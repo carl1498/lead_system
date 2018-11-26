@@ -7,11 +7,10 @@
 	<title>Lead System</title>
 
 	<link rel="shortcut icon" type="image/png" href="./img/favicon.png"/>
-	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedcolumns/3.2.6/css/fixedColumns.bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css" />
-	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" />
+	<link rel="stylesheet" type="text/css" href="/css/datatables-bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="/css/fixedColumns-bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="/css/bootstrap-datepicker.min.css">
+	<link rel="stylesheet" type="text/css" href="/css/select2.min.css">
 	<link rel="stylesheet" type="text/css" href="/css/app.css">
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -82,14 +81,14 @@
   	</footer>
 </div>
 <!-- ./wrapper -->
-<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.29.0/sweetalert2.all.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
-<script src="https://cdn.datatables.net/fixedcolumns/3.2.6/js/dataTables.fixedColumns.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.full.min.js"></script>
+<script src="/js/jquery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/sweetalert2-all.min.js"></script>
+<script src="/js/jquery-datatables.min.js"></script>
+<script src="/js/datatables-bootstrap.min.js"></script>
+<script src="/js/datatables-fixedColumns.min.js"></script>
+<script src="/js/bootstrap-datepicker.min.js"></script>
+<script src="/js/select2-full.min.js"></script>
 <script src="/js/app.js"></script>
 @yield('script')
 </body>

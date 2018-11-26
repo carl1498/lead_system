@@ -7,7 +7,7 @@
 $fa-font-path: "../webfonts";
 
 // Bootstrap
-//@import '~admin-lte/node_modules/bootstrap/dist/css/bootstrap.css';
+@import '~admin-lte/node_modules/bootstrap/dist/css/bootstrap.css';
 
 @import '~admin-lte/dist/css/AdminLTE.min.css';
 @import '~admin-lte/dist/css/skins/_all-skins.css';
@@ -44,4 +44,8 @@ $fa-font-path: "../webfonts";
 .DTFC_LeftBodyLiner{
   overflow-y: hidden !important;
   overflow-x: hidden !important;
+}
+
+.dataTables_empty{
+  text-align: left !important;
 }
