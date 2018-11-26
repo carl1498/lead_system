@@ -1,12 +1,13 @@
-<div class="modal fade" id="student_modal">
+<div class="modal fade" id="employee_modal">
     <div class="modal-dialog" style="width: 100%; max-width: 800px;">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Add Student</h4>
+                <h4 class="modal-title">Add Employee</h4>
             </div>
-            <form class="form-horizontal" id="add_student_form">
+            <form class="form-horizontal" id="employee_form">
+                @csrf
                 <div class="modal-body">
 
                     <!-- LEFT COLUMN -->
@@ -58,36 +59,14 @@
 
                         <div class="row clearfix">
                             <div class="col-lg-4 col-md-4 col-sm-3 col-xs-3 form-control-label">
-                                    <label for="age" class="pull-right">Age</label>
+                                    <label for="gender" class="pull-right">Gender</label>
                             </div>
                             <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
                                 <div class="form-group">
-                                    <input type="number" id="age" name="age" class="form-control required" placeholder="Enter Age" required>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row clearfix">
-                            <div class="col-lg-4 col-md-4 col-sm-3 col-xs-3 form-control-label">
-                                    <label for="contact" class="pull-right">Contact #</label>
-                            </div>
-                            <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
-                                <div class="form-group">
-                                    <input type="text" id="contact" name="contact" class="form-control required" placeholder="0912-345-6789" required>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row clearfix">
-                            <div class="col-lg-4 col-md-4 col-sm-3 col-xs-3 form-control-label">
-                                    <label for="program" class="pull-right">Program</label>
-                            </div>
-                            <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
-                                <div class="form-group">
-                                    <select type="text" id="program" name="program" class="form-control select2" style="width: 100%;">
+                                    <select type="text" id="gender" name="gender" class="form-control select2" style="width: 100%;">
                                         <option value="">Select Program</option>
-                                        <option value="1">FNPL</option>
-                                        <option value="2">LEAD Premium</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
                                     </select>
                                 </div>
                             </div>
@@ -95,46 +74,44 @@
 
                         <div class="row clearfix">
                             <div class="col-lg-4 col-md-4 col-sm-3 col-xs-3 form-control-label">
-                                    <label for="school" class="pull-right">School</label>
+                                    <label for="personal_no" class="pull-right">Personal #</label>
                             </div>
                             <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
                                 <div class="form-group">
-                                    <select type="text" id="school" name="school" class="form-control select2" style="width: 100%;">
-                                        <option value="">Select School</option>
-                                        <option value="1">Nagoya Kaikei</option>
-                                        <option value="2">TEC</option>
-                                        <option value="3">Osaka Gakuin</option>
-                                        <option value="4">Yu</option>
-                                        <option value="5">J-Kokusai</option>
-                                        <option value="6">Fukujukai</option>
-                                    </select>
+                                    <input type="text" id="personal_no" name="personal_no" class="form-control" placeholder="0912-345-6789">
                                 </div>
                             </div>
                         </div>
 
                         <div class="row clearfix">
                             <div class="col-lg-4 col-md-4 col-sm-3 col-xs-3 form-control-label">
-                                    <label for="benefactor" class="pull-right">Benefactor</label>
+                                    <label for="business_no" class="pull-right">Business #</label>
                             </div>
                             <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
                                 <div class="form-group">
-                                    <select type="text" id="benefactor" name="benefactor" class="form-control select2" style="width: 100%;">
-                                        <option value="">Select Benefactor</option>
-                                        <option value="1">Supercourt</option>
-                                        <option value="2">Akikaze</option>
-                                        <option value="3">Shin-ei</option>
-                                    </select>
+                                    <input type="text" id="personal_no" name="personal_no" class="form-control" placeholder="0912-345-6789">
                                 </div>
                             </div>
                         </div>
 
                         <div class="row clearfix">
                             <div class="col-lg-4 col-md-4 col-sm-3 col-xs-3 form-control-label">
-                                    <label for="address" class="pull-right">Address</label>
+                                    <label for="email" class="pull-right">Email</label>
                             </div>
                             <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
                                 <div class="form-group">
-                                    <input type="text" id="address" name="address" class="form-control required" placeholder="Enter Address" required>
+                                    <input type="email" id="email" name="email" class="form-control required" placeholder="Enter Valid Email" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row clearfix">
+                            <div class="col-lg-4 col-md-4 col-sm-3 col-xs-3 form-control-label">
+                                    <label for="picture" class="pull-right">Picture</label>
+                            </div>
+                            <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
+                                <div class="form-group">
+                                    <input type="file" id="picture" name="picture" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -146,75 +123,11 @@
 
                         <div class="row clearfix">
                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
-                                    <label for="email" class="pull-right">Email</label>
+                                    <label for="address" class="pull-right">Address</label>
                             </div>
                             <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
                                 <div class="form-group">
-                                    <input type="email" id="email" name="email" class="form-control required" placeholder="Enter Valid Email" required>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
-                                    <label for="referral" class="pull-right">Referral</label>
-                            </div>
-                            <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
-                                <div class="form-group">
-                                    <select type="text" id="referral" name="referral" class="form-control select2 required" style="width: 100%;" required>
-                                        <option value="">Select Referral</option>
-                                        <option value="1">Benedict</option>
-                                        <option value="2">Irene</option>
-                                        <option value="3">Bev</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
-                                    <label for="sign_up" class="pull-right">Sign Up</label>
-                            </div>
-                            <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
-                                <div class="form-group">
-                                    <input type="text" id="sign_up" name="sign_up" class="form-control datepicker required" placeholder="MM/DD/YYYY Date of Sign Up" required>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
-                                    <label for="medical" class="pull-right">Medical</label>
-                            </div>
-                            <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
-                                <div class="form-group">
-                                    <input type="text" id="medical" name="medical" class="form-control datepicker" placeholder="MM/DD/YYYY Date of Medical">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
-                                    <label for="completion" class="pull-right">Completion</label>
-                            </div>
-                            <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
-                                <div class="form-group">
-                                    <input type="text" id="completion" name="completion" class="form-control datepicker" placeholder="MM/DD/YYYY Date of Completion">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
-                                    <label for="gender" class="pull-right">Gender</label>
-                            </div>
-                            <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
-                                <div class="form-group required">
-                                    <select type="text" id="gender" name="gender" class="form-control select2" style="width: 100%;" required>
-                                        <option value="">Select Gender</option>
-                                        <option value="1">Male</option>
-                                        <option value="2">Female</option>
-                                    </select>
+                                    <input type="text" id="address" name="address" class="form-control required" placeholder="Enter Address" required>
                                 </div>
                             </div>
                         </div>
@@ -224,11 +137,13 @@
                                     <label for="branch" class="pull-right">Branch</label>
                             </div>
                             <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
-                                <div class="form-group required">
+                                <div class="form-group">
                                     <select type="text" id="branch" name="branch" class="form-control select2 required" style="width: 100%;" required>
                                         <option value="">Select Branch</option>
                                         <option value="1">Makati</option>
-                                        <option value="2">Davao</option>
+                                        <option value="2">Naga</option>
+                                        <option value="3">Cebu</option>
+                                        <option value="4">Davao</option>
                                     </select>
                                 </div>
                             </div>
@@ -236,25 +151,16 @@
 
                         <div class="row clearfix">
                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
-                                    <label for="course" class="pull-right">Course</label>
+                                    <label for="role" class="pull-right">Role</label>
                             </div>
                             <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
-                                <div class="form-group required">
-                                    <input type="text" id="course" name="course" class="form-control required" placeholder="Enter Course" required required>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
-                                    <label for="year" class="pull-right">Year</label>
-                            </div>
-                            <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
-                                <div class="form-group required">
-                                    <select type="text" id="year" name="year" class="form-control select2 required" style="width: 100%;" required>
-                                        <option value="">Select Departure Year</option>
-                                        <option value="1">2019</option>
-                                        <option value="2">2020</option>
+                                <div class="form-group">
+                                    <select type="text" id="role" name="role" class="form-control select2 required" style="width: 100%;" required>
+                                        <option value="">Select Role</option>
+                                        <option value="1">Admin</option>
+                                        <option value="2">IT</option>
+                                        <option value="3">Documentation</option>
+                                        <option value="4">Marketing</option>
                                     </select>
                                 </div>
                             </div>
@@ -262,21 +168,69 @@
 
                         <div class="row clearfix">
                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
-                                    <label for="month" class="pull-right">Month</label>
+                                    <label for="salary" class="pull-right">Salary</label>
                             </div>
                             <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
-                                <div class="form-group required">
-                                    <select type="text" id="month" name="month" class="form-control select2" style="width: 100%;">
-                                        <option value="">Select Departure Month</option>
-                                        <option value="1">January</option>
-                                        <option value="2">April</option>
-                                        <option value="3">July</option>
-                                        <option value="4">October</option>
-                                    </select>
+                                <div class="form-group">
+                                    <input type="number" id="salary" name="salary" class="form-control" placeholder="Enter Salary">
                                 </div>
                             </div>
                         </div>
 
+                        <div class="row clearfix">
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
+                                    <label for="hired" class="pull-right">Hired</label>
+                            </div>
+                            <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
+                                <div class="form-group">
+                                    <input type="text" id="hired" name="hired" class="form-control datepicker required" placeholder="MM/DD/YYYY Hired Date" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row clearfix">
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
+                                    <label for="sss" class="pull-right">SSS</label>
+                            </div>
+                            <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
+                                <div class="form-group">
+                                    <input type="text" id="sss" name="sss" class="form-control" placeholder="Enter SSS Number">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row clearfix">
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
+                                    <label for="pagibig" class="pull-right">Pagibig</label>
+                            </div>
+                            <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
+                                <div class="form-group">
+                                    <input type="text" id="pagibig" name="pagibig" class="form-control" placeholder="Enter Pagibig Number">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row clearfix">
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
+                                    <label for="philhealth" class="pull-right">Philhealth</label>
+                            </div>
+                            <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
+                                <div class="form-group">
+                                    <input type="text" id="philhealth" name="philhealth" class="form-control" placeholder="Enter Philhealth Number">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row clearfix">
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
+                                    <label for="tin" class="pull-right">TIN</label>
+                            </div>
+                            <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
+                                <div class="form-group">
+                                    <input type="text" id="tin" name="tin" class="form-control" placeholder="Enter TIN Number">
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
 

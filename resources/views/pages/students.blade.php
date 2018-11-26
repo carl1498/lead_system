@@ -76,7 +76,7 @@
 
     <!-- MODALS -- START -->
     
-    @include('includes.modals.add_student_modal')
+    @include('includes.modals.student_modal')
 
     <!-- MODALS -- END -->
 
@@ -91,7 +91,7 @@
         
         $('.datepicker').datepicker();
 
-        $('.select2').select2()
+        $('.select2').select2();
 
         //INITIALIZE -- END
 

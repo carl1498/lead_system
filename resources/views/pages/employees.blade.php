@@ -7,7 +7,11 @@
         Employee Page
     </h1>
     <ol class="breadcrumb">
-        <li><button class="btn btn-secondary bg-red"><i class="fa fa-plus-square"></i></button></li>
+        <li>
+            <button class="btn btn-secondary bg-red add_employee" data-toggle="modal" data-target="#employee_modal">
+                <i class="fa fa-plus-square"></i>
+            </button>
+        </li>
     </ol>
 </section>
 
@@ -20,7 +24,7 @@
             <!-- Profile Image -->
             <div class="box box-primary">
                 <div class="box-body box-profile">
-                    <img class="profile-user-img img-responsive img-circle" src="./img/user.jpg" alt="User profile picture">
+                    <img class="profile-user-img img-responsive img-circle" src="./img/avatar5.png" alt="User profile picture">
 
                     <h3 class="profile-username text-center">{{ onLoadName() }}</h3>
 
@@ -48,38 +52,51 @@
         <div class="col-md-9">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="#makati_tab" data-toggle="tab">Makati</a></li>
-                    <li><a href="#timeline" data-toggle="tab">Naga</a></li>
-                    <li><a href="#settings" data-toggle="tab">Cebu</a></li>
-                    <li><a href="#settings" data-toggle="tab">Davao</a></li>
+                    <li class="active"><a href="#employees_makati_tab" data-toggle="tab">Makati</a></li>
+                    <li><a href="#employees_naga_tab" data-toggle="tab">Naga</a></li>
+                    <li><a href="#employees_cebu_tab" data-toggle="tab">Cebu</a></li>
+                    <li><a href="#employees_davao_tab" data-toggle="tab">Davao</a></li>
+                    
                 </ul>
+
                 <div class="tab-content">
-                    <div class="active tab-pane" id="makati_tab">
-                        <table id="makati" class="table table-striped table-bordered" cellspacing="0" style="width: 100%;">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Contact</th>
-                                    <th>Address</th>
-                                    <th>Hired Date</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
-                    <!-- /.tab-pane -->
-                    <div class="tab-pane" id="timeline">
-                    </div>
-                <!-- /.tab-pane -->
+
+                    @include('includes.tabs.employee_tabs')
+
                 </div>
-            <!-- /.tab-content -->
             </div>
-        <!-- /.nav-tabs-custom -->
         </div>
-    <!-- /.col -->
     </div>
-    <!-- /.row -->
+
+    <!-- MODALS -- START -->
+    
+    @include('includes.modals.employee_modal')
+
+    <!-- MODALS -- END -->
 
 </section>
-    
+@endsection
+
+@section('script')
+<script>
+    $(document).ready(function(){
+
+        //INITIALIZE -- START
+
+        $('.datepicker').datepicker();
+
+        $('.select2').select2();
+        
+        //INITIALIZE -- END
+
+        //DATATABLES -- START
+
+        $(document).on('shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
+            $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
+        });
+
+        //DATATABLES -- END
+    });
+</script>
+
 @endsection
