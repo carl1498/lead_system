@@ -178,6 +178,7 @@
         //Delete School
         $(document).on('click', '.delete_school', function(){
             var id = $(this).attr('id');
+            console.log(id);
 
             swal({
                 title: 'Are you sure?',
@@ -195,9 +196,10 @@
                         },
                         url: '/delete_school',
                         method: 'get',
-                        date: {id:id},
+                        data: {id:id},
+                        type: 'json',
                         success:function(data){
-                            swal('Deleted!', 'This School has been Delete', 'success');
+                            swal('Deleted!', 'This School has been Deleted', 'success');
                             refresh_school_table();
                         }
                     })

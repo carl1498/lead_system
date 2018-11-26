@@ -59,7 +59,8 @@ class schoolController extends Controller
     }
 
     public function delete_school(Request $request){
-        $sch = school::where('id', $request->id)->delete();
+        $school = school::find($request->id);
+        $school->delete();
     }
 
     /**
