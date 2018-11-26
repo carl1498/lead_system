@@ -95,6 +95,32 @@
             $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
         });
 
+        var columns_employees = [
+            {data: 'name', name: 'name'},
+            {data: 'contact_personal', name: 'contact_personal'},
+            {data: 'contact_business', name: 'contact_business'},
+            {data: 'birthdate', name: 'birthdate'},
+            {data: 'gender', name: 'gender'},
+            {data: 'email', name: 'email'},
+            {data: 'role.name', name: 'role.name'},
+            {data: 'hired_date', name: 'hired_date'},
+            {data: "action", orderable:false,searchable:false}
+        ]
+
+        const employees_table_variables = [employees_makati, employees_naga, employees_cebu, employees_davao];
+        const employees_table_id = ['employees_makati', 'employees_naga', 'employees_cebu', 'employees_davao'];
+        const employees_table_route = ['/makatiEmployee', '/nagaEmployee', '/cebuEmployee', '/davaoEmployee'];
+
+        for(var x = 0; x < 4; x++){
+            employees_table_variables[x] = $('#'+employees_table_id[x]+ "").DataTable({
+                scrollX:        true,
+                scrollCollapse: true,
+                fixedColumns:   true,
+                ajax: employees_table_route[x],
+                columns: columns_employees,
+            });
+        }
+
         //DATATABLES -- END
     });
 </script>

@@ -60,6 +60,9 @@ Route::get('/delete_benefactor', 'benefactorController@delete_benefactor');
 //EMPLOYEE ROUTES -- START
 
 Route::get('/employees', 'employeeController@index');
-Route::get('/makatiEmployee', 'employeeController@makatiEmployee');
+Route::get('/makatiEmployee', 'employeeController@makati');
+Route::get('/nagaEmployee', 'employeeController@naga');
+Route::get('/cebuEmployee', 'employeeController@cebu');
+Route::get('/davaoEmployee', 'employeeController@davao');
 
 //EMPLOYEE ROUTES -- END
