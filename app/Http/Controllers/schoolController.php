@@ -36,7 +36,6 @@ class schoolController extends Controller
     }
 
     public function save_school(Request $request){
-
         $add_edit = $request->add_edit;
         if($add_edit == 'add'){
             $school = new school;

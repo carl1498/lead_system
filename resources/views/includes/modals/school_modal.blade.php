@@ -4,9 +4,9 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Add Program</h4>
+                <h4 class="modal-title">Add School</h4>
             </div>
-            <form class="form-horizontal" id="add_school_form">
+            <form class="form-horizontal" id="school_form">
                 @csrf
                 <div class="modal-body clearfix">
 

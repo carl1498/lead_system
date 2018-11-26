@@ -65,7 +65,7 @@
         });
 
         $("#school_modal").on("hidden.bs.modal", function(e){
-            $('#add_school_form :input.required').each(function (){
+            $('#school_form :input.required').each(function (){
                 this.style.setProperty('border-color', 'green', 'important');
             });
             $(this).find("input,textarea,select").val('').end();
@@ -120,7 +120,7 @@
                     dataType: 'text',
                     method: 'POST',
                     url: '/save_school',
-                    data: $('#add_school_form').serialize(),
+                    data: $('#school_form').serialize(),
                     success: function(data){
                         swal('Success!', 'Record has been saved to the Database!', 'success');
                         $('#school_modal').modal('hide');
@@ -136,7 +136,7 @@
                 });
             }
             else{
-                $('#add_school_form :input.required').each(function (){
+                $('#school_form :input.required').each(function (){
                     if(!/\S/.test($(this).val())){
                         this.style.setProperty('border-color', 'red', 'important');
                     }

@@ -6,7 +6,7 @@
                 <span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Add Benefactor</h4>
             </div>
-            <form class="form-horizontal" id="add_benefactor_form">
+            <form class="form-horizontal" id="benefactor_form">
                 @csrf
                 <div class="modal-body clearfix">
 
@@ -14,6 +14,8 @@
                     <div class="col-md-12">
 
                         <div class="row clearfix">
+                            <input type="hidden" name="id" id="id">
+                            <input type="hidden" name="add_edit" id="add_edit">
                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
                                     <label for="benefactor_name" class="pull-right">Benefactor Name</label>
                             </div>
@@ -30,7 +32,7 @@
                 <div class="modal-footer">
                     <div class="col-md-12">
                         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary add_benefactor_button">Save changes</button>
+                        <button type="submit" class="btn btn-primary save_benefactor">Save changes</button>
                     </div>
                 </div>
             </form>

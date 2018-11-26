@@ -43,12 +43,16 @@ Route::get('/delete_school', 'schoolController@delete_school');
 //Programs
 Route::get('/programs', 'programController@index');
 Route::get('/programsView', 'programController@view');
-Route::post('/add_program', 'programController@add_program')->name('add_program');
+Route::post('/save_program', 'programController@save_program');
+Route::get('/get_program', 'programController@get_program');
+Route::get('/delete_program', 'programController@delete_program');
 
 //Benefactors
 Route::get('/benefactors', 'benefactorController@index');
 Route::get('/benefactorsView', 'benefactorController@view');
-Route::post('/add_benefactor', 'benefactorController@add_benefactor')->name('add_benefactor');
+Route::post('/save_benefactor', 'benefactorController@save_benefactor');
+Route::get('/get_benefactor', 'benefactorController@get_benefactor');
+Route::get('/delete_benefactor', 'benefactorController@delete_benefactor');
 
 //STUDENT ROUTES -- END
 

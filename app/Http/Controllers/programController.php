@@ -27,15 +27,37 @@ class programController extends Controller
 
         return Datatables::of($programs)
         ->addColumn('action', function($data){
-            return 'Actions here';
+            return  '<button class="btn btn-warning btn-sm edit_program" id="'.$data->id.'"><i class="fa fa-pen"></i></button>
+                    <button class="btn btn-danger btn-sm delete_program" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
         })
         ->make(true);
     }
 
-    public function add_program(Request $request){
-        $program = new program;
-        $program->name = $request->program_name;
-        $program->save();
+    public function save_program(Request $request){
+        $add_edit = $request->add_edit;
+        if($add_edit == 'add'){
+            $program = new program;
+            $program->name = $request->program_name;
+            $program->save();
+        }
+        else{
+            $id = $request->id;
+            $program = program::find($id);
+            $program->name = $request->program_name;
+            $program->save();
+        }
+    }
+
+    public function get_program(Request $request){
+        $id = $request->id;
+        $program = program::find($id);
+
+        return $program;
+    }
+
+    public function delete_program(Request $request){
+        $program = program::find($request->id);
+        $program->delete();
     }
 
     /**

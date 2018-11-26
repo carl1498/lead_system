@@ -4,11 +4,11 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        Program Page
+        Benefactor Page
     </h1>
     <ol class="breadcrumb">
         <li>
-            <button class="btn btn-secondary bg-red add_program" data-toggle="modal" data-target="#program_modal">
+            <button class="btn btn-secondary bg-red add_benefactor" data-toggle="modal" data-target="#benefactor_modal">
                 <i class="fa fa-plus-square"></i>
             </button>
         </li>
@@ -22,12 +22,12 @@
         <div class="col-md-12">
             <div class="box">
                 <div class="box-body">
-                    <div class="tab-pane fade in active" id="programs">
-                        <table id="programs_table" class="table table-hover table-striped table-bordered" cellspacing="0">
+                    <div class="tab-pane fade in active" id="benefactors">
+                        <table id="benefactors_table" class="table table-hover table-striped table-bordered" cellspacing="0">
                             <thead>
                                 <tr>
-                                    <th style="width: 100%; max-width: 100px;">Name</th>
-                                    <th>Action</th>
+                                    <th style="width: 100%">Name</th>
+                                    <th style="width: 90px">Action</th>
                                 </tr>
                             </thead>
                         </table>
@@ -39,7 +39,7 @@
 
     <!-- MODALS -- START -->
     
-    @include('includes.modals.program_modal')
+    @include('includes.modals.benefactor_modal')
 
     <!-- MODALS -- END -->
 
@@ -56,27 +56,27 @@
 
         $('.select2').select2()
 
-        function refresh_program_table(){
-            programs_table.ajax.reload(); //reload datatable ajax
+        function refresh_benefactor_table(){
+            benefactors_table.ajax.reload(); //reload datatable ajax
         }
 
-        $('#program_modal').on('shown.bs.modal', function(){
-            $('#program_name').focus();
-            $(this).find("input,textarea,select").val('').end();
+        $('#benefactor_modal').on('shown.bs.modal', function(){
+            $('#benefactor_name').focus();
         });
 
-        $("#program_modal").on("hidden.bs.modal", function(e){
-            $('#add_program_form :input.required').each(function (){
+        $("#benefactor_modal").on("hidden.bs.modal", function(e){
+            $('#benefactor_form :input.required').each(function (){
                 this.style.setProperty('border-color', 'green', 'important');
             });
+            $(this).find("input,textarea,select").val('').end();
         });
 
         //INITIALIZE -- END
 
         //VALIDATION -- START
 
-        function validate_program(){
-            var name = $('#program_name').val();
+        function validate_benefactor(){
+            var name = $('#benefactor_name').val();
             if(/\S/.test(name)){
                 return true;
             }
@@ -89,9 +89,9 @@
 
         //DATATABLES -- START
 
-        var programs_table = $('#programs_table').DataTable({
+        var benefactors_table = $('#benefactors_table').DataTable({
             processing: true,
-            ajax: '/programsView',
+            ajax: '/benefactorsView',
             scrollX: true,
             autoWidth: true,
             columns: [
@@ -99,8 +99,9 @@
                 {data: "action", orderable:false,searchable:false}
             ]
         });
-        
-        $('.add_program_button').on('click', function(e){
+
+        //Add or Edit Benefactor
+        $('.save_benefactor').on('click', function(e){
             e.preventDefault();
             
             var input = $(this);
@@ -109,7 +110,7 @@
             button.disabled = true;
             input.html('SAVING...');
 
-            var validated = validate_program();
+            var validated = validate_benefactor();
             
             if(validated){
                 $.ajax({
@@ -118,24 +119,24 @@
                     },
                     dataType: 'text',
                     method: 'POST',
-                    url: '/add_program',
-                    data: $('#add_program_form').serialize(),
+                    url: '/save_benefactor',
+                    data: $('#benefactor_form').serialize(),
                     success: function(data){
-                        swal('Success!', 'Record has been added to the Database!', 'success');
-                        $('#program_modal').modal('hide');
+                        swal('Success!', 'Record has been saved to the Database!', 'success');
+                        $('#benefactor_modal').modal('hide');
                         button.disabled = false;
                         input.html('SAVE CHANGES');
-                        refresh_program_table();
+                        refresh_benefactor_table();
                     },
                     error: function(data){
-                        swal("Oh no!", "Something went wrong, try again.", "error")
+                        swal("Oh no!", "Something went wrong, try again.", "error");
                         button.disabled = false;
                         input.html('SAVE CHANGES');
                     }
                 });
             }
             else{
-                $('#add_program_form :input.required').each(function (){
+                $('#benefactor_form :input.required').each(function (){
                     if(!/\S/.test($(this).val())){
                         this.style.setProperty('border-color', 'red', 'important');
                     }
@@ -147,6 +148,68 @@
         });
 
         //DATATABLES -- END
+
+        //FUNCTIONS -- START
+
+        //Open Benefactor Modal (ADD)
+        $('.add_benefactor').on('click', function(){
+            $('#add_edit').val('add');
+        });
+
+        //Open Benefactor Modal (EDIT)
+        $(document).on('click', '.edit_benefactor', function(){
+            var id = $(this).attr('id');
+
+            $.ajax({
+                url: '/get_benefactor',
+                method: 'get',
+                data: {id: id},
+                dataType: 'json',
+                success:function(data){
+                    $('#add_edit').val('edit');
+                    $('#id').val(data.id);
+                    $('#benefactor_name').val(data.name);
+                    $('#benefactor_modal').modal('toggle');
+                    $('#benefactor_modal').modal('show');
+                }
+            });
+        });
+
+        //Delete Benefactor
+        $(document).on('click', '.delete_benefactor', function(){
+            var id = $(this).attr('id');
+            console.log(id);
+
+            swal({
+                title: 'Are you sure?',
+                text: 'You are about to delete a benefactor. This may affect multiple rows',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if(result.value){
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: '/delete_benefactor',
+                        method: 'get',
+                        data: {id:id},
+                        type: 'json',
+                        success:function(data){
+                            swal('Deleted!', 'This benefactor has been Deleted', 'success');
+                            refresh_benefactor_table();
+                        }
+                    })
+                }
+            });
+
+            
+        });
+        
+        //FUNCTIONS -- END
     });
 </script>
 
