@@ -62,9 +62,9 @@
                                     <label for="gender" class="pull-right">Gender</label>
                             </div>
                             <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
-                                <div class="form-group">
-                                    <select type="text" id="gender" name="gender" class="form-control select2" style="width: 100%;">
-                                        <option value="">Select Program</option>
+                                <div class="form-group required">
+                                    <select type="text" id="gender" name="gender" class="form-control select2 required" style="width: 100%;">
+                                        <option value="">Select Gender</option>
                                         <option value="Male">Male</option>
                                         <option value="Female">Female</option>
                                     </select>
@@ -137,13 +137,12 @@
                                     <label for="branch" class="pull-right">Branch</label>
                             </div>
                             <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
-                                <div class="form-group">
+                                <div class="form-group required">
                                     <select type="text" id="branch" name="branch" class="form-control select2 required" style="width: 100%;" required>
                                         <option value="">Select Branch</option>
-                                        <option value="1">Makati</option>
-                                        <option value="2">Naga</option>
-                                        <option value="3">Cebu</option>
-                                        <option value="4">Davao</option>
+                                        @foreach($branch as $key => $b)
+                                            <option value="{{ $key }}">{{ $b->name }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -154,13 +153,12 @@
                                     <label for="role" class="pull-right">Role</label>
                             </div>
                             <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
-                                <div class="form-group">
+                                <div class="form-group required">
                                     <select type="text" id="role" name="role" class="form-control select2 required" style="width: 100%;" required>
                                         <option value="">Select Role</option>
-                                        <option value="1">Admin</option>
-                                        <option value="2">IT</option>
-                                        <option value="3">Documentation</option>
-                                        <option value="4">Marketing</option>
+                                        @foreach($role as $key => $r)
+                                            <option value="{{ $key }}">{{ $r->name }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>

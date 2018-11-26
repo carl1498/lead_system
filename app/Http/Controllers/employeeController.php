@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\employee;
+use App\branch;
+use App\role;
 use App\User;
 use Auth;
 use Yajra\Datatables\Datatables;
@@ -27,7 +29,10 @@ class employeeController extends Controller
      */
     public function index()
     {
-        return view('pages.employees');
+        $branch = branch::all();
+        $role = role::all();
+
+        return view('pages.employees', compact('branch', 'role'));
     }
 
     public function makati(){
