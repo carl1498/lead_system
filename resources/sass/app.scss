@@ -1,0 +1,47 @@
+
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+// Variables
+@import 'variables';
+$fa-font-path: "../webfonts";
+
+// Bootstrap
+//@import '~admin-lte/node_modules/bootstrap/dist/css/bootstrap.css';
+
+@import '~admin-lte/dist/css/AdminLTE.min.css';
+@import '~admin-lte/dist/css/skins/_all-skins.css';
+@import "~font-awesome/css/font-awesome.css";
+@import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
+@import "~@fortawesome/fontawesome-free/scss/solid.scss";
+@import "~@fortawesome/fontawesome-free/scss/brands.scss";
+
+.navbar-laravel {
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+#makati_paginate, #makati_filter,
+#students_makati_paginate, #students_makati_filter,
+#students_naga_paginate, #students_naga_filter,
+#students_cebu_paginate, #students_cebu_filter,
+#students_davao_paginate, #students_davao_filter {
+  float: right;
+}
+
+#add_student_form .col-md-4{
+  text-align: right;
+}
+
+.required, .required .select2-selection {
+  border-color: green !important;
+}
+
+.DTFC_RightWrapper, .DTFC_NoData .dataTables_empty{
+  display: none;
+}
+
+.DTFC_LeftBodyLiner{
+  overflow-y: hidden !important;
+  overflow-x: hidden !important;
+}
