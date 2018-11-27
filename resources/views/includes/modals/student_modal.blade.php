@@ -161,7 +161,7 @@
                                     <label for="referral" class="pull-right">Referral</label>
                             </div>
                             <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
-                                <div class="form-group">
+                                <div class="form-group required">
                                     <select type="text" id="referral" name="referral" class="form-control select2 required" style="width: 100%;" required>
                                         <option value="">Select Referral</option>
                                         <option value="1">Benedict</option>
@@ -211,7 +211,7 @@
                             </div>
                             <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
                                 <div class="form-group required">
-                                    <select type="text" id="gender" name="gender" class="form-control select2" style="width: 100%;" required>
+                                    <select type="text" id="gender" name="gender" class="form-control select2 required" style="width: 100%;" required>
                                         <option value="">Select Gender</option>
                                         <option value="1">Male</option>
                                         <option value="2">Female</option>

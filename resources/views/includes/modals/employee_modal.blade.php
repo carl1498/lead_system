@@ -63,7 +63,7 @@
                             </div>
                             <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
                                 <div class="form-group required">
-                                    <select type="text" id="gender" name="gender" class="form-control select2 required" style="width: 100%;">
+                                    <select type="text" id="gender" name="gender" class="form-control select2 required" style="width: 100%;" required>
                                         <option value="">Select Gender</option>
                                         <option value="Male">Male</option>
                                         <option value="Female">Female</option>
@@ -141,7 +141,7 @@
                                     <select type="text" id="branch" name="branch" class="form-control select2 required" style="width: 100%;" required>
                                         <option value="">Select Branch</option>
                                         @foreach($branch as $key => $b)
-                                            <option value="{{ $key }}">{{ $b->name }}</option>
+                                            <option value="{{ $b->id }}">{{ $b->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -157,7 +157,7 @@
                                     <select type="text" id="role" name="role" class="form-control select2 required" style="width: 100%;" required>
                                         <option value="">Select Role</option>
                                         @foreach($role as $key => $r)
-                                            <option value="{{ $key }}">{{ $r->name }}</option>
+                                            <option value="{{ $r->id }}">{{ $r->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -237,7 +237,7 @@
                 <div class="modal-footer">
                     <div class="col-md-12">
                         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
+                        <button type="submit" class="btn btn-primary save_student">Save changes</button>
                     </div>
                 </div>
             </form>

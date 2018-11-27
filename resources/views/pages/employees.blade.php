@@ -122,6 +122,15 @@
         }
 
         //DATATABLES -- END
+
+        //FUNCTIONS -- START
+
+        $('.save_student').on('click', function(e){
+            e.preventDefault();
+            console.log($('#employee_form').serialize());
+        })
+
+        //FUNCTIONS -- END
     });
 </script>
 
