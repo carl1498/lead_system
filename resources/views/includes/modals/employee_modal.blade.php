@@ -6,9 +6,11 @@
                 <span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Add Employee</h4>
             </div>
-            <form class="form-horizontal" id="employee_form">
+            <form class="form-horizontal" id="employee_form" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
+                    <input type="hidden" name="id" id="id">
+                    <input type="hidden" name="add_edit" id="add_edit">
 
                     <!-- LEFT COLUMN -->
                     <div class="col-md-6">
@@ -89,7 +91,7 @@
                             </div>
                             <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
                                 <div class="form-group">
-                                    <input type="text" id="personal_no" name="personal_no" class="form-control" placeholder="0912-345-6789">
+                                    <input type="text" id="business_no" name="business_no" class="form-control" placeholder="0912-345-6789">
                                 </div>
                             </div>
                         </div>
@@ -111,7 +113,7 @@
                             </div>
                             <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
                                 <div class="form-group">
-                                    <input type="file" id="picture" name="picture" class="form-control">
+                                    <input type="file" id="picture" name="picture" class="form-control inputFile">
                                 </div>
                             </div>
                         </div>
@@ -237,7 +239,7 @@
                 <div class="modal-footer">
                     <div class="col-md-12">
                         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary save_student">Save changes</button>
+                        <button type="submit" class="btn btn-primary save_employee">Save changes</button>
                     </div>
                 </div>
             </form>

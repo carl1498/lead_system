@@ -100,6 +100,12 @@
             ]
         });
 
+        
+
+        //DATATABLES -- END
+
+        //FUNCTIONS -- START
+
         //Add or Edit School
         $('.save_school').on('click', function(e){
             e.preventDefault();
@@ -146,10 +152,6 @@
                 input.html('SAVE CHANGES');
             }
         });
-
-        //DATATABLES -- END
-
-        //FUNCTIONS -- START
 
         //Open School Modal (ADD)
         $('.add_school').on('click', function(){
@@ -205,8 +207,6 @@
                     })
                 }
             });
-
-            
         });
         
         //FUNCTIONS -- END

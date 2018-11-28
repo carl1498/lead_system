@@ -17,7 +17,7 @@ class RolesTableSeeder extends Seeder
                 'name' => 'Admin',
             ),
             array(
-                'name' => 'Manage',
+                'name' => 'Manager',
             ),
             array(
                 'name' => 'HR Head',
@@ -32,10 +32,19 @@ class RolesTableSeeder extends Seeder
                 'name' => 'Marketing Head',
             ),
             array(
+                'name' => 'Marketing Officer',
+            ),
+            array(
                 'name' => 'Documentation Head',
             ),
             array(
-                'name' => 'Documentation',
+                'name' => 'Documentation Officer',
+            ),
+            array(
+                'name' => 'Language Head',
+            ),
+            array(
+                'name' => 'Language Teacher',
             ),
         );
 

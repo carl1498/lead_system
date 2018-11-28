@@ -6,9 +6,12 @@ use Illuminate\Http\Request;
 use App\employee;
 use App\branch;
 use App\role;
+use App\employee_benefits;
 use App\User;
+use Carbon\Carbon;
 use Auth;
 use Yajra\Datatables\Datatables;
+use Image;
 
 class employeeController extends Controller
 {
@@ -40,14 +43,7 @@ class employeeController extends Controller
         $m = employee::with('role')->with('branch')->get();
         $makati = $m->where('branch.name', 'Makati');
 
-        return Datatables::of($makati)
-        ->editColumn('name', function($data){
-            return $data->lname.', '.$data->fname.' '.$data->mname; 
-        })
-        ->addColumn('action', function($data){
-            return 'Actions here';
-        })
-        ->make(true);
+        return $this->refreshDatatable($makati);
     }
 
     public function naga(){
@@ -55,14 +51,7 @@ class employeeController extends Controller
         $n = employee::with('role', 'branch')->get();
         $naga = $n->where('branch.name', 'Naga');
 
-        return Datatables::of($naga)
-        ->editColumn('name', function($data){
-            return $data->lname.', '.$data->fname.' '.$data->mname; 
-        })
-        ->addColumn('action', function($data){
-            return 'Actions here';
-        })
-        ->make(true);
+        return $this->refreshDatatable($naga);
     }
 
     public function cebu(){
@@ -70,14 +59,7 @@ class employeeController extends Controller
         $c = employee::with('role')->with('branch')->get();
         $cebu = $c->where('branch.name', 'Cebu');
 
-        return Datatables::of($cebu)
-        ->editColumn('name', function($data){
-            return $data->lname.', '.$data->fname.' '.$data->mname; 
-        })
-        ->addColumn('action', function($data){
-            return 'Actions here';
-        })
-        ->make(true);
+        return $this->refreshDatatable($cebu);
     }
 
     public function davao(){
@@ -85,13 +67,94 @@ class employeeController extends Controller
         $d = employee::with('role')->with('branch')->get();
         $davao = $d->where('branch.name', 'Davao');
 
-        return Datatables::of($davao)
+        return $this->refreshDatatable($davao);
+    }
+
+    public function refreshDatatable($branch){
+        return Datatables::of($branch)
         ->editColumn('name', function($data){
             return $data->lname.', '.$data->fname.' '.$data->mname; 
         })
         ->addColumn('action', function($data){
-            return 'Actions here';
+            return  '<button class="btn btn-warning btn-xs edit_employee" id="'.$data->id.'"><i class="fa fa-pen"></i></button>
+                    <button class="btn btn-danger btn-xs delete_employee" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
         })
         ->make(true);
+    }
+
+    public function save_employee(Request $request){
+        $add_edit = $request->add_edit;
+
+        if($add_edit == 'add'){
+            $employee = new employee;
+            $employee->employment_status = 'Active';
+        }
+        else{
+            $id = $request->id;
+            $employee = employee::find($id);
+        }
+
+        $employee->fname = $request->fname;
+        $employee->mname = $request->mname;
+        $employee->lname = $request->lname;
+        $employee->birthdate = Carbon::parse($request->birthdate);
+        $employee->gender = $request->gender;
+        $employee->contact_personal = $request->personal_no;
+        $employee->contact_business = $request->business_no;
+        $employee->email = $request->email;
+        $employee->address = $request->address;
+        $employee->branch_id = $request->branch;
+        $employee->role_id = $request->role;
+        $employee->salary = $request->salary;
+        $employee->hired_date = Carbon::parse($request->hired_date);
+        $employee->save();
+
+        $employee_id = employee::orderBy('id', 'DESC')->first();
+
+        for($x = 0; $x < 4; $x++){
+            if($add_edit == 'add'){
+                $employee_benefits = new employee_benefits;
+                $employee_benefits->emp_id = $employee_id->id;
+            }
+            else{
+                $employee_benefits = employee_benefits::where('emp_id', $employee_id->id)
+                    ->where('benefits_id', $x+1)->first();
+            }
+            if($x == 0){//SSS
+                $employee_benefits->benefits_id = 1;
+                $employee_benefits->id_number = $request->sss;
+            }
+            else if($x == 1){//Pag-ibig
+                $employee_benefits->benefits_id = 2;
+                $employee_benefits->id_number = $request->pagibig;
+            }
+            else if($x == 2){//Philhealth
+                $employee_benefits->benefits_id = 3;
+                $employee_benefits->id_number = $request->philhealth;
+            }
+            else if($x == 3){//TIN
+                $employee_benefits->benefits_id = 4;
+                $employee_benefits->id_number = $request->tin;
+            }
+            $employee_benefits->save();
+        }
+    }
+
+    public function get_employee(Request $request){
+        $id = $request->id;
+        $employee = employee::find($id);
+        $employee_benefits = employee_benefits::where('emp_id', $id)->get();
+
+        $output = array(
+            'employee' => $employee,
+            'benefits' => $employee_benefits
+        );
+
+        echo json_encode($output);
+    }
+
+    public function delete_employee(Request $request){
+        $employee = employee::find($request->id);
+        $employee->delete();
     }
 }

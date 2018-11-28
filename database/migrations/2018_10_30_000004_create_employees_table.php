@@ -19,10 +19,10 @@ class CreateEmployeesTable extends Migration
             $table->string('mname')->nullable();
             $table->string('lname');
             $table->date('birthdate');
-            $table->string('contact_personal');
+            $table->string('contact_personal')->nullable();
             $table->string('contact_business')->nullable();
-            $table->decimal('salary', 10, 2);
-            $table->string('picture')->nullable();
+            $table->decimal('salary', 10, 2)->nullable();
+            $table->string('picture')->default('avatar5.png');
             $table->string('address');
             $table->string('email');
             $table->unsignedInteger('branch_id');

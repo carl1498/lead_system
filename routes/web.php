@@ -65,4 +65,8 @@ Route::get('/nagaEmployee', 'employeeController@naga');
 Route::get('/cebuEmployee', 'employeeController@cebu');
 Route::get('/davaoEmployee', 'employeeController@davao');
 
+Route::post('/save_employee', 'employeeController@save_employee');
+Route::get('/get_employee', 'employeeController@get_employee');
+Route::get('/delete_employee', 'employeeController@delete_employee');
+
 //EMPLOYEE ROUTES -- END
