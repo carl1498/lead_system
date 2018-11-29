@@ -42,7 +42,8 @@ class CreateStudentsTable extends Migration
             $table->foreign('departure_year_id')->references('id')->on('departure_years');
             $table->unsignedInteger('departure_month_id');
             $table->foreign('departure_month_id')->references('id')->on('departure_months');
-            $table->enum('status', ['Active', 'Back Out']);
+            $table->enum('status', ['Active', 'Back Out', 'Final School']);
+            $table->string('remarks')->nullable();
             $table->timestamps();
         });
     }

@@ -8,12 +8,10 @@ use Yajra\Datatables\Datatables;
 
 class benefactorController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('auth');
     }
-
     /**
      * Display a listing of the resource.
      *
@@ -29,15 +27,37 @@ class benefactorController extends Controller
 
         return Datatables::of($benefactors)
         ->addColumn('action', function($data){
-            return 'Actions here';
+            return  '<button class="btn btn-warning btn-sm edit_benefactor" id="'.$data->id.'"><i class="fa fa-pen"></i></button>
+                    <button class="btn btn-danger btn-sm delete_benefactor" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
         })
         ->make(true);
     }
 
-    public function add_benefactor(Request $request){
-        $benefactor = new benefactor;
-        $benefactor->name = $request->benefactor_name;
-        $benefactor->save();
+    public function save_benefactor(Request $request){
+        $add_edit = $request->add_edit;
+        if($add_edit == 'add'){
+            $benefactor = new benefactor;
+            $benefactor->name = $request->benefactor_name;
+            $benefactor->save();
+        }
+        else{
+            $id = $request->id;
+            $benefactor = benefactor::find($id);
+            $benefactor->name = $request->benefactor_name;
+            $benefactor->save();
+        }
+    }
+
+    public function get_benefactor(Request $request){
+        $id = $request->id;
+        $benefactor = benefactor::find($id);
+
+        return $benefactor;
+    }
+
+    public function delete_benefactor(Request $request){
+        $benefactor = benefactor::find($request->id);
+        $benefactor->delete();
     }
 
     /**

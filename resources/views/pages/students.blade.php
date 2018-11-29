@@ -93,6 +93,24 @@
 
         $('.select2').select2();
 
+        function refresh_tables(){//reload datatable ajax
+            for(var x = 0; x < 4; x++){
+                students_table_variables[x].ajax.reload();
+            };
+        }
+
+        $('#student_modal').on('shown.bs.modal', function(){
+            $('#fname').focus();
+        });
+
+        $("#student_modal").on("hidden.bs.modal", function(e){
+            $('#student_form :input.required').each(function (){
+                this.style.setProperty('border-color', 'green', 'important');
+            });
+            $(this).find("input,textarea,select").val('').end();
+            $('.select2').trigger('change');
+        });
+
         //INITIALIZE -- END
 
 
@@ -131,6 +149,101 @@
             });
         }
         //DATATABLES -- END
+
+        //FUNCTIONS -- START
+
+        $('.save_student').on('click', function(e){
+            e.preventDefault();
+
+            var input = $(this);
+            var button = this;
+
+            button.disabled = true;
+            input.html('SAVING...');
+
+            var formData = new FormData($('#student_form')[0]);
+            
+            $.ajax({
+                headers: {
+                    'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '/save_student',
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(data){
+                    swal('Success!', 'Record has been saved to the Database!', 'success');
+                    $('#student_modal').modal('hide');
+                    button.disabled = false;
+                    input.html('SAVE CHANGES');
+                    refresh_tables();
+                },
+                error: function(data){
+                    swal("Oh no!", "Something went wrong, try again.", "error");
+                    button.disabled = false;
+                    input.html('SAVE CHANGES');
+                }
+            })
+        })
+
+        //Open Student Modal (ADD)
+        $('.add_student').on('click', function(){
+            $('#add_edit').val('add');
+        });
+
+        //Open Student Modal (EDIT)
+        $(document).on('click', '.edit_student', function(){
+            var id = $(this).attr('id');
+
+            $.ajax({
+                url: '/get_student',
+                method: 'get',
+                data: {id: id},
+                dataType: 'json',
+                success:function(data){
+                    console.log(data);
+                    $('#add_edit').val('edit');
+                    //reserved for picture
+                    $('#student_modal').modal('toggle');
+                    $('#student_modal').modal('show');
+                }
+            });
+        });
+
+        //Delete Student
+        $(document).on('click', '.delete_student', function(){
+            var id = $(this).attr('id');
+            console.log(id);
+
+            swal({
+                title: 'Are you sure?',
+                text: 'You are about to delete a student. This may affect multiple rows',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if(result.value){
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: '/delete_student',
+                        method: 'get',
+                        data: {id:id},
+                        type: 'json',
+                        success:function(data){
+                            swal('Deleted!', 'This Student has been Deleted', 'success');
+                            refresh_tables();
+                        }
+                    })
+                }
+            });
+        });
+
+        //FUNCTIONS -- END
     });
 </script>
 

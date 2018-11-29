@@ -9,6 +9,8 @@
             <form class="form-horizontal" id="student_form">
                 @csrf
                 <div class="modal-body">
+                    <input type="hidden" name="id" id="id">
+                    <input type="hidden" name="add_edit" id="add_edit">
 
                     <!-- LEFT COLUMN -->
                     <div class="col-md-6">
@@ -87,8 +89,9 @@
                                 <div class="form-group">
                                     <select type="text" id="program" name="program" class="form-control select2" style="width: 100%;">
                                         <option value="">Select Program</option>
-                                        <option value="1">FNPL</option>
-                                        <option value="2">LEAD Premium</option>
+                                        @foreach($program as $p)
+                                            <option value="{{ $p->id }}">{{ $p->name }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -102,12 +105,9 @@
                                 <div class="form-group">
                                     <select type="text" id="school" name="school" class="form-control select2" style="width: 100%;">
                                         <option value="">Select School</option>
-                                        <option value="1">Nagoya Kaikei</option>
-                                        <option value="2">TEC</option>
-                                        <option value="3">Osaka Gakuin</option>
-                                        <option value="4">Yu</option>
-                                        <option value="5">J-Kokusai</option>
-                                        <option value="6">Fukujukai</option>
+                                        @foreach($school as $s)
+                                            <option value="{{ $s->id }}">{{ $s->name }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -121,9 +121,9 @@
                                 <div class="form-group">
                                     <select type="text" id="benefactor" name="benefactor" class="form-control select2" style="width: 100%;">
                                         <option value="">Select Benefactor</option>
-                                        <option value="1">Supercourt</option>
-                                        <option value="2">Akikaze</option>
-                                        <option value="3">Shin-ei</option>
+                                        @foreach($benefactor as $b)
+                                            <option value="{{ $b->id }}">{{ $b->name }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -164,9 +164,9 @@
                                 <div class="form-group required">
                                     <select type="text" id="referral" name="referral" class="form-control select2 required" style="width: 100%;" required>
                                         <option value="">Select Referral</option>
-                                        <option value="1">Benedict</option>
-                                        <option value="2">Irene</option>
-                                        <option value="3">Bev</option>
+                                        @foreach($employee as $e)
+                                            <option value="{{ $e->id }}">{{ $e->fname }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -213,8 +213,8 @@
                                 <div class="form-group required">
                                     <select type="text" id="gender" name="gender" class="form-control select2 required" style="width: 100%;" required>
                                         <option value="">Select Gender</option>
-                                        <option value="1">Male</option>
-                                        <option value="2">Female</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
                                     </select>
                                 </div>
                             </div>
@@ -228,8 +228,9 @@
                                 <div class="form-group required">
                                     <select type="text" id="branch" name="branch" class="form-control select2 required" style="width: 100%;" required>
                                         <option value="">Select Branch</option>
-                                        <option value="1">Makati</option>
-                                        <option value="2">Davao</option>
+                                        @foreach($branch as $b)
+                                            <option value="{{ $b->id }}">{{ $b->name }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -254,8 +255,9 @@
                                 <div class="form-group required">
                                     <select type="text" id="year" name="year" class="form-control select2 required" style="width: 100%;" required>
                                         <option value="">Select Departure Year</option>
-                                        <option value="1">2019</option>
-                                        <option value="2">2020</option>
+                                        @foreach($departure_year as $dy)
+                                            <option value="{{ $dy->id }}">{{ $dy->name }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -269,24 +271,33 @@
                                 <div class="form-group required">
                                     <select type="text" id="month" name="month" class="form-control select2" style="width: 100%;">
                                         <option value="">Select Departure Month</option>
-                                        <option value="1">January</option>
-                                        <option value="2">April</option>
-                                        <option value="3">July</option>
-                                        <option value="4">October</option>
+                                        @foreach($departure_month as $dm)
+                                            <option value="{{ $dm->id }}">{{ $dm->name }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
                         </div>
 
-
                     </div>
+
+                    <div class="row clearfix">
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
+                                    <label for="remarks" class="pull-right">Remarks</label>
+                            </div>
+                            <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+                                <div class="form-group required">
+                                <input type="text" id="remarks" name="remarks" class="form-control" placeholder="Enter Remarks">
+                                </div>
+                            </div>
+                        </div>
 
                 </div>
 
                 <div class="modal-footer">
                     <div class="col-md-12">
                         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
+                        <button type="submit" class="btn btn-primary save_student">Save changes</button>
                     </div>
                 </div>
             </form>

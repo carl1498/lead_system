@@ -33,6 +33,10 @@ Route::get('/nagaStudent', 'studentController@naga');
 Route::get('/cebuStudent', 'studentController@cebu');
 Route::get('/davaoStudent', 'studentController@davao');
 
+Route::post('/save_student', 'studentController@save_student');
+Route::get('/get_student', 'studentController@get_student');
+Route::get('/delete_student', 'studentController@delete_student');
+
 //Schools
 Route::get('/schools', 'schoolController@index');
 Route::get('/schoolsView', 'schoolController@view');
