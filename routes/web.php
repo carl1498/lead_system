@@ -28,10 +28,7 @@ Route::get('/dashboard', 'dashboardController@index');
 
 //Student List
 Route::get('/students', 'studentController@index');
-Route::get('/makatiStudent', 'studentController@makati');
-Route::get('/nagaStudent', 'studentController@naga');
-Route::get('/cebuStudent', 'studentController@cebu');
-Route::get('/davaoStudent', 'studentController@davao');
+Route::get('/student_branch', 'studentController@branch');
 
 Route::post('/save_student', 'studentController@save_student');
 Route::get('/get_student', 'studentController@get_student');

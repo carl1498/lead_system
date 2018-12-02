@@ -52,23 +52,18 @@
         <div class="col-md-9">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="#students_makati_tab" data-toggle="tab">Makati</a></li>
-                    <li><a href="#students_naga_tab" data-toggle="tab">Naga</a></li>
-                    <li><a href="#students_cebu_tab" data-toggle="tab">Cebu</a></li>
-                    <li><a href="#students_davao_tab" data-toggle="tab">Davao</a></li>
+                    <li class="active"><a class="tab_pick" href="#students_branch_tab" data-toggle="tab">Makati</a></li>
+                    <li><a class="tab_pick" href="#students_branch_tab" data-toggle="tab">Naga</a></li>
+                    <li><a class="tab_pick" href="#students_branch_tab" data-toggle="tab">Cebu</a></li>
+                    <li><a class="tab_pick" href="#students_branch_tab" data-toggle="tab">Davao</a></li>
                     
                 </ul>
-
-                
 
                 <div class="tab-content">
 
                     @include('includes.tabs.student_tabs')
 
                 </div>
-
-
-                
 
             </div>
         </div>
@@ -88,15 +83,15 @@
     $(document).ready(function(){
 
         //INITIALIZE -- START
+
+        var current_branch = 'Makati';
         
         $('.datepicker').datepicker();
 
         $('.select2').select2();
 
         function refresh_tables(){//reload datatable ajax
-            for(var x = 0; x < 4; x++){
-                students_table_variables[x].ajax.reload();
-            };
+            students_branch.ajax.reload();
         }
 
         $('#student_modal').on('shown.bs.modal', function(){
@@ -120,7 +115,6 @@
             $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
         });
 
-
         var columns_students = [
             {data: 'name', name: 'name'},
             {data: 'contact', name: 'contact'},
@@ -135,22 +129,31 @@
             {data: "action", orderable:false,searchable:false}
         ]
 
-        const students_table_variables = [students_makati, students_naga, students_cebu, students_davao];
-        const students_table_id = ['students_makati', 'students_naga', 'students_cebu', 'students_davao'];
-        const students_table_route = ['/makatiStudent', 'nagaStudent', 'cebuStudent', 'davaoStudent'];
-
-        for(var x = 0; x < 4; x++){
-            students_table_variables[x] = $('#'+students_table_id[x]+ "").DataTable({
-                scrollX:        true,
+        function refresh_student_branch(){
+            var students_branch = $('#students_branch').DataTable({
+                destroy: true,
+                scrollX: true,
                 scrollCollapse: true,
-                fixedColumns:   true,
-                ajax: students_table_route[x],
+                fixedColumns: true,
+                ajax: {
+                    url: '/student_branch',
+                    data: {current_branch: current_branch}
+                },
                 columns: columns_students,
             });
         }
+
+        refresh_student_branch();
+
         //DATATABLES -- END
 
         //FUNCTIONS -- START
+
+        $('.tab_pick').on('click', function(){
+            current_branch = $(this).text();
+            refresh_student_branch();
+        });
+
 
         $('.save_student').on('click', function(e){
             e.preventDefault();
@@ -177,7 +180,7 @@
                     $('#student_modal').modal('hide');
                     button.disabled = false;
                     input.html('SAVE CHANGES');
-                    refresh_tables();
+                    refresh_student_branch();
                 },
                 error: function(data){
                     swal("Oh no!", "Something went wrong, try again.", "error");
@@ -202,9 +205,28 @@
                 data: {id: id},
                 dataType: 'json',
                 success:function(data){
-                    console.log(data);
                     $('#add_edit').val('edit');
-                    //reserved for picture
+                    $('#id').val(data.id);
+                    $('#fname').val(data.fname);
+                    $('#mname').val(data.mname);
+                    $('#lname').val(data.lname);
+                    $('#birthdate').val(data.birthdate);
+                    $('#age').val(data.age);
+                    $('#contact').val(data.contact);
+                    $('#program').val(data.program.id).trigger('change');
+                    $('#school').val(data.school.id).trigger('change');
+                    $('#benefactor').val(data.benefactor.id).trigger('change');
+                    $('#address').val(data.address);
+                    $('#email').val(data.email);
+                    $('#sign_up').val(data.date_of_signup);
+                    $('#medical').val(data.date_of_medical);
+                    $('#completion').val(data.date_of_completion);
+                    $('#referral').val(data.referral.id).trigger('change');
+                    $('#gender').val(data.gender).trigger('change');
+                    $('#branch').val(data.branch.id).trigger('change');
+                    $('#course').val(data.course);
+                    $('#year').val(data.departure_year.id).trigger('change');
+                    $('#month').val(data.departure_month.id).trigger('change');
                     $('#student_modal').modal('toggle');
                     $('#student_modal').modal('show');
                 }
@@ -214,7 +236,6 @@
         //Delete Student
         $(document).on('click', '.delete_student', function(){
             var id = $(this).attr('id');
-            console.log(id);
 
             swal({
                 title: 'Are you sure?',
@@ -236,7 +257,7 @@
                         type: 'json',
                         success:function(data){
                             swal('Deleted!', 'This Student has been Deleted', 'success');
-                            refresh_tables();
+                            refresh_student_branch();
                         }
                     })
                 }

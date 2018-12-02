@@ -35,40 +35,14 @@ class studentController extends Controller
         return view('pages.students', compact('program', 'school', 'benefactor', 'employee', 'branch', 'departure_year', 'departure_month'));
     }
 
-    public function makati(){
-        $m = student::with('program', 'school', 'benefactor', 'referral', 
+    public function branch(Request $request){
+        $current_branch = $request->current_branch;
+        $b = student::with('program', 'school', 'benefactor', 'referral', 
         'branch', 'departure_year', 'departure_month')->get();
 
-        $makati = $m->where('branch.name', 'Makati');
+        $branch = $b->where('branch.name', $current_branch);
 
-        return $this->refreshDatatable($makati);
-    }
-
-    public function naga(){
-        $n = student::with('program', 'school', 'benefactor', 'referral', 
-        'branch', 'departure_year', 'departure_month')->get();
-
-        $naga = $n->where('branch.name', 'Naga');
-
-        return $this->refreshDatatable($naga);
-    }
-    
-    public function cebu(){
-        $c = student::with('program', 'school', 'benefactor', 'referral', 
-        'branch', 'departure_year', 'departure_month')->get();
-
-        $cebu = $c->where('branch.name', 'Cebu');
-
-        return $this->refreshDatatable($cebu);
-    }
-    
-    public function davao(){
-        $d = student::with('program', 'school', 'benefactor', 'referral', 
-        'branch', 'departure_year', 'departure_month')->get();
-
-        $davao = $d->where('branch.name', 'Davao');
-
-        return $this->refreshDatatable($davao);
+        return $this->refreshDatatable($branch);
     }
 
     public function refreshDatatable($branch){
@@ -92,7 +66,7 @@ class studentController extends Controller
         }
         else{
             $id = $request->id;
-            $student = student::find($id);
+            $student = student::findOrFail($id);
         }
 
         $student->fname = $request->fname;
@@ -121,13 +95,13 @@ class studentController extends Controller
 
     public function get_student(Request $request){
         $id = $request->id;
-        $student = student::with('program', 'school', 'benefactor', 'employee', 'branch', 'departure_year', 'departure_month')->find($id);
+        $student = student::with('program', 'school', 'benefactor', 'referral', 'branch', 'departure_year', 'departure_month')->find($id);
 
-        return $employee;
+        return $student;
     }
 
-    public function delete_employee(Request $request){
-        $employee = employee::find($request->id);
-        $employee->delete();
+    public function delete_student(Request $request){
+        $student = student::find($request->id);
+        $student->delete();
     }
 }
