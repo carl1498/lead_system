@@ -52,11 +52,12 @@
         <div class="col-md-9">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
-                    <li class="active"><a class="tab_pick" href="#students_branch_tab" data-toggle="tab">Makati</a></li>
-                    <li><a class="tab_pick" href="#students_branch_tab" data-toggle="tab">Naga</a></li>
-                    <li><a class="tab_pick" href="#students_branch_tab" data-toggle="tab">Cebu</a></li>
-                    <li><a class="tab_pick" href="#students_branch_tab" data-toggle="tab">Davao</a></li>
-                    
+                    <li class="active"><a class="branch_pick" href="#students_branch_tab" data-toggle="tab">Makati</a></li>
+                    <li><a class="branch_pick" href="#students_branch_tab" data-toggle="tab">Naga</a></li>
+                    <li><a class="branch_pick" href="#students_branch_tab" data-toggle="tab">Cebu</a></li>
+                    <li><a class="branch_pick" href="#students_branch_tab" data-toggle="tab">Davao</a></li>
+                    <li><a class="status_pick" href="#students_status_tab" data-toggle="tab">Final School</a></li>
+                    <li><a class="status_pick" href="#students_status_tab" data-toggle="tab">Backout</a></li>
                 </ul>
 
                 <div class="tab-content">
@@ -85,6 +86,7 @@
         //INITIALIZE -- START
 
         var current_branch = 'Makati';
+        var current_status = '';
         
         $('.datepicker').datepicker();
 
@@ -129,6 +131,50 @@
             {data: "action", orderable:false,searchable:false}
         ]
 
+        var columnDefs_students = [
+            { width: 220, targets: 0 },
+            { width: 90, targets: 1 },
+            { width: 130, targets: 2 },
+            { width: 130, targets: 3 },
+            { width: 130, targets: 4 },
+            { width: 60, targets: 5 },
+            { width: 45, targets: 6 },
+            { width: 200, targets: 7 },
+            { width: 120, targets: 8 },
+            { width: 120, targets: 9 },
+            { width: 150, targets: 10 },
+        ]
+
+        var columns_students_status = [
+            {data: 'name', name: 'name'},
+            {data: 'branch.name', name: 'branch'},
+            {data: 'contact', name: 'contact'},
+            {data: 'program.name', name: 'program'},
+            {data: 'school.name', name: 'school'},
+            {data: 'benefactor.name', name: 'benefactor'},
+            {data: 'gender', name: 'gender'},
+            {data: 'age', name: 'age'},
+            {data: 'course', name: 'course'},
+            {data: 'date_of_signup', name: 'date_of_signup'},
+            {data: 'referral.fname', name: 'referral'},
+            {data: "action", orderable:false,searchable:false}
+        ]
+        
+        var columnDefs_students_status = [
+            { width: 220, targets: 0 },
+            { width: 70, targets: 1 },
+            { width: 90, targets: 2 },
+            { width: 130, targets: 3 },
+            { width: 130, targets: 4 },
+            { width: 130, targets: 5 },
+            { width: 60, targets: 6 },
+            { width: 45, targets: 7 },
+            { width: 200, targets: 8 },
+            { width: 120, targets: 9 },
+            { width: 120, targets: 10 },
+            { width: 150, targets: 11 },
+        ]
+
         function refresh_student_branch(){
             var students_branch = $('#students_branch').DataTable({
                 destroy: true,
@@ -139,21 +185,46 @@
                     url: '/student_branch',
                     data: {current_branch: current_branch}
                 },
+                columnDefs: columnDefs_students,
                 columns: columns_students,
             });
         }
 
+        function refresh_student_status(){
+            var students_status = $('#students_status').DataTable({
+                destroy: true,
+                scrollX: true,
+                scrollCollapse: true,
+                fixedColumns: true,
+                responsive: true,
+                ajax: '/student_status',
+                ajax: {
+                    url: '/student_status',
+                    data: {current_status: current_status}
+                },
+                columnDefs: columnDefs_students_status,
+                columns: columns_students_status,
+            });
+        }
+
         refresh_student_branch();
+        refresh_student_status();
 
         //DATATABLES -- END
 
         //FUNCTIONS -- START
 
-        $('.tab_pick').on('click', function(){
+        $('.branch_pick').on('click', function(){
             current_branch = $(this).text();
+            
             refresh_student_branch();
         });
 
+        $('.status_pick').on('click', function(){
+            current_status = $(this).text();
+
+            refresh_student_status();
+        })
 
         $('.save_student').on('click', function(e){
             e.preventDefault();
@@ -259,7 +330,40 @@
                             swal('Deleted!', 'This Student has been Deleted', 'success');
                             refresh_student_branch();
                         }
-                    })
+                    });
+                }
+            });
+        });
+
+        $(document).on('click', '.final_student', function(){
+            var id = $(this).attr('id');
+            console.log(id);
+
+            swal({
+                title: 'Go for Final School?',
+                text: 'This Student will be in Final School',
+                type: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!'
+            }).then((result) => {
+                if(result.value){
+                    $.ajax({
+                        url: '/final_student',
+                        method: 'POST',
+                        data: {id: id},
+                        dataType: 'json',
+                        success: function(data){
+                            swal('Congratulations!', 'This Student is now in Final School!', 'success');
+                            refresh_student_branch();
+                            refresh_student_status();
+                        },
+                        error: function(data){
+                            console.log(data);
+                            console.log(id);
+                        }
+                    });
                 }
             });
         });

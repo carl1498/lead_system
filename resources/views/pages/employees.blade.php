@@ -52,10 +52,10 @@
         <div class="col-md-9">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="#employees_makati_tab" data-toggle="tab">Makati</a></li>
-                    <li><a href="#employees_naga_tab" data-toggle="tab">Naga</a></li>
-                    <li><a href="#employees_cebu_tab" data-toggle="tab">Cebu</a></li>
-                    <li><a href="#employees_davao_tab" data-toggle="tab">Davao</a></li>
+                    <li class="active"><a class="tab_pick" href="#employees_branch_tab" data-toggle="tab">Makati</a></li>
+                    <li><a class="tab_pick" href="#employees_branch_tab" data-toggle="tab">Naga</a></li>
+                    <li><a class="tab_pick" href="#employees_branch_tab" data-toggle="tab">Cebu</a></li>
+                    <li><a class="tab_pick" href="#employees_branch_tab" data-toggle="tab">Davao</a></li>
                     
                 </ul>
 
@@ -83,14 +83,14 @@
 
         //INITIALIZE -- START
 
+        var current_branch = 'Makati';
+
         $('.datepicker').datepicker();
 
         $('.select2').select2();
 
         function refresh_tables(){//reload datatable ajax
-            for(var x = 0; x < 4; x++){
-                employees_table_variables[x].ajax.reload();
-            };
+            employees_branch.ajax.reload();
         }
 
         $('#employee_modal').on('shown.bs.modal', function(){
@@ -125,23 +125,30 @@
             {data: "action", orderable:false,searchable:false}
         ]
 
-        const employees_table_variables = [employees_makati, employees_naga, employees_cebu, employees_davao];
-        const employees_table_id = ['employees_makati', 'employees_naga', 'employees_cebu', 'employees_davao'];
-        const employees_table_route = ['/makatiEmployee', '/nagaEmployee', '/cebuEmployee', '/davaoEmployee'];
-
-        for(var x = 0; x < 4; x++){
-            employees_table_variables[x] = $('#'+employees_table_id[x]+ "").DataTable({
-                scrollX:        true,
+        function refresh_employee_branch(){
+            var employees_branch = $('#employees_branch').DataTable({
+                destroy: true,
+                scrollX: true,
                 scrollCollapse: true,
-                fixedColumns:   true,
-                ajax: employees_table_route[x],
+                fixedColumns: true,
+                ajax: {
+                    url: '/employee_branch',
+                    data: {current_branch: current_branch}
+                },
                 columns: columns_employees,
             });
         }
 
+        refresh_employee_branch();
+
         //DATATABLES -- END
 
         //FUNCTIONS -- START
+
+        $('.tab_pick').on('click', function(){
+            current_branch = $(this).text();
+            refresh_employee_branch();
+        });
 
         //Add or Edit School
         $('.save_employee').on('click', function(e){
@@ -169,7 +176,7 @@
                     $('#employee_modal').modal('hide');
                     button.disabled = false;
                     input.html('SAVE CHANGES');
-                    refresh_tables();
+                    refresh_employee_branch();
                 },
                 error: function(data){
                     swal("Oh no!", "Something went wrong, try again.", "error");
@@ -245,7 +252,7 @@
                         type: 'json',
                         success:function(data){
                             swal('Deleted!', 'This Employee has been Deleted', 'success');
-                            refresh_tables();
+                            refresh_employee_branch();
                         }
                     })
                 }

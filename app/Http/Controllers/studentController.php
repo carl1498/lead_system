@@ -51,7 +51,31 @@ class studentController extends Controller
             return $data->lname.', '.$data->fname.' '.$data->mname;
         })
         ->addColumn('action', function($data){
-            return  '<button class="btn btn-warning btn-xs edit_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>
+            return  '<button class="btn btn-success btn-xs final_student" id="'.$data->id.'"><i class="fa fa-graduation-cap"></i></button>
+                    <button class="btn btn-warning btn-xs backout_student" id="'.$data->id.'"><i class="fa fa-sign-out-alt"></i></button>
+                    <button class="btn btn-info btn-xs edit_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>
+                    <button class="btn btn-danger btn-xs delete_student" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
+        })
+        ->make(true);
+    }
+
+    public function status(Request $request){
+        $current_status = $request->current_status;
+        $s = student::with('program', 'school', 'benefactor', 'referral', 
+        'branch', 'departure_year', 'departure_month')->get();
+
+        $status = $s->where('status', $current_status);
+
+        return $this->refreshDatatableStatus($status);
+    }
+
+    public function refreshDatatableStatus($type){
+        return Datatables::of($type)
+        ->editColumn('name', function($data){
+            return $data->lname.', '.$data->fname.' '.$data->mname;
+        })
+        ->addColumn('action', function($data){
+            return  '<button class="btn btn-info btn-xs edit_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>
                     <button class="btn btn-danger btn-xs delete_student" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
         })
         ->make(true);
@@ -66,7 +90,7 @@ class studentController extends Controller
         }
         else{
             $id = $request->id;
-            $student = student::findOrFail($id);
+            $student = student::find($id);
         }
 
         $student->fname = $request->fname;
@@ -103,5 +127,10 @@ class studentController extends Controller
     public function delete_student(Request $request){
         $student = student::find($request->id);
         $student->delete();
+    }
+
+    public function final_student(Request $request){
+        $student = student::find($request->id);
+        $student->status = 'Final School';
     }
 }

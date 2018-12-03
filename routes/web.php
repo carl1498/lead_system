@@ -29,7 +29,9 @@ Route::get('/dashboard', 'dashboardController@index');
 //Student List
 Route::get('/students', 'studentController@index');
 Route::get('/student_branch', 'studentController@branch');
+Route::get('/student_status', 'studentController@status');
 
+Route::post('/final_student', 'studentController@final_student');
 Route::post('/save_student', 'studentController@save_student');
 Route::get('/get_student', 'studentController@get_student');
 Route::get('/delete_student', 'studentController@delete_student');
@@ -61,10 +63,7 @@ Route::get('/delete_benefactor', 'benefactorController@delete_benefactor');
 //EMPLOYEE ROUTES -- START
 
 Route::get('/employees', 'employeeController@index');
-Route::get('/makatiEmployee', 'employeeController@makati');
-Route::get('/nagaEmployee', 'employeeController@naga');
-Route::get('/cebuEmployee', 'employeeController@cebu');
-Route::get('/davaoEmployee', 'employeeController@davao');
+Route::get('/employee_branch', 'employeeController@branch');
 
 Route::post('/save_employee', 'employeeController@save_employee');
 Route::get('/get_employee', 'employeeController@get_employee');

@@ -1,7 +1,7 @@
 <!-- EMPLOYEES MAKATI -- START -->
 
-<div class="tab-pane fade in active" id="employees_makati_tab">
-    <table id="employees_makati" class="table table-hover table-striped table-bordered" cellspacing="0">
+<div class="tab-pane fade in active" id="employees_branch_tab">
+    <table id="employees_branch" class="table table-hover table-striped table-bordered" cellspacing="0">
         @include('includes.tables.employee_table')
     </table>
 </div>

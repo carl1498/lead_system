@@ -1,6 +1,7 @@
 <thead>
     <tr>
         <th>Name</th>
+        <th>Branch</th>
         <th>Contact</th>
         <th>Program</th>
         <th>School</th>

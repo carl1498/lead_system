@@ -38,36 +38,13 @@ class employeeController extends Controller
         return view('pages.employees', compact('branch', 'role'));
     }
 
-    public function makati(){
-        $id = Auth::user()->emp_id;
-        $m = employee::with('role')->with('branch')->get();
-        $makati = $m->where('branch.name', 'Makati');
+    public function branch(Request $request){
+        $current_branch = $request->current_branch;
+        $b = employee::with('role', 'branch')->get();
 
-        return $this->refreshDatatable($makati);
-    }
+        $branch = $b->where('branch.name', $current_branch);
 
-    public function naga(){
-        $id = Auth::user()->emp_id;
-        $n = employee::with('role', 'branch')->get();
-        $naga = $n->where('branch.name', 'Naga');
-
-        return $this->refreshDatatable($naga);
-    }
-
-    public function cebu(){
-        $id = Auth::user()->emp_id;
-        $c = employee::with('role')->with('branch')->get();
-        $cebu = $c->where('branch.name', 'Cebu');
-
-        return $this->refreshDatatable($cebu);
-    }
-
-    public function davao(){
-        $id = Auth::user()->emp_id;
-        $d = employee::with('role')->with('branch')->get();
-        $davao = $d->where('branch.name', 'Davao');
-
-        return $this->refreshDatatable($davao);
+        return $this->refreshDatatable($branch);
     }
 
     public function refreshDatatable($branch){
