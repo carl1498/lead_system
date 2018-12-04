@@ -280,7 +280,6 @@
                 data: {id: id},
                 dataType: 'json',
                 success:function(data){
-                    console.log(data);
                     $('#add_edit').val('edit');
                     $('#id').val(data.id);
                     $('#fname').val(data.fname);
@@ -289,9 +288,15 @@
                     $('#birthdate').val(data.birthdate);
                     $('#age').val(data.age);
                     $('#contact').val(data.contact);
-                    $('#program').val(data.program.id).trigger('change');
-                    $('#school').val(data.school.id).trigger('change');
-                    $('#benefactor').val(data.benefactor.id).trigger('change');
+                    if(data.program){
+                        $('#program').val(data.program.id).trigger('change');
+                    }
+                    if(data.school){
+                        $('#school').val(data.school.id).trigger('change');
+                    }
+                    if(data.benefactor){
+                        $('#benefactor').val(data.benefactor.id).trigger('change');
+                    }
                     $('#address').val(data.address);
                     $('#email').val(data.email);
                     $('#sign_up').val(data.date_of_signup);
