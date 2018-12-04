@@ -31,7 +31,9 @@ Route::get('/students', 'studentController@index');
 Route::get('/student_branch', 'studentController@branch');
 Route::get('/student_status', 'studentController@status');
 
-Route::post('/final_student', 'studentController@final_student');
+Route::get('/continue_student', 'studentController@continue_student');
+Route::get('/backout_student', 'studentController@backout_student');
+Route::get('/final_student', 'studentController@final_student');
 Route::post('/save_student', 'studentController@save_student');
 Route::get('/get_student', 'studentController@get_student');
 Route::get('/delete_student', 'studentController@delete_student');

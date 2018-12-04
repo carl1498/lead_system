@@ -40,7 +40,7 @@ class studentController extends Controller
         $b = student::with('program', 'school', 'benefactor', 'referral', 
         'branch', 'departure_year', 'departure_month')->get();
 
-        $branch = $b->where('branch.name', $current_branch);
+        $branch = $b->where('branch.name', $current_branch)->whereIn('status', ['Active', 'Final School']);
 
         return $this->refreshDatatable($branch);
     }
@@ -51,10 +51,12 @@ class studentController extends Controller
             return $data->lname.', '.$data->fname.' '.$data->mname;
         })
         ->addColumn('action', function($data){
-            return  '<button class="btn btn-success btn-xs final_student" id="'.$data->id.'"><i class="fa fa-graduation-cap"></i></button>
-                    <button class="btn btn-warning btn-xs backout_student" id="'.$data->id.'"><i class="fa fa-sign-out-alt"></i></button>
-                    <button class="btn btn-info btn-xs edit_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>
-                    <button class="btn btn-danger btn-xs delete_student" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
+            $html = '<button class="btn btn-success btn-xs final_student" id="'.$data->id.'"><i class="fa fa-user-graduate"></i></button>
+            <button class="btn btn-warning btn-xs backout_student" id="'.$data->id.'"><i class="fa fa-sign-out-alt"></i></button>
+            <button class="btn btn-info btn-xs edit_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>
+            <button class="btn btn-danger btn-xs delete_student" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
+
+            return  $html;
         })
         ->make(true);
     }
@@ -75,8 +77,20 @@ class studentController extends Controller
             return $data->lname.', '.$data->fname.' '.$data->mname;
         })
         ->addColumn('action', function($data){
-            return  '<button class="btn btn-info btn-xs edit_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>
+            $html = '';
+
+            if($data->status == 'Final School'){
+                $html .= '<button class="btn btn-warning btn-xs backout_student" id="'.$data->id.'"><i class="fa fa-sign-out-alt"></i></button>';
+            }
+            else if($data->status == 'Back Out'){
+                $html .= '<button class="btn btn-success btn-xs continue_student" id="'.$data->id.'"><i class="fa fa-sign-in-alt"></i></button>';
+            }
+
+            $html .= '
+                    <button class="btn btn-info btn-xs edit_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>
                     <button class="btn btn-danger btn-xs delete_student" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
+            
+            return $html;
         })
         ->make(true);
     }
@@ -132,5 +146,18 @@ class studentController extends Controller
     public function final_student(Request $request){
         $student = student::find($request->id);
         $student->status = 'Final School';
+        $student->save();
+    }
+
+    public function backout_student(Request $request){
+        $student = student::find($request->id);
+        $student->status = 'Back Out';
+        $student->save();
+    }
+
+    public function continue_student(Request $request){
+        $student = student::find($request->id);
+        $student->status = 'Active';
+        $student->save();
     }
 }

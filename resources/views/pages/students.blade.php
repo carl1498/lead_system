@@ -57,7 +57,7 @@
                     <li><a class="branch_pick" href="#students_branch_tab" data-toggle="tab">Cebu</a></li>
                     <li><a class="branch_pick" href="#students_branch_tab" data-toggle="tab">Davao</a></li>
                     <li><a class="status_pick" href="#students_status_tab" data-toggle="tab">Final School</a></li>
-                    <li><a class="status_pick" href="#students_status_tab" data-toggle="tab">Backout</a></li>
+                    <li><a class="status_pick" href="#students_status_tab" data-toggle="tab">Back Out</a></li>
                 </ul>
 
                 <div class="tab-content">
@@ -143,6 +143,8 @@
             { width: 120, targets: 8 },
             { width: 120, targets: 9 },
             { width: 150, targets: 10 },
+            {defaultContent: "",
+             targets: "_all"}
         ]
 
         var columns_students_status = [
@@ -173,6 +175,8 @@
             { width: 120, targets: 9 },
             { width: 120, targets: 10 },
             { width: 150, targets: 11 },
+            {defaultContent: "",
+             targets: "_all"}
         ]
 
         function refresh_student_branch(){
@@ -197,7 +201,6 @@
                 scrollCollapse: true,
                 fixedColumns: true,
                 responsive: true,
-                ajax: '/student_status',
                 ajax: {
                     url: '/student_status',
                     data: {current_status: current_status}
@@ -252,6 +255,7 @@
                     button.disabled = false;
                     input.html('SAVE CHANGES');
                     refresh_student_branch();
+                    refresh_student_status();
                 },
                 error: function(data){
                     swal("Oh no!", "Something went wrong, try again.", "error");
@@ -276,6 +280,7 @@
                 data: {id: id},
                 dataType: 'json',
                 success:function(data){
+                    console.log(data);
                     $('#add_edit').val('edit');
                     $('#id').val(data.id);
                     $('#fname').val(data.fname);
@@ -329,15 +334,16 @@
                         success:function(data){
                             swal('Deleted!', 'This Student has been Deleted', 'success');
                             refresh_student_branch();
+                            refresh_student_status();
                         }
                     });
                 }
             });
         });
 
+        //Final School
         $(document).on('click', '.final_student', function(){
             var id = $(this).attr('id');
-            console.log(id);
 
             swal({
                 title: 'Go for Final School?',
@@ -351,17 +357,71 @@
                 if(result.value){
                     $.ajax({
                         url: '/final_student',
-                        method: 'POST',
+                        method: 'get',
                         data: {id: id},
-                        dataType: 'json',
+                        dataType: 'text',
                         success: function(data){
                             swal('Congratulations!', 'This Student is now in Final School!', 'success');
                             refresh_student_branch();
                             refresh_student_status();
-                        },
-                        error: function(data){
-                            console.log(data);
-                            console.log(id);
+                        }
+                    });
+                }
+            });
+        });
+
+        //Back Out
+        $(document).on('click', '.backout_student', function(){
+            var id = $(this).attr('id');
+
+            swal({
+                title: 'Student will backout?',
+                text: 'This Student will be transferred to list of backouts',
+                type: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!'
+            }).then((result) => {
+                if(result.value){
+                    $.ajax({
+                        url: '/backout_student',
+                        method: 'get',
+                        data: {id: id},
+                        dataType: 'text',
+                        success: function(data){
+                            swal('Success!', 'This Student has backed out!', 'success');
+                            refresh_student_branch();
+                            refresh_student_status();
+                        }
+                    });
+                }
+            });
+        });
+
+        //Continue (From Back Out)
+        $(document).on('click', '.continue_student', function(){
+            var id = $(this).attr('id');
+
+            swal({
+                title: 'Student will apply again?',
+                text: 'This Student will be transferred to list of Active Students',
+                type: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!'
+            }).then((result) => {
+                if(result.value){
+                    $.ajax({
+                        url: '/continue_student',
+                        method: 'get',
+                        data: {id: id},
+                        dataType: 'text',
+                        success: function(data){
+                            swal('Congratulations!', 'This Student is now active again!', 'success');
+                            refresh_student_branch();
+                            refresh_student_status();
                         }
                     });
                 }
