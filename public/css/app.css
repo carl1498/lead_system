@@ -16140,3 +16140,7 @@ readers do not read off random characters that represent icons */
   text-align: left !important;
 }
 
+.tooltip-inner {
+  max-width: 100% !important;
+}
+

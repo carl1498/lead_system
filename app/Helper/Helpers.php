@@ -13,3 +13,15 @@ function onLoadPosition(){
 
     return $user->employee->role->name;
 }
+
+function departure_year(){
+    $departure_year = \App\departure_year::all();
+
+    return $departure_year;
+}
+
+function departure_month(){
+    $departure_month = \App\departure_month::all();
+
+    return $departure_month;
+}

@@ -37,10 +37,13 @@ class studentController extends Controller
 
     public function branch(Request $request){
         $current_branch = $request->current_branch;
+        $departure_year = $request->departure_year;
+        $departure_month = $request->departure_month;
+
         $b = student::with('program', 'school', 'benefactor', 'referral', 
         'branch', 'departure_year', 'departure_month')->get();
 
-        $branch = $b->where('branch.name', $current_branch)->whereIn('status', ['Active', 'Final School']);
+        $branch = $b->where('branch.name', $current_branch)->where('departure_year_id', $departure_year)->where('departure_month_id', $departure_month)->whereIn('status', ['Active', 'Final School']);
 
         return $this->refreshDatatable($branch);
     }
@@ -51,10 +54,10 @@ class studentController extends Controller
             return $data->lname.', '.$data->fname.' '.$data->mname;
         })
         ->addColumn('action', function($data){
-            $html = '<button class="btn btn-success btn-xs final_student" id="'.$data->id.'"><i class="fa fa-user-graduate"></i></button>
-            <button class="btn btn-warning btn-xs backout_student" id="'.$data->id.'"><i class="fa fa-sign-out-alt"></i></button>
-            <button class="btn btn-info btn-xs edit_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>
-            <button class="btn btn-danger btn-xs delete_student" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
+            $html = '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Final School" class="btn btn-success btn-xs final_student" id="'.$data->id.'"><i class="fa fa-user-graduate"></i></button>
+            <button data-container="body" data-toggle="tooltip" data-placement="left" title="Back Out" class="btn btn-warning btn-xs backout_student" id="'.$data->id.'"><i class="fa fa-sign-out-alt"></i></button>
+            <button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>
+            <button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_student" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
 
             return  $html;
         })
@@ -63,10 +66,13 @@ class studentController extends Controller
 
     public function status(Request $request){
         $current_status = $request->current_status;
+        $departure_year = $request->departure_year;
+        $departure_month = $request->departure_month;
+
         $s = student::with('program', 'school', 'benefactor', 'referral', 
         'branch', 'departure_year', 'departure_month')->get();
 
-        $status = $s->where('status', $current_status);
+        $status = $s->where('status', $current_status)->where('departure_year_id', $departure_year)->where('departure_month_id', $departure_month);
 
         return $this->refreshDatatableStatus($status);
     }
@@ -80,15 +86,17 @@ class studentController extends Controller
             $html = '';
 
             if($data->status == 'Final School'){
-                $html .= '<button class="btn btn-warning btn-xs backout_student" id="'.$data->id.'"><i class="fa fa-sign-out-alt"></i></button>';
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Re Apply" class="btn btn-success btn-xs continue_student" id="'.$data->id.'"><i class="fa fa-step-backward"></i></button>
+                         ';
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Back Out" class="btn btn-warning btn-xs backout_student" id="'.$data->id.'"><i class="fa fa-sign-out-alt"></i></button>';
             }
             else if($data->status == 'Back Out'){
-                $html .= '<button class="btn btn-success btn-xs continue_student" id="'.$data->id.'"><i class="fa fa-sign-in-alt"></i></button>';
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Re Apply" class="btn btn-success btn-xs continue_student" id="'.$data->id.'"><i class="fa fa-sign-in-alt"></i></button>';
             }
 
             $html .= '
-                    <button class="btn btn-info btn-xs edit_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>
-                    <button class="btn btn-danger btn-xs delete_student" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
+                    <button data-container="body" data-toggle="tooltip" data-placement="left" title="Final School" class="btn btn-info btn-xs edit_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>
+                    <button data-container="body" data-toggle="tooltip" data-placement="left" title="Final School" class="btn btn-danger btn-xs delete_student" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
             
             return $html;
         })

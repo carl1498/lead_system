@@ -24,7 +24,7 @@
 					</a>
 				</li>
 		
-                <li class="{{ (Request::path() == 'students' || Request::path() == 'schools' || Request::path() == 'programs' || Request::path() == 'benefactors') ? 'active' : '' }} treeview">
+                <li class="{{ (Request::path() == 'students' || Request::path() == 'student_settings') ? 'active' : '' }} treeview">
 					<a href="">
 						<i class="fa fa-user-graduate"></i> <span>Students</span>
 						<span class="pull-right-container">
@@ -33,9 +33,7 @@
 					</a>
 					<ul class="treeview-menu">
 						<li class="{{ (Request::path() == 'students') ? 'active' : '' }}"><a href="/students"><i class="fa fa-list-ul"></i> Student List</a></li>
-						<li class="{{ (Request::path() == 'schools') ? 'active' : '' }}"><a href="/schools"><i class="fa fa-graduation-cap"></i> Schools</a></li>
-						<li class="{{ (Request::path() == 'programs') ? 'active' : '' }}"><a href="/programs"><i class="fa fa-clipboard-list"></i> Programs</a></li>
-						<li class="{{ (Request::path() == 'benefactors') ? 'active' : '' }}"><a href="/benefactors"><i class="fa fa-hands-helping"></i> Benefactors</a></li>
+						<li class="{{ (Request::path() == 'student_settings') ? 'active' : '' }}"><a href="/student_settings"><i class="fa fa-cog"></i> Settings</a></li>
 					</ul>
 				</li>
 

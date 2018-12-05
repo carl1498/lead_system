@@ -61,7 +61,8 @@
                 </ul>
 
                 <div class="tab-content">
-
+                    
+                    @include('includes.departures')
                     @include('includes.tabs.student_tabs')
 
                 </div>
@@ -87,10 +88,20 @@
 
         var current_branch = 'Makati';
         var current_status = '';
+        var departure_year = $('#year_select').val();
+        var departure_month = $('#month_select').val();
+
+        var students_branch;
+        var students_status;
         
         $('.datepicker').datepicker();
 
         $('.select2').select2();
+        
+        $('body').tooltip({
+            selector: '[data-toggle="tooltip"]',
+            trigger : 'hover'
+        });
 
         function refresh_tables(){//reload datatable ajax
             students_branch.ajax.reload();
@@ -143,8 +154,7 @@
             { width: 120, targets: 8 },
             { width: 120, targets: 9 },
             { width: 150, targets: 10 },
-            {defaultContent: "",
-             targets: "_all"}
+            {defaultContent: "", targets: "_all"}
         ]
 
         var columns_students_status = [
@@ -175,27 +185,39 @@
             { width: 120, targets: 9 },
             { width: 120, targets: 10 },
             { width: 150, targets: 11 },
-            {defaultContent: "",
-             targets: "_all"}
+            {defaultContent: "", targets: "_all"}
         ]
 
         function refresh_student_branch(){
-            var students_branch = $('#students_branch').DataTable({
+            departure_year = $('#year_select').val();
+            departure_month = $('#month_select').val();
+
+            students_branch = $('#students_branch').DataTable({
                 destroy: true,
                 scrollX: true,
                 scrollCollapse: true,
                 fixedColumns: true,
                 ajax: {
                     url: '/student_branch',
-                    data: {current_branch: current_branch}
+                    data: {
+                        current_branch: current_branch,
+                        departure_year: departure_year,
+                        departure_month: departure_month
+                    }
                 },
                 columnDefs: columnDefs_students,
                 columns: columns_students,
             });
+
+            $('.tooltip').css('width', '400px');
         }
 
         function refresh_student_status(){
-            var students_status = $('#students_status').DataTable({
+
+            departure_year = $('#year_select').val();
+            departure_month = $('#month_select').val();
+
+            students_status = $('#students_status').DataTable({
                 destroy: true,
                 scrollX: true,
                 scrollCollapse: true,
@@ -203,7 +225,11 @@
                 responsive: true,
                 ajax: {
                     url: '/student_status',
-                    data: {current_status: current_status}
+                    data: {
+                        current_status: current_status,
+                        departure_year: departure_year,
+                        departure_month: departure_month
+                    }
                 },
                 columnDefs: columnDefs_students_status,
                 columns: columns_students_status,
@@ -227,7 +253,12 @@
             current_status = $(this).text();
 
             refresh_student_status();
-        })
+        });
+
+        $(document).on('change', '#year_select, #month_select', function(){
+            refresh_student_branch();
+            refresh_student_status();
+        });
 
         $('.save_student').on('click', function(e){
             e.preventDefault();
@@ -262,8 +293,8 @@
                     button.disabled = false;
                     input.html('SAVE CHANGES');
                 }
-            })
-        })
+            });
+        });
 
         //Open Student Modal (ADD)
         $('.add_student').on('click', function(){
@@ -424,7 +455,12 @@
                         data: {id: id},
                         dataType: 'text',
                         success: function(data){
-                            swal('Congratulations!', 'This Student is now active again!', 'success');
+                            if(current_status == 'Final School'){
+                                swal('Success!', 'This Student out of Final School!', 'success');
+                            }
+                            else{
+                                swal('Congratulations!', 'This Student is now active again!', 'success');
+                            }
                             refresh_student_branch();
                             refresh_student_status();
                         }

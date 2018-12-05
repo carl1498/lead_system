@@ -38,26 +38,29 @@ Route::post('/save_student', 'studentController@save_student');
 Route::get('/get_student', 'studentController@get_student');
 Route::get('/delete_student', 'studentController@delete_student');
 
+//Student Settings
+Route::get('/student_settings', 'studentSettingsController@index');
+Route::get('/view_student_settings', 'studentSettingsController@view');
+
+/* This part reserved for possible future use
 //Schools
-Route::get('/schools', 'schoolController@index');
 Route::get('/schoolsView', 'schoolController@view');
 Route::post('/save_school', 'schoolController@save_school');
 Route::get('/get_school', 'schoolController@get_school');
 Route::get('/delete_school', 'schoolController@delete_school');
 
 //Programs
-Route::get('/programs', 'programController@index');
 Route::get('/programsView', 'programController@view');
 Route::post('/save_program', 'programController@save_program');
 Route::get('/get_program', 'programController@get_program');
 Route::get('/delete_program', 'programController@delete_program');
 
 //Benefactors
-Route::get('/benefactors', 'benefactorController@index');
 Route::get('/benefactorsView', 'benefactorController@view');
 Route::post('/save_benefactor', 'benefactorController@save_benefactor');
 Route::get('/get_benefactor', 'benefactorController@get_benefactor');
 Route::get('/delete_benefactor', 'benefactorController@delete_benefactor');
+*/
 
 //STUDENT ROUTES -- END
 
