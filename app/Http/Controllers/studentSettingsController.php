@@ -8,6 +8,7 @@ use App\school;
 use App\benefactor;
 use App\departure_year;
 use App\departure_month;
+use App\course;
 use Yajra\Datatables\Datatables;
 
 class studentSettingsController extends Controller
@@ -39,15 +40,42 @@ class studentSettingsController extends Controller
         else if($current_settings == 'Month'){
             $settings = departure_month::all();
         }
-        /*else if($current_settings == 'Course'){
+        else if($current_settings == 'Course'){
             $settings = course::all();
-        }*/
+        }
 
         return Datatables::of($settings)
         ->addColumn('action', function($data){
-            return  '<button class="btn btn-warning btn-sm edit_settings" id="'.$data->id.'"><i class="fa fa-pen"></i></button>
-                    <button class="btn btn-danger btn-sm delete_settings" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
+            return  '<button class="btn btn-warning btn-sm edit_sstudent_ettings" id="'.$data->id.'"><i class="fa fa-pen"></i></button>
+                    <button class="btn btn-danger btn-sm delete_sstudent_settings" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
         })
         ->make(true);
+    }
+
+    public function store(Request $request){
+        $current_settings = $request->current_settings;
+        
+        if($current_settings == 'Program'){
+            $settings = program::all();
+        }
+        else if($current_settings == 'School'){
+            $settings = school::all();
+        }
+        else if($current_settings == 'Benefactor'){
+            $settings = benefactor::all();
+        }
+        else if($current_settings == 'Year'){
+            $settings = departure_year::all();
+        }
+        else if($current_settings == 'Month'){
+            $settings = departure_month::all();
+        }
+        else if($current_settings == 'Course'){
+            $settings = course::all();
+        }
+
+        if($request->add_edit == 'add'){
+            
+        }
     }
 }

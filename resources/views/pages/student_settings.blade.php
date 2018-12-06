@@ -28,7 +28,7 @@
                     <li><a class="settings_pick" href="#student_settings_tab" data-toggle="tab">Benefactor</a></li>
                     <li><a class="settings_pick" href="#student_settings_tab" data-toggle="tab">Year</a></li>
                     <li><a class="settings_pick" href="#student_settings_tab" data-toggle="tab">Month</a></li>
-                    <!--<li><a class="settings_pick" href="#student_settings_tab" data-toggle="tab">Course</a></li>-->
+                    <li><a class="settings_pick" href="#student_settings_tab" data-toggle="tab">Course</a></li>
                 </ul>
 
                 <div class="tab-content">
@@ -104,14 +104,42 @@
             refresh_student_settings();
         });
 
-        //Add or Edit Settings
+        //Open Student Settings Modal (ADD)
         $('.add_student_settings').on('click', function(){
+            $('#add_edit').val('add');
+            $('#student_settings_modal .modal-title').text('Add ' + current_settings);
+            $('#student_settings_form label').text(current_settings + ' Name');
+            $('#student_settings_name').attr('placeholder', 'Enter ' + current_settings + ' Name');
+            
             $('#student_settings_modal').modal('toggle');
             $('#student_settings_modal').modal('show');
-
-            $('#student_settings_modal .modal-title').text('mao ni');
         });
 
+        //Open Student Settings Modal (EDIT)
+        $('.edit_student_settings').on('click', function(){
+            var id = $(this).attr('id');
+
+            $.ajax({
+                url: '/get_student_settings',
+                method: 'get',
+                data: [
+                    {$('#student_settings_form').serialize()},
+                    {current_settings: current_settings}
+                ],
+                dataType: 'json',
+                success: function(data){
+                    $('#id').val($(this).val());
+                    $('#add_edit').val('edit');
+                    $('#student_settings_modal .modal-title').text('Add ' + current_settings);
+                    $('#student_settings_form label').text(current_settings + ' Name');
+
+
+                }
+            });
+
+            $('#student_settings_modal').modal('toggle');
+            $('#student_settings_modal').modal('show');
+        })
 
         //FUNCTIONS -- END
     });

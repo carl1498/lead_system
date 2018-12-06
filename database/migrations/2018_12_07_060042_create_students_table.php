@@ -37,7 +37,8 @@ class CreateStudentsTable extends Migration
             $table->enum('gender', ['Male', 'Female']);
             $table->unsignedInteger('branch_id');
             $table->foreign('branch_id')->references('id')->on('branches');
-            $table->string('course')->nullable();
+            $table->unsignedInteger('course_id');
+            $table->foreign('course_id')->references('id')->on('courses');
             $table->unsignedInteger('departure_year_id');
             $table->foreign('departure_year_id')->references('id')->on('departure_years');
             $table->unsignedInteger('departure_month_id');
