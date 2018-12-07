@@ -104,6 +104,45 @@
             refresh_student_settings();
         });
 
+        //save student settings
+        $('.save_student_settings').on('click', function(e){
+            console.log(current_settings);
+            console.log($('#add_edit').val())
+            e.preventDefault();
+
+            var input = $(this);
+            var button = this;
+
+            button.disabled = true;
+            input.html('SAVING...');
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: 'text',
+                method: 'POST',
+                url: '/save_student_settings',
+                data: [
+                    $('#student_settings_form').serialize(),
+                    {current_settings: current_settings}
+                ],
+                success: function(data){
+                    console.log(data);
+                    swal('Success!', 'Record has been saved to the Database!', 'success');
+                    $('#student_settings_modal').modal('hide');
+                    button.disabled = false;
+                    input.html('SAVE CHANGES');
+                    refresh_student_settings();
+                },
+                error: function(data){
+                    swal("Oh no!", "Something went wrong, try again.", "error");
+                    button.disabled = false;
+                    input.html('SAVE CHANGES');
+                }
+            });
+        });
+
         //Open Student Settings Modal (ADD)
         $('.add_student_settings').on('click', function(){
             $('#add_edit').val('add');
@@ -123,17 +162,18 @@
                 url: '/get_student_settings',
                 method: 'get',
                 data: [
-                    {$('#student_settings_form').serialize()},
+                    {id: id},
                     {current_settings: current_settings}
                 ],
                 dataType: 'json',
                 success: function(data){
                     $('#id').val($(this).val());
                     $('#add_edit').val('edit');
+
+                    $('student_settings_name').val(data);
+
                     $('#student_settings_modal .modal-title').text('Add ' + current_settings);
                     $('#student_settings_form label').text(current_settings + ' Name');
-
-
                 }
             });
 

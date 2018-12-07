@@ -41,6 +41,7 @@ Route::get('/delete_student', 'studentController@delete_student');
 //Student Settings
 Route::get('/student_settings', 'studentSettingsController@index');
 Route::get('/view_student_settings', 'studentSettingsController@view');
+Route::post('/save_student_settings', 'studentSettingsController@store');
 Route::get('/get_student_settings', 'studentSettingsController@get_student_settings');
 
 /* This part reserved for possible future use

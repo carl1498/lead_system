@@ -53,29 +53,76 @@ class studentSettingsController extends Controller
     }
 
     public function store(Request $request){
+        $id = $request->id;
         $current_settings = $request->current_settings;
-        
-        if($current_settings == 'Program'){
-            $settings = program::all();
-        }
-        else if($current_settings == 'School'){
-            $settings = school::all();
-        }
-        else if($current_settings == 'Benefactor'){
-            $settings = benefactor::all();
-        }
-        else if($current_settings == 'Year'){
-            $settings = departure_year::all();
-        }
-        else if($current_settings == 'Month'){
-            $settings = departure_month::all();
-        }
-        else if($current_settings == 'Course'){
-            $settings = course::all();
-        }
 
         if($request->add_edit == 'add'){
-            
+            if($current_settings == 'Program'){
+                $settings = program::all();
+            }
+            else if($current_settings == 'School'){
+                $settings = school::all();
+            }
+            else if($current_settings == 'Benefactor'){
+                $settings = benefactor::all();
+            }
+            else if($current_settings == 'Year'){
+                $settings = departure_year::all();
+            }
+            else if($current_settings == 'Month'){
+                $settings = departure_month::all();
+            }
+            else if($current_settings == 'Course'){
+                $settings = course::all();
+            }
         }
+        else{
+            if($current_settings == 'Program'){
+                $settings = program::find($id);
+            }
+            else if($current_settings == 'School'){
+                $settings = school::find($id);
+            }
+            else if($current_settings == 'Benefactor'){
+                $settings = benefactor::find($id);
+            }
+            else if($current_settings == 'Year'){
+                $settings = departure_year::find($id);
+            }
+            else if($current_settings == 'Month'){
+                $settings = departure_month::find($id);
+            }
+            else if($current_settings == 'Course'){
+                $settings = course::find($id);
+            }
+        }
+
+        return $request->student_settings_name;
+    }
+
+    public function get_student_settings(){
+        $id = $request->id;
+        $current_settings = $request->current_settings;
+
+        if($current_settings == 'Program'){
+            $settings = program::find($id);
+        }
+        else if($current_settings == 'School'){
+            $settings = school::find($id);
+        }
+        else if($current_settings == 'Benefactor'){
+            $settings = benefactor::find($id);
+        }
+        else if($current_settings == 'Year'){
+            $settings = departure_year::find($id);
+        }
+        else if($current_settings == 'Month'){
+            $settings = departure_month::find($id);
+        }
+        else if($current_settings == 'Course'){
+            $settings = course::find($id);
+        }
+
+        return $settings->name;
     }
 }
