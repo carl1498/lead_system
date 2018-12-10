@@ -58,22 +58,22 @@ class studentSettingsController extends Controller
 
         if($request->add_edit == 'add'){
             if($current_settings == 'Program'){
-                $settings = program::all();
+                $settings = new program;
             }
             else if($current_settings == 'School'){
-                $settings = school::all();
+                $settings = new school;
             }
             else if($current_settings == 'Benefactor'){
-                $settings = benefactor::all();
+                $settings = new benefactor;
             }
             else if($current_settings == 'Year'){
-                $settings = departure_year::all();
+                $settings = new departure_year;
             }
             else if($current_settings == 'Month'){
-                $settings = departure_month::all();
+                $settings = new departure_month;
             }
             else if($current_settings == 'Course'){
-                $settings = course::all();
+                $settings = new course;
             }
         }
         else{
@@ -97,7 +97,10 @@ class studentSettingsController extends Controller
             }
         }
 
-        return $request->student_settings_name;
+        /*$settings->name = $request->student_settings_name;
+        $settings->save(); */
+
+        return $current_settings;
     }
 
     public function get_student_settings(){

@@ -109,6 +109,7 @@
             console.log(current_settings);
             console.log($('#add_edit').val())
             e.preventDefault();
+            console.log($('#student_settings_form').serialize())
 
             var input = $(this);
             var button = this;
@@ -120,13 +121,10 @@
                 headers: {
                     'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
                 },
-                type: 'text',
+                type: 'json',
                 method: 'POST',
                 url: '/save_student_settings',
-                data: [
-                    $('#student_settings_form').serialize(),
-                    {current_settings: current_settings}
-                ],
+                data: $('#student_settings_form').serialize() + current_settings,
                 success: function(data){
                     console.log(data);
                     swal('Success!', 'Record has been saved to the Database!', 'success');
