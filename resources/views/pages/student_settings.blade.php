@@ -121,7 +121,7 @@
                 headers: {
                     'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
                 },
-                type: 'json',
+                type: 'json', 
                 method: 'POST',
                 url: '/save_student_settings',
                 data: $('#student_settings_form').serialize() + current_settings,
