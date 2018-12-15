@@ -10,6 +10,7 @@
         <th>Course</th>
         <th>Sign Up Date</th>
         <th>Referred By</th>
+        <th>Remarks</th>
         <th>Action</th>
     </tr>
 </thead>

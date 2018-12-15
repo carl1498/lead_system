@@ -9,6 +9,7 @@ use App\school;
 use App\benefactor;
 use App\employee;
 use App\branch;
+use App\course;
 use App\departure_year;
 use App\departure_month;
 use Carbon\Carbon;
@@ -29,10 +30,11 @@ class studentController extends Controller
         $benefactor = benefactor::all();
         $employee = employee::all();
         $branch = branch::all();
+        $course = course::all();
         $departure_year = departure_year::all();
         $departure_month = departure_month::all();
 
-        return view('pages.students', compact('program', 'school', 'benefactor', 'employee', 'branch', 'departure_year', 'departure_month'));
+        return view('pages.students', compact('program', 'school', 'benefactor', 'employee', 'branch', 'course', 'departure_year', 'departure_month'));
     }
 
     public function branch(Request $request){
@@ -41,7 +43,7 @@ class studentController extends Controller
         $departure_month = $request->departure_month;
 
         $b = student::with('program', 'school', 'benefactor', 'referral', 
-        'branch', 'departure_year', 'departure_month')->get();
+        'branch', 'course', 'departure_year', 'departure_month')->get();
 
         $branch = $b->where('branch.name', $current_branch)->where('departure_year_id', $departure_year)->where('departure_month_id', $departure_month)->whereIn('status', ['Active', 'Final School']);
 
@@ -70,7 +72,7 @@ class studentController extends Controller
         $departure_month = $request->departure_month;
 
         $s = student::with('program', 'school', 'benefactor', 'referral', 
-        'branch', 'departure_year', 'departure_month')->get();
+        'branch', 'course', 'departure_year', 'departure_month')->get();
 
         $status = $s->where('status', $current_status)->where('departure_year_id', $departure_year)->where('departure_month_id', $departure_month);
 
@@ -132,7 +134,7 @@ class studentController extends Controller
         $student->date_of_completion = Carbon::parse($request->completion);
         $student->gender = $request->gender;
         $student->branch_id = $request->branch;
-        $student->course = $request->course;
+        $student->course_id = $request->course;
         $student->departure_year_id = $request->year;
         $student->departure_month_id = $request->month;
         $student->remarks = $request->remarks;
@@ -141,7 +143,7 @@ class studentController extends Controller
 
     public function get_student(Request $request){
         $id = $request->id;
-        $student = student::with('program', 'school', 'benefactor', 'referral', 'branch', 'departure_year', 'departure_month')->find($id);
+        $student = student::with('program', 'school', 'benefactor', 'referral', 'branch', 'course', 'departure_year', 'departure_month')->find($id);
 
         return $student;
     }

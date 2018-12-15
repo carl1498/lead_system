@@ -28,21 +28,24 @@
 
                     <h3 class="profile-username text-center">{{ onLoadName() }}</h3>
 
-                    <p class="text-muted text-center">{{ onLoadPosition() }}</p>
+                    <!--<p class="text-muted text-center"></p>-->
 
                     <ul class="list-group list-group-unbordered">
                         <li class="list-group-item">
-                            <b>Followers</b> <a class="pull-right">1,322</a>
+                            <b>Contact</b> <a class="pull-right">test</a>
                         </li>
                         <li class="list-group-item">
-                            <b>Following</b> <a class="pull-right">543</a>
+                            <b>Program</b> <a class="pull-right">test</a>
                         </li>
                         <li class="list-group-item">
-                            <b>Friends</b> <a class="pull-right">13,287</a>
+                            <b>School</b> <a class="pull-right">test</a>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Benefactor</b> <a class="pull-right">test</a>
                         </li>
                     </ul>
 
-                    <a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>
+                    <!--<a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>-->
                 </div>
                 <!-- /.box-body -->
             </div>
@@ -103,9 +106,9 @@
             trigger : 'hover'
         });
 
-        function refresh_tables(){//reload datatable ajax
+        /*function refresh_tables(){//reload datatable ajax
             students_branch.ajax.reload();
-        }
+        }*/
 
         $('#student_modal').on('shown.bs.modal', function(){
             $('#fname').focus();
@@ -116,8 +119,10 @@
                 this.style.setProperty('border-color', 'green', 'important');
             });
             $(this).find("input,textarea,select").val('').end();
-            $('.select2').trigger('change');
+            $('.select2').trigger('change.select2');
         });
+
+        $('input, select').attr('autocomplete', 'off');
 
         //INITIALIZE -- END
 
@@ -136,9 +141,10 @@
             {data: 'benefactor.name', name: 'benefactor'},
             {data: 'gender', name: 'gender'},
             {data: 'age', name: 'age'},
-            {data: 'course', name: 'course'},
+            {data: 'course.name', name: 'course'},
             {data: 'date_of_signup', name: 'date_of_signup'},
             {data: 'referral.fname', name: 'referral'},
+            {data: 'remarks', name: 'remarks'},
             {data: "action", orderable:false,searchable:false}
         ]
 
@@ -153,7 +159,8 @@
             { width: 200, targets: 7 },
             { width: 120, targets: 8 },
             { width: 120, targets: 9 },
-            { width: 150, targets: 10 },
+            { width: 250, targets: 10 },
+            { width: 150, targets: 11 },
             {defaultContent: "", targets: "_all"}
         ]
 
@@ -166,9 +173,10 @@
             {data: 'benefactor.name', name: 'benefactor'},
             {data: 'gender', name: 'gender'},
             {data: 'age', name: 'age'},
-            {data: 'course', name: 'course'},
+            {data: 'course.name', name: 'course'},
             {data: 'date_of_signup', name: 'date_of_signup'},
             {data: 'referral.fname', name: 'referral'},
+            {data: 'remarks', name: 'remarks'},
             {data: "action", orderable:false,searchable:false}
         ]
         
@@ -184,7 +192,8 @@
             { width: 200, targets: 8 },
             { width: 120, targets: 9 },
             { width: 120, targets: 10 },
-            { width: 150, targets: 11 },
+            { width: 250, targets: 11 },
+            { width: 150, targets: 12 },
             {defaultContent: "", targets: "_all"}
         ]
 
@@ -193,6 +202,7 @@
             departure_month = $('#month_select').val();
 
             students_branch = $('#students_branch').DataTable({
+                processing: true,
                 destroy: true,
                 scrollX: true,
                 scrollCollapse: true,
@@ -218,6 +228,7 @@
             departure_month = $('#month_select').val();
 
             students_status = $('#students_status').DataTable({
+                processing: true,
                 destroy: true,
                 scrollX: true,
                 scrollCollapse: true,
@@ -319,6 +330,7 @@
                     $('#birthdate').val(data.birthdate);
                     $('#age').val(data.age);
                     $('#contact').val(data.contact);
+
                     if(data.program){
                         $('#program').val(data.program.id).trigger('change');
                     }
@@ -328,6 +340,7 @@
                     if(data.benefactor){
                         $('#benefactor').val(data.benefactor.id).trigger('change');
                     }
+                    
                     $('#address').val(data.address);
                     $('#email').val(data.email);
                     $('#sign_up').val(data.date_of_signup);
@@ -336,9 +349,10 @@
                     $('#referral').val(data.referral.id).trigger('change');
                     $('#gender').val(data.gender).trigger('change');
                     $('#branch').val(data.branch.id).trigger('change');
-                    $('#course').val(data.course);
+                    $('#course').val(data.course.id).trigger('change');
                     $('#year').val(data.departure_year.id).trigger('change');
                     $('#month').val(data.departure_month.id).trigger('change');
+                    $('#remarks').val(data.remarks);
                     $('#student_modal').modal('toggle');
                     $('#student_modal').modal('show');
                 }

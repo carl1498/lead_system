@@ -242,7 +242,12 @@
                             </div>
                             <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
                                 <div class="form-group required">
-                                    <input type="text" id="course" name="course" class="form-control required" placeholder="Enter Course" required required>
+                                    <select type="text" id="course" name="course" class="form-control select2 required" style="width: 100%;" required>
+                                        <option value="">Select Course</option>
+                                        @foreach($course as $c)
+                                            <option value="{{ $c->id }}">{{ $c->name }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                         </div>

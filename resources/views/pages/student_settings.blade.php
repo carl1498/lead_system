@@ -60,7 +60,7 @@
         var student_settings;
 
         $('#student_settings_modal').on('shown.bs.modal', function(){
-            $('#fname').focus();
+            $('#student_settings_name').focus();
         });
 
         $("#student_settings_modal").on("hidden.bs.modal", function(e){
@@ -70,6 +70,13 @@
             $(this).find("input,textarea,select").val('').end();
         });
 
+        $('body').tooltip({
+            selector: '[data-toggle="tooltip"]',
+            trigger : 'hover'
+        });
+        
+        $('input, select').attr('autocomplete', 'off');
+
         //INITIALIZE -- END
 
 
@@ -77,6 +84,7 @@
 
         function refresh_student_settings(){
             student_settings = $('#student_settings').DataTable({
+                processing: true,
                 destroy: true,
                 autoWidth: true,
                 scrollCollapse: true,
@@ -106,10 +114,7 @@
 
         //save student settings
         $('.save_student_settings').on('click', function(e){
-            console.log(current_settings);
-            console.log($('#add_edit').val())
             e.preventDefault();
-            console.log($('#student_settings_form').serialize())
 
             var input = $(this);
             var button = this;
@@ -124,9 +129,8 @@
                 type: 'json', 
                 method: 'POST',
                 url: '/save_student_settings',
-                data: $('#student_settings_form').serialize() + current_settings,
+                data: $('#student_settings_form').serialize() + '&current_settings=' + current_settings,
                 success: function(data){
-                    console.log(data);
                     swal('Success!', 'Record has been saved to the Database!', 'success');
                     $('#student_settings_modal').modal('hide');
                     button.disabled = false;
@@ -153,31 +157,64 @@
         });
 
         //Open Student Settings Modal (EDIT)
-        $('.edit_student_settings').on('click', function(){
+        $(document).on('click', '.edit_student_settings', function(){
             var id = $(this).attr('id');
 
             $.ajax({
                 url: '/get_student_settings',
                 method: 'get',
-                data: [
-                    {id: id},
-                    {current_settings: current_settings}
-                ],
-                dataType: 'json',
+                data: {
+                    id: id,
+                    current_settings: current_settings
+                },
+                dataType: 'text',
                 success: function(data){
-                    $('#id').val($(this).val());
+                    $('#id').val(id);
                     $('#add_edit').val('edit');
 
-                    $('student_settings_name').val(data);
-
+                    $('#student_settings_name').val(data);
+                    
                     $('#student_settings_modal .modal-title').text('Add ' + current_settings);
                     $('#student_settings_form label').text(current_settings + ' Name');
+                    $('#student_settings_modal').modal('toggle');
+                    $('#student_settings_modal').modal('show');
                 }
             });
+        });
 
-            $('#student_settings_modal').modal('toggle');
-            $('#student_settings_modal').modal('show');
-        })
+        //Delete Student Settings
+        $(document).on('click', '.delete_student_settings', function(){
+            var id = $(this).attr('id');
+
+            swal({
+                title: 'Are you sure?',
+                text: 'You are about to delete this setting. This may affect multiple rows',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if(result.value){
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: '/delete_student_settings',
+                        method: 'get',
+                        data: {
+                            id:id,
+                            current_settings: current_settings
+                        },
+                        type: 'json',
+                        success:function(data){
+                            swal('Deleted!', 'This Student Setting has been Deleted', 'success');
+                            refresh_student_settings();
+                        }
+                    })
+                }
+            });
+        });
 
         //FUNCTIONS -- END
     });

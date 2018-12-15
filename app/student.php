@@ -51,6 +51,10 @@ class student extends Model
         return $this->hasOne('App\branch', 'id', 'branch_id');
     }
 
+    public function course(){
+        return $this->hasOne('App\course', 'id', 'course_id');
+    }
+
     public function departure_year(){
         return $this->hasOne('App\departure_year', 'id', 'departure_year_id');
     }

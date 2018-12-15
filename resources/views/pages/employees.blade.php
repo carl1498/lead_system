@@ -31,18 +31,9 @@
                     <p class="text-muted text-center">{{ onLoadPosition() }}</p>
 
                     <ul class="list-group list-group-unbordered">
-                        <li class="list-group-item">
-                            <b>Followers</b> <a class="pull-right">1,322</a>
-                        </li>
-                        <li class="list-group-item">
-                            <b>Following</b> <a class="pull-right">543</a>
-                        </li>
-                        <li class="list-group-item">
-                            <b>Friends</b> <a class="pull-right">13,287</a>
-                        </li>
                     </ul>
 
-                    <a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>
+                    <!--<a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>-->
                 </div>
                 <!-- /.box-body -->
             </div>
@@ -230,7 +221,6 @@
         //Delete Employee
         $(document).on('click', '.delete_employee', function(){
             var id = $(this).attr('id');
-            console.log(id);
 
             swal({
                 title: 'Are you sure?',
