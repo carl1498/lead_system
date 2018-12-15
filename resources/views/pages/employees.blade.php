@@ -95,6 +95,8 @@
             $(this).find("input,textarea,select").val('').end();
             $('.select2').trigger('change');
         });
+
+        $('input, select').attr('autocomplete', 'off');
         
         //INITIALIZE -- END
 
