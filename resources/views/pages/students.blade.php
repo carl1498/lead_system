@@ -56,7 +56,6 @@
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
                     <li class="active"><a class="branch_pick" href="#students_branch_tab" data-toggle="tab">Makati</a></li>
-                    <li><a class="branch_pick" href="#students_branch_tab" data-toggle="tab">Naga</a></li>
                     <li><a class="branch_pick" href="#students_branch_tab" data-toggle="tab">Cebu</a></li>
                     <li><a class="branch_pick" href="#students_branch_tab" data-toggle="tab">Davao</a></li>
                     <li><a class="status_pick" href="#students_status_tab" data-toggle="tab">Final School</a></li>

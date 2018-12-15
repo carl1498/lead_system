@@ -44,7 +44,6 @@
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
                     <li class="active"><a class="tab_pick" href="#employees_branch_tab" data-toggle="tab">Makati</a></li>
-                    <li><a class="tab_pick" href="#employees_branch_tab" data-toggle="tab">Naga</a></li>
                     <li><a class="tab_pick" href="#employees_branch_tab" data-toggle="tab">Cebu</a></li>
                     <li><a class="tab_pick" href="#employees_branch_tab" data-toggle="tab">Davao</a></li>
                     

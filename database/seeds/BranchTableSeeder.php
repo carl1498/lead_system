@@ -17,9 +17,6 @@ class BranchTableSeeder extends Seeder
                 'name' => 'Makati',
             ),
             array(
-                'name' => 'Naga',
-            ),
-            array(
                 'name' => 'Cebu',
             ),
             array(
