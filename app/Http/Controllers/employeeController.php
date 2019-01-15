@@ -39,7 +39,7 @@ class employeeController extends Controller
     }
 
     public function branch(Request $request){
-        $current_branch = $request->current_branch;
+        $current_branch = $_GET['current_branch'];
         $b = employee::with('role', 'branch')->get();
 
         $branch = $b->where('branch.name', $current_branch);
@@ -115,10 +115,17 @@ class employeeController extends Controller
             }
             $employee_benefits->save();
         }
+
+        //Create Employee Account
+        $user = new User;
+        $user->emp_id = $employee->id;
+        $user->email = $employee->email;
+        $user->password = bcrypt('lead123');
+        $user->save();
     }
 
-    public function get_employee(Request $request){
-        $id = $request->id;
+    public function get_employee(){
+        $id = $_GET['id'];
         $employee = employee::find($id);
         $employee_benefits = employee_benefits::where('emp_id', $id)->get();
 

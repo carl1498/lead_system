@@ -89,7 +89,7 @@
                 autoWidth: true,
                 scrollCollapse: true,
                 ajax: {
-                    url: '/view_student_settings',
+                    url: '/view_student_settings/{current_settings}',
                     data: {current_settings: current_settings}
                 },
                 columns: [
@@ -161,7 +161,7 @@
             var id = $(this).attr('id');
 
             $.ajax({
-                url: '/get_student_settings',
+                url: '/get_student_settings/{id}/{current_settings}',
                 method: 'get',
                 data: {
                     id: id,

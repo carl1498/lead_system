@@ -124,7 +124,7 @@
                 scrollCollapse: true,
                 fixedColumns: true,
                 ajax: {
-                    url: '/employee_branch',
+                    url: '/employee_branch/{current_branch}',
                     data: {current_branch: current_branch}
                 },
                 columns: columns_employees,
@@ -188,7 +188,7 @@
             var id = $(this).attr('id');
 
             $.ajax({
-                url: '/get_employee',
+                url: '/get_employee/{id}',
                 method: 'get',
                 data: {id: id},
                 dataType: 'json',

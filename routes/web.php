@@ -40,9 +40,9 @@ Route::get('/delete_student', 'studentController@delete_student');
 
 //Student Settings
 Route::get('/student_settings', 'studentSettingsController@index');
-Route::get('/view_student_settings', 'studentSettingsController@view');
+Route::get('/view_student_settings/{current_settings}', 'studentSettingsController@view');
 Route::post('/save_student_settings', 'studentSettingsController@store');
-Route::get('/get_student_settings', 'studentSettingsController@get_student_settings');
+Route::get('/get_student_settings/{id}/{current_settings}', 'studentSettingsController@get_student_settings');
 Route::get('/delete_student_settings', 'studentSettingsController@delete_student_settings');
 
 /* This part reserved for possible future use
@@ -71,10 +71,10 @@ Route::get('/delete_benefactor', 'benefactorController@delete_benefactor');
 //EMPLOYEE ROUTES -- START
 
 Route::get('/employees', 'employeeController@index');
-Route::get('/employee_branch', 'employeeController@branch');
+Route::get('/employee_branch/{current_branch}', 'employeeController@branch');
 
 Route::post('/save_employee', 'employeeController@save_employee');
-Route::get('/get_employee', 'employeeController@get_employee');
+Route::get('/get_employee/{id}', 'employeeController@get_employee');
 Route::get('/delete_employee', 'employeeController@delete_employee');
 
 //EMPLOYEE ROUTES -- END

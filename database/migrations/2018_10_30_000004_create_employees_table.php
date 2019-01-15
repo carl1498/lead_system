@@ -24,7 +24,7 @@ class CreateEmployeesTable extends Migration
             $table->decimal('salary', 10, 2)->nullable();
             $table->string('picture')->default('avatar5.png');
             $table->string('address');
-            $table->string('email');
+            $table->string('email')->unique();
             $table->unsignedInteger('branch_id');
             $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade');
             $table->enum('gender', ['Male', 'Female']);

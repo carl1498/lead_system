@@ -23,7 +23,7 @@ class studentSettingsController extends Controller
     }
 
     public function view(Request $request){
-        $current_settings = $request->current_settings;
+        $current_settings = $_GET['current_settings'];
 
         if($current_settings == 'Program'){
             $settings = program::all();
@@ -101,9 +101,9 @@ class studentSettingsController extends Controller
         $settings->save();
     }
 
-    public function get_student_settings(Request $request){
-        $id = $request->id;
-        $current_settings = $request->current_settings;
+    public function get_student_settings(){
+        $id = $_GET['id'];
+        $current_settings = $_GET['current_settings'];
 
         if($current_settings == 'Program'){
             $settings = program::find($id);
