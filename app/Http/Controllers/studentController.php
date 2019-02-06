@@ -34,7 +34,8 @@ class studentController extends Controller
         $departure_year = departure_year::all();
         $departure_month = departure_month::all();
 
-        return view('pages.students', compact('program', 'school', 'benefactor', 'employee', 'branch', 'course', 'departure_year', 'departure_month'));
+        return view('pages.students', compact('program', 'school', 'benefactor', 
+        'employee', 'branch', 'course', 'departure_year', 'departure_month'));
     }
 
     public function branch(Request $request){
@@ -74,8 +75,12 @@ class studentController extends Controller
         $s = student::with('program', 'school', 'benefactor', 'referral', 
         'branch', 'course', 'departure_year', 'departure_month')->get();
 
-        $status = $s->where('status', $current_status)->where('departure_year_id', $departure_year)->where('departure_month_id', $departure_month);
-
+        if($current_status == 'Back Out / Cancelled'){
+            $status = $s->whereIn('status', ['Back Out', 'Cancelled'])->where('departure_year_id', $departure_year)->where('departure_month_id', $departure_month);
+        }else{
+            $status = $s->where('status', $current_status)->where('departure_year_id', $departure_year)->where('departure_month_id', $departure_month);
+        }
+        
         return $this->refreshDatatableStatus($status);
     }
 
@@ -92,15 +97,42 @@ class studentController extends Controller
                          ';
                 $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Back Out" class="btn btn-warning btn-xs backout_student" id="'.$data->id.'"><i class="fa fa-sign-out-alt"></i></button>';
             }
-            else if($data->status == 'Back Out'){
+            else if($data->status == 'Back Out' || $data->status == 'Cancelled'){
                 $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Re Apply" class="btn btn-success btn-xs continue_student" id="'.$data->id.'"><i class="fa fa-sign-in-alt"></i></button>';
             }
 
             $html .= '
-                    <button data-container="body" data-toggle="tooltip" data-placement="left" title="Final School" class="btn btn-info btn-xs edit_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>
-                    <button data-container="body" data-toggle="tooltip" data-placement="left" title="Final School" class="btn btn-danger btn-xs delete_student" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
-            
+                    <button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>
+                    <button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_student" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
             return $html;
+        })
+        ->make(true);
+    }
+
+    public function result(Request $request){
+        $departure_year = $request->departure_year;
+        $departure_month = $request->departure_month;
+
+        $r = student::with('program', 'school', 'referral', 
+        'branch', 'course', 'departure_year', 'departure_month')->get();
+
+        $result = $r->whereIn('status', ['Final School', 'Cancelled'])->where('departure_year_id', $departure_year)->where('departure_month_id', $departure_month);
+
+        return $this->refreshDatatableResult($result);
+    }
+
+    public function refreshDatatableResult($result){
+        return Datatables::of($result)
+        ->editColumn('name', function($data){
+            return $data->lname.', '.$data->fname.' '.$data->mname;
+        })
+        ->addColumn('action', function($data){
+            $html = '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Approved" class="btn btn-success btn-xs approve_student" id="'.$data->id.'"><i class="fa fa-check"></i></button>
+            <button data-container="body" data-toggle="tooltip" data-placement="left" title="Denied" class="btn btn-danger btn-xs deny_student" id="'.$data->id.'"><i class="fa fa-times"></i></button>
+            <button data-container="body" data-toggle="tooltip" data-placement="left" title="Cancelled" class="btn btn-warning btn-xs cancel_student" id="'.$data->id.'"><i class="fa fa-ban"></i></button>
+            <button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>';
+
+            return  $html;
         })
         ->make(true);
     }
@@ -111,6 +143,7 @@ class studentController extends Controller
         if($add_edit == 'add'){
             $student = new student;
             $student->status = 'Active';
+            $student->coe_status = 'TBA';
         }
         else{
             $id = $request->id;
@@ -130,8 +163,18 @@ class studentController extends Controller
         $student->email = $request->email;
         $student->referral_id = $request->referral;
         $student->date_of_signup = Carbon::parse($request->sign_up);
-        $student->date_of_medical = Carbon::parse($request->medical);
-        $student->date_of_completion = Carbon::parse($request->completion);
+        if($request->medical){
+            $student->date_of_medical = Carbon::parse($request->medical);
+        }
+        else{
+            $student->date_of_medical = null;
+        }
+        if($request->completion){
+            $student->date_of_completion = Carbon::parse($request->completion);
+        }
+        else{
+            $student->date_of_completion = null;
+        }
         $student->gender = $request->gender;
         $student->branch_id = $request->branch;
         $student->course_id = $request->course;
@@ -168,6 +211,25 @@ class studentController extends Controller
     public function continue_student(Request $request){
         $student = student::find($request->id);
         $student->status = 'Active';
+        $student->coe_status = 'TBA';
+        $student->save();
+    }
+
+    public function approve_student(Request $request){
+        $student = student::find($request->id);
+        $student->coe_status = 'Approved';
+        $student->save();
+    }
+
+    public function deny_student(Request $request){
+        $student = student::find($request->id);
+        $student->coe_status = 'Denied';
+        $student->save();
+    }
+
+    public function cancel_student(Request $request){
+        $student = student::find($request->id);
+        $student->status = 'Cancelled';
         $student->save();
     }
 }

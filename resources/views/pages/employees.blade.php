@@ -75,7 +75,10 @@
 
         var current_branch = 'Makati';
 
-        $('.datepicker').datepicker();
+        $(".datepicker").datepicker({
+            format: 'yyyy-mm-dd',
+            forceParse: false
+        });
 
         $('.select2').select2();
 

@@ -54,7 +54,7 @@
                             </div>
                             <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
                                 <div class="form-group">
-                                    <input type="text" id="birthdate" name="birthdate" class="form-control datepicker required" placeholder="MM/DD/YYYY" required>
+                                    <input type="text" id="birthdate" name="birthdate" class="form-control datepicker required" placeholder="YYYY-MM-DD" required>
                                 </div>
                             </div>
                         </div>
@@ -178,7 +178,7 @@
                             </div>
                             <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
                                 <div class="form-group">
-                                    <input type="text" id="sign_up" name="sign_up" class="form-control datepicker required" placeholder="MM/DD/YYYY Date of Sign Up" required>
+                                    <input type="text" id="sign_up" name="sign_up" class="form-control datepicker required" placeholder="YYYY-MM-DD Date of Sign Up" required>
                                 </div>
                             </div>
                         </div>
@@ -189,7 +189,7 @@
                             </div>
                             <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
                                 <div class="form-group">
-                                    <input type="text" id="medical" name="medical" class="form-control datepicker" placeholder="MM/DD/YYYY Date of Medical">
+                                    <input type="text" id="medical" name="medical" class="form-control datepicker" placeholder="YYYY-MM-DD Date of Medical">
                                 </div>
                             </div>
                         </div>
@@ -200,7 +200,7 @@
                             </div>
                             <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
                                 <div class="form-group">
-                                    <input type="text" id="completion" name="completion" class="form-control datepicker" placeholder="MM/DD/YYYY Date of Completion">
+                                    <input type="text" id="completion" name="completion" class="form-control datepicker" placeholder="YYYY-MM-DD Date of Completion">
                                 </div>
                             </div>
                         </div>

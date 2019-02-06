@@ -28,7 +28,9 @@ class student extends Model
         'branch_id',
         'course',
         'departure_year_id',
-        'departure_month_id'
+        'departure_month_id',
+        'status',
+        'coe_status'
     ];
 
     public function program(){

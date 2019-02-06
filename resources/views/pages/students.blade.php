@@ -24,9 +24,9 @@
             <!-- Profile Image -->
             <div class="box box-primary">
                 <div class="box-body box-profile">
-                    <img class="profile-user-img img-responsive img-circle" src="./img/avatar5.png" alt="User profile picture">
+                    <!--<img class="profile-user-img img-responsive img-circle" src="./img/avatar5.png" alt="User profile picture">-->
 
-                    <h3 class="profile-username text-center">{{ onLoadName() }}</h3>
+                    <h3 class="profile-username text-center">Student Name</h3>
 
                     <!--<p class="text-muted text-center"></p>-->
 
@@ -59,7 +59,8 @@
                     <li><a class="branch_pick" href="#students_branch_tab" data-toggle="tab">Cebu</a></li>
                     <li><a class="branch_pick" href="#students_branch_tab" data-toggle="tab">Davao</a></li>
                     <li><a class="status_pick" href="#students_status_tab" data-toggle="tab">Final School</a></li>
-                    <li><a class="status_pick" href="#students_status_tab" data-toggle="tab">Back Out</a></li>
+                    <li><a class="status_pick" href="#students_status_tab" data-toggle="tab">Back Out / Cancelled</a></li>
+                    <li><a class="result_pick" href="#students_result_tab" data-toggle="tab">Result Monitoring</a></li>
                 </ul>
 
                 <div class="tab-content">
@@ -90,13 +91,18 @@
 
         var current_branch = 'Makati';
         var current_status = '';
+        var current_result = '';
         var departure_year = $('#year_select').val();
         var departure_month = $('#month_select').val();
 
         var students_branch;
         var students_status;
+        var students_result;
         
-        $('.datepicker').datepicker();
+        $(".datepicker").datepicker({
+            format: 'yyyy-mm-dd',
+            forceParse: false
+        });
 
         $('.select2').select2();
         
@@ -175,6 +181,7 @@
             {data: 'course.name', name: 'course'},
             {data: 'date_of_signup', name: 'date_of_signup'},
             {data: 'referral.fname', name: 'referral'},
+            {data: 'status', name: 'status'},
             {data: 'remarks', name: 'remarks'},
             {data: "action", orderable:false,searchable:false}
         ]
@@ -191,8 +198,32 @@
             { width: 200, targets: 8 },
             { width: 120, targets: 9 },
             { width: 120, targets: 10 },
-            { width: 250, targets: 11 },
-            { width: 150, targets: 12 },
+            { width: 100, targets: 11 },
+            { width: 250, targets: 12 },
+            { width: 150, targets: 13 },
+            {defaultContent: "", targets: "_all"}
+        ]
+
+        var columns_students_result = [
+            {data: 'name', name: 'name'},
+            {data: 'branch.name', name: 'branch'},
+            {data: 'program.name', name: 'program'},
+            {data: 'school.name', name: 'school'},
+            {data: 'coe_status', name: 'coe_status'},
+            {data: 'status', name: 'status'},
+            {data: 'referral.fname', name: 'referral'},
+            {data: "action", orderable:false,searchable:false}
+        ]
+        
+        var columnDefs_students_result = [
+            { width: 220, targets: 0 },
+            { width: 70, targets: 1 },
+            { width: 90, targets: 2 },
+            { width: 130, targets: 3 },
+            { width: 100, targets: 4 },
+            { width: 100, targets: 5 },
+            { width: 120, targets: 6 },
+            { width: 150, targets: 7 },
             {defaultContent: "", targets: "_all"}
         ]
 
@@ -246,8 +277,34 @@
             });
         }
 
+        function refresh_student_result(){
+
+            departure_year = $('#year_select').val();
+            departure_month = $('#month_select').val();
+
+            students_result = $('#students_result').DataTable({
+                processing: true,
+                destroy: true,
+                scrollX: true,
+                scrollCollapse: true,
+                fixedColumns: true,
+                responsive: true,
+                ajax: {
+                    url: '/student_result',
+                    data: {
+                        current_result: current_result,
+                        departure_year: departure_year,
+                        departure_month: departure_month
+                    }
+                },
+                columnDefs: columnDefs_students_result,
+                columns: columns_students_result,
+            });
+        }
+
         refresh_student_branch();
         refresh_student_status();
+        refresh_student_result();
 
         //DATATABLES -- END
 
@@ -265,9 +322,16 @@
             refresh_student_status();
         });
 
+        $('.result_pick').on('click', function(){
+            current_result = $(this).text();
+
+            refresh_student_result();
+        });
+
         $(document).on('change', '#year_select, #month_select', function(){
             refresh_student_branch();
             refresh_student_status();
+            refresh_student_result();
         });
 
         $('.save_student').on('click', function(e){
@@ -476,6 +540,99 @@
                             }
                             refresh_student_branch();
                             refresh_student_status();
+                        }
+                    });
+                }
+            });
+        });
+
+        //Approve (Only in Result Monitoring)
+        $(document).on('click', '.approve_student', function(){
+            var id = $(this).attr('id');
+
+            swal({
+                title: 'Student COE Approved?',
+                text: 'Confirm that this student\'s COE is approved?',
+                type: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!'
+            }).then((result) => {
+                if(result.value){
+                    $.ajax({
+                        url: '/approve_student',
+                        method: 'get',
+                        data: {id: id},
+                        dataType: 'text',
+                        success: function(data){
+                            swal('Congratulations!', 'Student COE Approved!', 'success');
+
+                            refresh_student_branch();
+                            refresh_student_status();
+                            refresh_student_result();
+                        }
+                    });
+                }
+            });
+        });
+
+        //Deny (Only in Result Monitoring)
+        $(document).on('click', '.deny_student', function(){
+            var id = $(this).attr('id');
+
+            swal({
+                title: 'Student COE Denied?',
+                text: 'Confirm that this student\'s COE is denied?',
+                type: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!'
+            }).then((result) => {
+                if(result.value){
+                    $.ajax({
+                        url: '/deny_student',
+                        method: 'get',
+                        data: {id: id},
+                        dataType: 'text',
+                        success: function(data){
+                            swal('Alright', 'Student COE Denied', 'success');
+
+                            refresh_student_branch();
+                            refresh_student_status();
+                            refresh_student_result();
+                        }
+                    });
+                }
+            });
+        });
+
+        //Cancel (Only in Result Monitoring)
+        $(document).on('click', '.cancel_student', function(){
+            var id = $(this).attr('id');
+
+            swal({
+                title: 'Student will Cancel?',
+                text: 'Confirm that this student decided to cancel?',
+                type: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!'
+            }).then((result) => {
+                if(result.value){
+                    $.ajax({
+                        url: '/cancel_student',
+                        method: 'get',
+                        data: {id: id},
+                        dataType: 'text',
+                        success: function(data){
+                            swal('Alright', 'Student Cancelled', 'success');
+
+                            refresh_student_branch();
+                            refresh_student_status();
+                            refresh_student_result();
                         }
                     });
                 }

@@ -117,11 +117,13 @@ class employeeController extends Controller
         }
 
         //Create Employee Account
-        $user = new User;
-        $user->emp_id = $employee->id;
-        $user->email = $employee->email;
-        $user->password = bcrypt('lead123');
-        $user->save();
+        if($add_edit == 'add'){
+            $user = new User;
+            $user->emp_id = $employee->id;
+            $user->email = $employee->email;
+            $user->password = bcrypt('lead123');
+            $user->save();
+        }
     }
 
     public function get_employee(){

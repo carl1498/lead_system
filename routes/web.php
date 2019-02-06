@@ -30,10 +30,17 @@ Route::get('/dashboard', 'dashboardController@index');
 Route::get('/students', 'studentController@index');
 Route::get('/student_branch', 'studentController@branch');
 Route::get('/student_status', 'studentController@status');
+Route::get('/student_result', 'studentController@result');
 
 Route::get('/continue_student', 'studentController@continue_student');
 Route::get('/backout_student', 'studentController@backout_student');
 Route::get('/final_student', 'studentController@final_student');
+
+//Result Monitoring
+Route::get('/approve_student', 'studentController@approve_student');
+Route::get('/deny_student', 'studentController@deny_student');
+Route::get('/cancel_student', 'studentController@cancel_student');
+
 Route::post('/save_student', 'studentController@save_student');
 Route::get('/get_student', 'studentController@get_student');
 Route::get('/delete_student', 'studentController@delete_student');
