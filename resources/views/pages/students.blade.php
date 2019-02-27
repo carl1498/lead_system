@@ -9,6 +9,9 @@
     <ol class="breadcrumb">
         <li>
             <button class="btn btn-secondary bg-red add_student" data-toggle="modal" data-target="#student_modal">
+                <i class="fas fa-credit-card"></i>
+            </button>
+            <button class="btn btn-secondary bg-red add_student" data-toggle="modal" data-target="#student_modal">
                 <i class="fa fa-plus-square"></i>
             </button>
         </li>
