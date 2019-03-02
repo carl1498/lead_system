@@ -64,6 +64,7 @@
                     <li><a class="status_pick" href="#students_status_tab" data-toggle="tab">Final School</a></li>
                     <li><a class="status_pick" href="#students_status_tab" data-toggle="tab">Back Out / Cancelled</a></li>
                     <li><a class="result_pick" href="#students_result_tab" data-toggle="tab">Result Monitoring</a></li>
+                    <li><a class="language_pick" href="#language_student_tab" data-toggle="tab">Language</a></li>
                 </ul>
 
                 <div class="tab-content">
@@ -98,9 +99,12 @@
         var departure_year = $('#year_select').val();
         var departure_month = $('#month_select').val();
 
+        //datatables
         var students_branch;
         var students_status;
         var students_result;
+        var language_students;
+
         
         $(".datepicker").datepicker({
             format: 'yyyy-mm-dd',
@@ -157,18 +161,18 @@
         ]
 
         var columnDefs_students = [
-            { width: 220, targets: 0 },
-            { width: 90, targets: 1 },
-            { width: 130, targets: 2 },
-            { width: 130, targets: 3 },
-            { width: 130, targets: 4 },
-            { width: 60, targets: 5 },
-            { width: 45, targets: 6 },
-            { width: 200, targets: 7 },
-            { width: 120, targets: 8 },
-            { width: 120, targets: 9 },
-            { width: 250, targets: 10 },
-            { width: 150, targets: 11 },
+            { width: 220, targets: 0 }, //name
+            { width: 90, targets: 1 }, //contact
+            { width: 130, targets: 2 }, //program
+            { width: 130, targets: 3 }, //school
+            { width: 130, targets: 4 }, //benefactor
+            { width: 60, targets: 5 }, //gender
+            { width: 45, targets: 6 }, //age
+            { width: 200, targets: 7 }, //course
+            { width: 120, targets: 8 }, //signup
+            { width: 120, targets: 9 }, //referral
+            { width: 250, targets: 10 }, //remarks
+            { width: 150, targets: 11 }, //action
             {defaultContent: "", targets: "_all"}
         ]
 
@@ -227,6 +231,31 @@
             { width: 100, targets: 5 },
             { width: 120, targets: 6 },
             { width: 150, targets: 7 },
+            {defaultContent: "", targets: "_all"}
+        ]
+
+        var columns_language_students = [
+            {data: 'name', name: 'name'},
+            {data: 'branch.name', name: 'branch'},
+            {data: 'contact', name: 'contact'},
+            {data: 'gender', name: 'gender'},
+            {data: 'age', name: 'age'},
+            {data: 'course.name', name: 'course'},
+            {data: 'referral.fname', name: 'referral'},
+            {data: 'remarks', name: 'remarks'},
+            {data: "action", orderable:false,searchable:false}
+        ]
+
+        var columnDef_language_students = [
+            { width: 220, targets: 0 }, //name
+            { width: 70, targets: 1 }, //branch
+            { width: 90, targets: 2 }, //contact
+            { width: 60, targets: 3 }, //gender
+            { width: 45, targets: 4 }, //age
+            { width: 200, targets: 5 }, //course
+            { width: 120, targets: 6 }, //referral
+            { width: 250, targets: 7 }, //remarks
+            { width: 150, targets: 8 }, //action
             {defaultContent: "", targets: "_all"}
         ]
 
@@ -305,9 +334,32 @@
             });
         }
 
+        function refresh_language_student(){
+            
+            departure_year = $('#year_select').val();
+
+            language_students = $('#language_students').DataTable({
+                processing: true,
+                destroy: true,
+                scrollX: true,
+                scrollCollapse: true,
+                fixedColumns: true,
+                responsive: true,
+                ajax: {
+                    url: '/language_student',
+                    data: {
+                        departure_year: departure_year
+                    }
+                },
+                columnDefs: columnDef_language_students,
+                columns: columns_language_students,
+            });
+        }
+
         refresh_student_branch();
         refresh_student_status();
         refresh_student_result();
+        refresh_language_student();
 
         //DATATABLES -- END
 
@@ -329,6 +381,10 @@
             current_result = $(this).text();
 
             refresh_student_result();
+        });
+
+        $('.student_type').on('click', function(){
+
         });
 
         $(document).on('change', '#year_select, #month_select', function(){
@@ -373,9 +429,50 @@
             });
         });
 
+        $('.save_language_student').on('click', function(e){
+            e.preventDefault();
+
+            var input = $(this);
+            var button = this;
+
+            button.disabled = true;
+            input.html('SAVING...');
+
+            var formData = new FormData($('#language_student_form')[0]);
+
+            for (var pair of formData.entries()) {
+                console.log(pair); 
+            }
+            
+            $.ajax({
+                headers: {
+                    'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '/save_student',
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(data){
+                    swal('Success!', 'Record has been saved to the Database!', 'success');
+                    $('#student_modal').modal('hide');
+                    button.disabled = false;
+                    input.html('SAVE CHANGES');
+                    refresh_language_student();
+                },
+                error: function(data){
+                    swal("Oh no!", "Something went wrong, try again.", "error");
+                    button.disabled = false;
+                    input.html('SAVE CHANGES');
+                }
+            });
+        });
+
         //Open Student Modal (ADD)
         $('.add_student').on('click', function(){
-            $('#add_edit').val('add');
+            $('#language_student_form #add_edit').val('add');
+            $('#student_form #add_edit').val('add');
+            $('#student_type_tab a:first').tab('show');
         });
 
         //Open Student Modal (EDIT)

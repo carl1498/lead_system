@@ -33,3 +33,15 @@
 </div>
 
 <!-- STUDENTS RESULT MONITORING -- END -->
+
+<!-- LANGUAGE ONLY STUDENTS -- START -->
+
+<div class="tab-pane fade in" id="language_student_tab">
+    
+    <table id="language_students" class="table table-hover table-striped table-bordered" cellspacing="0">
+        @include('includes.tables.language_student_table')
+    </table>
+    
+</div>
+
+<!-- LANGUAGE ONLY STUDENTS -- END -->

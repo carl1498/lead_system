@@ -52,6 +52,14 @@
 						</span>
 					</a>
 				</li>
+
+				<li>
+					<a href="#">
+						<i class="fa fa-book"></i> <span>Books</span>
+						<span class="pull-right-container">
+						</span>
+					</a>
+				</li>
       		</ul>
     	</section>
     	<!-- /.sidebar -->

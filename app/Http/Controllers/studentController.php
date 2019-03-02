@@ -46,7 +46,7 @@ class studentController extends Controller
         $b = student::with('program', 'school', 'benefactor', 'referral', 
         'branch', 'course', 'departure_year', 'departure_month')->get();
 
-        $branch = $b->where('branch.name', $current_branch)->where('departure_year_id', $departure_year)->where('departure_month_id', $departure_month)->whereIn('status', ['Active', 'Final School']);
+        $branch = $b->where('branch.name', $current_branch)->where('program.name', '<>', 'Language Only')->where('departure_year_id', $departure_year)->where('departure_month_id', $departure_month)->whereIn('status', ['Active', 'Final School']);
 
         return $this->refreshDatatable($branch);
     }
@@ -76,7 +76,7 @@ class studentController extends Controller
         'branch', 'course', 'departure_year', 'departure_month')->get();
 
         if($current_status == 'Back Out / Cancelled'){
-            $status = $s->whereIn('status', ['Back Out', 'Cancelled'])->where('departure_year_id', $departure_year)->where('departure_month_id', $departure_month);
+            $status = $s->whereIn('status', ['Back Out', 'Cancelled'])->where('program.name', '<>', 'Language Only')->where('departure_year_id', $departure_year)->where('departure_month_id', $departure_month);
         }else{
             $status = $s->where('status', $current_status)->where('departure_year_id', $departure_year)->where('departure_month_id', $departure_month);
         }
@@ -116,7 +116,7 @@ class studentController extends Controller
         $r = student::with('program', 'school', 'referral', 
         'branch', 'course', 'departure_year', 'departure_month')->get();
 
-        $result = $r->whereIn('status', ['Final School', 'Cancelled'])->where('departure_year_id', $departure_year)->where('departure_month_id', $departure_month);
+        $result = $r->whereIn('status', ['Final School', 'Cancelled'])->where('program.name', '<>', 'Language Only')->where('departure_year_id', $departure_year)->where('departure_month_id', $departure_month);
 
         return $this->refreshDatatableResult($result);
     }
@@ -137,8 +137,29 @@ class studentController extends Controller
         ->make(true);
     }
 
+    public function language(Request $request){
+        $departure_year = $request->departure_year;
+
+        $l = student::with('program', 'referral', 'branch', 'course', 'departure_year')->get();
+
+        $language = $l->where('program.name', 'Language Only')->where('departure_year_id', $departure_year);
+
+        return $this->refreshDatatableLanguage($language);
+    }
+
+    public function refreshDatatableLanguage($language){
+        return Datatables::of($language)
+        ->editColumn('name', function($data){
+            return $data->lname.', '.$data->fname.' '.$data->mname;
+        })->addColumn('action', function($data){
+            return 'Temporary';
+        })
+        ->make(true);
+    }
+
     public function save_student(Request $request){
         $add_edit = $request->add_edit;
+        $type = $request->type;
 
         if($add_edit == 'add'){
             $student = new student;
@@ -148,6 +169,33 @@ class studentController extends Controller
         else{
             $id = $request->id;
             $student = student::find($id);
+        }
+
+        if($type == 'Language Only'){
+            $student->fname = $request->fname;
+            $student->mname = $request->mname;
+            $student->lname = $request->lname;
+            $student->birthdate = Carbon::parse($request->birthdate);
+            $student->age = $request->age;
+            $student->contact = $request->contact;
+
+            $program = program::where('name',$type)->first();
+            $student->program_id = $program->id;
+
+            $student->address = $request->address;
+            $student->email = $request->email;
+            $student->referral_id = $request->referral;
+            $student->date_of_signup = Carbon::now();
+            $student->date_of_medical = null;
+            $student->date_of_completion = null;
+            $student->gender = $request->gender;
+            $student->branch_id = $request->branch;
+            $student->course_id = $request->course;
+            $student->departure_year_id = $request->year;
+            $student->departure_month_id = 1;
+            $student->remarks = $request->remarks;
+            $student->save();
+            return;
         }
 
         $student->fname = $request->fname;
