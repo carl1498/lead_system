@@ -45,20 +45,25 @@
 					</a>
 				</li>
 
-                <li>
+                <!--<li>
 					<a href="#">
 						<i class="fa fa-file-alt"></i> <span>Documentation</span>
 						<span class="pull-right-container">
 						</span>
 					</a>
-				</li>
+				</li>-->
 
-				<li>
-					<a href="#">
+				<li class="{{ (Request::path() == 'invoice' || Request::path() == 'invoice') ? 'active' : '' }} treeview">
+					<a href="">
 						<i class="fa fa-book"></i> <span>Books</span>
 						<span class="pull-right-container">
+							<i class="fa fa-angle-left pull-right"></i>
 						</span>
 					</a>
+					<ul class="treeview-menu">
+						<li class="{{ (Request::path() == 'invoice') ? 'active' : '' }}"><a href="/invoice"><i class="fa fa-file-invoice"></i> Invoice</a></li>
+						<li class=""><a href=""><i class="fa fa-book-open"></i> Book Management</a></li>
+					</ul>
 				</li>
       		</ul>
     	</section>

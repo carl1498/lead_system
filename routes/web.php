@@ -53,26 +53,6 @@ Route::post('/save_student_settings', 'studentSettingsController@store');
 Route::get('/get_student_settings/{id}/{current_settings}', 'studentSettingsController@get_student_settings');
 Route::get('/delete_student_settings', 'studentSettingsController@delete_student_settings');
 
-/* This part reserved for possible future use
-//Schools
-Route::get('/schoolsView', 'schoolController@view');
-Route::post('/save_school', 'schoolController@save_school');
-Route::get('/get_school', 'schoolController@get_school');
-Route::get('/delete_school', 'schoolController@delete_school');
-
-//Programs
-Route::get('/programsView', 'programController@view');
-Route::post('/save_program', 'programController@save_program');
-Route::get('/get_program', 'programController@get_program');
-Route::get('/delete_program', 'programController@delete_program');
-
-//Benefactors
-Route::get('/benefactorsView', 'benefactorController@view');
-Route::post('/save_benefactor', 'benefactorController@save_benefactor');
-Route::get('/get_benefactor', 'benefactorController@get_benefactor');
-Route::get('/delete_benefactor', 'benefactorController@delete_benefactor');
-*/
-
 //STUDENT ROUTES -- END
 
 
@@ -86,3 +66,10 @@ Route::get('/get_employee/{id}', 'employeeController@get_employee');
 Route::get('/delete_employee', 'employeeController@delete_employee');
 
 //EMPLOYEE ROUTES -- END
+
+//BOOK ROUTES -- START
+
+Route::get('/invoice', 'invoiceController@index');
+
+
+//BOOK ROUTES -- END
