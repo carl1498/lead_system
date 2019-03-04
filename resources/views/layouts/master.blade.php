@@ -12,6 +12,7 @@
 	<link rel="stylesheet" type="text/css" href="/css/bootstrap-datepicker.min.css">
 	<link rel="stylesheet" type="text/css" href="/css/select2.min.css">
 	<link rel="stylesheet" type="text/css" href="/css/app.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">

@@ -8,8 +8,11 @@
     </h1>
     <ol class="breadcrumb">
         <li>
-            <button class="btn btn-secondary bg-red add_student_settings">
-                <i class="fa fa-plus-square"></i>
+            <button class="btn btn-secondary bg-red add_books">
+            <i class="fas fa-book-medical"></i>
+            </button>
+            <button class="btn btn-secondary bg-red add_invoice">
+            <i class="fas fa-file-medical"></i>
             </button>
         </li>
     </ol>
@@ -39,6 +42,7 @@
 
     <!-- MODALS -- START -->
     
+    @include('includes.modals.invoice_modal')
 
     <!-- MODALS -- END -->
 
@@ -61,6 +65,12 @@
 
 
         //FUNCTIONS -- START
+
+        //Open Add Invoice Modal
+        $('.add_invoice').on('click', function(){            
+            $('#invoice_modal').modal('toggle');
+            $('#invoice_modal').modal('show');
+        });
 
         //FUNCTIONS -- END
     });
