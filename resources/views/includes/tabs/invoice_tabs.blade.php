@@ -14,7 +14,7 @@
 
 <div class="tab-pane fade in" id="invoice_tab2">
     
-    <table id="invoice_table2" class="table table-hover table-striped table-bordered" cellspacing="0">
+    <table id="add_books_table" class="table table-hover table-striped table-bordered" cellspacing="0">
         @include('includes.tables.invoice_table')
     </table>
 

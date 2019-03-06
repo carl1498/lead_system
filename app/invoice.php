@@ -19,7 +19,7 @@ class invoice extends Model
         return $this->hasOne('App\reference_no', 'id', 'ref_no_id');
     }
     
-    public function book_tye(){
+    public function book_type(){
         return $this->hasOne('App\book_type', 'id', 'book_type_id');
     }
 }

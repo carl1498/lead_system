@@ -70,6 +70,7 @@ Route::get('/delete_employee', 'employeeController@delete_employee');
 //BOOK ROUTES -- START
 
 Route::get('/invoice', 'invoiceController@index');
-
+Route::get('/view_invoice/{invoice_select}', 'invoiceController@view');
+Route::post('/save_invoice', 'invoiceController@save_invoice');
 
 //BOOK ROUTES -- END
