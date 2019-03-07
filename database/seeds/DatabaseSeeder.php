@@ -34,5 +34,9 @@ class DatabaseSeeder extends Seeder
         //USER -- START
         $this->call(UsersTableSeeder::class);
         //USER -- END
+
+        //BOOKS -- START
+        $this->call(BookTypeTableSeeder::class);
+        //BOOKS -- END
     }
 }

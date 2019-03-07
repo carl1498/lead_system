@@ -9,7 +9,7 @@ class books extends Model
     protected $primaryKey = 'id';
     protected $table = 'books';
     protected $fillable = [
-        'name', 'stud_id', 'book_type_id', 'branch_id'
+        'name', 'stud_id', 'book_type_id', 'branch_id', 'invoice_ref_id'
     ];
 
     public $timestamps = true;
@@ -24,5 +24,9 @@ class books extends Model
     
     public function branch(){
         return $this->hasOne('App\branches', 'id', 'branch_id');
+    }
+
+    public function reference_no(){
+        return $this->hasOne('App\reference_no', 'id', 'invoice_ref_id');
     }
 }

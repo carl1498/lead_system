@@ -42,7 +42,7 @@
                             </div>
                             <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                 <div class="form-group">
-                                    <input type="number" id="wb_1" name="wb_1" class="form-control required" placeholder="Minna no Nihongo Work Book I">
+                                    <input type="number" id="wb_1" name="wb_1" class="form-control required" placeholder="Minna no Nihongo I WB">
                                 </div>
                             </div>
                         </div>
@@ -64,7 +64,7 @@
                             </div>
                             <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                 <div class="form-group">
-                                    <input type="number" id="wb_2" name="wb_2" class="form-control required" placeholder="Minna no Nihongo Work Book II">
+                                    <input type="number" id="wb_2" name="wb_2" class="form-control required" placeholder="Minna no Nihongo II WB">
                                 </div>
                             </div>
                         </div>

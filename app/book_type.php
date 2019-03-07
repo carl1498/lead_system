@@ -9,7 +9,7 @@ class book_type extends Model
     protected $primaryKey = 'id';
     protected $table = 'book_type';
     protected $fillable = [
-        'name'
+        'name', 'description'
     ];
 
     public $timestamps = true;

@@ -20,6 +20,8 @@ class CreateBooksTable extends Migration
             $table->foreign('stud_id')->references('id')->on('students')->onDelete('cascade');
             $table->unsignedInteger('book_type_id');
             $table->foreign('book_type_id')->references('id')->on('book_type')->onDelete('cascade');
+            $table->unsignedInteger('invoice_ref_id');
+            $table->foreign('invoice_ref_id')->references('id')->on('reference_no')->onDelete('cascade');
             $table->unsignedInteger('branch_id');
             $table->foreign('branch_id')->references('id')->on('branches');
             $table->timestamps();

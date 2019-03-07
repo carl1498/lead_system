@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\invoice;
 use App\reference_no;
 use App\book_type;
+use App\add_books;
+use App\books;
+use App\branch;
 use Carbon\Carbon;
 use Yajra\Datatables\Datatables;
 
@@ -27,47 +30,79 @@ class invoiceController extends Controller
 
     public function view(Request $request){
         $invoice = invoice::with('reference_no')->groupBy('ref_no_id')->get();
-        $test = $request->invoice_select;
+        $invoice_select = $request->invoice_select;
 
         return Datatables::of($invoice)
-        ->addColumn('book_1', function($data){
+        ->addColumn('book_1', function($data) use($invoice_select){
             $get_book = book_type::where('name', 'Book 1')->first();
             $get_book_id = $get_book->id;
             $book = $data->where('ref_no_id', $data->ref_no_id)->where('book_type_id', $get_book_id)->first();
-            /*if($request->invoice_select == 'Quantity'){
+            if($invoice_select == 'Quantity'){
                 return $book->quantity;
             }
-            else if($request->invoice_select == 'Pending'){
+            else if($invoice_select == 'Pending'){
                 return $book->pending;
-            }*/
-            return $test;
+            }
         })
-        ->addColumn('wb_1', function($data){
+        ->addColumn('wb_1', function($data) use($invoice_select){
             $get_book = book_type::where('name', 'WB 1')->first();
             $get_book_id = $get_book->id;
             $book = $data->where('ref_no_id', $data->ref_no_id)->where('book_type_id', $get_book_id)->first();
-            return $book->quantity;
+            if($invoice_select == 'Quantity'){
+                return $book->quantity;
+            }
+            else if($invoice_select == 'Pending'){
+                return $book->pending;
+            }
         })
-        ->addColumn('book_2', function($data){
+        ->addColumn('book_2', function($data) use($invoice_select){
             $get_book = book_type::where('name', 'Book 2')->first();
             $get_book_id = $get_book->id;
             $book = $data->where('ref_no_id', $data->ref_no_id)->where('book_type_id', $get_book_id)->first();
-            return $book->quantity;
+            if($invoice_select == 'Quantity'){
+                return $book->quantity;
+            }
+            else if($invoice_select == 'Pending'){
+                return $book->pending;
+            }
         })
-        ->addColumn('wb_2', function($data){
+        ->addColumn('wb_2', function($data) use($invoice_select){
             $get_book = book_type::where('name', 'WB 2')->first();
             $get_book_id = $get_book->id;
             $book = $data->where('ref_no_id', $data->ref_no_id)->where('book_type_id', $get_book_id)->first();
-            return $book->quantity;
+            if($invoice_select == 'Quantity'){
+                return $book->quantity;
+            }
+            else if($invoice_select == 'Pending'){
+                return $book->pending;
+            }
         })
-        ->addColumn('kanji', function($data){
+        ->addColumn('kanji', function($data) use($invoice_select){
             $get_book = book_type::where('name', 'Kanji')->first();
             $get_book_id = $get_book->id;
             $book = $data->where('ref_no_id', $data->ref_no_id)->where('book_type_id', $get_book_id)->first();
-            return $book->quantity;
+            if($invoice_select == 'Quantity'){
+                return $book->quantity;
+            }
+            else if($invoice_select == 'Pending'){
+                return $book->pending;
+            }
+        })
+        ->addColumn('action', function($data) use($invoice_select){
+            return 'TEMP';
+        })
+        ->make(true);
+    }
+
+    public function view_add_books(){
+        $add_books = add_books::with('reference_no', 'book_type')->get();
+
+        return Datatables::of($add_books)
+        ->addColumn('book_range', function($data){
+            return $data->book_no_start . ' - ' . $data->book_no_end;
         })
         ->addColumn('action', function($data){
-            return "TEMP";
+            return 'TEMP';
         })
         ->make(true);
     }
@@ -103,10 +138,94 @@ class invoiceController extends Controller
             $invoice->ref_no_id = $ref_id;
             $get_book_type_id = book_type::where('name', $book_types[$x])->first();
             $invoice->book_type_id = $get_book_type_id->id;
-            $invoice->quantity = $quantity[$x];
-            $invoice->pending = $quantity[$x];
+            if($quantity[$x]){
+                $invoice->quantity = $quantity[$x];
+                $invoice->pending = $quantity[$x];
+            }else{
+                $invoice->quantity = 0;
+                $invoice->pending = 0;
+            }
             $invoice->save();
         }
         //FOR INVOICE -- END
+    }
+
+    public function invoice_all(Request $request){
+        $invoice = invoice::with('reference_no')->groupBy('ref_no_id')->get()->toArray();
+        $array = [];
+        foreach ($invoice as $key => $value){
+            $array[] = [
+                'id' => $value['ref_no_id'],
+                'text' => $value['reference_no']['invoice_ref_no']
+            ];
+        }
+        return json_encode(['results' => $array]);
+    }
+
+    public function book_all(Request $request){
+        $invoice = $request->invoice_id;
+        $book = invoice::with('book_type')->where('ref_no_id', $invoice)->where('pending', '>', 0)->get()->toArray();
+        $array = [];
+        foreach ($book as $key => $value){
+            $array[] = [
+                'id' =>$value['book_type_id'],
+                'text' => $value['book_type']['name']
+            ];
+        }
+        return json_encode(['results' => $array]);
+    }
+
+    public function get_pending(Request $request){
+        $invoice = $request->invoice_id;
+        $book_type = $request->book_type;
+
+        $pending = invoice::where('ref_no_id', $invoice)->where('book_type_id', $book_type)->first();
+
+        return $pending->pending;
+    }
+
+    public function get_starting(Request $request){
+        $book_type = $request->book_type;
+        $last_book = books::where('book_type_id', $book_type)->orderBy('name', 'desc')->first();
+
+        if($last_book){
+            return $last_book->name + 1;
+        }
+        else{
+            return 1;
+        }
+    }
+
+    public function save_books(Request $request){
+        $start = $request->start;
+        $end = $request->end;
+        $ref_no = $request->invoice_add_book;
+        $book_type = $request->book_type_add_book;
+        $makati = branch::where('name', 'Makati')->first();
+        info($request);
+
+        $add_book = new add_books;
+        $add_book->invoice_ref_id = $ref_no;
+        $add_book->book_type_id = $book_type;
+        $add_book->quantity = $request->quantity;
+        $add_book->previous_pending = $request->previous_pending;
+        $add_book->pending = $request->pending;
+        $add_book->book_no_start = $start;
+        $add_book->book_no_end = $end;
+        $add_book->remarks = $request->remarks;
+        $add_book->save();
+
+        for($x = $start; $x <= $end; $x++){
+            $books = new books;
+            $books->name = $x;
+            $books->book_type_id = $request->book_type_add_book;
+            $books->invoice_ref_id = $ref_no;
+            $books->branch_id = $makati->id;
+            $books->save();
+        }
+
+        $pending = invoice::where('ref_no_id', $ref_no)->where('book_type_id', $book_type)->first();
+        $pending->pending = $request->pending;
+        $pending->save();
     }
 }

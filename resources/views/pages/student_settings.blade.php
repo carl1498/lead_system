@@ -89,7 +89,7 @@
                 autoWidth: true,
                 scrollCollapse: true,
                 ajax: {
-                    url: '/view_student_settings/{current_settings}',
+                    url: '/view_student_settings/'+current_settings,
                     data: {current_settings: current_settings}
                 },
                 columns: [

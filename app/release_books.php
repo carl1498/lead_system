@@ -9,7 +9,7 @@ class release_books extends Model
     protected $primaryKey = 'id';
     protected $table = 'release_books';
     protected $fillable = [
-        'p_request_id', 'quantity', 'book_no_low', 'book_no_high', 'remarks'
+        'p_request_id', 'quantity', 'book_no_start', 'book_no_end', 'remarks'
     ];
 
     public $timestamps = true;

@@ -69,8 +69,17 @@ Route::get('/delete_employee', 'employeeController@delete_employee');
 
 //BOOK ROUTES -- START
 
+//Invoice
 Route::get('/invoice', 'invoiceController@index');
 Route::get('/view_invoice/{invoice_select}', 'invoiceController@view');
 Route::post('/save_invoice', 'invoiceController@save_invoice');
+
+//Add Book
+Route::get('/viewAddBooks', 'invoiceController@view_add_books');
+Route::get('/invoiceAll', 'invoiceController@invoice_all');
+Route::get('/bookAll/{invoice_id}', 'invoiceController@book_all');
+Route::get('/getPending/{invoice_id}/{book_type}', 'invoiceController@get_pending');
+Route::get('/getStarting/{book_type}', 'invoiceController@get_starting');
+Route::post('/save_books', 'invoiceController@save_books');
 
 //BOOK ROUTES -- END
