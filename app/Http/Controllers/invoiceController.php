@@ -112,7 +112,7 @@ class invoiceController extends Controller
         $year = Carbon::now()->year;
         $month = Carbon::now()->format('m');
         $day = Carbon::now()->format('d');
-        $get_invoice_id = reference_no::first();
+        $get_invoice_id = reference_no::orderBy('id','desc')->first();
 
         $ref_no = new reference_no;
         if($get_invoice_id != null){
@@ -151,7 +151,7 @@ class invoiceController extends Controller
     }
 
     public function invoice_all(Request $request){
-        $invoice = invoice::with('reference_no')->groupBy('ref_no_id')->get()->toArray();
+        $invoice = invoice::with('reference_no')->where('pending', '>', 0)->groupBy('ref_no_id')->get()->toArray();
         $array = [];
         foreach ($invoice as $key => $value){
             $array[] = [

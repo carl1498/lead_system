@@ -26,8 +26,8 @@
         <div class="col-md-12">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
-                    <li class="active"><a class="settings_pick" href="#invoice_tab" data-toggle="tab">Invoice</a></li>
-                    <li><a class="settings_pick" href="#add_books_tab" data-toggle="tab">Add Book History</a></li>
+                    <li class="active"><a class="invoice_pick" href="#invoice_tab" data-toggle="tab">Invoice</a></li>
+                    <li><a class="invoice_pick" href="#add_books_tab" data-toggle="tab">Add Book History</a></li>
                 </ul>
 
                 <div class="tab-content">
@@ -60,6 +60,7 @@
 
         var invoice_select = $('#invoice_select').val();
         var invoice_id, book_type;
+        var current_tab = 'Invoice';
 
         $("#invoice_modal").on("hidden.bs.modal", function(e){
             $('#invoice_form :input.required').each(function (){
@@ -207,6 +208,19 @@
 
         //FUNCTIONS -- START
 
+        $('.invoice_pick').on('click', function(){
+            current_tab = $(this).text();
+            if(current_tab == 'Invoice'){
+                $('.invoice_select').show();
+                $('#invoice_select').next(".select2-container").show();
+                refresh_invoice();
+            }else{
+                $('.invoice_select').hide();
+                $('#invoice_select').next(".select2-container").hide();
+                refresh_add_book_history();
+            }
+        });
+
         //Invoice Reference No. Select
         $(document).on('change', '#invoice_add_book', function(){
             invoice_id = $('#invoice_add_book').val();
@@ -298,6 +312,9 @@
 
         //formula for total pending
         $('#quantity').keyup(function(){
+            if($('#previous_pending').val() - $('#quantity').val() < 0){
+                $('#quantity').val($('#previous_pending').val());
+            }
             $('#pending').val($('#previous_pending').val() - $('#quantity').val());
             $('#end').val(parseInt($('#start').val()) + (parseInt($('#quantity').val()) - 1));
         });

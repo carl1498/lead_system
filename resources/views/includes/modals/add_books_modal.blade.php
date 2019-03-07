@@ -46,7 +46,7 @@
                             </div>
                             <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                 <div class="form-group required">
-                                    <input type="number" id="previous_pending" name="previous_pending" class="form-control required" style="width: 100%;" required readonly>
+                                    <input type="number" min="0" id="previous_pending" name="previous_pending" class="form-control required" style="width: 100%;" required readonly>
                                 </div>
                             </div>
                         </div>
@@ -57,7 +57,7 @@
                             </div>
                             <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                 <div class="form-group required">
-                                    <input type="number" id="quantity" name="quantity" class="form-control required" style="width: 100%;" required disabled>
+                                    <input type="number" min="0" id="quantity" name="quantity" class="form-control required" style="width: 100%;" required disabled>
                                 </div>
                             </div>
                         </div>
@@ -68,7 +68,7 @@
                             </div>
                             <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                 <div class="form-group required">
-                                    <input type="number" id="pending" name="pending" class="form-control required" style="width: 100%;" required readonly>
+                                    <input type="number" min="0" id="pending" name="pending" class="form-control required" style="width: 100%;" required readonly>
                                 </div>
                             </div>
                         </div>
@@ -79,7 +79,7 @@
                             </div>
                             <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                 <div class="form-group required">
-                                    <input type="number" id="starting" name="starting" class="form-control required" style="width: 100%;" required disabled>
+                                    <input type="number" min="0" id="starting" name="starting" class="form-control required" style="width: 100%;" required disabled>
                                 </div>
                             </div>
                         </div>
@@ -90,7 +90,7 @@
                             </div>
                             <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                 <div class="form-group required">
-                                    <input type="number" id="start" name="start" class="form-control required" style="width: 100%;" required readonly>
+                                    <input type="number" min="0" id="start" name="start" class="form-control required" style="width: 100%;" required readonly>
                                 </div>
                             </div>
                         </div>
@@ -101,7 +101,7 @@
                             </div>
                             <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                 <div class="form-group required">
-                                    <input type="number" id="end" name="end" class="form-control required" style="width: 100%;" required readonly>
+                                    <input type="number" min="0" id="end" name="end" class="form-control required" style="width: 100%;" required readonly>
                                 </div>
                             </div>
                         </div>

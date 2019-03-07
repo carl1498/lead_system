@@ -15,7 +15,7 @@ class CreateBooksTable extends Migration
     {
         Schema::create('books', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
+            $table->integer('name');
             $table->unsignedInteger('stud_id')->nullable();
             $table->foreign('stud_id')->references('id')->on('students')->onDelete('cascade');
             $table->unsignedInteger('book_type_id');
