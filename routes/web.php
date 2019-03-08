@@ -82,4 +82,10 @@ Route::get('/getPending/{invoice_id}/{book_type}', 'invoiceController@get_pendin
 Route::get('/getStarting/{book_type}', 'invoiceController@get_starting');
 Route::post('/save_books', 'invoiceController@save_books');
 
+//Book Management
+Route::get('/book_management', 'bookManagementController@index');
+
+//Request Books
+Route::get('/getRequestPending/{book_type}', 'requestBooksController@get_pending');
+
 //BOOK ROUTES -- END

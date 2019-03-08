@@ -89,7 +89,10 @@ class invoiceController extends Controller
             }
         })
         ->addColumn('action', function($data) use($invoice_select){
-            return 'TEMP';
+            $html = '
+                    <button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_invoice" id="'.$data->ref_no_id.'"><i class="fa fa-trash-alt"></i></button>';
+            
+            return $html;
         })
         ->make(true);
     }

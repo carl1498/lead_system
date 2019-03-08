@@ -53,7 +53,7 @@
 					</a>
 				</li>-->
 
-				<li class="{{ (Request::path() == 'invoice' || Request::path() == 'invoice') ? 'active' : '' }} treeview">
+				<li class="{{ (Request::path() == 'invoice' || Request::path() == 'book_management') ? 'active' : '' }} treeview">
 					<a href="">
 						<i class="fa fa-book"></i> <span>Books</span>
 						<span class="pull-right-container">
@@ -62,7 +62,7 @@
 					</a>
 					<ul class="treeview-menu">
 						<li class="{{ (Request::path() == 'invoice') ? 'active' : '' }}"><a href="/invoice"><i class="fa fa-file-invoice"></i> Invoice</a></li>
-						<li class=""><a href=""><i class="fa fa-book-open"></i> Book Management</a></li>
+						<li class="{{ (Request::path() == 'book_management') ? 'active' : '' }}"><a href="/book_management"><i class="fa fa-book-open"></i> Book Management</a></li>
 					</ul>
 				</li>
       		</ul>

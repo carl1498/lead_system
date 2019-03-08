@@ -1,0 +1,12 @@
+<thead>
+    <tr>
+        <th>Branch</th>
+        <th>Previous</th>
+        <th>Quantity</th>
+        <th>Book</th>
+        <th>Pending</th>
+        <th>Remarks</th>
+        <th>Date</th>
+        <th>Action</th>
+    </tr>
+</thead>

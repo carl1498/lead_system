@@ -283,6 +283,7 @@
                     dataType: 'text',
                     success: function(data){
                         $('#previous_pending').val(data);
+                        $('#pending').val(data);
                     }
                 });
 
@@ -312,8 +313,16 @@
 
         //formula for total pending
         $('#quantity').keyup(function(){
+            if($('#quantity').val() == ''){
+                $('#pending').val($('#previous_pending').val());
+                $('#end').val('');
+                return;
+            }
             if($('#previous_pending').val() - $('#quantity').val() < 0){
                 $('#quantity').val($('#previous_pending').val());
+                $('#pending').val($('#previous_pending').val() - $('#quantity').val());
+                $('#end').val(parseInt($('#start').val()) + (parseInt($('#quantity').val()) - 1));
+                return;
             }
             $('#pending').val($('#previous_pending').val() - $('#quantity').val());
             $('#end').val(parseInt($('#start').val()) + (parseInt($('#quantity').val()) - 1));

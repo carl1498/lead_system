@@ -24,6 +24,7 @@ class CreateBooksTable extends Migration
             $table->foreign('invoice_ref_id')->references('id')->on('reference_no')->onDelete('cascade');
             $table->unsignedInteger('branch_id');
             $table->foreign('branch_id')->references('id')->on('branches');
+            $table->enum('status', ['Available', 'Released', 'Lost']);
             $table->timestamps();
         });
     }

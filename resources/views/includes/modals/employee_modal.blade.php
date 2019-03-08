@@ -166,7 +166,7 @@
                             </div>
                         </div>
 
-                        <div class="row clearfix">
+                        <!--<div class="row clearfix">
                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
                                     <label for="salary" class="pull-right">Salary</label>
                             </div>
@@ -175,7 +175,7 @@
                                     <input type="number" id="salary" name="salary" class="form-control" placeholder="Enter Salary">
                                 </div>
                             </div>
-                        </div>
+                        </div>-->
 
                         <div class="row clearfix">
                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">

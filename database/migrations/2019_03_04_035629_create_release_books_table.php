@@ -17,6 +17,9 @@ class CreateReleaseBooksTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('p_request_id');
             $table->foreign('p_request_id')->references('id')->on('pending_request')->onDelete('cascade');
+            $table->integer('quantity');
+            $table->integer('previous_pending');
+            $table->integer('pending');
             $table->integer('book_no_start');
             $table->integer('book_no_end');
             $table->string('remarks')->nullable();
