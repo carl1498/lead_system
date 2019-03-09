@@ -6,7 +6,7 @@
         <th>Quantity</th>
         <th>Pending</th>
         <th>Book No. Range</th>
-        <th>Pending</th>
+        <th>Date</th>
         <th>Remarks</th>
         <th>Action</th>
     </tr>

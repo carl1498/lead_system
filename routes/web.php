@@ -86,6 +86,14 @@ Route::post('/save_books', 'invoiceController@save_books');
 Route::get('/book_management', 'bookManagementController@index');
 
 //Request Books
+Route::get('/view_request_books', 'requestBooksController@view_request_books');
 Route::get('/getRequestPending/{book_type}', 'requestBooksController@get_pending');
+Route::post('/save_book_request', 'requestBooksController@save_book_request');
+
+//Release Books
+Route::get('/view_release_books', 'releaseBooksController@view_release_books');
+Route::get('/get_release_books/{branch_id}', 'releaseBooksController@get_books');
+Route::get('/get_release_pending/{book_type}/{branch_id}', 'releaseBooksController@get_pending');
+Route::post('/save_book_release', 'releaseBooksController@save_book_release');
 
 //BOOK ROUTES -- END

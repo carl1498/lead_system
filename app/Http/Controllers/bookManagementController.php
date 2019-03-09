@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\book_type;
+use App\branch;
 
 class bookManagementController extends Controller
 {
@@ -19,7 +20,8 @@ class bookManagementController extends Controller
     public function index()
     {
         $book_type = book_type::all();
+        $branch = branch::all();
 
-        return view('pages.book_management', compact('book_type'));
+        return view('pages.book_management', compact('book_type', 'branch'));
     }
 }

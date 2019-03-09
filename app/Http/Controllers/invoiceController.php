@@ -205,7 +205,6 @@ class invoiceController extends Controller
         $ref_no = $request->invoice_add_book;
         $book_type = $request->book_type_add_book;
         $makati = branch::where('name', 'Makati')->first();
-        info($request);
 
         $add_book = new add_books;
         $add_book->invoice_ref_id = $ref_no;
@@ -224,6 +223,7 @@ class invoiceController extends Controller
             $books->book_type_id = $request->book_type_add_book;
             $books->invoice_ref_id = $ref_no;
             $books->branch_id = $makati->id;
+            $books->status = 'Available';
             $books->save();
         }
 

@@ -6,7 +6,7 @@
                 <span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Request Books</h4>
             </div>
-            <form class="form-horizontal" id="add_books_form">
+            <form class="form-horizontal" id="request_books_form">
                 @csrf
                 <div class="modal-body clearfix">
 

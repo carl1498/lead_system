@@ -19,6 +19,6 @@ class pending_request extends Model
     }
     
     public function branch(){
-        return $this->hasOne('App\branches', 'id', 'branch_id');
+        return $this->hasOne('App\branch', 'id', 'branch_id');
     }
 }
