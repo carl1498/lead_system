@@ -184,14 +184,14 @@ class studentController extends Controller
 
             $student->address = $request->address;
             $student->email = $request->email;
-            $student->referral_id = $request->referral;
+            $student->referral_id = $request->l_referral;
             $student->date_of_signup = Carbon::now();
             $student->date_of_medical = null;
             $student->date_of_completion = null;
-            $student->gender = $request->gender;
-            $student->branch_id = $request->branch;
-            $student->course_id = $request->course;
-            $student->departure_year_id = $request->year;
+            $student->gender = $request->l_gender;
+            $student->branch_id = $request->l_branch;
+            $student->course_id = $request->l_course;
+            $student->departure_year_id = $request->l_year;
             $student->departure_month_id = 1;
             $student->remarks = $request->remarks;
             $student->save();

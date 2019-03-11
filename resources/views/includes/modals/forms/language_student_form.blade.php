@@ -103,11 +103,11 @@
 
             <div class="row clearfix">
                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
-                        <label for="referral" class="pull-right">Referral</label>
+                        <label for="l_referral" class="pull-right">Referral</label>
                 </div>
                 <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
                     <div class="form-group required">
-                        <select type="text" id="referral" name="referral" class="form-control select2 required" style="width: 100%;" required>
+                        <select type="text" id="l_referral" name="l_referral" class="form-control select2 required" style="width: 100%;" required>
                             <option value="">Select Referral</option>
                             @foreach($employee as $e)
                                 <option value="{{ $e->id }}">{{ $e->fname }}</option>
@@ -119,11 +119,11 @@
 
             <div class="row clearfix">
                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
-                        <label for="gender" class="pull-right">Gender</label>
+                        <label for="l_gender" class="pull-right">Gender</label>
                 </div>
                 <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
                     <div class="form-group required">
-                        <select type="text" id="gender" name="gender" class="form-control select2 required" style="width: 100%;" required>
+                        <select type="text" id="l_gender" name="l_gender" class="form-control select2 required" style="width: 100%;" required>
                             <option value="">Select Gender</option>
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
@@ -134,11 +134,11 @@
 
             <div class="row clearfix">
                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
-                        <label for="branch" class="pull-right">Branch</label>
+                        <label for="l_branch" class="pull-right">Branch</label>
                 </div>
                 <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
                     <div class="form-group required">
-                        <select type="text" id="branch" name="branch" class="form-control select2 required" style="width: 100%;" required>
+                        <select type="text" id="l_branch" name="l_branch" class="form-control select2 required" style="width: 100%;" required>
                             <option value="">Select Branch</option>
                             @foreach($branch as $b)
                                 <option value="{{ $b->id }}">{{ $b->name }}</option>
@@ -150,11 +150,11 @@
 
             <div class="row clearfix">
                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
-                        <label for="course" class="pull-right">Course</label>
+                        <label for="l_course" class="pull-right">Course</label>
                 </div>
                 <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
                     <div class="form-group required">
-                        <select type="text" id="course" name="course" class="form-control select2 required" style="width: 100%;" required>
+                        <select type="text" id="l_course" name="l_course" class="form-control select2 required" style="width: 100%;" required>
                             <option value="">Select Course</option>
                             @foreach($course as $c)
                                 <option value="{{ $c->id }}">{{ $c->name }}</option>
@@ -166,11 +166,11 @@
 
             <div class="row clearfix">
                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
-                        <label for="year" class="pull-right">Year</label>
+                        <label for="l_year" class="pull-right">Year</label>
                 </div>
                 <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
                     <div class="form-group required">
-                        <select type="text" id="year" name="year" class="form-control select2 required" style="width: 100%;" required>
+                        <select type="text" id="l_year" name="l_year" class="form-control select2 required" style="width: 100%;" required>
                             <option value="">Select Year</option>
                             @foreach($departure_year as $dy)
                                 <option value="{{ $dy->id }}">{{ $dy->name }}</option>

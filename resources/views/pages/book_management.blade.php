@@ -59,6 +59,7 @@
     
     @include('includes.modals.request_books_modal')
     @include('includes.modals.release_books_modal')
+    @include('includes.modals.assign_books_modal')
 
     <!-- MODALS -- END -->
 
@@ -74,6 +75,7 @@
         var book_type;
         var books_pick;
         var branch_id;
+        var student_id;
 
         $('#request_books_modal').on('hidden.bs.modal', function(e){
             $(this).find("input,textarea,select").val('').end();
@@ -182,6 +184,43 @@
             ]]
         });
 
+        function refresh_release_books(){
+            release_books_table.ajax.reload();
+        }
+
+        var assign_books_table = $('#books_assign_table').DataTable({
+            processing: true,
+            destroy: true,
+            scrollX: true,
+            scrollCollapse: true,
+            fixedColumns: {
+                leftColumns: 1
+            },
+            responsive: true,
+            ajax: '/view_assign_books',
+            columns: [
+                {data: 'student_name', name: 'name'},
+                {data: 'student.branch.name', name: 'branch'},
+                {data: 'books.book_type.name', name: 'book'},
+                {data: 'books.name', name: 'book_no'},
+                {data: 'created_at', name: 'date'},
+            ],
+            columnDefs: [
+                { width: 250, targets: 0 }, //student name
+                { width: 150, targets: 1 }, //branch
+                { width: 150, targets: 2 }, //book
+                { width: 100, targets: 3 }, //book no.
+                { width: 200, targets: 4 }, //date
+            ],
+            order: [[
+                4, 'desc'
+            ]]
+        });
+
+        function refresh_assign_books(){
+            assign_books_table.ajax.reload();
+        }
+
         //DATATABLES -- END
 
 
@@ -282,7 +321,7 @@
                 $('#release_book').prop('disabled', false);
                 $('#release_book').val('').trigger('change');
                 $('#release_books_modal').find("input,textarea").val('').end();
-                getBooks();
+                getBooksPending();
             }
         });
 
@@ -301,6 +340,7 @@
                             $('#release_books_modal').find("input,textarea").val('').end();
                         }else{
                             $('#release_quantity, #release_starting, #release_remarks').prop('disabled', false);
+                            $('#release_stocks').val(data.stocks);
                             $('#release_previous_pending').val(data.pending);
                             $('#release_pending').val(data.pending);
                             $('#release_quantity').val('');
@@ -318,6 +358,9 @@
             }else{
                 if(parseInt($(this).val()) > parseInt($('#release_previous_pending').val())){
                     $(this).val($('#release_previous_pending').val());
+                }
+                if(parseInt($(this).val()) > parseInt($('#release_stocks').val())){
+                    $(this).val($('#release_stocks').val());
                 }
                 $('#release_pending').val(parseInt($('#release_previous_pending').val()) - parseInt($(this).val()));
                 $('#release_end').val(parseInt($('#release_start').val()) + (parseInt($(this).val()) - 1));
@@ -353,7 +396,7 @@
                     $('#release_books_modal').modal('hide');
                     button.disabled = false;
                     input.html('SAVE CHANGES');
-                    //refresh here
+                    refresh_release_books();
                 },
                 error: function(data){
                     swal("Oh no!", "Something went wrong, try again.", "error");
@@ -364,7 +407,21 @@
         });
 
         //Release Books SELECT 2
-        function getBooks(){
+        $('#release_branch').select2({
+            placeholder: 'Select Branch',
+            ajax: {
+                url: "/get_release_branch",
+                dataType: 'json',
+                
+                processResults: function (data){
+                    return {
+                        results:data.results      
+                    }
+                }
+            }
+        });
+
+        function getBooksPending(){
             $('#release_book').select2({
                 placeholder: 'Select Book',
                 ajax: {
@@ -381,6 +438,119 @@
         }
 
         //RELEASE BOOKS -- END
+
+        //ASSIGN BOOKS -- START
+
+        //Show Assign Books Modal
+        $('.assign_books').on('click', function(){
+            $('#assign_books_modal').modal('toggle');
+            $('#assign_books_modal').modal('show');
+        });
+
+        $('#assign_student_name').on('change', function(){
+            $('#assign_book_type').prop('disabled', false);
+            student_id = $(this).val();
+            getAvailableBookType();
+        });
+
+        $('#assign_book_type').on('change', function(){
+            $('#assign_book').prop('disabled', false);
+            book_type = $(this).val();
+            getAvailableBooks();
+        });
+
+        $('.save_book_assign').on('click', function(e){
+            e.preventDefault();
+
+            var input = $(this);
+            var button = this;
+
+            button.disabled = true;
+            input.html('SAVING...');
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '/save_book_assign',
+                data: $('#assign_books_form').serialize(),
+                method: 'POST',
+                dataType: 'text',
+                success:function(data){
+                    swal('Success!', 'Record has been saved to the Database!', 'success');
+                    $('#assign_books_modal').modal('hide');
+                    button.disabled = false;
+                    input.html('SAVE CHANGES');
+                    refresh_assign_books();
+                },
+                error: function(data){
+                    swal("Oh no!", "Something went wrong, try again.", "error");
+                    button.disabled = false;
+                    input.html('SAVE CHANGES');
+                }
+            });
+        });
+
+        //Assign Books SELECT 2
+        $('#assign_student_name').select2({
+            placeholder: 'Select Student',
+            ajax: {
+                url: '/get_student',
+                dataType: 'json',
+                
+                processResults: function (data){
+                    return {
+                        results:data.results      
+                    }
+                }
+            },
+        });
+
+        function getAvailableBookType(){
+            $('#assign_book_type').select2({
+                placeholder: 'Select Book',
+                ajax: {
+                    url: '/get_available_book_type/'+student_id,
+                    dataType: 'json',
+
+                    data: function (params){
+                        return {
+                            name: params.term,
+                            page: params.page
+                        }
+                    },
+                    processResults: function (data){
+                        return {
+                            results:data.results
+                        }
+                    }
+                },
+            });
+        }
+
+        function getAvailableBooks(){
+            $('#assign_book').select2({
+                placeholder: 'Select Book',
+                ajax: {
+                    url: '/get_available_book/'+book_type,
+                    dataType: 'json',
+
+                    data: function (params){
+                        return {
+                            name: params.term,
+                            page: params.page
+                        }
+                    },
+                    processResults: function (data){
+                        return {
+                            results:data.results
+                        }
+                    }
+                },
+            });
+        }
+
+        //ASSIGN BOOKS -- END
 
 
         //FUNCTIONS -- END

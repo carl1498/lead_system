@@ -8,7 +8,7 @@
     </h1>
     <ol class="breadcrumb">
         <li>
-            <button class="btn btn-secondary bg-red add_student" data-toggle="modal" data-target="#student_modal">
+            <button class="btn btn-secondary bg-red" data-toggle="modal" data-target="#student_modal">
                 <i class="fas fa-credit-card"></i>
             </button>
             <button class="btn btn-secondary bg-red add_student" data-toggle="modal" data-target="#student_modal">

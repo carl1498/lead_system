@@ -92,8 +92,16 @@ Route::post('/save_book_request', 'requestBooksController@save_book_request');
 
 //Release Books
 Route::get('/view_release_books', 'releaseBooksController@view_release_books');
+Route::get('/get_release_branch', 'releaseBooksController@get_branch');
 Route::get('/get_release_books/{branch_id}', 'releaseBooksController@get_books');
 Route::get('/get_release_pending/{book_type}/{branch_id}', 'releaseBooksController@get_pending');
 Route::post('/save_book_release', 'releaseBooksController@save_book_release');
+
+//Assign Books
+Route::get('/view_assign_books', 'assignBooksController@view_assign_books');
+Route::get('/get_student', 'assignBooksController@get_student');
+Route::get('/get_available_book_type/{student_id}', 'assignBooksController@get_available_book_type');
+Route::get('/get_available_book/{book_type}', 'assignBooksController@get_available_book');
+Route::post('/save_book_assign', 'assignBooksController@save_book_assign');
 
 //BOOK ROUTES -- END

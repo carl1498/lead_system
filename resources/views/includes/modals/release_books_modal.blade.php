@@ -21,9 +21,7 @@
                             <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                 <div class="form-group required">
                                     <select type="text" id="release_branch" name="release_branch" class="form-control select2 required" style="width: 100%;" required>
-                                        @foreach($branch as $b)
-                                        <option value="{{ $b->id }}">{{ $b->name }}</option>
-                                        @endforeach
+                                        <!-- Controller: releaseBooksController@get_branch -->
                                     </select>
                                 </div>
                             </div>
@@ -36,8 +34,19 @@
                             <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                 <div class="form-group required">
                                     <select type="text" id="release_book" name="release_book" class="form-control select2 required" style="width: 100%;" required disabled>
-                                        <!-- Controller: releaseBooksController@books_all -->
+                                        <!-- Controller: releaseBooksController@get_books -->
                                     </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row clearfix">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 form-control-label">
+                                <label for="release_stocks" class="pull-right">Stocks On Hand</label>
+                            </div>
+                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                                <div class="form-group required">
+                                    <input type="number" min="0" id="release_stocks" name="release_stocks" class="form-control required" style="width: 100%;" required readonly>
                                 </div>
                             </div>
                         </div>

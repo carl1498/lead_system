@@ -18,6 +18,19 @@ class releaseBooksController extends Controller
         $this->middleware('auth');
     }
 
+    public function get_branch(){
+        $branch = pending_request::with('branch')->where('pending', '>', 0)->groupBy('branch_id')->get()->toArray();
+
+        $array = [];
+        foreach ($branch as $key => $value){
+            $array[] = [
+                'id' =>$value['branch_id'],
+                'text' => $value['branch']['name']
+            ];
+        }
+        return json_encode(['results' => $array]);
+    }
+
     public function get_books(Request $request){
         $branch = $request->branch_id;
         $book = pending_request::with('book_type')->where('branch_id', $branch)->where('pending', '>', 0)->get()->toArray();
@@ -41,14 +54,16 @@ class releaseBooksController extends Controller
 
         $starting = books::where('branch_id', $branch)->where('book_type_id', $book_type)
                         ->where('status', 'Available')->orderBy('name')->first();
+
+        $stocks = $starting->count();
                         
-        info($starting);
         $pending = ($pending) ? $pending->pending : 0;
         $starting = ($starting) ? $starting->name : 0;
 
         $output = array(
             'pending' => $pending,
-            'starting' => $starting
+            'starting' => $starting,
+            'stocks' => $stocks
         );
 
         echo json_encode($output);
