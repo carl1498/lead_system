@@ -8,21 +8,19 @@
     </h1>
     <ol class="breadcrumb">
         <li>
-            <button class="btn btn-secondary bg-red lost_books">
-            <i class="fas fa-eye-slash"></i>
-            </button>
-            <button class="btn btn-secondary bg-red return_books">
-            <i class="fas fa-undo"></i>
-            </button>
             <button class="btn btn-secondary bg-red assign_books">
             <i class="fas fa-people-carry"></i>
             </button>
+            @if(onLoadBranch() == 'Makati')
             <button class="btn btn-secondary bg-red release_books">
             <i class="fas fa-external-link-alt"></i>
             </button>
+            @endif
+            @if(onLoadBranch() != 'Makati')
             <button class="btn btn-secondary bg-red request_books">
             <i class="fas fa-hand-holding"></i>
             </button>
+            @endif
         </li>
     </ol>
 </section>
@@ -47,6 +45,7 @@
 
                 <div class="tab-content">
                 
+                    @include('includes.books_select')
                     @include('includes.tabs.book_management_tabs')
 
                 </div>
@@ -72,10 +71,17 @@
 
         //INITIALIZE -- START
 
+        var current_tab;
         var book_type;
         var books_pick;
         var branch_id;
         var student_id;
+        var book_status = $('#status_select').val();
+
+        $('body').tooltip({
+            selector: '[data-toggle="tooltip"]',
+            trigger : 'hover'
+        });
 
         $('#request_books_modal').on('hidden.bs.modal', function(e){
             $(this).find("input,textarea,select").val('').end();
@@ -89,6 +95,12 @@
             $('#release_quantity, #release_book, #release_starting, #release_remarks').prop('disabled', true);
         });
 
+        $('#assign_books_modal').on('hidden.bs.modal', function(e){
+            $(this).find("input,textarea,select").val('').end();
+            $('#assign_student_name, #assign_book_type, #assign_book').val('').trigger('change');
+            $('#assign_book_type, #assign_book').prop('disabled', true);
+        });
+
         $('.select2').select2();
 
         $('#request_book').select2({
@@ -98,6 +110,32 @@
         $('#release_branch').select2({
             placeholder: "Select Branch"
         });
+
+        $('.books_pick').on('click', function(){
+            current_tab = $(this).text();
+            if(current_tab == 'Branch'){
+                $('.status_select').show();
+                $('#status_select').next(".select2-container").show();
+                refresh_books_branch_table();
+            }
+            else if(current_tab == 'Student'){
+                refresh_books_student_table();
+            }
+            else if(current_tab == 'Books'){
+                refresh_books();
+            }
+            else if(current_tab == 'Request History'){
+                refresh_request_books();
+            }
+            else if(current_tab == 'Release History'){
+                refresh_release_books();
+            }
+
+            if(current_tab != 'Branch'){
+                $('.status_select').hide();
+                $('#status_select').next(".select2-container").hide();
+            }
+        })
 
         //INITIALIZE -- END
 
@@ -221,10 +259,127 @@
             assign_books_table.ajax.reload();
         }
 
+        var books_table = $('#books_table').DataTable({
+            processing: true,
+            destroy: true,
+            scrollX: true,
+            scrollCollapse: true,
+            fixedColumns: {
+                leftColumns: 2
+            },
+            responsive: true,
+            ajax: '/view_books',
+            columns: [
+                {data: 'book_type.name', name: 'book_type'},
+                {data: 'name', name: 'book_no'},
+                {data: 'reference_no.lead_ref_no', name: 'lead_ref_no'},
+                {data: 'reference_no.invoice_ref_no', name: 'invoice_ref_no'},
+                {data: 'branch.name', name: 'branch'},
+                {data: 'status', name: 'status'},
+                {data: 'student_name', name: 'student_name'},
+                {data: 'action', orderable: false, searchable: false}
+            ],
+            columnDefs: [
+                { width: 80, targets: 0 }, //book type
+                { width: 80, targets: 1 }, //book no.
+                { width: 130, targets: 2 }, //lead ref no
+                { width: 130, targets: 3 }, //invoice ref no
+                { width: 100, targets: 4 }, //branch
+                { width: 100, targets: 5 }, //status
+                { width: 250, targets: 6 }, //student name
+                { width: 100, targets: 7 }, //action
+            ]
+        });
+
+        function refresh_books(){
+            books_table.ajax.reload();
+        }
+
+        var books_student_table = $('#books_student_table').DataTable({
+            processing: true,
+            destroy: true,
+            scrollX: true,
+            scrollCollapse: true,
+            fixedColumns: {
+                leftColumns: 1
+            },
+            responsive: true,
+            ajax: '/view_student_books',
+            columns: [
+                {data: 'student_name', name: 'student_name'},
+                {data: 'branch.name', name: 'branch'},
+                {data: 'book_1', name: 'book_1'},
+                {data: 'wb_1', name: 'wb_1'},
+                {data: 'book_2', name: 'book_2'},
+                {data: 'wb_2', name: 'wb_2'},
+                {data: 'kanji', name: 'kanji'},
+                {data: 'program.name', name: 'program'},
+                {data: 'action', orderable: false, searchable: false}
+            ],
+            columnDefs: [
+                { width: 250, targets: 0 }, //student name
+                { width: 100, targets: 1 }, //branch
+                { width: 80, targets: 2 }, //book 1
+                { width: 80, targets: 3 }, //wb 1
+                { width: 80, targets: 4 }, //book 2
+                { width: 80, targets: 5 }, //wb 2
+                { width: 80, targets: 6 }, //kanji
+                { width: 150, targets: 7 }, //program
+                { width: 110, targets: 8 }, //action
+            ]
+        });
+
+        function refresh_books_student_table(){
+            books_student_table.ajax.reload();
+        }
+
+        function refresh_books_branch_table(){
+            var books_branch_table = $('#books_branch_table').DataTable({
+                dom: 'Blfrtip',
+                processing: true,
+                destroy: true,
+                scrollX: true,
+                scrollCollapse: true,
+                fixedColumns: {
+                    leftColumns: 1
+                },
+                buttons: [{
+                    extend: 'print',
+                    title: 'LEAD System - '+book_status+' Books'
+                }],
+                responsive: true,
+                ajax: '/view_branch_books/'+book_status,
+                columns: [
+                    {data: 'name', name: 'branch'},
+                    {data: 'book_1', name: 'book_1'},
+                    {data: 'wb_1', name: 'wb_1'},
+                    {data: 'book_2', name: 'book_2'},
+                    {data: 'wb_2', name: 'wb_2'},
+                    {data: 'kanji', name: 'kanji'},
+                ],
+                columnDefs: [
+                    { width: 170, targets: 0 }, //branch
+                    { width: 130, targets: 1 }, //book 1
+                    { width: 130, targets: 2 }, //wb 1
+                    { width: 130, targets: 3 }, //book 2
+                    { width: 130, targets: 4 }, //wb 2
+                    { width: 130, targets: 5 }, //kanji
+                ]
+            });
+        }
+
+        refresh_books_branch_table();
+
+
         //DATATABLES -- END
 
 
         //FUNCTIONS -- START
+
+        $('#status_select').on('change', function(){
+            book_status = $(this).val();
+            refresh_books_branch_table();
+        });
 
         $('.books_pick').on('click', function(){
             books_pick = $(this).text();
@@ -498,6 +653,12 @@
                 url: '/get_student',
                 dataType: 'json',
                 
+                data: function (params){
+                    return {
+                        name: params.term,
+                        page: params.page
+                    }
+                },
                 processResults: function (data){
                     return {
                         results:data.results      
@@ -530,7 +691,7 @@
 
         function getAvailableBooks(){
             $('#assign_book').select2({
-                placeholder: 'Select Book',
+                placeholder: 'Select Book No.',
                 ajax: {
                     url: '/get_available_book/'+book_type,
                     dataType: 'json',

@@ -20,10 +20,13 @@ class assignBooksController extends Controller
         $this->middleware('auth');
     }
 
-    public function get_student(){
+    public function get_student(Request $request){
         $employee = employee::where('id', Auth::user()->emp_id)->first();
-        $student = student::where('branch_id', $employee->branch_id)->get()->toArray();
+        $student = student::where('lname', 'like', '%'.$request->name.'%')
+            ->orWhere('fname', 'like', '%'.$request->name.'%')
+            ->orWhere('mname', 'like', '%'.$request->name.'%')->get();
 
+        $student = $student->where('branch_id', $employee->branch_id);
         $array = [];
         foreach ($student as $key => $value){
             $array[] = [
@@ -37,14 +40,15 @@ class assignBooksController extends Controller
     public function get_available_book_type(Request $request){
         $student_id = $request->student_id;
         $employee = employee::where('id', Auth::user()->emp_id)->first();
+        $limit_book = books::where('stud_id', $student_id)->groupBy('book_type_id')->pluck('book_type_id');
 
         $book_type = books::with('book_type')
-            ->where('branch_id', $employee->branch_id)
-            ->where('status', 'Available')
+            ->where('branch_id', $employee->branch_id)->where('status', 'Available')
             ->whereHas('book_type', function($query) use ($request) {
                 $query->where('book_type.name', 'LIKE', '%'.$request->name.'%');
             })
-            ->groupBy('book_type_id')->get(); 
+            ->whereNotIn('book_type_id', $limit_book)
+            ->groupBy('book_type_id')->get();
         
         $array = [];
         foreach ($book_type as $key => $value){
@@ -74,7 +78,7 @@ class assignBooksController extends Controller
 
     public function save_book_assign(Request $request){
         $books = books::where('book_type_id', $request->assign_book_type)
-                        ->where('name', $request->assign_book)->first();
+            ->where('name', $request->assign_book)->first();
             
         $assign_books = new assign_books;
         $assign_books->book_id = $books->id;
@@ -93,9 +97,8 @@ class assignBooksController extends Controller
 
         $assign_books = assign_books::with('books.book_type', 'student.branch')->get();
         if($branch != 'Makati'){
-            $assign_books = $assign_books->where('pending_request.branch.name', $branch);
+            $assign_books = $assign_books->where('books.branch.name', $branch);
         }
-        info($assign_books[3]->books->name);
 
         return Datatables::of($assign_books)
         ->addColumn('student_name', function($data){

@@ -14,6 +14,14 @@ function onLoadPosition(){
     return $user->employee->role->name;
 }
 
+function onLoadBranch(){
+    $id = Auth::user()->id;
+    $employee = \App\employee::find($id);
+    $branch = \App\branch::where('id', $employee->branch_id)->first();
+
+    return $branch->name;
+}
+
 function departure_year(){
     $departure_year = \App\departure_year::all();
 

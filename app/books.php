@@ -15,7 +15,7 @@ class books extends Model
     public $timestamps = true;
     
     public function student(){
-        return $this->hasOne('App\students', 'id', 'stud_id');
+        return $this->hasOne('App\student', 'id', 'stud_id');
     }
 
     public function book_type(){
@@ -23,7 +23,7 @@ class books extends Model
     }
     
     public function branch(){
-        return $this->hasOne('App\branches', 'id', 'branch_id');
+        return $this->hasOne('App\branch', 'id', 'branch_id');
     }
 
     public function reference_no(){

@@ -84,6 +84,9 @@ Route::post('/save_books', 'invoiceController@save_books');
 
 //Book Management
 Route::get('/book_management', 'bookManagementController@index');
+Route::get('/view_student_books', 'bookManagementController@view_student_books');
+Route::get('/view_books', 'bookManagementController@view_books');
+Route::get('/view_branch_books/{book_status}', 'bookManagementController@view_branch_books');
 
 //Request Books
 Route::get('/view_request_books', 'requestBooksController@view_request_books');
@@ -103,5 +106,6 @@ Route::get('/get_student', 'assignBooksController@get_student');
 Route::get('/get_available_book_type/{student_id}', 'assignBooksController@get_available_book_type');
 Route::get('/get_available_book/{book_type}', 'assignBooksController@get_available_book');
 Route::post('/save_book_assign', 'assignBooksController@save_book_assign');
+
 
 //BOOK ROUTES -- END

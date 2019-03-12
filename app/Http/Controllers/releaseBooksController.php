@@ -55,7 +55,8 @@ class releaseBooksController extends Controller
         $starting = books::where('branch_id', $branch)->where('book_type_id', $book_type)
                         ->where('status', 'Available')->orderBy('name')->first();
 
-        $stocks = $starting->count();
+        $stocks = books::where('branch_id', $branch)->where('book_type_id', $book_type)
+                    ->where('status', 'Available')->count();
                         
         $pending = ($pending) ? $pending->pending : 0;
         $starting = ($starting) ? $starting->name : 0;
