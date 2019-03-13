@@ -19,6 +19,6 @@ class lost_books extends Model
     }
 
     public function student(){
-        return $this->hasOne('App\students', 'id', 'stud_id');
+        return $this->hasOne('App\student', 'id', 'stud_id');
     }
 }

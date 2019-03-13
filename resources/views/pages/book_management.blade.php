@@ -71,12 +71,14 @@
 
         //INITIALIZE -- START
 
-        var current_tab;
+        var current_tab = 'Branch';
         var book_type;
         var books_pick;
         var branch_id;
         var student_id;
         var book_status = $('#status_select').val();
+        var book_type_select = $('#book_type_select').val();
+
 
         $('body').tooltip({
             selector: '[data-toggle="tooltip"]',
@@ -111,14 +113,33 @@
             placeholder: "Select Branch"
         });
 
+        //Hide book type select on load
+        $('.book_type_select').hide();
+        $('#book_type_select').next(".select2-container").hide();
+
         $('.books_pick').on('click', function(){
             current_tab = $(this).text();
+            pickRefresh();
+        })
+
+        function pickRefresh(){
+            if(current_tab != 'Branch'){
+                $('.status_select').hide();
+                $('#status_select').next(".select2-container").hide();
+                $('.book_type_select').show();
+                $('#book_type_select').next(".select2-container").show();
+            }
+
             if(current_tab == 'Branch'){
                 $('.status_select').show();
                 $('#status_select').next(".select2-container").show();
+                $('.book_type_select').hide();
+                $('#book_type_select').next(".select2-container").hide();
                 refresh_books_branch_table();
             }
             else if(current_tab == 'Student'){
+                $('.book_type_select').hide();
+                $('#book_type_select').next(".select2-container").hide();
                 refresh_books_student_table();
             }
             else if(current_tab == 'Books'){
@@ -130,12 +151,16 @@
             else if(current_tab == 'Release History'){
                 refresh_release_books();
             }
-
-            if(current_tab != 'Branch'){
-                $('.status_select').hide();
-                $('#status_select').next(".select2-container").hide();
+            else if(current_tab == 'Assign History'){
+                refresh_assign_books();
             }
-        })
+            else if(current_tab == 'Return History'){
+                refresh_return_books()
+            }
+            else if(current_tab == 'Lost History'){
+                refresh_lost_books()
+            }
+        }
 
         //INITIALIZE -- END
 
@@ -146,153 +171,145 @@
             $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
         });
 
-        var request_books_table = $('#books_request_table').DataTable({
-            processing: true,
-            destroy: true,
-            scrollX: true,
-            scrollCollapse: true,
-            fixedColumns: {
-                leftColumns: 2
-            },
-            responsive: true,
-            ajax: '/view_request_books',
-            columns: [
-                {data: 'pending_request.branch.name', name: 'branch'},
-                {data: 'pending_request.book_type.name', name: 'book'},
-                {data: 'previous_pending', name: 'previous_pending'},
-                {data: 'quantity', name: 'quantity'},
-                {data: 'pending', name: 'pending'},
-                {data: 'created_at', name: 'date'},
-                {data: 'remarks', name: 'remarks'},
-                {data: 'action', orderable: false, searchable: false}
-            ],
-            columnDefs: [
-                { width: 80, targets: 0 }, //branch
-                { width: 80, targets: 1 }, //book type
-                { width: 70, targets: 2 }, //previous
-                { width: 70, targets: 3 }, //quantity
-                { width: 70, targets: 4 }, //pending
-                { width: 130, targets: 5 }, //date
-                { width: 160, targets: 6 }, //remarks
-                { width: 110, targets: 7 }, //action
-            ],
-            order: [[
-                5, 'desc'
-            ]]
-        });
-
         function refresh_request_books(){
-            request_books_table.ajax.reload();
+            var request_books_table = $('#books_request_table').DataTable({
+                processing: true,
+                destroy: true,
+                scrollX: true,
+                scrollCollapse: true,
+                fixedColumns: {
+                    leftColumns: 2
+                },
+                responsive: true,
+                ajax: '/view_request_books/'+book_type_select,
+                columns: [
+                    {data: 'pending_request.branch.name', name: 'branch'},
+                    {data: 'pending_request.book_type.name', name: 'book'},
+                    {data: 'previous_pending', name: 'previous_pending'},
+                    {data: 'quantity', name: 'quantity'},
+                    {data: 'pending', name: 'pending'},
+                    {data: 'created_at', name: 'date'},
+                    {data: 'remarks', name: 'remarks'},
+                    {data: 'action', orderable: false, searchable: false}
+                ],
+                columnDefs: [
+                    { width: 80, targets: 0 }, //branch
+                    { width: 80, targets: 1 }, //book type
+                    { width: 70, targets: 2 }, //previous
+                    { width: 70, targets: 3 }, //quantity
+                    { width: 70, targets: 4 }, //pending
+                    { width: 130, targets: 5 }, //date
+                    { width: 160, targets: 6 }, //remarks
+                    { width: 110, targets: 7 }, //action
+                ],
+                order: [[
+                    5, 'desc'
+                ]]
+            });
         }
-
-        var release_books_table = $('#books_release_table').DataTable({
-            processing: true,
-            destroy: true,
-            scrollX: true,
-            scrollCollapse: true,
-            fixedColumns: {
-                leftColumns: 2
-            },
-            responsive: true,
-            ajax: '/view_release_books',
-            columns: [
-                {data: 'pending_request.branch.name', name: 'branch'},
-                {data: 'pending_request.book_type.name', name: 'book'},
-                {data: 'previous_pending', name: 'previous_pending'},
-                {data: 'quantity', name: 'quantity'},
-                {data: 'pending', name: 'pending'},
-                {data: 'book_range', name: 'book_range'},
-                {data: 'created_at', name: 'date'},
-                {data: 'remarks', name: 'remarks'},
-                {data: 'action', orderable: false, searchable: false}
-            ],
-            columnDefs: [
-                { width: 80, targets: 0 }, //branch
-                { width: 80, targets: 1 }, //book type
-                { width: 70, targets: 2 }, //previous
-                { width: 70, targets: 3 }, //quantity
-                { width: 70, targets: 4 }, //pending
-                { width: 110, targets: 5 }, //book range
-                { width: 130, targets: 6 }, //date
-                { width: 160, targets: 7 }, //remarks
-                { width: 110, targets: 8 }, //action
-            ],
-            order: [[
-                6, 'desc'
-            ]]
-        });
 
         function refresh_release_books(){
-            release_books_table.ajax.reload();
+            var release_books_table = $('#books_release_table').DataTable({
+                processing: true,
+                destroy: true,
+                scrollX: true,
+                scrollCollapse: true,
+                fixedColumns: {
+                    leftColumns: 2
+                },
+                responsive: true,
+                ajax: '/view_release_books/'+book_type_select,
+                columns: [
+                    {data: 'pending_request.branch.name', name: 'branch'},
+                    {data: 'pending_request.book_type.name', name: 'book'},
+                    {data: 'previous_pending', name: 'previous_pending'},
+                    {data: 'quantity', name: 'quantity'},
+                    {data: 'pending', name: 'pending'},
+                    {data: 'book_range', name: 'book_range'},
+                    {data: 'created_at', name: 'date'},
+                    {data: 'remarks', name: 'remarks'},
+                    {data: 'action', orderable: false, searchable: false}
+                ],
+                columnDefs: [
+                    { width: 80, targets: 0 }, //branch
+                    { width: 80, targets: 1 }, //book type
+                    { width: 70, targets: 2 }, //previous
+                    { width: 70, targets: 3 }, //quantity
+                    { width: 70, targets: 4 }, //pending
+                    { width: 130, targets: 5 }, //book range
+                    { width: 130, targets: 6 }, //date
+                    { width: 160, targets: 7 }, //remarks
+                    { width: 110, targets: 8 }, //action
+                ],
+                order: [[
+                    6, 'desc'
+                ]]
+            });
         }
-
-        var assign_books_table = $('#books_assign_table').DataTable({
-            processing: true,
-            destroy: true,
-            scrollX: true,
-            scrollCollapse: true,
-            fixedColumns: {
-                leftColumns: 1
-            },
-            responsive: true,
-            ajax: '/view_assign_books',
-            columns: [
-                {data: 'student_name', name: 'name'},
-                {data: 'student.branch.name', name: 'branch'},
-                {data: 'books.book_type.name', name: 'book'},
-                {data: 'books.name', name: 'book_no'},
-                {data: 'created_at', name: 'date'},
-            ],
-            columnDefs: [
-                { width: 250, targets: 0 }, //student name
-                { width: 150, targets: 1 }, //branch
-                { width: 150, targets: 2 }, //book
-                { width: 100, targets: 3 }, //book no.
-                { width: 200, targets: 4 }, //date
-            ],
-            order: [[
-                4, 'desc'
-            ]]
-        });
-
+        
         function refresh_assign_books(){
-            assign_books_table.ajax.reload();
+            var assign_books_table = $('#books_assign_table').DataTable({
+                processing: true,
+                destroy: true,
+                scrollX: true,
+                scrollCollapse: true,
+                fixedColumns: {
+                    leftColumns: 1
+                },
+                responsive: true,
+                ajax: '/view_assign_books/'+book_type_select,
+                columns: [
+                    {data: 'student_name', name: 'name'},
+                    {data: 'student.branch.name', name: 'branch'},
+                    {data: 'books.book_type.name', name: 'book'},
+                    {data: 'books.name', name: 'book_no'},
+                    {data: 'created_at', name: 'date'},
+                ],
+                columnDefs: [
+                    { width: 250, targets: 0 }, //student name
+                    { width: 150, targets: 1 }, //branch
+                    { width: 150, targets: 2 }, //book
+                    { width: 100, targets: 3 }, //book no.
+                    { width: 200, targets: 4 }, //date
+                ],
+                order: [[
+                    4, 'desc'
+                ]]
+            });
         }
-
-        var books_table = $('#books_table').DataTable({
-            processing: true,
-            destroy: true,
-            scrollX: true,
-            scrollCollapse: true,
-            fixedColumns: {
-                leftColumns: 2
-            },
-            responsive: true,
-            ajax: '/view_books',
-            columns: [
-                {data: 'book_type.name', name: 'book_type'},
-                {data: 'name', name: 'book_no'},
-                {data: 'reference_no.lead_ref_no', name: 'lead_ref_no'},
-                {data: 'reference_no.invoice_ref_no', name: 'invoice_ref_no'},
-                {data: 'branch.name', name: 'branch'},
-                {data: 'status', name: 'status'},
-                {data: 'student_name', name: 'student_name'},
-                {data: 'action', orderable: false, searchable: false}
-            ],
-            columnDefs: [
-                { width: 80, targets: 0 }, //book type
-                { width: 80, targets: 1 }, //book no.
-                { width: 130, targets: 2 }, //lead ref no
-                { width: 130, targets: 3 }, //invoice ref no
-                { width: 100, targets: 4 }, //branch
-                { width: 100, targets: 5 }, //status
-                { width: 250, targets: 6 }, //student name
-                { width: 100, targets: 7 }, //action
-            ]
-        });
 
         function refresh_books(){
-            books_table.ajax.reload();
+            var books_table = $('#books_table').DataTable({
+                processing: true,
+                destroy: true,
+                scrollX: true,
+                scrollCollapse: true,
+                fixedColumns: {
+                    leftColumns: 2
+                },
+                responsive: true,
+                ajax: '/view_books/'+book_type_select,
+                columns: [
+                    {data: 'book_type.name', name: 'book_type'},
+                    {data: 'name', name: 'book_no'},
+                    {data: 'reference_no.lead_ref_no', name: 'lead_ref_no'},
+                    {data: 'reference_no.invoice_ref_no', name: 'invoice_ref_no'},
+                    {data: 'branch.name', name: 'branch'},
+                    {data: 'status', name: 'status'},
+                    {data: 'student_name', name: 'student_name'},
+                    {data: 'action', orderable: false, searchable: false}
+                ],
+                columnDefs: [
+                    { width: 80, targets: 0 }, //book type
+                    { width: 80, targets: 1 }, //book no.
+                    { width: 130, targets: 2 }, //lead ref no
+                    { width: 130, targets: 3 }, //invoice ref no
+                    { width: 100, targets: 4 }, //branch
+                    { width: 100, targets: 5 }, //status
+                    { width: 250, targets: 6 }, //student name
+                    { width: 100, targets: 7 }, //action
+                ]
+            });
         }
 
         var books_student_table = $('#books_student_table').DataTable({
@@ -314,7 +331,7 @@
                 {data: 'wb_2', name: 'wb_2'},
                 {data: 'kanji', name: 'kanji'},
                 {data: 'program.name', name: 'program'},
-                {data: 'action', orderable: false, searchable: false}
+                {data: 'status', name: 'status'}
             ],
             columnDefs: [
                 { width: 250, targets: 0 }, //student name
@@ -325,7 +342,7 @@
                 { width: 80, targets: 5 }, //wb 2
                 { width: 80, targets: 6 }, //kanji
                 { width: 150, targets: 7 }, //program
-                { width: 110, targets: 8 }, //action
+                { width: 110, targets: 8 }, //status
             ]
         });
 
@@ -335,7 +352,7 @@
 
         function refresh_books_branch_table(){
             var books_branch_table = $('#books_branch_table').DataTable({
-                dom: 'Blfrtip',
+                dom: 'Bflrtip',
                 processing: true,
                 destroy: true,
                 scrollX: true,
@@ -368,9 +385,69 @@
             });
         }
 
-        refresh_books_branch_table();
+        function refresh_lost_books(){
+            var books_lost_table = $('#books_lost_table').DataTable({
+                processing: true,
+                scrollX: true,
+                destroy: true,
+                scrollCollapse: true,
+                fixedColumns: {
+                    leftColumns: 1
+                },
+                responsive: true,
+                ajax: '/view_books_lost/'+book_type_select,
+                columns: [
+                    {data: 'books.book_type.name', name: 'book'},
+                    {data: 'books.name', name: 'book_no'},
+                    {data: 'books.reference_no.invoice_ref_no', name: 'invoice_ref_no'},
+                    {data: 'stud_id', name: 'student_name'},
+                    {data: 'created_at', name: 'date'},
+                ],
+                columnDefs: [
+                    { width: 170, targets: 0 }, //book
+                    { width: 130, targets: 1 }, //book no
+                    { width: 130, targets: 2 }, //invoice ref no
+                    { width: 250, targets: 3 }, //student name
+                    { width: 130, targets: 4 }, //date
+                ],
+                order: [[
+                    4, 'desc'
+                ]]
+            });
+        }
 
+        function refresh_return_books(){
+            var books_return_table = $('#books_return_table').DataTable({
+                processing: true,
+                destroy: true,
+                scrollX: true,
+                scrollCollapse: true,
+                fixedColumns: {
+                    leftColumns: 1
+                },
+                responsive: true,
+                ajax: '/view_books_return/'+book_type_select,
+                columns: [
+                    {data: 'books.book_type.name', name: 'book'},
+                    {data: 'books.name', name: 'book_no'},
+                    {data: 'books.reference_no.invoice_ref_no', name: 'invoice_ref_no'},
+                    {data: 'stud_id', name: 'student_name'},
+                    {data: 'created_at', name: 'date'},
+                ],
+                columnDefs: [
+                    { width: 170, targets: 0 }, //book
+                    { width: 130, targets: 1 }, //book no
+                    { width: 130, targets: 2 }, //invoice ref no
+                    { width: 250, targets: 3 }, //student name
+                    { width: 130, targets: 4 }, //date
+                ],
+                order: [[
+                    4, 'desc'
+                ]]
+            });
+        }
 
+        pickRefresh();
         //DATATABLES -- END
 
 
@@ -379,6 +456,11 @@
         $('#status_select').on('change', function(){
             book_status = $(this).val();
             refresh_books_branch_table();
+        });
+
+        $('#book_type_select').on('change', function(){
+            book_type_select = $(this).val();
+            pickRefresh();
         });
 
         $('.books_pick').on('click', function(){
@@ -568,6 +650,12 @@
                 url: "/get_release_branch",
                 dataType: 'json',
                 
+                data: function (params){
+                    return {
+                        name: params.term,
+                        page: params.page
+                    }
+                },
                 processResults: function (data){
                     return {
                         results:data.results      
@@ -583,6 +671,12 @@
                     url: "/get_release_books/"+branch_id,
                     dataType: 'json',
                     
+                    data: function (params){
+                        return {
+                            name: params.term,
+                            page: params.page
+                        }
+                    },
                     processResults: function (data){
                         return {
                             results:data.results      
@@ -637,6 +731,7 @@
                     button.disabled = false;
                     input.html('SAVE CHANGES');
                     refresh_assign_books();
+                    refresh_books();
                 },
                 error: function(data){
                     swal("Oh no!", "Something went wrong, try again.", "error");
@@ -713,9 +808,77 @@
 
         //ASSIGN BOOKS -- END
 
+        //LOST BOOKS -- START
+
+        $(document).on('click', '.lost_book', function(){
+            var id = $(this).attr('id');
+
+            swal({
+                title: 'Lost Book?',
+                type: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!'
+            }).then((result) => {
+                if(result.value){
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: '/lost_book/'+id,
+                        method: 'get',
+                        type: 'json',
+                        success:function(data){
+                            swal('Book Lost!', 'success');
+                            refresh_lost_books()
+                            refresh_books();
+                        }
+                    })
+                }
+            });
+        });
+
+        //LOST BOOKS -- END
+
+        //RETURN BOOKS -- START
+
+        $(document).on('click', '.return_book', function(){
+            var id = $(this).attr('id');
+
+            swal({
+                title: 'Return Book?',
+                text: 'This book will be available again',
+                type: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!'
+            }).then((result) => {
+                if(result.value){
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: '/return_book/'+id,
+                        method: 'get',
+                        type: 'json',
+                        success:function(data){
+                            swal('Book Returned!', 'success');
+                            refresh_return_books()
+                            refresh_books();
+                        }
+                    })
+                }
+            });
+        });
+
+        //RETURN BOOKS -- END
+
 
         //FUNCTIONS -- END
     });
+    
 </script>
 
 @endsection

@@ -16144,3 +16144,15 @@ readers do not read off random characters that represent icons */
   max-width: 100% !important;
 }
 
+#books_branch_table_wrapper .dataTables_length {
+  float: right !important;
+  margin-right: 25px;
+}
+
+#books_branch_table_wrapper .dataTables_filter {
+  float: right !important;
+}
+
+.dataTables_processing{
+  z-index: 105
+}

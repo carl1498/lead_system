@@ -154,7 +154,12 @@ class invoiceController extends Controller
     }
 
     public function invoice_all(Request $request){
-        $invoice = invoice::with('reference_no')->where('pending', '>', 0)->groupBy('ref_no_id')->get()->toArray();
+        $invoice = invoice::with('reference_no')->where('pending', '>', 0)
+            ->whereHas('reference_no', function($query) use ($request) {
+                $query->where('invoice_ref_no', 'LIKE', '%'.$request->name.'%');
+            })
+            ->groupBy('ref_no_id')->get()->toArray();
+
         $array = [];
         foreach ($invoice as $key => $value){
             $array[] = [
@@ -167,7 +172,12 @@ class invoiceController extends Controller
 
     public function book_all(Request $request){
         $invoice = $request->invoice_id;
-        $book = invoice::with('book_type')->where('ref_no_id', $invoice)->where('pending', '>', 0)->get()->toArray();
+        $book = invoice::with('book_type')->where('ref_no_id', $invoice)
+            ->whereHas('book_type', function($query) use ($request) {
+                $query->where('name', 'LIKE', '%'.$request->name.'%');
+            })
+            ->where('pending', '>', 0)->get()->toArray();
+
         $array = [];
         foreach ($book as $key => $value){
             $array[] = [

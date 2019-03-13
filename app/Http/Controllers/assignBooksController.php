@@ -45,7 +45,7 @@ class assignBooksController extends Controller
         $book_type = books::with('book_type')
             ->where('branch_id', $employee->branch_id)->where('status', 'Available')
             ->whereHas('book_type', function($query) use ($request) {
-                $query->where('book_type.name', 'LIKE', '%'.$request->name.'%');
+                $query->where('name', 'LIKE', '%'.$request->name.'%');
             })
             ->whereNotIn('book_type_id', $limit_book)
             ->groupBy('book_type_id')->get();
@@ -91,13 +91,19 @@ class assignBooksController extends Controller
         $books->save();
     }
 
-    public function view_assign_books(){
+    public function view_assign_books(Request $request){
+        $book_type_select = $request->book_type_select;
         $get_branch = employee::with('branch')->where('id', Auth::user()->emp_id)->first();
         $branch = $get_branch->branch->name;
 
         $assign_books = assign_books::with('books.book_type', 'student.branch')->get();
+
         if($branch != 'Makati'){
             $assign_books = $assign_books->where('books.branch.name', $branch);
+        }
+
+        if($book_type_select != 'All'){
+            $assign_books = $assign_books->where('books.book_type_id', $book_type_select);
         }
 
         return Datatables::of($assign_books)

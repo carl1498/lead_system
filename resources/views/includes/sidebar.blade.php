@@ -37,12 +37,17 @@
 					</ul>
 				</li>
 
-				<li class="{{ (Request::path() == 'employees') ? 'active' : '' }}">
-					<a href="/employees">
-						<i class="fa fa-address-card"></i> <span>Employee Management</span>
+				<li class="{{ (Request::path() == 'employees') ? 'active' : '' }} treeview">
+					<a href="">
+						<i class="fa fa-address-card"></i><span>Employee</span>
 						<span class="pull-right-container">
+							<i class="fa fa-angle-left pull-right"></i>
 						</span>
 					</a>
+					<ul class="treeview-menu">
+						<li class="{{ (Request::path() == 'employees') ? 'active' : '' }}"><a href="/employees"><i class="fa fa-user-tie"></i> Employees</a></li>
+						<li class=""><a href=""><i class="fa fa-user-lock"></i> Accounts</a></li>
+					</ul>
 				</li>
 
                 <!--<li>

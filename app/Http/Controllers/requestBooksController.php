@@ -69,13 +69,19 @@ class requestBooksController extends Controller
         $request_books->save();
     }
 
-    public function view_request_books(){
+    public function view_request_books(Request $request){
+        $book_type_select = $request->book_type_select;
         $get_branch = employee::with('branch')->where('id', Auth::user()->emp_id)->first();
         $branch = $get_branch->branch->name;
 
         $request_books = request_books::with('pending_request.book_type', 'pending_request.branch')->get();
+        
         if($branch != 'Makati'){
             $request_books = $request_books->where('pending_request.branch.name', $branch);
+        }
+
+        if($book_type_select != 'All'){
+            $request_books = $request_books->where('pending_request.book_type_id', $book_type_select);
         }
         
         return Datatables::of($request_books)

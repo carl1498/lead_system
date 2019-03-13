@@ -31,7 +31,8 @@ class bookManagementController extends Controller
         return view('pages.book_management', compact('book_type', 'branch'));
     }
 
-    public function view_books(){
+    public function view_books(Request $request){
+        $book_type_select = $request->book_type_select;
         $get_branch = employee::with('branch')->where('id', Auth::user()->emp_id)->first();
         $branch = $get_branch->branch->name;
 
@@ -39,6 +40,10 @@ class bookManagementController extends Controller
 
         if($branch != 'Makati'){
             $books = $books->where('branch.name', $branch);
+        }
+
+        if($book_type_select != 'All'){
+            $books = $books->where('book_type.id', $book_type_select);
         }
 
         return Datatables::of($books)
@@ -49,8 +54,10 @@ class bookManagementController extends Controller
         })
         ->addColumn('action', function($data){
             $action = '';
-            $action .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Lost" class="btn btn-danger btn-xs lost_book" id="'.$data->id.'"><i class="fas fa-eye-slash"></i></button>&nbsp;&nbsp;';
-            if($data->student){
+            if($data->status != 'Lost'){
+                $action .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Lost" class="btn btn-danger btn-xs lost_book" id="'.$data->id.'"><i class="fas fa-eye-slash"></i></button>&nbsp;&nbsp;';
+            }
+            if($data->student || $data->status == 'Lost'){
                 $action .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Return" class="btn btn-warning btn-xs return_book" id="'.$data->id.'"><i class="fas fa-undo"></i></button>';
             }
            
@@ -62,9 +69,6 @@ class bookManagementController extends Controller
     public function view_student_books(){
         $get_branch = employee::with('branch')->where('id', Auth::user()->emp_id)->first();
         $branch = $get_branch->branch->name;
-
-        /*$student = books::with('student.program', 'branch', 'book_type')
-            ->where('stud_id', '<>', null)->groupBy('stud_id')->get();*/
 
         $student = student::with('branch', 'program')->get();
         

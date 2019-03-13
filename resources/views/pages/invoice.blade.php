@@ -336,7 +336,13 @@
                     url: "/bookAll/"+invoice_id,
                     data: {invoice_id: invoice_id},
                     dataType: 'json',
-                    
+
+                    data: function (params){
+                        return {
+                            name: params.term,
+                            page: params.page
+                        }
+                    },
                     processResults: function (data){
                         return {
                             results:data.results      

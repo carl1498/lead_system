@@ -18,8 +18,12 @@ class releaseBooksController extends Controller
         $this->middleware('auth');
     }
 
-    public function get_branch(){
-        $branch = pending_request::with('branch')->where('pending', '>', 0)->groupBy('branch_id')->get()->toArray();
+    public function get_branch(Request $request){
+        $branch = pending_request::with('branch')->where('pending', '>', 0)
+            ->whereHas('branch', function($query) use ($request) {
+                $query->where('name', 'LIKE', '%'.$request->name.'%');
+            })    
+            ->groupBy('branch_id')->get();
 
         $array = [];
         foreach ($branch as $key => $value){
@@ -33,7 +37,11 @@ class releaseBooksController extends Controller
 
     public function get_books(Request $request){
         $branch = $request->branch_id;
-        $book = pending_request::with('book_type')->where('branch_id', $branch)->where('pending', '>', 0)->get()->toArray();
+        $book = pending_request::with('book_type')->where('branch_id', $branch)
+            ->whereHas('book_type', function($query) use ($request) {
+                $query->where('name', 'LIKE', '%'.$request->name.'%');
+            })
+            ->where('pending', '>', 0)->get();
         $array = [];
         foreach ($book as $key => $value){
             $array[] = [
@@ -98,7 +106,8 @@ class releaseBooksController extends Controller
         $release_books->save();
     }
 
-    public function view_release_books(){
+    public function view_release_books(Request $request){
+        $book_type_select = $request->book_type_select;
         $get_branch = employee::with('branch')->where('id', Auth::user()->emp_id)->first();
         $branch = $get_branch->branch->name;
 
@@ -106,6 +115,10 @@ class releaseBooksController extends Controller
         $release_books = release_books::with('pending_request.book_type', 'pending_request.branch')->get();
         if($branch != 'Makati'){
             $release_books = $release_books->where('pending_request.branch.name', $branch);
+        }
+
+        if($book_type_select != 'All'){
+            $release_books = $release_books->where('pending_request.book_type_id', $book_type_select);
         }
 
         return Datatables::of($release_books)

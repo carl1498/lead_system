@@ -17,7 +17,7 @@ class CreateReturnBooksTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('book_id');
             $table->foreign('book_id')->references('id')->on('books')->onDelete('cascade');
-            $table->unsignedInteger('stud_id');
+            $table->unsignedInteger('stud_id')->nullable();
             $table->foreign('stud_id')->references('id')->on('students')->onDelete('cascade');
             $table->timestamps();
         });
