@@ -3,7 +3,6 @@
     <div class="modal-body">
         <input type="hidden" name="id" id="id">
         <input type="hidden" name="add_edit" id="add_edit">
-        <input type="hidden" name="type" id="type" value="Student">
 
         <!-- LEFT COLUMN -->
         <div class="col-md-6">

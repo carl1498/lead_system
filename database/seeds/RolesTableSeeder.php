@@ -14,10 +14,19 @@ class RolesTableSeeder extends Seeder
     {
         $data = array(
             array(
+                'name' => 'President',
+            ),
+            array(
+                'name' => 'Finance Director'
+            ),
+            array(
                 'name' => 'Admin',
             ),
             array(
                 'name' => 'Manager',
+            ),
+            array(
+                'name' => 'OIC',
             ),
             array(
                 'name' => 'HR Head',
@@ -45,6 +54,9 @@ class RolesTableSeeder extends Seeder
             ),
             array(
                 'name' => 'Language Teacher',
+            ),
+            array(
+                'name' => 'Liaison Officer',
             ),
         );
 

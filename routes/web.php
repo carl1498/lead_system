@@ -43,6 +43,7 @@ Route::get('/deny_student', 'studentController@deny_student');
 Route::get('/cancel_student', 'studentController@cancel_student');
 
 Route::post('/save_student', 'studentController@save_student');
+Route::post('/save_language_student', 'studentController@save_language_student');
 Route::get('/get_student', 'studentController@get_student');
 Route::get('/delete_student', 'studentController@delete_student');
 
@@ -64,6 +65,9 @@ Route::get('/employee_branch/{current_branch}', 'employeeController@branch');
 Route::post('/save_employee', 'employeeController@save_employee');
 Route::get('/get_employee/{id}', 'employeeController@get_employee');
 Route::get('/delete_employee', 'employeeController@delete_employee');
+
+//Account
+Route::get('/get_account/{id}', 'employeeController@get_account');
 
 //EMPLOYEE ROUTES -- END
 
@@ -102,7 +106,7 @@ Route::post('/save_book_release', 'releaseBooksController@save_book_release');
 
 //Assign Books
 Route::get('/view_assign_books/{book_type_select}', 'assignBooksController@view_assign_books');
-Route::get('/get_student', 'assignBooksController@get_student');
+Route::get('/get_assign_student', 'assignBooksController@get_student');
 Route::get('/get_available_book_type/{student_id}', 'assignBooksController@get_available_book_type');
 Route::get('/get_available_book/{book_type}', 'assignBooksController@get_available_book');
 Route::post('/save_book_assign', 'assignBooksController@save_book_assign');
@@ -114,7 +118,6 @@ Route::get('/lost_book/{id}', 'lostBookController@lost_book');
 //Return Books
 Route::get('/view_books_return/{book_type_select}', 'returnBookController@view_books_return');
 Route::get('/return_book/{id}', 'returnBookController@return_book');
-
 
 
 //BOOK ROUTES -- END

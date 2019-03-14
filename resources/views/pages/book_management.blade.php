@@ -463,13 +463,6 @@
             pickRefresh();
         });
 
-        $('.books_pick').on('click', function(){
-            books_pick = $(this).text();
-            if(books_pick == 'Request History'){
-                refresh_request_books()
-            }
-        })
-
         //REQUEST BOOKS -- START
 
         //Open Request Books Modal
@@ -529,7 +522,7 @@
                     $('#request_books_modal').modal('hide');
                     button.disabled = false;
                     input.html('SAVE CHANGES');
-                    refresh_request_books();
+                    pickRefresh();
                 },
                 error: function(data){
                     swal("Oh no!", "Something went wrong, try again.", "error");
@@ -629,11 +622,17 @@
                 method: 'POST',
                 dataType: 'text',
                 success:function(data){
+                    if(data){
+                        swal("Releasing Stopped", "Conflict! Book #" + data + " already released or lost", "error");                       
+                        button.disabled = false;
+                        input.html('SAVE CHANGES');
+                        return;
+                    }
                     swal('Success!', 'Record has been saved to the Database!', 'success');
                     $('#release_books_modal').modal('hide');
                     button.disabled = false;
                     input.html('SAVE CHANGES');
-                    refresh_release_books();
+                    pickRefresh();
                 },
                 error: function(data){
                     swal("Oh no!", "Something went wrong, try again.", "error");
@@ -730,8 +729,7 @@
                     $('#assign_books_modal').modal('hide');
                     button.disabled = false;
                     input.html('SAVE CHANGES');
-                    refresh_assign_books();
-                    refresh_books();
+                    pickRefresh();
                 },
                 error: function(data){
                     swal("Oh no!", "Something went wrong, try again.", "error");
@@ -745,7 +743,7 @@
         $('#assign_student_name').select2({
             placeholder: 'Select Student',
             ajax: {
-                url: '/get_student',
+                url: '/get_assign_student',
                 dataType: 'json',
                 
                 data: function (params){
@@ -831,8 +829,7 @@
                         type: 'json',
                         success:function(data){
                             swal('Book Lost!', 'success');
-                            refresh_lost_books()
-                            refresh_books();
+                            pickRefresh();
                         }
                     })
                 }
@@ -865,8 +862,7 @@
                         type: 'json',
                         success:function(data){
                             swal('Book Returned!', 'success');
-                            refresh_return_books()
-                            refresh_books();
+                            pickRefresh();
                         }
                     })
                 }

@@ -152,14 +152,17 @@ class studentController extends Controller
         ->editColumn('name', function($data){
             return $data->lname.', '.$data->fname.' '.$data->mname;
         })->addColumn('action', function($data){
-            return 'Temporary';
+            $html = '
+                    <button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_language_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>
+                    <button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_student" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
+
+            return  $html;
         })
         ->make(true);
     }
 
     public function save_student(Request $request){
         $add_edit = $request->add_edit;
-        $type = $request->type;
 
         if($add_edit == 'add'){
             $student = new student;
@@ -169,33 +172,6 @@ class studentController extends Controller
         else{
             $id = $request->id;
             $student = student::find($id);
-        }
-
-        if($type == 'Language Only'){
-            $student->fname = $request->fname;
-            $student->mname = $request->mname;
-            $student->lname = $request->lname;
-            $student->birthdate = Carbon::parse($request->birthdate);
-            $student->age = $request->age;
-            $student->contact = $request->contact;
-
-            $program = program::where('name',$type)->first();
-            $student->program_id = $program->id;
-
-            $student->address = $request->address;
-            $student->email = $request->email;
-            $student->referral_id = $request->l_referral;
-            $student->date_of_signup = Carbon::now();
-            $student->date_of_medical = null;
-            $student->date_of_completion = null;
-            $student->gender = $request->l_gender;
-            $student->branch_id = $request->l_branch;
-            $student->course_id = $request->l_course;
-            $student->departure_year_id = $request->l_year;
-            $student->departure_month_id = 1;
-            $student->remarks = $request->remarks;
-            $student->save();
-            return;
         }
 
         $student->fname = $request->fname;
@@ -211,18 +187,8 @@ class studentController extends Controller
         $student->email = $request->email;
         $student->referral_id = $request->referral;
         $student->date_of_signup = Carbon::parse($request->sign_up);
-        if($request->medical){
-            $student->date_of_medical = Carbon::parse($request->medical);
-        }
-        else{
-            $student->date_of_medical = null;
-        }
-        if($request->completion){
-            $student->date_of_completion = Carbon::parse($request->completion);
-        }
-        else{
-            $student->date_of_completion = null;
-        }
+        $student->date_of_medical = Carbon::parse($request->medical);
+        $student->date_of_completion = Carbon::parse($request->completion);
         $student->gender = $request->gender;
         $student->branch_id = $request->branch;
         $student->course_id = $request->course;
@@ -232,10 +198,47 @@ class studentController extends Controller
         $student->save();
     }
 
+    public function save_language_student(Request $request){
+        $add_edit = $request->l_add_edit;
+        $type = $request->l_student_type;
+
+        if($add_edit == 'add'){
+            $student = new student;
+            $student->status = 'Active';
+            $student->coe_status = 'TBA';
+        }
+        else{
+            $id = $request->l_id;
+            $student = student::find($id);
+        }
+        
+        $student->fname = $request->l_fname;
+        $student->mname = $request->l_mname;
+        $student->lname = $request->l_lname;
+        $student->birthdate = Carbon::parse($request->l_birthdate);
+        $student->age = $request->l_age;
+        $student->contact = $request->l_contact;
+
+        $program = program::where('name', 'Language Only')->first();
+        $student->program_id = $program->id;
+
+        $student->address = $request->l_address;
+        $student->email = $request->l_email;
+        $student->referral_id = $request->l_referral;
+        $student->date_of_signup = Carbon::now();
+        $student->gender = $request->l_gender;
+        $student->branch_id = $request->l_branch;
+        $student->course_id = $request->l_course;
+        $student->departure_year_id = $request->l_year;
+        $student->departure_month_id = 1;
+        $student->remarks = $request->l_remarks;
+        $student->save();
+    }
+
     public function get_student(Request $request){
         $id = $request->id;
         $student = student::with('program', 'school', 'benefactor', 'referral', 'branch', 'course', 'departure_year', 'departure_month')->find($id);
-
+        
         return $student;
     }
 

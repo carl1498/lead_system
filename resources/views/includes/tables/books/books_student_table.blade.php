@@ -8,6 +8,6 @@
         <th>WB 2</th>
         <th>Kanji</th>
         <th>Program</th>
-        <th>Action</th>
+        <th>Status</th>
     </tr>
 </thead>

@@ -85,6 +85,14 @@ class releaseBooksController extends Controller
         $start = $request->release_start;
         $end = $request->release_end;
 
+        //checker;
+        for($x = $start; $x <= $end; $x++){
+            $books = books::with('branch')->where('name', $x)->where('book_type_id', $book_type)->first();
+            if($books->branch->name != 'Makati' || $books->status == 'Lost' || $books->status == 'Released'){
+                return $books->name;
+            }
+        }
+
         $pending_request = pending_request::where('book_type_id', $book_type)->where('branch_id', $branch)->first();
         $pending_request->pending = $request->release_pending;
         $pending_request->save();

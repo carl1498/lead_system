@@ -190,7 +190,7 @@
                     { width: 60, targets: 5 }, //pending
                     { width: 120, targets: 6 }, //book no range
                     { width: 130, targets: 7 }, //date
-                    { width: 100, targets: 8 }, //remarks
+                    { width: 200, targets: 8 }, //remarks
                     { width: 80, targets: 9 }, //action
                 ],
                 order: [[

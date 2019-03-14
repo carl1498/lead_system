@@ -61,6 +61,7 @@
     <!-- MODALS -- START -->
     
     @include('includes.modals.employee_modal')
+    @include('includes.modals.account_modal')
 
     <!-- MODALS -- END -->
 
@@ -78,6 +79,11 @@
         $(".datepicker").datepicker({
             format: 'yyyy-mm-dd',
             forceParse: false
+        });
+        
+        $('body').tooltip({
+            selector: '[data-toggle="tooltip"]',
+            trigger : 'hover'
         });
 
         $('.select2').select2();
@@ -252,6 +258,26 @@
                 }
             });
         });
+
+        //ACCOUNTS -- START
+
+        $(document).on('click', '.edit_account', function(){
+            var id = $(this).attr('id');
+
+            $('#account_modal').modal('toggle');
+            $('#account_modal').modal('show');
+
+            $.ajax({
+                url: '/get_account/'+id,
+                dataType: 'text',
+                success: function(data){
+                    console.log(data);
+                    $('#emp_name').val(data.employee.lname + ', ' + data.employee.fname + ' ' + data.employee.mname);
+                }
+            })
+        })
+
+        //ACCOUNTS -- END
 
         //FUNCTIONS -- END
     });

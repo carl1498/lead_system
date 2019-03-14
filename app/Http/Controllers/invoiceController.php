@@ -89,10 +89,11 @@ class invoiceController extends Controller
             }
         })
         ->addColumn('action', function($data) use($invoice_select){
-            $html = '
+            /*$html = '
                     <button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_invoice" id="'.$data->ref_no_id.'"><i class="fa fa-trash-alt"></i></button>';
             
-            return $html;
+            return $html;*/
+
         })
         ->make(true);
     }
@@ -105,7 +106,7 @@ class invoiceController extends Controller
             return $data->book_no_start . ' - ' . $data->book_no_end;
         })
         ->addColumn('action', function($data){
-            return 'TEMP';
+            
         })
         ->make(true);
     }

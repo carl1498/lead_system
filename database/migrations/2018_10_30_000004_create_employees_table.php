@@ -32,6 +32,7 @@ class CreateEmployeesTable extends Migration
             $table->unsignedInteger('role_id');
             $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
             $table->date('hired_date');
+            $table->date('resignation_date')->nullable();
             $table->timestamps();
         });
     }

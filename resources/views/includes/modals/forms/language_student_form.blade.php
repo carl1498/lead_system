@@ -1,86 +1,85 @@
 <form class="form-horizontal tab-pane fade in" id="language_student_form">
     @csrf
     <div class="modal-body">
-        <input type="hidden" name="id" id="id">
-        <input type="hidden" name="add_edit" id="add_edit">
-        <input type="hidden" name="type" id="type" value="Language Only">
+        <input type="hidden" name="l_id" id="l_id">
+        <input type="hidden" name="l_add_edit" id="l_add_edit">
 
         <!-- LEFT COLUMN -->
         <div class="col-md-6">
 
             <div class="row clearfix">
                 <div class="col-lg-4 col-md-4 col-sm-3 col-xs-3 form-control-label">
-                        <label for="fname" class="pull-right">First Name</label>
+                        <label for="l_fname" class="pull-right">First Name</label>
                 </div>
                 <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
                     <div class="form-group">
-                        <input type="text" id="fname" name="fname" class="form-control required" placeholder="Enter First Name" required>
+                        <input type="text" id="l_fname" name="l_fname" class="form-control required" placeholder="Enter First Name" required>
                     </div>
                 </div>
             </div>
 
             <div class="row clearfix">
                 <div class="col-lg-4 col-md-4 col-sm-3 col-xs-3 form-control-label">
-                        <label for="mname" class="pull-right">Middle Name</label>
+                        <label for="l_mname" class="pull-right">Middle Name</label>
                 </div>
                 <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
                     <div class="form-group">
-                        <input type="text" id="mname" name="mname" class="form-control" placeholder="Enter Middle Name (Not M.I.)">
+                        <input type="text" id="l_mname" name="l_mname" class="form-control" placeholder="Enter Middle Name (Not M.I.)">
                     </div>
                 </div>
             </div>
 
             <div class="row clearfix">
                 <div class="col-lg-4 col-md-4 col-sm-3 col-xs-3 form-control-label">
-                        <label for="lname" class="pull-right">Last Name</label>
+                        <label for="l_lname" class="pull-right">Last Name</label>
                 </div>
                 <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
                     <div class="form-group">
-                        <input type="text" id="lname" name="lname" class="form-control required" placeholder="Enter Last Name" required>
+                        <input type="text" id="l_lname" name="l_lname" class="form-control required" placeholder="Enter Last Name" required>
                     </div>
                 </div>
             </div>
 
             <div class="row clearfix">
                 <div class="col-lg-4 col-md-4 col-sm-3 col-xs-3 form-control-label">
-                        <label for="birthdate" class="pull-right">Birth Date</label>
+                        <label for="l_birthdate" class="pull-right">Birth Date</label>
                 </div>
                 <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
                     <div class="form-group">
-                        <input type="text" id="birthdate" name="birthdate" class="form-control datepicker required" placeholder="YYYY-MM-DD" required>
+                        <input type="text" id="l_birthdate" name="l_birthdate" class="form-control datepicker required" placeholder="YYYY-MM-DD" required>
                     </div>
                 </div>
             </div>
 
             <div class="row clearfix">
                 <div class="col-lg-4 col-md-4 col-sm-3 col-xs-3 form-control-label">
-                        <label for="age" class="pull-right">Age</label>
+                        <label for="l_age" class="pull-right">Age</label>
                 </div>
                 <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
                     <div class="form-group">
-                        <input type="number" id="age" name="age" class="form-control required" placeholder="Enter Age" required>
+                        <input type="number" id="l_age" name="l_age" class="form-control required" placeholder="Enter Age" required>
                     </div>
                 </div>
             </div>
 
             <div class="row clearfix">
                 <div class="col-lg-4 col-md-4 col-sm-3 col-xs-3 form-control-label">
-                        <label for="contact" class="pull-right">Contact #</label>
+                        <label for="l_contact" class="pull-right">Contact #</label>
                 </div>
                 <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
                     <div class="form-group">
-                        <input type="text" id="contact" name="contact" class="form-control required" placeholder="0912-345-6789" required>
+                        <input type="text" id="l_contact" name="l_contact" class="form-control required" placeholder="0912-345-6789" required>
                     </div>
                 </div>
             </div>
 
             <div class="row clearfix">
                 <div class="col-lg-4 col-md-4 col-sm-3 col-xs-3 form-control-label">
-                        <label for="address" class="pull-right">Address</label>
+                        <label for="l_address" class="pull-right">Address</label>
                 </div>
                 <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
                     <div class="form-group">
-                        <input type="text" id="address" name="address" class="form-control required" placeholder="Enter Address" required>
+                        <input type="text" id="l_address" name="l_address" class="form-control required" placeholder="Enter Address" required>
                     </div>
                 </div>
             </div>
@@ -92,11 +91,11 @@
 
             <div class="row clearfix">
                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
-                        <label for="email" class="pull-right">Email</label>
+                        <label for="l_email" class="pull-right">Email</label>
                 </div>
                 <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
                     <div class="form-group">
-                        <input type="email" id="email" name="email" class="form-control required" placeholder="Enter Valid Email" required>
+                        <input type="email" id="l_email" name="l_email" class="form-control required" placeholder="Enter Valid Email" required>
                     </div>
                 </div>
             </div>
@@ -182,11 +181,11 @@
 
             <div class="row clearfix">
                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
-                        <label for="remarks" class="pull-right">Remarks</label>
+                        <label for="l_remarks" class="pull-right">Remarks</label>
                 </div>
                 <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
                     <div class="form-group required">
-                    <input type="text" id="remarks" name="remarks" class="form-control" placeholder="Enter Remarks">
+                    <input type="text" id="l_remarks" name="l_remarks" class="form-control" placeholder="Enter Remarks">
                     </div>
                 </div>
             </div>

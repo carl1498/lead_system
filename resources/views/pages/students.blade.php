@@ -98,6 +98,7 @@
         var current_result = '';
         var departure_year = $('#year_select').val();
         var departure_month = $('#month_select').val();
+        var student_type = 'Student';
 
         //datatables
         var students_branch;
@@ -128,6 +129,9 @@
 
         $("#student_modal").on("hidden.bs.modal", function(e){
             $('#student_form :input.required').each(function (){
+                this.style.setProperty('border-color', 'green', 'important');
+            });
+            $('#language_student_form :input.required').each(function (){
                 this.style.setProperty('border-color', 'green', 'important');
             });
             $(this).find("input,textarea,select").val('').end();
@@ -357,9 +361,6 @@
         }
 
         refresh_student_branch();
-        refresh_student_status();
-        refresh_student_result();
-        refresh_language_student();
 
         //DATATABLES -- END
 
@@ -383,14 +384,15 @@
             refresh_student_result();
         });
 
-        $('.student_type').on('click', function(){
-
-        });
+        $('.language_pick').on('click', function(){
+            refresh_language_student();
+        })
 
         $(document).on('change', '#year_select, #month_select', function(){
             refresh_student_branch();
             refresh_student_status();
             refresh_student_result();
+            refresh_language_student();
         });
 
         $('.save_student').on('click', function(e){
@@ -401,8 +403,6 @@
 
             button.disabled = true;
             input.html('SAVING...');
-
-            var formData = new FormData($('#student_form')[0]);
             
             $.ajax({
                 headers: {
@@ -410,9 +410,7 @@
                 },
                 url: '/save_student',
                 method: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
+                data: $('#student_form').serialize(),
                 success: function(data){
                     swal('Success!', 'Record has been saved to the Database!', 'success');
                     $('#student_modal').modal('hide');
@@ -438,21 +436,15 @@
             button.disabled = true;
             input.html('SAVING...');
 
-            var formData = new FormData($('#language_student_form')[0]);
-
-            for (var pair of formData.entries()) {
-                console.log(pair); 
-            }
-            
+            //var formData = new FormData($('#language_student_form')[0]);
+            console.log($('#language_student_form').serialize());
             $.ajax({
                 headers: {
                     'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: '/save_student',
+                url: '/save_language_student',
                 method: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
+                data: $('#language_student_form').serialize(),
                 success: function(data){
                     swal('Success!', 'Record has been saved to the Database!', 'success');
                     $('#student_modal').modal('hide');
@@ -470,13 +462,14 @@
 
         //Open Student Modal (ADD)
         $('.add_student').on('click', function(){
-            $('#language_student_form #add_edit').val('add');
-            $('#student_form #add_edit').val('add');
+            $('#add_edit').val('add');
+            $('#l_add_edit').val('add');
             $('#student_type_tab a:first').tab('show');
         });
 
         //Open Student Modal (EDIT)
         $(document).on('click', '.edit_student', function(){
+            $('#student_type_tab a:first').tab('show');
             var id = $(this).attr('id');
 
             $.ajax({
@@ -522,6 +515,39 @@
             });
         });
 
+        //Open Language Student Modal (EDIT)
+        $(document).on('click', '.edit_language_student', function(){
+            $('#student_type_tab a:last').tab('show');
+            var id = $(this).attr('id');
+
+            $.ajax({
+                url: '/get_student',
+                method: 'get',
+                data: {id: id},
+                dataType: 'json',
+                success:function(data){
+                    $('#l_add_edit').val('edit');
+                    $('#l_id').val(data.id);
+                    $('#l_fname').val(data.fname);
+                    $('#l_mname').val(data.mname);
+                    $('#l_lname').val(data.lname);
+                    $('#l_birthdate').val(data.birthdate);
+                    $('#l_age').val(data.age);
+                    $('#l_contact').val(data.contact);                    
+                    $('#l_address').val(data.address);
+                    $('#l_email').val(data.email);
+                    $('#l_referral').val(data.referral.id).trigger('change');
+                    $('#l_gender').val(data.gender).trigger('change');
+                    $('#l_branch').val(data.branch.id).trigger('change');
+                    $('#l_course').val(data.course.id).trigger('change');
+                    $('#l_year').val(data.departure_year.id).trigger('change');
+                    $('#l_remarks').val(data.remarks);
+                    $('#student_modal').modal('toggle');
+                    $('#student_modal').modal('show');
+                }
+            });
+        });
+
         //Delete Student
         $(document).on('click', '.delete_student', function(){
             var id = $(this).attr('id');
@@ -546,8 +572,10 @@
                         type: 'json',
                         success:function(data){
                             swal('Deleted!', 'This Student has been Deleted', 'success');
+
                             refresh_student_branch();
                             refresh_student_status();
+                            refresh_language_student();
                         }
                     });
                 }
@@ -575,6 +603,7 @@
                         dataType: 'text',
                         success: function(data){
                             swal('Congratulations!', 'This Student is now in Final School!', 'success');
+
                             refresh_student_branch();
                             refresh_student_status();
                         }
@@ -603,7 +632,8 @@
                         data: {id: id},
                         dataType: 'text',
                         success: function(data){
-                            swal('Success!', 'This Student has backed out!', 'success');
+                            swal('This Student has backed out!', 'warning');
+
                             refresh_student_branch();
                             refresh_student_status();
                         }
@@ -636,7 +666,7 @@
                                 swal('Success!', 'This Student out of Final School!', 'success');
                             }
                             else{
-                                swal('Congratulations!', 'This Student is now active again!', 'success');
+                                swal('Success!', 'This Student is now active again!', 'success');
                             }
                             refresh_student_branch();
                             refresh_student_status();
@@ -697,7 +727,7 @@
                         data: {id: id},
                         dataType: 'text',
                         success: function(data){
-                            swal('Alright', 'Student COE Denied', 'success');
+                            swal('Student COE Denied', 'warning');
 
                             refresh_student_branch();
                             refresh_student_status();
@@ -728,7 +758,7 @@
                         data: {id: id},
                         dataType: 'text',
                         success: function(data){
-                            swal('Alright', 'Student Cancelled', 'success');
+                            swal('Student Cancelled', 'warning');
 
                             refresh_student_branch();
                             refresh_student_status();
