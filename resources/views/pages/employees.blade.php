@@ -104,6 +104,10 @@
             $('.select2').trigger('change');
         });
 
+        $("#account_modal").on("hidden.bs.modal", function(e){
+            $(this).find("input,textarea,select").val('').end();
+        });
+
         $('input, select').attr('autocomplete', 'off');
         
         //INITIALIZE -- END
@@ -264,18 +268,78 @@
         $(document).on('click', '.edit_account', function(){
             var id = $(this).attr('id');
 
-            $('#account_modal').modal('toggle');
-            $('#account_modal').modal('show');
-
             $.ajax({
                 url: '/get_account/'+id,
-                dataType: 'text',
+                dataType: 'json',
                 success: function(data){
-                    console.log(data);
-                    $('#emp_name').val(data.employee.lname + ', ' + data.employee.fname + ' ' + data.employee.mname);
+                    $('#a_id').val(data.id);
+                    if(data.employee.mname){
+                        $('#emp_name').val(data.employee.lname + ', ' + data.employee.fname + ' ' + data.employee.mname);
+                    }
+                    else{
+                        $('#emp_name').val(data.employee.lname + ', ' + data.employee.fname);
+                    }
+                    $('#a_email').val(data.email);
+                    
+                    $('#account_modal').modal('toggle');
+                    $('#account_modal').modal('show');
                 }
             })
         })
+
+        $('.save_account').on('click', function(e){
+            e.preventDefault();
+
+            if($('#password').val() != ''){
+                if($('#password').val() != $('#confirm_password').val()){
+                    swal('Error!', 'Password and Confirm Password must be identical', 'error');
+                    return;
+                }
+            }
+
+            swal.fire({
+                title: 'Confirm User',
+                text: 'For security purposes, input your password again.',
+                input: 'password',
+                inputAttributes: {
+                    autocapitalize: 'off'
+                },
+                showCancelButton: true,
+                confirmButtonText: 'Confirm',
+                showLoaderOnConfirm: true,
+                preConfirm: (password) => {
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: '/confirm_user',
+                        data: { password:password },
+                        method: 'POST',
+                        success: function(data){
+                            if(data == 0){
+                                swal('Password Incorrect!', 'Please try again', 'error');
+                                return;
+                            }
+                            else{
+                                $.ajax({
+                                    headers: {
+                                        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                                    },
+                                    url: '/save_account',
+                                    data: $('#account_form').serialize(),
+                                    method: 'POST',
+                                    dataType: 'text',
+                                    success: function(data){
+                                        swal('Success!', 'User Data has been saved!', 'success');
+                                        $('#account_modal').modal('hide');
+                                    }
+                                })
+                            }
+                        }
+                    });
+                },
+            })
+        });
 
         //ACCOUNTS -- END
 

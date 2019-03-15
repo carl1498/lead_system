@@ -59,8 +59,10 @@ Route::get('/delete_student_settings', 'studentSettingsController@delete_student
 
 //EMPLOYEE ROUTES -- START
 
-Route::get('/employees', 'employeeController@index');
-Route::get('/employee_branch/{current_branch}', 'employeeController@branch');
+Route::group(['middleware' => ['auth', 'admin']], function(){
+    Route::get('/employees', 'employeeController@index')->middleware('admin');
+    Route::get('/employee_branch/{current_branch}', 'employeeController@branch');
+});
 
 Route::post('/save_employee', 'employeeController@save_employee');
 Route::get('/get_employee/{id}', 'employeeController@get_employee');
@@ -68,6 +70,8 @@ Route::get('/delete_employee', 'employeeController@delete_employee');
 
 //Account
 Route::get('/get_account/{id}', 'employeeController@get_account');
+Route::post('/confirm_user', 'employeeController@confirm_user');
+Route::post('/save_account', 'employeeController@save_account');
 
 //EMPLOYEE ROUTES -- END
 

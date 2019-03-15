@@ -11,6 +11,7 @@ use App\User;
 use Carbon\Carbon;
 use Auth;
 use Yajra\Datatables\Datatables;
+use Illuminate\Support\Facades\Hash;
 use Image;
 
 class employeeController extends Controller
@@ -151,5 +152,26 @@ class employeeController extends Controller
         $account = User::with('employee')->where('emp_id', $id)->first();
         
         return $account;
+    }
+
+    public function confirm_user(Request $request){
+        $id = Auth::user()->id;
+
+        if(Hash::check($request->password, Auth::user()->password)){
+            return 1;
+        }
+        return 0;
+    }
+
+    public function save_account(Request $request){
+        $id = $request->a_id;
+        $user = User::find($id);
+        info($user);
+
+        $user->email = $request->a_email;
+        if($request->password){
+            $user->password = bcrypt($request->input('password'));
+        }
+        $user->save();
     }
 }
