@@ -61,6 +61,11 @@ class employeeController extends Controller
                 <button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_employee" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
             }
         })
+        ->editColumn('hired_date', function($data){
+            if(canAccessAll()){
+                return $data->hired_date;
+            }
+        })
         ->make(true);
     }
 

@@ -80,6 +80,19 @@ function canAccessStudentList(){
     return false;
 }
 
+function canEditStudentList(){
+    $id = Auth::user()->emp_id;
+    $user = \App\User::with('employee.role')->find($id);
+    $authorized = ['Melba', 'Jovelyn'];
+
+    foreach($authorized as $auth){
+        if($user->employee->fname == $auth){
+            return true;
+        }
+    }
+    return false;
+}
+
 function canAccessStudentSettings(){
     $id = Auth::user()->emp_id;
     $user = \App\User::with('employee.role')->find($id);
