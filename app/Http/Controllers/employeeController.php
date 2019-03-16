@@ -54,10 +54,12 @@ class employeeController extends Controller
             return $data->lname.', '.$data->fname.' '.$data->mname; 
         })
         ->addColumn('action', function($data){
-            return  '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Account" class="btn btn-info btn-xs edit_account" id="'.$data->id.'"><i class="fa fa-key"></i></button>
+            if(canAccessAll()){
+                return  '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Account" class="btn btn-info btn-xs edit_account" id="'.$data->id.'"><i class="fa fa-key"></i></button>
                 <button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-primary btn-xs edit_employee" id="'.$data->id.'"><i class="fa fa-pen"></i></button>
                 <button data-container="body" data-toggle="tooltip" data-placement="left" title="Resign" class="btn btn-warning btn-xs resign_employee" id="'.$data->id.'"><i class="fa fa-sign-out-alt"></i></button>
                 <button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_employee" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
+            }
         })
         ->make(true);
     }

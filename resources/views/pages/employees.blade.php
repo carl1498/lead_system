@@ -8,9 +8,11 @@
     </h1>
     <ol class="breadcrumb">
         <li>
+            @if(canAccessAll())
             <button class="btn btn-secondary bg-red add_employee" data-toggle="modal" data-target="#employee_modal">
                 <i class="fa fa-plus-square"></i>
             </button>
+            @endif
         </li>
     </ol>
 </section>
