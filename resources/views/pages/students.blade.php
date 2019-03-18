@@ -29,23 +29,75 @@
                 <div class="box-body box-profile">
                     <!--<img class="profile-user-img img-responsive img-circle" src="./img/avatar5.png" alt="User profile picture">-->
 
-                    <h3 class="profile-username text-center">Student Name</h3>
+                    <h3 id="p_stud_name" class="profile-username text-center">Student Name</h3>
 
-                    <!--<p class="text-muted text-center"></p>-->
+                    <p id="p_departure" class="text-muted text-center">N/A</p>
 
                     <ul class="list-group list-group-unbordered">
                         <li class="list-group-item">
-                            <b>Contact</b> <a class="pull-right">test</a>
+                            <b>Contact</b> <p id="p_contact" class="pull-right text-muted">-</p>
                         </li>
                         <li class="list-group-item">
-                            <b>Program</b> <a class="pull-right">test</a>
+                            <b>Program</b> <p id="p_program" class="pull-right text-muted">-</p>
                         </li>
                         <li class="list-group-item">
-                            <b>School</b> <a class="pull-right">test</a>
+                            <b>School</b> <p id="p_school" class="pull-right text-muted">-</p>
                         </li>
                         <li class="list-group-item">
-                            <b>Benefactor</b> <a class="pull-right">test</a>
+                            <b>Benefactor</b> <p id="p_benefactor" class="pull-right text-muted">-</p>
                         </li>
+                        <li class="list-group-item">
+                            <b>Birthdate</b> <p id="p_birthdate" class="pull-right text-muted">-</p>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Gender</b> <p id="p_gender" class="pull-right text-muted">-</p>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Referral</b> <p id="p_referral" class="pull-right text-muted">-</p>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Date of Sign Up</b> <p id="p_sign_up" class="pull-right text-muted">-</p>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Date of Medical</b> <p id="p_medical" class="pull-right text-muted">-</p>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Date of Completion</b> <p id="p_completion" class="pull-right text-muted">-</p>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Branch</b> <p id="p_branch" class="pull-right text-muted">-</p>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Status</b> <p id="p_status" class="pull-right text-muted">-</p>
+                        </li>
+                        <li class="list-group-item">
+                            <b>COE Status</b> <p id="p_coe_status" class="pull-right text-muted">-</p>
+                        </li>
+                        <strong>Email</strong>
+                        <p id="p_email" class="text-muted">
+                        -
+                        </p>
+
+                        <hr>
+
+                        <strong>Course</strong>
+                        <p id="p_course" class="text-muted">
+                        -
+                        </p>
+
+                        <hr>
+
+                        <strong>Address</strong>
+                        <p id="p_address" class="text-muted">
+                        -
+                        </p>
+
+                        <hr>
+
+                        <strong>Remarks</strong>
+                        <p id="p_remarks" class="text-muted">
+                        -
+                        </p>
                     </ul>
 
                     <!--<a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>-->
@@ -768,6 +820,64 @@
                 }
             });
         });
+
+        $(document).on('click', '.view_profile', function(){
+            var id = $(this).attr('id');
+
+            $.ajax({
+                url: '/view_profile_student/'+id,
+                method: 'get',
+                dataType: 'JSON',
+                success: function(data){
+                    if(data.mname){
+                        $('#p_stud_name').text(data.lname + ', ' + data.fname + ' ' + data.mname);
+                    }
+                    else{
+                        $('#p_stud_name').text(data.lname + ', ' + data.fname);
+                    }
+                    
+                    if(data.program){
+                        if(data.program.name != 'Language Only'){
+                            $('#p_departure').text(data.departure_year.name + ' ' + data.departure_month.name);
+                        }
+                        else{
+                            $('#p_departure').text('N/A');
+                        }
+                    }
+
+                    $('#p_contact').text(data.contact);
+                    $('#p_program').text(data.program ? data.program.name : '-');
+                    $('#p_school').text(data.school ? data.school.name : '-');
+                    $('#p_benefactor').text(data.benefactor ? data.benefactor.name : '-');
+                    var age = getAge(data.birthdate);
+                    $('#p_birthdate').text(data.birthdate + ' (' + age + ')');
+                    $('#p_gender').text(data.gender);
+                    $('#p_referral').text(data.referral.fname);
+                    $('#p_sign_up').text(data.date_of_signup);
+                    $('#p_medical').text(data.date_of_medical ? data.date_of_medical : '-');
+                    $('#p_completion').text(data.date_of_completion ? data.date_of_completion : '-');
+                    $('#p_branch').text(data.branch.name);
+                    $('#p_status').text(data.status);
+                    $('#p_coe_status').text(data.coe_status);
+                    $('#p_email').text(data.email);
+                    $('#p_course').text(data.course.name);
+                    $('#p_address').text(data.address);
+                    $('#p_remarks').text(data.remarks ? data.remarks : '-');
+                }
+            });
+        });
+
+        function getAge(birthdate){
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0');
+            var yyyy = today.getFullYear();
+
+            today = yyyy + '-' + mm + '-' + dd;
+            var age = Math.floor((Date.parse(today) - Date.parse(birthdate))/31471200000);
+            
+            return age;
+        }
 
         //FUNCTIONS -- END
     });

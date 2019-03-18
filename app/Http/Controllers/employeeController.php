@@ -54,11 +54,15 @@ class employeeController extends Controller
             return $data->lname.', '.$data->fname.' '.$data->mname; 
         })
         ->addColumn('action', function($data){
+            $html = '';
             if(canAccessAll()){
-                return  '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Account" class="btn btn-info btn-xs edit_account" id="'.$data->id.'"><i class="fa fa-key"></i></button>
-                <button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-primary btn-xs edit_employee" id="'.$data->id.'"><i class="fa fa-pen"></i></button>
-                <button data-container="body" data-toggle="tooltip" data-placement="left" title="Resign" class="btn btn-warning btn-xs resign_employee" id="'.$data->id.'"><i class="fa fa-sign-out-alt"></i></button>
-                <button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_employee" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Account" class="btn btn-info btn-xs edit_account" id="'.$data->id.'"><i class="fa fa-key"></i></button>&nbsp;';
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-primary btn-xs edit_employee" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
+                if($data->employment_status == 'Active'){
+                    $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Resign" class="btn btn-warning btn-xs resign_employee" id="'.$data->id.'"><i class="fa fa-sign-out-alt"></i></button>&nbsp;';
+                }
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_employee" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>&nbsp;';
+                return $html;
             }
         })
         ->editColumn('hired_date', function($data){
@@ -180,5 +184,14 @@ class employeeController extends Controller
             $user->password = bcrypt($request->input('password'));
         }
         $user->save();
+    }
+
+    public function resign_employee(Request $request){
+        $id = $request->r_id;
+        
+        $employee = employee::find($id);
+        $employee->employment_status = 'Resigned';
+        $employee->resignation_date = $request->resignation_date;
+        $employee->save();
     }
 }

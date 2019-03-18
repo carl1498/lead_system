@@ -89,11 +89,10 @@ class invoiceController extends Controller
             }
         })
         ->addColumn('action', function($data) use($invoice_select){
-            /*$html = '
+            $html = '
                     <button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_invoice" id="'.$data->ref_no_id.'"><i class="fa fa-trash-alt"></i></button>';
             
-            return $html;*/
-
+            return $html;
         })
         ->make(true);
     }
@@ -241,5 +240,11 @@ class invoiceController extends Controller
         $pending = invoice::where('ref_no_id', $ref_no)->where('book_type_id', $book_type)->first();
         $pending->pending = $request->pending;
         $pending->save();
+    }
+
+    public function delete_invoice(Request $request){
+        $id = $request->id;
+        $invoice = invoice::where('ref_no_id', $id)->delete();
+        $reference_no = reference_no::find($id)->delete();
     }
 }

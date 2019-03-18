@@ -16156,3 +16156,8 @@ readers do not read off random characters that represent icons */
 .dataTables_processing{
   z-index: 105
 }
+
+.box-profile{
+  height: 300px;
+  overflow-y: scroll;
+}

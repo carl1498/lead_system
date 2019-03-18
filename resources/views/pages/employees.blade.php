@@ -26,7 +26,7 @@
             <!-- Profile Image -->
             <div class="box box-primary">
                 <div class="box-body box-profile">
-                    <img class="profile-user-img img-responsive img-circle" src="./img/avatar5.png" alt="User profile picture">
+                    <!--<img class="profile-user-img img-responsive img-circle" src="./img/avatar5.png" alt="User profile picture">-->
 
                     <h3 class="profile-username text-center">{{ onLoadName() }}</h3>
 
@@ -64,6 +64,7 @@
     
     @include('includes.modals.employee_modal')
     @include('includes.modals.account_modal')
+    @include('includes.modals.resign_modal')
 
     <!-- MODALS -- END -->
 
@@ -340,10 +341,67 @@
                         }
                     });
                 },
-            })
+            });
         });
 
         //ACCOUNTS -- END
+
+        //RESIGN -- START
+
+        $(document).on('click', '.resign_employee', function(){
+            var id = $(this).attr('id');
+
+
+            $('#r_id').val(id);
+            $('#resign_modal').modal('toggle');
+            $('#resign_modal').modal('show');
+        });
+
+        $('.save_resign_employee').on('click', function(e){
+            e.preventDefault();
+
+            swal.fire({
+                title: 'Confirm User',
+                text: 'For security purposes, input your password again.',
+                input: 'password',
+                inputAttributes: {
+                    autocapitalize: 'off'
+                },
+                showCancelButton: true,
+                confirmButtonText: 'Confirm',
+                showLoaderOnConfirm: true,
+                preConfirm: (password) => {
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: '/confirm_user',
+                        data: { password:password },
+                        method: 'POST',
+                        success: function(data){
+                            if(data == 0){
+                                swal('Password Incorrect!', 'Please try again', 'error');
+                                return;
+                            }
+                            else{
+                                $.ajax({
+                                    url: '/save_resign_employee',
+                                    method: 'POST',
+                                    dataType: 'text',
+                                    data: $('#resign_form').serialize(),
+                                    success: function (data){
+                                        $('#resign_modal').modal('hide');
+                                        swal('Employee now resigned.', '', 'info');
+                                    }
+                                });
+                            }
+                        }
+                    });
+                },
+            });
+        });
+
+        //RESIGN -- END
 
         //FUNCTIONS -- END
     });

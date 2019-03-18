@@ -404,6 +404,36 @@
             })
         });
 
+        $(document).on('click', '.delete_invoice', function(){
+            var id = $(this).attr('id');
+            console.log('mao ni');
+
+            swal({
+                title: 'Warning',
+                text: 'This may delete data of books added for this invoice.',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if(result.value){
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: '/delete_invoice/'+id,
+                        method: 'get',
+                        type: 'json',
+                        success:function(data){
+                            swal('Success!', 'This invoice has been Deleted', 'success');
+                            refresh_invoice();
+                        }
+                    })
+                }
+            });
+        });
+
         //INVOICE -- END
 
 

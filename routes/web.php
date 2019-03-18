@@ -37,6 +37,7 @@ Route::group(['middleware' => ['auth', 'student_list']], function(){
     Route::get('/continue_student', 'studentController@continue_student');
     Route::get('/backout_student', 'studentController@backout_student');
     Route::get('/final_student', 'studentController@final_student');
+    Route::get('/view_profile_student/{id}', 'studentController@view_profile');
 
     //Result Monitoring
     Route::get('/approve_student', 'studentController@approve_student');
@@ -66,16 +67,17 @@ Route::group(['middleware' => ['auth', 'student_settings']], function(){
 Route::group(['middleware' => ['auth', 'employee']], function(){
     Route::get('/employees', 'employeeController@index');
     Route::get('/employee_branch/{current_branch}', 'employeeController@branch');
+    
+    Route::post('/save_employee', 'employeeController@save_employee');
+    Route::get('/get_employee/{id}', 'employeeController@get_employee');
+    Route::get('/delete_employee', 'employeeController@delete_employee');
+    Route::post('/save_resign_employee', 'employeeController@resign_employee');
+
+    //Account
+    Route::get('/get_account/{id}', 'employeeController@get_account');
+    Route::post('/confirm_user', 'employeeController@confirm_user');
+    Route::post('/save_account', 'employeeController@save_account');
 });
-
-Route::post('/save_employee', 'employeeController@save_employee');
-Route::get('/get_employee/{id}', 'employeeController@get_employee');
-Route::get('/delete_employee', 'employeeController@delete_employee');
-
-//Account
-Route::get('/get_account/{id}', 'employeeController@get_account');
-Route::post('/confirm_user', 'employeeController@confirm_user');
-Route::post('/save_account', 'employeeController@save_account');
 
 //EMPLOYEE ROUTES -- END
 
@@ -86,6 +88,7 @@ Route::group(['middleware' => ['auth', 'invoice']], function(){
     Route::get('/invoice', 'invoiceController@index');
     Route::get('/view_invoice/{invoice_select}', 'invoiceController@view');
     Route::post('/save_invoice', 'invoiceController@save_invoice');
+    Route::get('/delete_invoice/{id}', 'invoiceController@delete_invoice');
     
     //Add Book
     Route::get('/viewAddBooks', 'invoiceController@view_add_books');

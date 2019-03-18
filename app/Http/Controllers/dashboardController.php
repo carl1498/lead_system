@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\employee;
+use Auth;
 
 class dashboardController extends Controller
 {
@@ -14,6 +16,7 @@ class dashboardController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+
     }
 
     /**
@@ -23,6 +26,13 @@ class dashboardController extends Controller
      */
     public function index()
     {
+        $id = Auth::user()->id;
+        $employee = employee::find($id);
+
+        if($employee->employment_status == 'Resigned'){
+            return redirect()->to('/logout');
+        }
+        
         return view('pages.dashboard');
     }
 }
