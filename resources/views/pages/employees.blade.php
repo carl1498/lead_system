@@ -28,11 +28,63 @@
                 <div class="box-body box-profile">
                     <!--<img class="profile-user-img img-responsive img-circle" src="./img/avatar5.png" alt="User profile picture">-->
 
-                    <h3 class="profile-username text-center">{{ onLoadName() }}</h3>
+                    <h3 id="p_emp_name" class="profile-username text-center">Employee Name</h3>
 
-                    <p class="text-muted text-center">{{ onLoadPosition() }}</p>
+                    <p id="p_position" class="text-muted text-center">Position</p>
 
                     <ul class="list-group list-group-unbordered">
+                        <strong>Business #</strong>
+                        <p id="p_business" class="text-muted">
+                        -
+                        </p>
+
+                        <hr>
+                        <strong>Personal #</strong>
+                        <p id="p_personal" class="text-muted">
+                        -
+                        </p>
+                        <li class="list-group-item">
+                            <b>Birthdate</b> <p id="p_birthdate" class="pull-right text-muted">-</p>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Gender</b> <p id="p_gender" class="pull-right text-muted">-</p>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Branch</b> <p id="p_branch" class="pull-right text-muted">-</p>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Employment Status</b> <p id="p_status" class="pull-right text-muted">-</p>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Hired Date</b> <p id="p_hired" class="pull-right text-muted">-</p>
+                        </li>
+                        <li class="list-group-item">
+                            <b>Resignation Date</b> <p id="p_resigned" class="pull-right text-muted">-</p>
+                        </li>
+                        <strong>SSS</strong>
+                        <p id="p_sss" class="text-muted">
+                        -
+                        </p>
+
+                        <hr>
+                        <strong>Pagibig</strong>
+                        <p id="p_pagibig" class="text-muted">
+                        -
+                        </p>
+
+                        <hr>
+                        <strong>Philhealth</strong>
+                        <p id="p_philhealth" class="text-muted">
+                        -
+                        </p>
+
+                        <hr>
+                        <strong>TIN</strong>
+                        <p id="p_tin" class="text-muted">
+                        -
+                        </p>
+
+                        <hr>
                     </ul>
 
                     <!--<a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>-->
@@ -65,6 +117,7 @@
     @include('includes.modals.employee_modal')
     @include('includes.modals.account_modal')
     @include('includes.modals.resign_modal')
+    @include('includes.modals.rehire_modal')
 
     <!-- MODALS -- END -->
 
@@ -335,6 +388,7 @@
                                     success: function(data){
                                         swal('Success!', 'User Data has been saved!', 'success');
                                         $('#account_modal').modal('hide');
+                                        refresh_employee_branch();
                                     }
                                 })
                             }
@@ -392,6 +446,7 @@
                                     success: function (data){
                                         $('#resign_modal').modal('hide');
                                         swal('Employee now resigned.', '', 'info');
+                                        refresh_employee_branch();
                                     }
                                 });
                             }
@@ -402,6 +457,114 @@
         });
 
         //RESIGN -- END
+
+        //REHIRE -- START
+
+        $(document).on('click', '.rehire_employee', function(){
+            var id = $(this).attr('id');
+
+
+            $('#rh_id').val(id);
+            $('#rehire_modal').modal('toggle');
+            $('#rehire_modal').modal('show');
+        });
+
+        $('.save_rehire_employee').on('click', function(e){
+            e.preventDefault();
+
+            swal.fire({
+                title: 'Confirm User',
+                text: 'For security purposes, input your password again.',
+                input: 'password',
+                inputAttributes: {
+                    autocapitalize: 'off'
+                },
+                showCancelButton: true,
+                confirmButtonText: 'Confirm',
+                showLoaderOnConfirm: true,
+                preConfirm: (password) => {
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: '/confirm_user',
+                        data: { password:password },
+                        method: 'POST',
+                        success: function(data){
+                            if(data == 0){
+                                swal('Password Incorrect!', 'Please try again', 'error');
+                                return;
+                            }
+                            else{
+                                $.ajax({
+                                    url: '/save_rehire_employee',
+                                    method: 'POST',
+                                    dataType: 'text',
+                                    data: $('#rehire_form').serialize(),
+                                    success: function (data){
+                                        $('#rehire_modal').modal('hide');
+                                        swal('Success!', 'Employee now rehired', 'success');
+                                        refresh_employee_branch();
+                                    }
+                                });
+                            }
+                        }
+                    });
+                },
+            });
+        });
+
+        //REHIRE -- END
+
+        //VIEW PROFILE -- START
+
+        $(document).on('click', '.view_employee_profile', function(){
+            var id = $(this).attr('id');
+
+            $.ajax({
+                url: '/view_profile_employee/'+id,
+                method: 'get',
+                dataType: 'json',
+                success: function(data){
+                    if(data.mname){
+                        $('#p_emp_name').text(data.lname + ', ' + data.fname + ' ' + data.mname);
+                    }
+                    else{
+                        $('#p_emp_name').text(data.lname + ', ' + data.fname);
+                    }
+
+                    $('#p_position').text(data.role.name);
+
+                    $('#p_business').text(data.contact_business ? data.contact_business : '-');
+                    $('#p_personal').text(data.contact_personal ? data.contact_personal : '-');
+                    var age = getAge(data.birthdate);
+                    $('#p_birthdate').text(data.birthdate + ' (' + age + ')');
+                    $('#p_gender').text(data.gender);
+                    $('#p_branch').text(data.branch.name);
+                    $('#p_status').text(data.employment_status);
+                    $('#p_hired').text(data.hired_date ? data.hired_date : '-');
+                    $('#p_resigned').text(data.resignation_date ? data.resignation_date : '-');
+                    $('#p_sss').text(data.benefits[0].id_number ? data.benefits[0].id_number : '-');
+                    $('#p_pagibig').text(data.benefits[1].id_number ? data.benefits[1].id_number : '-');
+                    $('#p_philhealth').text(data.benefits[2].id_number ? data.benefits[2].id_number : '-');
+                    $('#p_tin').text(data.benefits[3].id_number ? data.benefits[3].id_number : '-');
+                }
+            });
+        }); 
+
+        //VIEW PROFILE -- END
+
+        function getAge(birthdate){
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0');
+            var yyyy = today.getFullYear();
+
+            today = yyyy + '-' + mm + '-' + dd;
+            var age = Math.floor((Date.parse(today) - Date.parse(birthdate))/31471200000);
+            
+            return age;
+        }
 
         //FUNCTIONS -- END
     });

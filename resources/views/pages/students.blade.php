@@ -31,7 +31,7 @@
 
                     <h3 id="p_stud_name" class="profile-username text-center">Student Name</h3>
 
-                    <p id="p_departure" class="text-muted text-center">N/A</p>
+                    <p id="p_departure" class="text-muted text-center">Departure</p>
 
                     <ul class="list-group list-group-unbordered">
                         <li class="list-group-item">

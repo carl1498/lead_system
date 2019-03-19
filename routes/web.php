@@ -72,6 +72,8 @@ Route::group(['middleware' => ['auth', 'employee']], function(){
     Route::get('/get_employee/{id}', 'employeeController@get_employee');
     Route::get('/delete_employee', 'employeeController@delete_employee');
     Route::post('/save_resign_employee', 'employeeController@resign_employee');
+    Route::post('/save_rehire_employee', 'employeeController@rehire_employee');
+    Route::get('/view_profile_employee/{id}', 'employeeController@view_profile');
 
     //Account
     Route::get('/get_account/{id}', 'employeeController@get_account');

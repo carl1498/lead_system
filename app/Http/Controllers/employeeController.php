@@ -55,15 +55,21 @@ class employeeController extends Controller
         })
         ->addColumn('action', function($data){
             $html = '';
+
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-success btn-xs view_employee_profile" id="'.$data->id.'"><i class="fa fa-eye"></i></button>&nbsp;';
+            
             if(canAccessAll()){
                 $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Account" class="btn btn-info btn-xs edit_account" id="'.$data->id.'"><i class="fa fa-key"></i></button>&nbsp;';
                 $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-primary btn-xs edit_employee" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
                 if($data->employment_status == 'Active'){
                     $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Resign" class="btn btn-warning btn-xs resign_employee" id="'.$data->id.'"><i class="fa fa-sign-out-alt"></i></button>&nbsp;';
                 }
+                else if($data->employment_status == 'Resigned'){
+                    $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Rehire" class="btn btn-warning btn-xs rehire_employee" id="'.$data->id.'"><i class="fa fa-sign-in-alt"></i></button>&nbsp;';
+                }
                 $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_employee" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>&nbsp;';
-                return $html;
             }
+            return $html;
         })
         ->editColumn('hired_date', function($data){
             if(canAccessAll()){
@@ -193,5 +199,29 @@ class employeeController extends Controller
         $employee->employment_status = 'Resigned';
         $employee->resignation_date = $request->resignation_date;
         $employee->save();
+    }
+
+    public function rehire_employee(Request $request){
+        $id = $request->rh_id;
+
+        $employee = employee::find($id);
+        $employee->employment_status = 'Active';
+        $employee->resignation_date = null;
+        $employee->hired_date = $request->rehiring_date;
+        $employee->save();
+    }
+
+    public function view_profile(Request $request){
+        $id = $request->id;
+
+        $employee = employee::with('benefits', 'branch', 'role')->find($id);
+        if(!canAccessAll()){
+            $employee->hired_date = null;
+            $employee->resignation_date = null;
+            foreach($employee->benefits as $emp){
+                $emp->id_number = null;
+            }
+        }
+        return $employee;
     }
 }

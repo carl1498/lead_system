@@ -34,5 +34,9 @@ class employee extends Model
         return $this->hasOne('App\role', 'id', 'role_id');
     }
 
+    public function benefits(){
+        return $this->hasMany('App\employee_benefits', 'emp_id', 'id');
+    }
+
     public $timestamps = true;
 }
