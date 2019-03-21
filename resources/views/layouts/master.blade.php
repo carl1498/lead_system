@@ -42,20 +42,20 @@
 							<img src="./img/avatar5.png" class="user-image" alt="User Image">
 							<span class="hidden-xs">{{ onLoadName() }}</span>
 						</a>
-						<ul class="dropdown-menu">
+						<ul class="dropdown-menu" style="width: 100px;">
 							<!-- User image -->
-							<li class="user-header">
+							<!--<li class="user-header">
 								<img src="./img/avatar5.png" class="img-circle" alt="User Image">
 								<p>
 									{{ onLoadName() }} - {{ onLoadPosition() }}
 									<small>Member since {{ Auth::user()->created_at }}</small>
 								</p>
-							</li>
+							</li>-->
 							<!-- Menu Footer-->
 							<li class="user-footer">
-								<div class="pull-left">
+								<!--<div class="pull-left">
 									<a href="#" class="btn btn-default btn-flat">Profile</a>
-								</div>
+								</div>-->
 								<div class="pull-right">
 									<a href="/logout" class="btn btn-default btn-flat">Sign out</a>
 								</div>
@@ -95,6 +95,7 @@
 <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.bootstrap.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-slimScroll/1.3.8/jquery.slimscroll.js"></script>
 <script src="/js/app.js"></script>
 @yield('script')
 </body>

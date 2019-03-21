@@ -38,6 +38,10 @@ Route::group(['middleware' => ['auth', 'student_list']], function(){
     Route::get('/backout_student', 'studentController@backout_student');
     Route::get('/final_student', 'studentController@final_student');
     Route::get('/view_profile_student/{id}', 'studentController@view_profile');
+    Route::get('/courseAll', 'studentController@course_all');
+    Route::get('/programAll', 'studentController@program_all');
+    Route::get('/schoolAll', 'studentController@school_all');
+    Route::get('/benefactorAll', 'studentController@benefactor_all');
 
     //Result Monitoring
     Route::get('/approve_student', 'studentController@approve_student');

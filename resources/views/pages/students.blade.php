@@ -192,6 +192,12 @@
 
         $('input, select').attr('autocomplete', 'off');
 
+        $('.box-profile').slimScroll({
+            size: '8px',
+            height: 'auto',
+            alwaysVisible: true
+        });
+
         //INITIALIZE -- END
 
 
@@ -878,6 +884,118 @@
             
             return age;
         }
+
+        //Course Select 2
+        $('#course').select2({
+            placeholder: 'Select Course',
+            ajax: {
+                url: "/courseAll",
+                dataType: 'json',
+
+                data: function (params){
+                    return {
+                        name: params.term,
+                        page:params.page
+                    }
+                },
+                
+                processResults: function (data){
+                    return {
+                        results:data.results      
+                    }
+                }
+            },
+        });
+
+        $('#l_course').select2({
+            placeholder: 'Select Course',
+            ajax: {
+                url: "/courseAll",
+                dataType: 'json',
+
+                data: function (params){
+                    return {
+                        name: params.term,
+                        page:params.page
+                    }
+                },
+                
+                processResults: function (data){
+                    return {
+                        results:data.results      
+                    }
+                }
+            },
+        });
+
+        //Program Select 2
+        $('#program').select2({
+            allowClear: true,
+            placeholder: 'Select Program',
+            ajax: {
+                url: "/programAll",
+                dataType: 'json',
+
+                data: function (params){
+                    return {
+                        name: params.term,
+                        page:params.page
+                    }
+                },
+                
+                processResults: function (data){
+                    return {
+                        results:data.results      
+                    }
+                }
+            },
+        });
+
+        //School Select 2
+        $('#school').select2({
+            allowClear: true,
+            placeholder: 'Select School',
+            ajax: {
+                url: "/schoolAll",
+                dataType: 'json',
+
+                data: function (params){
+                    return {
+                        name: params.term,
+                        page:params.page
+                    }
+                },
+                
+                processResults: function (data){
+                    return {
+                        results:data.results      
+                    }
+                }
+            },
+        });
+
+        //Benefactor Select 2
+        $('#benefactor').select2({
+            allowClear: true,
+            placeholder: 'Select Benefactor',
+            ajax: {
+                url: "/benefactorAll",
+                dataType: 'json',
+
+                data: function (params){
+                    return {
+                        name: params.term,
+                        page:params.page
+                    }
+                },
+                
+                processResults: function (data){
+                    return {
+                        results:data.results      
+                    }
+                }
+            },
+        });
 
         //FUNCTIONS -- END
     });

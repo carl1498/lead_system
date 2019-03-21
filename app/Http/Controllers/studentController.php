@@ -319,4 +319,56 @@ class studentController extends Controller
 
         return $student;
     }
+
+    public function course_all(Request $request){
+        $course = course::where('name', 'LIKE', '%'.$request->name.'%')->get()->toArray();
+
+        $array = [];
+        foreach ($course as $key => $value){
+            $array[] = [
+                'id' => $value['id'],
+                'text' => $value['name']
+            ];
+        }
+        return json_encode(['results' => $array]);
+    }
+
+    public function program_all(Request $request){
+        $program = program::where('name', 'LIKE', '%'.$request->name.'%')->get()->toArray();
+
+        $array = [];
+        foreach ($program as $key => $value){
+            $array[] = [
+                'id' => $value['id'],
+                'text' => $value['name']
+            ];
+        }
+        return json_encode(['results' => $array]);
+    }
+
+    public function school_all(Request $request){
+        $school = school::where('name', 'LIKE', '%'.$request->name.'%')->get()->toArray();
+
+        $array = [];
+        foreach ($school as $key => $value){
+            $array[] = [
+                'id' => $value['id'],
+                'text' => $value['name']
+            ];
+        }
+        return json_encode(['results' => $array]);
+    }
+
+    public function benefactor_all(Request $request){
+        $benefactor = benefactor::where('name', 'LIKE', '%'.$request->name.'%')->get()->toArray();
+
+        $array = [];
+        foreach ($benefactor as $key => $value){
+            $array[] = [
+                'id' => $value['id'],
+                'text' => $value['name']
+            ];
+        }
+        return json_encode(['results' => $array]);
+    }
 }

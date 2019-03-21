@@ -165,6 +165,12 @@
         });
 
         $('input, select').attr('autocomplete', 'off');
+
+        $('.box-profile').slimScroll({
+            size: '8px',
+            height: 'auto',
+            alwaysVisible: true
+        });
         
         //INITIALIZE -- END
 
