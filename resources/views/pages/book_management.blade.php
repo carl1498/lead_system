@@ -330,7 +330,7 @@
                 {data: 'book_2', name: 'book_2'},
                 {data: 'wb_2', name: 'wb_2'},
                 {data: 'kanji', name: 'kanji'},
-                {data: 'program.name', name: 'program'},
+                {data: 'program.name', name: 'program', defaultContent: ''},
                 {data: 'status', name: 'status'}
             ],
             columnDefs: [
