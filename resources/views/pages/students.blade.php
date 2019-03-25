@@ -849,6 +849,8 @@
                         else{
                             $('#p_departure').text('N/A');
                         }
+                    }else{
+                        $('#p_departure').text(data.departure_year.name + ' ' + data.departure_month.name);
                     }
 
                     $('#p_contact').text(data.contact);

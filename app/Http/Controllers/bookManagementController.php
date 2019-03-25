@@ -8,6 +8,7 @@ use App\branch;
 use App\books;
 use App\employee;
 use App\student;
+use App\program;
 use App\pending_request;
 use Auth;
 use Yajra\Datatables\Datatables;
@@ -27,8 +28,9 @@ class bookManagementController extends Controller
     {
         $book_type = book_type::all();
         $branch = branch::all();
+        $program = program::all();
 
-        return view('pages.book_management', compact('book_type', 'branch'));
+        return view('pages.book_management', compact('book_type', 'branch', 'program'));
     }
 
     public function view_books(Request $request){
@@ -70,7 +72,7 @@ class bookManagementController extends Controller
         $get_branch = employee::with('branch')->where('id', Auth::user()->emp_id)->first();
         $branch = $get_branch->branch->name;
 
-        $student = student::with('branch', 'program')->get();
+        $student = student::with('branch', 'program', 'departure_year', 'departure_month')->get();
         
         if($branch != 'Makati'){
             $student = $student->where('branch.name', $branch);
@@ -127,6 +129,15 @@ class bookManagementController extends Controller
         })
         ->addColumn('action', function($data){
             return 'TEMP';
+        })
+        ->addColumn('departure', function($data){
+            if($data->program){
+                if($data->program->name == 'Language Only'){
+                    return 'N/A';
+                }
+            }
+
+            return $data->departure_year->name . ' ' . $data->departure_month->name;
         })
         ->make(true);
     }

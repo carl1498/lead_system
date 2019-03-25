@@ -13,4 +13,19 @@
     <option value="{{ $b->id }}">{{ $b->name }}</option>
     @endforeach
 </select>
+<label class="student_status_select">Student Status: </label>
+<select type="text" id="student_status_select" class="book_status_select form-control select2" style="width: 130px; display: inline-block;">
+    <option value="All">All</option>
+    <option value="Active">Active</option>
+    <option value="Final School">Final School</option>
+    <option value="Back Out">Back Out</option>
+    <option value="Cancelled">Cancelled</option>
+</select>
+<label class="program_select">Program: </label>
+<select type="text" id="program_select" class="book_status_select form-control select2" style="width: 150px;">
+    <option value="All">All</option>
+    @foreach ($program as $p)
+    <option value="{{ $p->id }}">{{ $p->name }}</option>
+    @endforeach
+</select>
 <br><br>

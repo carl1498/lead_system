@@ -9,5 +9,6 @@
         <th>Kanji</th>
         <th>Program</th>
         <th>Status</th>
+        <th>Departure</th>
     </tr>
 </thead>

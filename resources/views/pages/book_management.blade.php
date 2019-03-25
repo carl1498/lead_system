@@ -331,7 +331,8 @@
                 {data: 'wb_2', name: 'wb_2'},
                 {data: 'kanji', name: 'kanji'},
                 {data: 'program.name', name: 'program', defaultContent: ''},
-                {data: 'status', name: 'status'}
+                {data: 'status', name: 'status'},
+                {data: 'departure', name: 'departure'},
             ],
             columnDefs: [
                 { width: 250, targets: 0 }, //student name
@@ -343,6 +344,7 @@
                 { width: 80, targets: 6 }, //kanji
                 { width: 150, targets: 7 }, //program
                 { width: 110, targets: 8 }, //status
+                { width: 110, targets: 9 }, //departure
             ]
         });
 
