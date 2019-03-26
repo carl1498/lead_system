@@ -78,6 +78,8 @@
         var student_id;
         var book_status = $('#status_select').val();
         var book_type_select = $('#book_type_select').val();
+        var student_status_select = $('#student_status_select').val();
+        var program_select = $('#program_select').val();
 
 
         $('body').tooltip({
@@ -130,6 +132,13 @@
                 $('#book_type_select').next(".select2-container").show();
             }
 
+            if(current_tab != 'Student'){
+                $('.student_status_select').hide();
+                $('#student_status_select').next(".select2-container").hide();
+                $('.program_select').hide();
+                $('#program_select').next(".select2-container").hide();
+            }
+
             if(current_tab == 'Branch'){
                 $('.status_select').show();
                 $('#status_select').next(".select2-container").show();
@@ -140,6 +149,10 @@
             else if(current_tab == 'Student'){
                 $('.book_type_select').hide();
                 $('#book_type_select').next(".select2-container").hide();
+                $('.student_status_select').show();
+                $('#student_status_select').next(".select2-container").show();
+                $('.program_select').show();
+                $('#program_select').next(".select2-container").show();
                 refresh_books_student_table();
             }
             else if(current_tab == 'Books'){
@@ -312,44 +325,48 @@
             });
         }
 
-        var books_student_table = $('#books_student_table').DataTable({
-            processing: true,
-            destroy: true,
-            scrollX: true,
-            scrollCollapse: true,
-            fixedColumns: {
-                leftColumns: 1
-            },
-            responsive: true,
-            ajax: '/view_student_books',
-            columns: [
-                {data: 'student_name', name: 'student_name'},
-                {data: 'branch.name', name: 'branch'},
-                {data: 'book_1', name: 'book_1'},
-                {data: 'wb_1', name: 'wb_1'},
-                {data: 'book_2', name: 'book_2'},
-                {data: 'wb_2', name: 'wb_2'},
-                {data: 'kanji', name: 'kanji'},
-                {data: 'program.name', name: 'program', defaultContent: ''},
-                {data: 'status', name: 'status'},
-                {data: 'departure', name: 'departure'},
-            ],
-            columnDefs: [
-                { width: 250, targets: 0 }, //student name
-                { width: 100, targets: 1 }, //branch
-                { width: 80, targets: 2 }, //book 1
-                { width: 80, targets: 3 }, //wb 1
-                { width: 80, targets: 4 }, //book 2
-                { width: 80, targets: 5 }, //wb 2
-                { width: 80, targets: 6 }, //kanji
-                { width: 150, targets: 7 }, //program
-                { width: 110, targets: 8 }, //status
-                { width: 110, targets: 9 }, //departure
-            ]
-        });
-
         function refresh_books_student_table(){
-            books_student_table.ajax.reload();
+            var books_student_table = $('#books_student_table').DataTable({
+                processing: true,
+                destroy: true,
+                scrollX: true,
+                scrollCollapse: true,
+                fixedColumns: {
+                    leftColumns: 1
+                },
+                responsive: true,
+                ajax: {
+                    url: '/view_student_books',
+                    data:{ 
+                        student_status_select: student_status_select,
+                        program_select: program_select
+                    }
+                },
+                columns: [
+                    {data: 'student_name', name: 'student_name'},
+                    {data: 'branch.name', name: 'branch'},
+                    {data: 'book_1', name: 'book_1'},
+                    {data: 'wb_1', name: 'wb_1'},
+                    {data: 'book_2', name: 'book_2'},
+                    {data: 'wb_2', name: 'wb_2'},
+                    {data: 'kanji', name: 'kanji'},
+                    {data: 'program.name', name: 'program', defaultContent: ''},
+                    {data: 'status', name: 'status'},
+                    {data: 'departure', name: 'departure'},
+                ],
+                columnDefs: [
+                    { width: 250, targets: 0 }, //student name
+                    { width: 100, targets: 1 }, //branch
+                    { width: 80, targets: 2 }, //book 1
+                    { width: 80, targets: 3 }, //wb 1
+                    { width: 80, targets: 4 }, //book 2
+                    { width: 80, targets: 5 }, //wb 2
+                    { width: 80, targets: 6 }, //kanji
+                    { width: 150, targets: 7 }, //program
+                    { width: 110, targets: 8 }, //status
+                    { width: 110, targets: 9 }, //departure
+                ]
+            });
         }
 
         function refresh_books_branch_table(){
@@ -462,6 +479,16 @@
 
         $('#book_type_select').on('change', function(){
             book_type_select = $(this).val();
+            pickRefresh();
+        });
+
+        $('#student_status_select').on('change', function(){
+            student_status_select = $(this).val();
+            pickRefresh();
+        });
+
+        $('#program_select').on('change', function(){
+            program_select = $(this).val();
             pickRefresh();
         });
 

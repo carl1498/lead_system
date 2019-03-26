@@ -68,16 +68,26 @@ class bookManagementController extends Controller
         ->make(true);
     }
 
-    public function view_student_books(){
+    public function view_student_books(Request $request){
+        info($request);
         $get_branch = employee::with('branch')->where('id', Auth::user()->emp_id)->first();
         $branch = $get_branch->branch->name;
-
+        $student_status = $request->student_status_select;
+        $program = $request->program_select;
         $student = student::with('branch', 'program', 'departure_year', 'departure_month')->get();
-        
         if($branch != 'Makati'){
             $student = $student->where('branch.name', $branch);
         }
 
+        if($student_status != 'All'){
+            $student = $student->where('status', $student_status);
+        }
+
+        if($program != 'All'){
+            $student = $student->where('program_id', $program);
+        }
+
+        info($program);
         return Datatables::of($student)
         ->addColumn('student_name', function($data){
             return $data->lname . ', ' . $data->fname . ' ' . $data->mname;
