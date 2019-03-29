@@ -424,27 +424,40 @@
 
         //FUNCTIONS -- START
 
+        function showMonthSelect(){
+            $('.month_select').show();
+            $('#month_select').next(".select2-container").show();
+            $('.select_description').text('Departure');
+        }
+
         $('.branch_pick').on('click', function(){
             current_branch = $(this).text();
             
+            showMonthSelect();
             refresh_student_branch();
         });
 
         $('.status_pick').on('click', function(){
             current_status = $(this).text();
 
+            showMonthSelect();
             refresh_student_status();
         });
 
         $('.result_pick').on('click', function(){
             current_result = $(this).text();
 
+            showMonthSelect();
             refresh_student_result();
         });
 
         $('.language_pick').on('click', function(){
             refresh_language_student();
-        })
+            
+            $('.month_select').hide();
+            $('#month_select').next(".select2-container").hide();
+            $('.select_description').text('Year');
+        });
 
         $(document).on('change', '#year_select, #month_select', function(){
             refresh_student_branch();

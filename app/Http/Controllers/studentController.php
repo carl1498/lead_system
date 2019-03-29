@@ -44,7 +44,7 @@ class studentController extends Controller
         $departure_month = $request->departure_month;
 
         $b = student::with('program', 'school', 'benefactor', 'referral', 
-        'branch', 'course', 'departure_year', 'departure_month')->get();
+        'branch', 'course', 'departure_year', 'departure_month')->orderBy('school_id')->get();
 
         $branch = $b->where('branch.name', $current_branch)->where('program.name', '<>', 'Language Only')->where('departure_year_id', $departure_year)->where('departure_month_id', $departure_month)->whereIn('status', ['Active', 'Final School']);
 
@@ -84,7 +84,7 @@ class studentController extends Controller
         $departure_month = $request->departure_month;
 
         $s = student::with('program', 'school', 'benefactor', 'referral', 
-        'branch', 'course', 'departure_year', 'departure_month')->get();
+        'branch', 'course', 'departure_year', 'departure_month')->orderBy('school_id')->get();
 
         if($current_status == 'Back Out / Cancelled'){
             $status = $s->whereIn('status', ['Back Out', 'Cancelled'])->where('program.name', '<>', 'Language Only')->where('departure_year_id', $departure_year)->where('departure_month_id', $departure_month);
@@ -132,7 +132,7 @@ class studentController extends Controller
         $departure_month = $request->departure_month;
 
         $r = student::with('program', 'school', 'referral', 
-        'branch', 'course', 'departure_year', 'departure_month')->get();
+        'branch', 'course', 'departure_year', 'departure_month')->orderBy('school_id')->get();
 
         $result = $r->whereIn('status', ['Final School', 'Cancelled'])->where('program.name', '<>', 'Language Only')->where('departure_year_id', $departure_year)->where('departure_month_id', $departure_month);
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\employee;
+use App\student;
 use Auth;
 
 class dashboardController extends Controller
@@ -26,13 +27,19 @@ class dashboardController extends Controller
      */
     public function index()
     {
-        $id = Auth::user()->id;
+        $id = Auth::user()->emp_id;
+        
+        //Logout if resigned
         $employee = employee::find($id);
 
         if($employee->employment_status == 'Resigned'){
             return redirect()->to('/logout');
         }
-        
-        return view('pages.dashboard');
+
+        //User Referrals
+        $referral_count = student::where('referral_id', $employee->id)->count();
+        $student_count = student::count();
+
+        return view('pages.dashboard', compact('referral_count', 'student_count'));
     }
 }
