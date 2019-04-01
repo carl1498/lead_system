@@ -21,6 +21,8 @@ Auth::routes();
 //DASHBOARD ROUTES -- START
 
 Route::get('/dashboard', 'dashboardController@index');
+Route::get('/monthly_referral', 'dashboardController@monthly_referral');
+Route::get('/branch_signups', 'dashboardController@branch_signups');
 
 //DASHBOARD ROUTES -- END
 
