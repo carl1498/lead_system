@@ -64,7 +64,10 @@
               <div class="row">
                 <div class="col-md-8">
                   <p class="text-center">
-                    <strong>Sign Ups: 2019</strong>
+                    <strong>Sign Ups:</strong>
+                    <select class="form-control" id="sign_ups_year" style="display: inline-block; width: 90px;">
+                      <option value="test">2019</option>
+                    </select>
                   </p>
 
                   <div class="chart">

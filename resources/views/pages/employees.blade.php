@@ -562,13 +562,24 @@
 
         function getAge(birthdate){
             var today = new Date();
-            var dd = String(today.getDate()).padStart(2, '0');
-            var mm = String(today.getMonth() + 1).padStart(2, '0');
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1;
             var yyyy = today.getFullYear();
-
-            today = yyyy + '-' + mm + '-' + dd;
-            var age = Math.floor((Date.parse(today) - Date.parse(birthdate))/31471200000);
             
+            today = yyyy + '-' + mm + '-' + dd;
+            birth_array = birthdate.split('-');
+
+            var age = yyyy - parseInt(birth_array[0]);
+
+            if(mm == parseInt(birth_array[1])){
+                if(dd < birth_array[2]){
+                    age--;
+                }
+            }
+            else if(mm < parseInt(birth_array[1])){
+                age--;
+            }
+
             return age;
         }
 

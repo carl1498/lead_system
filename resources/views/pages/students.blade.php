@@ -427,7 +427,7 @@
         function showMonthSelect(){
             $('.month_select').show();
             $('#month_select').next(".select2-container").show();
-            $('.select_description').text('Departure');
+            $('.select_description').text('Departure:');
         }
 
         $('.branch_pick').on('click', function(){
@@ -456,7 +456,7 @@
             
             $('.month_select').hide();
             $('#month_select').next(".select2-container").hide();
-            $('.select_description').text('Year');
+            $('.select_description').text('Year:');
         });
 
         $(document).on('change', '#year_select, #month_select', function(){
@@ -507,8 +507,6 @@
             button.disabled = true;
             input.html('SAVING...');
 
-            //var formData = new FormData($('#language_student_form')[0]);
-            console.log($('#language_student_form').serialize());
             $.ajax({
                 headers: {
                     'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
@@ -886,19 +884,7 @@
                     $('#p_remarks').text(data.remarks ? data.remarks : '-');
                 }
             });
-        });
-
-        function getAge(birthdate){
-            var today = new Date();
-            var dd = String(today.getDate()).padStart(2, '0');
-            var mm = String(today.getMonth() + 1).padStart(2, '0');
-            var yyyy = today.getFullYear();
-
-            today = yyyy + '-' + mm + '-' + dd;
-            var age = Math.floor((Date.parse(today) - Date.parse(birthdate))/31471200000);
-            
-            return age;
-        }
+        });        
 
         //Course Select 2
         $('#course').select2({
@@ -1011,7 +997,29 @@
                 }
             },
         });
+        
+        function getAge(birthdate){
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1;
+            var yyyy = today.getFullYear();
+            
+            today = yyyy + '-' + mm + '-' + dd;
+            birth_array = birthdate.split('-');
 
+            var age = yyyy - parseInt(birth_array[0]);
+
+            if(mm == parseInt(birth_array[1])){
+                if(dd < birth_array[2]){
+                    age--;
+                }
+            }
+            else if(mm < parseInt(birth_array[1])){
+                age--;
+            }
+
+            return age;
+        }
         //FUNCTIONS -- END
     });
 </script>

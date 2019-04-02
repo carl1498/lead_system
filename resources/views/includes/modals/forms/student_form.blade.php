@@ -80,6 +80,7 @@
                 <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
                     <div class="form-group">
                         <select type="text" id="program" name="program" class="form-control select2" style="width: 100%;">
+                            <option value="" disabled selected>Select Program</option>
                             @foreach($program as $p)
                                 <option value="{{ $p->id }}">{{ $p->name }}</option>
                             @endforeach
@@ -95,6 +96,7 @@
                 <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
                     <div class="form-group">
                         <select type="text" id="school" name="school" class="form-control select2" style="width: 100%;">
+                            <option value="" disabled selected>Select School</option>
                             @foreach($school as $s)
                                 <option value="{{ $s->id }}">{{ $s->name }}</option>
                             @endforeach
@@ -110,6 +112,7 @@
                 <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
                     <div class="form-group">
                         <select type="text" id="benefactor" name="benefactor" class="form-control select2" style="width: 100%;">
+                            <option value="" disabled selected>Select Benefactor</option>
                             @foreach($benefactor as $b)
                                 <option value="{{ $b->id }}">{{ $b->name }}</option>
                             @endforeach
@@ -232,6 +235,7 @@
                 <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
                     <div class="form-group required">
                         <select type="text" id="course" name="course" class="form-control select2 required" style="width: 100%;" required>
+                            <option value="" disabled selected>Select Course</option>
                             @foreach($course as $c)
                                 <option value="{{ $c->id }}">{{ $c->name }}</option>
                             @endforeach
