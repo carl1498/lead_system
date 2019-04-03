@@ -23,7 +23,7 @@ function onLoadBranch(){
 }
 
 function departure_year(){
-    $departure_year = \App\departure_year::all();
+    $departure_year = \App\departure_year::orderBy('name')->get();
 
     return $departure_year;
 }

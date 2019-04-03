@@ -201,7 +201,6 @@ class studentController extends Controller
             $id = $request->id;
             $student = student::find($id);
         }
-        info($request->medical);
 
         $student->fname = $request->fname;
         $student->mname = $request->mname;

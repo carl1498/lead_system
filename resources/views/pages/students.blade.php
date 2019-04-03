@@ -148,7 +148,7 @@
         var current_branch = 'Makati';
         var current_status = '';
         var current_result = '';
-        var departure_year = $('#year_select').val();
+        var departure_year;
         var departure_month = $('#month_select').val();
         var student_type = 'Student';
 
@@ -157,6 +157,19 @@
         var students_status;
         var students_result;
         var language_students;
+
+        $.ajax({
+            headers: {
+                'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+            },
+			url: '/get_current_year',
+			method: 'get',
+			dataType: 'json',
+			success: function(data){
+				$('#year_select').val(data).trigger('change');
+                departure_year = $('#year_select').val();
+			}
+		});
 
         
         $(".datepicker").datepicker({

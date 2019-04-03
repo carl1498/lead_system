@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use App\employee;
 use App\student;
 use App\branch;
+use App\departure_year;
 use Auth;
+use Carbon\Carbon;
 
 class dashboardController extends Controller
 {
@@ -44,7 +46,8 @@ class dashboardController extends Controller
         return view('pages.dashboard', compact('referral_count', 'student_count'));
     }
 
-    public function monthly_referral(){
+    public function monthly_referral(Request $request){
+        $year = $request->year;
         $makati = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $cebu = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $davao = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -55,7 +58,7 @@ class dashboardController extends Controller
             ->whereNull('program_id')
             ->whereHas('referral.branch', function($query) {
                 $query->where('name', 'Makati');
-            })->whereMonth('date_of_signup', $x)->whereYear('date_of_signup', '2019')->count();
+            })->whereMonth('date_of_signup', $x)->whereYear('date_of_signup', $year)->count();
 
             $makati[$x-1] += student::with('referral.branch', 'program')
             ->whereHas('program', function($query){
@@ -63,14 +66,14 @@ class dashboardController extends Controller
             })
             ->whereHas('referral.branch', function($query) {
                 $query->where('name', 'Makati');
-            })->whereMonth('date_of_signup', $x)->whereYear('date_of_signup', '2019')->count();
+            })->whereMonth('date_of_signup', $x)->whereYear('date_of_signup', $year)->count();
 
             //CEBU
             $cebu[$x-1] += student::with('referral.branch', 'program')
             ->whereNull('program_id')
             ->whereHas('referral.branch', function($query) {
                 $query->where('name', 'Makati');
-            })->whereMonth('date_of_signup', $x)->whereYear('date_of_signup', '2019')->count();
+            })->whereMonth('date_of_signup', $x)->whereYear('date_of_signup', $year)->count();
 
             $cebu[$x-1] = student::with('branch', 'program')
             ->whereHas('program', function($query){
@@ -78,14 +81,14 @@ class dashboardController extends Controller
             })
             ->whereHas('referral.branch', function($query) {
                 $query->where('name', 'Cebu');
-            })->whereMonth('date_of_signup', $x)->whereYear('date_of_signup', '2019')->count();
+            })->whereMonth('date_of_signup', $x)->whereYear('date_of_signup', $year)->count();
 
             //DAVAO
             $davao[$x-1] += student::with('referral.branch', 'program')
             ->whereNull('program_id')
             ->whereHas('referral.branch', function($query) {
                 $query->where('name', 'Makati');
-            })->whereMonth('date_of_signup', $x)->whereYear('date_of_signup', '2019')->count();
+            })->whereMonth('date_of_signup', $x)->whereYear('date_of_signup', $year)->count();
 
             $davao[$x-1] = student::with('branch', 'program')
             ->whereHas('program', function($query){
@@ -93,7 +96,7 @@ class dashboardController extends Controller
             })
             ->whereHas('referral.branch', function($query) {
                 $query->where('name', 'Davao');
-            })->whereMonth('date_of_signup', $x)->whereYear('date_of_signup', '2019')->count();
+            })->whereMonth('date_of_signup', $x)->whereYear('date_of_signup', $year)->count();
         }
         
         $output = array(
@@ -105,19 +108,20 @@ class dashboardController extends Controller
         echo json_encode($output);
     }
 
-    public function branch_signups(){
+    public function branch_signups(Request $request){
+        $year = $request->year;
         $makati = 0;
         $cebu = 0;
         $davao = 0;
 
         //MAKATI
-        $makati += student::with('referral.branch')->whereYear('date_of_signup', '2019')
+        $makati += student::with('referral.branch')->whereYear('date_of_signup', $year)
         ->whereNull('program_id')
         ->whereHas('referral.branch', function($query){
             $query->where('name', 'Makati');
         })->count();
         
-        $makati += student::with('referral.branch')->whereYear('date_of_signup', '2019')
+        $makati += student::with('referral.branch')->whereYear('date_of_signup', $year)
         ->whereHas('program', function($query){
             $query->where('name', '<>', 'Language Only');
         })
@@ -125,23 +129,14 @@ class dashboardController extends Controller
             $query->where('name', 'Makati');
         })->count();
 
-        $test = student::with('referral.branch')->whereYear('date_of_signup', '2019')
-        ->whereHas('program', function($query){
-            $query->where('name', '<>', 'Language Only');
-        })
-        ->whereHas('referral.branch', function($query){
-            $query->where('name', 'Makati');
-        })->get()->toArray();
-        info($test);
-
         //CEBU
-        $cebu += student::with('referral.branch')->whereYear('date_of_signup', '2019')
+        $cebu += student::with('referral.branch')->whereYear('date_of_signup', $year)
         ->whereNull('program_id')
         ->whereHas('referral.branch', function($query){
             $query->where('name', 'Cebu');
         })->count();
 
-        $cebu += student::with('referral.branch')->whereYear('date_of_signup', '2019')
+        $cebu += student::with('referral.branch')->whereYear('date_of_signup', $year)
         ->whereHas('program', function($query){
             $query->where('name', '<>', 'Language Only');
         })
@@ -150,13 +145,13 @@ class dashboardController extends Controller
         })->count();
 
         //DAVAO
-        $davao += student::with('referral.branch')->whereYear('date_of_signup', '2019')
+        $davao += student::with('referral.branch')->whereYear('date_of_signup', $year)
         ->whereNull('program_id')
         ->whereHas('referral.branch', function($query){
             $query->where('name', 'Davao');
         })->count();
 
-        $davao += student::with('referral.branch')->whereYear('date_of_signup', '2019')
+        $davao += student::with('referral.branch')->whereYear('date_of_signup', $year)
         ->whereHas('program', function($query){
             $query->where('name', '<>', 'Language Only');
         })
@@ -168,17 +163,17 @@ class dashboardController extends Controller
         $makati_final = student::with('referral.branch')->where('status', 'Final School')
         ->whereHas('referral.branch', function($query){
             $query->where('name', 'Makati');
-        })->whereYear('date_of_signup', '2019')->count();
+        })->whereYear('date_of_signup', $year)->count();
 
         $cebu_final = student::with('referral.branch')->where('status', 'Final School')
         ->whereHas('referral.branch', function($query){
             $query->where('name', 'Cebu');
-        })->whereYear('date_of_signup', '2019')->count();
+        })->whereYear('date_of_signup', $year)->count();
 
         $davao_final = student::with('referral.branch')->where('status', 'Final School')
         ->whereHas('referral.branch', function($query){
             $query->where('name', 'Davao');
-        })->whereYear('date_of_signup', '2019')->count();
+        })->whereYear('date_of_signup', $year)->count();
 
         $output = array(
             'makati' => $makati,
@@ -190,5 +185,11 @@ class dashboardController extends Controller
         );
 
         echo json_encode($output);
+    }
+
+    public function get_current_year(){
+        $current_year = Carbon::now()->year;
+        $year = departure_year::where('name', $current_year)->first();
+        return $year->id;
     }
 }
