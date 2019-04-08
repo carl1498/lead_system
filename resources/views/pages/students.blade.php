@@ -356,7 +356,7 @@
                 },
                 columnDefs: columnDefs_students,
                 columns: columns_students,
-                order: [[3]]
+                order: [[3,'asc']]
             });
 
             $('.tooltip').css('width', '400px');
@@ -384,7 +384,7 @@
                 },
                 columnDefs: columnDefs_students_status,
                 columns: columns_students_status,
-                order: [[3]]
+                order: [[3,'asc']]
             });
         }
 
@@ -410,7 +410,7 @@
                 },
                 columnDefs: columnDefs_students_result,
                 columns: columns_students_result,
-                order: [[3]]
+                order: [[3,'asc']]
             });
         }
 
