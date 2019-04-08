@@ -8,12 +8,14 @@
     </h1>
     <ol class="breadcrumb">
         <li>
-            <button class="btn btn-secondary bg-red">
+            <!--<button class="btn btn-secondary bg-red">
                 <i class="fas fa-credit-card"></i>
-            </button>
+            </button>-->
+            @if(canAccessAll())
             <button class="btn btn-secondary bg-red add_student" data-toggle="modal" data-target="#student_modal">
                 <i class="fa fa-plus-square"></i>
             </button>
+            @endif
         </li>
     </ol>
 </section>
@@ -354,6 +356,7 @@
                 },
                 columnDefs: columnDefs_students,
                 columns: columns_students,
+                order: [[3]]
             });
 
             $('.tooltip').css('width', '400px');
@@ -381,6 +384,7 @@
                 },
                 columnDefs: columnDefs_students_status,
                 columns: columns_students_status,
+                order: [[3]]
             });
         }
 
@@ -406,6 +410,7 @@
                 },
                 columnDefs: columnDefs_students_result,
                 columns: columns_students_result,
+                order: [[3]]
             });
         }
 

@@ -16,7 +16,7 @@
                 <span class="info-box-icon bg-red"><i class="fa fa-network-wired"></i></span>
                 <div class="info-box-content">
                     <span class="info-box-text">Your Referrals</span>
-                    <span class="info-box-number">{{ $referral_count }}</span>
+                    <span class="info-box-number referral_count">{{ $referral_count }}</span>
                 </div>
                 <!-- /.info-box-content -->
             </div>
@@ -27,7 +27,7 @@
                 <span class="info-box-icon bg-aqua"><i class="fa fa-user-plus"></i></span>
                 <div class="info-box-content">
                     <span class="info-box-text">Total Sign Ups</span>
-                    <span class="info-box-number">{{ $student_count }}</span>
+                    <span class="info-box-number student_count">{{ $student_count }}</span>
                 </div>
                 <!-- /.info-box-content -->
             </div>
@@ -121,8 +121,62 @@
           <!-- /.box -->
         </div>
         <!-- /.col -->
-      </div>
-      <!-- /.row -->
+    </div>
+    <!-- /.row -->
+    <div class="row">
+        <div class="col-md-4">
+
+        <!-- Profile Image -->
+            <div class="box box-primary">
+                <div class="box-body box-profile">
+                    <!--<img class="profile-user-img img-responsive img-circle" src="./img/avatar5.png" alt="User profile picture">-->
+
+                    <h3 class="profile-username text-center">Birthday Month</h3>
+
+                    <p id="birth_month" class="text-muted text-center">{{ getCurrentMonthName() }}</p>
+
+                    <ul class="list-group list-group-unbordered">
+                        @foreach($merged_birthdays as $m)
+                        <li class="list-group-item">
+                            <b>{{ $m->lname }}, {{ $m->fname }}</b> <p class="pull-right text-muted">{{ $m->birth_day }} ({{ $m->current_age }} y/o)</p>
+                        </li>
+                        @endforeach
+                    </ul>
+
+                    <!--<a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>-->
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+
+        <div class="col-md-3">
+
+        <!-- Profile Image -->
+            <div class="box box-primary">
+                <div class="box-body box-profile">
+                    <!--<img class="profile-user-img img-responsive img-circle" src="./img/avatar5.png" alt="User profile picture">-->
+
+                    <h3 class="profile-username text-center">Referral Leaderboard</h3>
+
+                    <p id="birth_month" class="text-muted text-center">Highest to Lowest</p>
+
+                    <ul class="list-group list-group-unbordered">
+                        @foreach($leaderboard as $l)
+                        <li class="list-group-item">
+                            <b>{{ $l->referral->lname }}, {{ $l->referral->fname }}</b>
+                        </li>
+                        @endforeach
+                    </ul>
+
+                    <!--<a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>-->
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+    </div>
+
 </section>
 @endsection
 
@@ -230,8 +284,26 @@
 			});
 			branch_signups();
 		}
+
+        function update_signup_count(){
+            $.ajax({
+				headers: {
+					'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+				},
+                url: '/update_signup_count',
+                method: 'get',
+                dataType: 'json',
+                success: function(data){
+                    $('.referral_count').text(data.referral_count);
+                    $('.student_count').text(data.student_count);
+                }
+            });
+        }
 		
-		var interval = setInterval(update_monthly_signup, 10000);
+		var interval = setInterval(function(){
+            update_signup_count();
+            update_monthly_signup();
+        }, 10000);
         
 		function branch_signups(){
 			$.ajax({

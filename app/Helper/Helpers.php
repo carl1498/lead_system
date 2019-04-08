@@ -170,3 +170,9 @@ function canAccessBookManagement(){
     }
     return false;
 }
+
+function getCurrentMonthName(){
+    $month = Carbon::now()->format('F');
+
+    return $month;
+}

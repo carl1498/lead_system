@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use App\employee;
 use App\student;
 use App\branch;
@@ -43,7 +44,76 @@ class dashboardController extends Controller
         $referral_count = student::where('referral_id', $employee->id)->count();
         $student_count = student::count();
 
-        return view('pages.dashboard', compact('referral_count', 'student_count'));
+        //Birthdays
+        $year = Carbon::now()->year;
+        $month = Carbon::now()->month;
+        $day = Carbon::now()->day;
+        $student_birthdays = student::whereMonth('birthdate', $month)->get();
+        foreach($student_birthdays as $student){
+            $birthdate = $student['birthdate'];
+            $birth = explode('-', $birthdate);
+            
+            $age = $year - $birth[0];
+            if($month == $birth[1]){
+                if($day < $birth[2]){
+                    $age--;
+                }
+            }
+            else if($month < $birth[1]){
+                $age--;
+            }
+
+            $getDay = strtotime($student->birthdate);
+            $birth_day = date('d', $getDay);
+            $student = array_add($student, 'current_age', $age);
+            $student = array_add($student, 'birth_day', $birth_day);
+        }
+        $employee_birthdays = employee::whereMonth('birthdate', $month)->get();
+        foreach($employee_birthdays as $employee){
+            $birthdate = $employee['birthdate'];
+            $birth = explode('-', $birthdate);
+            
+            $age = $year - $birth[0];
+            if($month == $birth[1]){
+                if($day < $birth[2]){
+                    $age--;
+                }
+            }
+            else if($month < $birth[1]){
+                $age--;
+            }
+            
+            $getDay = strtotime($employee->birthdate);
+            $birth_day = date('d', $getDay);
+            $employee = array_add($employee, 'current_age', $age);
+            $employee = array_add($employee, 'birth_day', $birth_day);
+        }
+        $merged_birthdays = $student_birthdays->merge($employee_birthdays)->sortBy('birth_day');
+
+        //leaderboard
+        $leaderboard = student::with('referral')->groupBy('referral_id')->get();
+        foreach($leaderboard as $l){
+            $ref_count = student::where('referral_id', $l->referral_id)->count();
+            $l = array_add($l, 'referral_count', $ref_count);
+        }
+        $leaderboard = $leaderboard->sortByDesc('referral_count');
+        info($leaderboard);
+
+        return view('pages.dashboard', compact('referral_count', 'student_count', 'merged_birthdays', 'leaderboard'));
+    }
+
+    public function update_signup_count(){
+        $id = Auth::user()->emp_id;
+        $employee = employee::find($id);
+        $referral_count = student::where('referral_id', $employee->id)->count();
+        $student_count = student::count();
+
+        $output = array(
+            'referral_count' => $referral_count,
+            'student_count' => $student_count
+        );
+
+        echo json_encode($output);
     }
 
     public function monthly_referral(Request $request){

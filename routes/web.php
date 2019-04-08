@@ -24,6 +24,7 @@ Route::get('/dashboard', 'dashboardController@index');
 Route::get('/monthly_referral/{year}', 'dashboardController@monthly_referral');
 Route::get('/branch_signups/{year}', 'dashboardController@branch_signups');
 Route::get('/get_current_year', 'dashboardController@get_current_year');
+Route::get('/update_signup_count', 'dashboardController@update_signup_count');
 
 //DASHBOARD ROUTES -- END
 
