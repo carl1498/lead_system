@@ -3,9 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class student extends Model
 {
+    use SoftDeletes;
     protected $primaryKey = 'id';
     protected $table = 'students';
     protected $fillable = [
@@ -46,7 +48,7 @@ class student extends Model
     }
 
     public function referral(){
-        return $this->hasOne('App\employee', 'id', 'referral_id');
+        return $this->hasOne('App\employee', 'id', 'referral_id')->withTrashed();
     }
 
     public function branch(){

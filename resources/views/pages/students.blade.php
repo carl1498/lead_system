@@ -436,8 +436,6 @@
             });
         }
 
-        refresh_student_branch();
-
         //DATATABLES -- END
 
         //FUNCTIONS -- START

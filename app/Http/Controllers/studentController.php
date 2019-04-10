@@ -12,6 +12,8 @@ use App\branch;
 use App\course;
 use App\departure_year;
 use App\departure_month;
+use App\student_edit_history;
+use App\student_delete_history;
 use Carbon\Carbon;
 use Auth;
 use Yajra\Datatables\Datatables;
@@ -28,7 +30,7 @@ class studentController extends Controller
         $program = program::all();
         $school = school::all();
         $benefactor = benefactor::all();
-        $employee = employee::all();
+        $employee = employee::withTrashed()->get();
         $branch = branch::all();
         $course = course::all();
         $departure_year = departure_year::all();
@@ -205,7 +207,116 @@ class studentController extends Controller
         else{
             $id = $request->id;
             $student = student::find($id);
+            $edited_by = Auth::user()->emp_id;
         }
+
+        // EDIT HISTORY -- START
+
+        if(isset($edited_by)){
+            $edit_fields = ['First Name', 'Middle Name', 'Last Name', 'Birth Date', 'Age', 'Contact #', 
+                'Program', 'School', 'Benefactor', 'Address', 'Email', 'Referred By', 'Sign Up Date', 
+                'Medical Date', 'Completion Date', 'Gender', 'Branch', 'Course', 'Year', 'Month', 'Remarks'];
+
+            $student_fields = [$student->fname, $student->mname, $student->lname, $student->birthdate,
+                $student->age, $student->contact, $student->program_id, $student->school_id,
+                $student->benefactor_id, $student->address, $student->email, $student->referral_id,
+                $student->date_of_signup, $student->date_of_medical, $student->date_of_completion,
+                $student->gender, $student->branch_id, $student->course_id, $student->departure_year_id,
+                $student->departure_month_id, $student->remarks];
+
+            $request_fields = [$request->fname, $request->mname, $request->lname, $request->birthdate,
+                $request->age, $request->contact, $request->program, $request->school,
+                $request->benefactor, $request->address, $request->email, $request->referral,
+                $request->sign_up, $request->medical, $request->completion, $request->gender, 
+                $request->branch, $request->course, $request->year, $request->month, $request->remarks];
+
+            for($x = 0; $x<count($edit_fields); $x++){
+                if($student_fields[$x] != $request_fields[$x]){
+                    $edit_history = new student_edit_history;
+                    $edit_history->stud_id = $student->id;
+                    $edit_history->field = $edit_fields[$x];
+                    if($edit_fields[$x] == 'Program' || $edit_fields[$x] == 'School' || $edit_fields[$x] == 'Benefactor' ||
+                        $edit_fields[$x] == 'Branch' || $edit_fields[$x] == 'Course' || $edit_fields[$x] == 'Year' ||
+                        $edit_fields[$x] == 'Month'){
+                        if($student_fields[$x] == null){
+                            $prev = 'N/A';
+                        }else{
+                            if($edit_fields[$x] == 'Program'){
+                                $prev = program::where('id', $student_fields[$x])->pluck('name');
+                            }
+                            else if($edit_fields[$x] == 'School'){
+                                $prev = school::where('id', $student_fields[$x])->pluck('name');
+                            }
+                            else if($edit_fields[$x] == 'Benefactor'){
+                                $prev = benefactor::where('id', $student_fields[$x])->pluck('name');
+                            }
+                            else if($edit_fields[$x] == 'Branch'){
+                                $prev = branch::where('id', $student_fields[$x])->pluck('name');
+                            }
+                            else if($edit_fields[$x] == 'Course'){
+                                $prev = course::where('id', $student_fields[$x])->pluck('name');
+                            }
+                            else if($edit_fields[$x] == 'Year'){
+                                $prev = departure_year::where('id', $student_fields[$x])->pluck('name');
+                            }
+                            else if($edit_fields[$x] == 'Month'){
+                                $prev = departure_month::where('id', $student_fields[$x])->pluck('name');
+                            }
+                            $prev = $prev[0];
+                        }
+
+                        $edit_history->previous = $prev;
+
+                        if($request_fields[$x] == null){
+                            $new = 'N/A';
+                        }
+                        else{
+                            if($edit_fields[$x] == 'Program'){
+                                $new = program::where('id', $request_fields[$x])->pluck('name');
+                            }
+                            else if($edit_fields[$x] == 'School'){
+                                $new = school::where('id', $request_fields[$x])->pluck('name');
+                            }
+                            else if($edit_fields[$x] == 'Benefactor'){
+                                $new = benefactor::where('id', $request_fields[$x])->pluck('name');
+                            }
+                            else if($edit_fields[$x] == 'Branch'){
+                                $new = branch::where('id', $request_fields[$x])->pluck('name');
+                            }
+                            else if($edit_fields[$x] == 'Course'){
+                                $new = course::where('id', $request_fields[$x])->pluck('name');
+                            }
+                            else if($edit_fields[$x] == 'Year'){
+                                $new = departure_year::where('id', $request_fields[$x])->pluck('name');
+                            }
+                            else if($edit_fields[$x] == 'Month'){
+                                $new = departure_month::where('id', $request_fields[$x])->pluck('name');
+                            }
+                            $new = $new[0];
+                        }
+
+                        $edit_history->new = $new;
+                    }
+                    else if($edit_fields[$x] == 'Referred By'){
+                        $prev = employee::find($student_fields[$x]);
+                        $prev = $prev->fname;
+                        $new = employee::find($request_fields[$x]);
+                        $new = $new->fname;
+
+                        $edit_history->previous = $prev;
+                        $edit_history->new = $new;
+                    }
+                    else{
+                        $edit_history->previous = (isset($student_fields[$x])) ? (string) $student_fields[$x] : 'N/A';
+                        $edit_history->new = (isset($request_fields[$x])) ? (string) $request_fields[$x] : 'N/A';
+                    }
+                    $edit_history->edited_by = $edited_by;
+                    $edit_history->save();
+                }
+            }
+        }
+
+        // EDIT HISTORY -- END
 
         $student->fname = $request->fname;
         $student->mname = $request->mname;
@@ -243,6 +354,73 @@ class studentController extends Controller
         else{
             $id = $request->l_id;
             $student = student::find($id);
+            $edited_by = Auth::user()->emp_id;
+        }
+
+        if(isset($edited_by)){
+            $edit_fields = ['First Name', 'Middle Name', 'Last Name', 'Birth Date',
+                'Age', 'Contact #', 'Address', 'Email', 'Referred By', 'Gender', 
+                'Branch', 'Course', 'Year', 'Remarks'];
+
+            $student_fields = [$student->fname, $student->mname, $student->lname,
+                $student->birthdate, $student->age, $student->contact, $student->address,
+                $student->email, $student->referral_id,
+                $student->gender, $student->branch_id, $student->course_id,
+                $student->departure_year_id, $student->remarks];
+
+            $request_fields = [$request->l_fname, $request->l_mname, $request->l_lname,
+                $request->l_birthdate, $request->l_age, $request->l_contact, $request->l_address,
+                $request->l_email, $request->l_referral, $request->l_gender, 
+                $request->l_branch, $request->l_course, $request->l_year, $request->l_remarks];
+
+            for($x = 0; $x<count($edit_fields); $x++){
+                if($student_fields[$x] != $request_fields[$x]){
+                    
+                    $edit_history = new student_edit_history;
+                    $edit_history->stud_id = $student->id;
+                    $edit_history->field = $edit_fields[$x];
+                    if($edit_fields[$x] == 'Branch' || $edit_fields[$x] == 'Course' || $edit_fields[$x] == 'Year'){
+                        if($edit_fields[$x] == 'Branch'){
+                            $prev = branch::where('id', $student_fields[$x])->pluck('name');
+                        }
+                        else if($edit_fields[$x] == 'Course'){
+                            $prev = course::where('id', $student_fields[$x])->pluck('name');
+                        }
+                        else if($edit_fields[$x] == 'Year'){
+                            $prev = departure_year::where('id', $student_fields[$x])->pluck('name');
+                        }
+
+                        $edit_history->previous = $prev[0];
+
+                        if($edit_fields[$x] == 'Branch'){
+                            $new = branch::where('id', $request_fields[$x])->pluck('name');
+                        }
+                        else if($edit_fields[$x] == 'Course'){
+                            $new = course::where('id', $request_fields[$x])->pluck('name');
+                        }
+                        else if($edit_fields[$x] == 'Year'){
+                            $new = departure_year::where('id', $request_fields[$x])->pluck('name');
+                        }
+
+                        $edit_history->new = $new[0];
+                    }
+                    else if($edit_fields[$x] == 'Referred By'){
+                        $prev = employee::find($student_fields[$x]);
+                        $prev = $prev->fname;
+                        $new = employee::find($request_fields[$x]);
+                        $new = $new->fname;
+    
+                        $edit_history->previous = $prev;
+                        $edit_history->new = $new;
+                    }
+                    else{
+                        $edit_history->previous = (isset($student_fields[$x])) ? (string) $student_fields[$x] : 'N/A';
+                        $edit_history->new = (isset($request_fields[$x])) ? (string) $request_fields[$x] : 'N/A';
+                    }
+                    $edit_history->edited_by = $edited_by;
+                    $edit_history->save();
+                }
+            }
         }
         
         $student->fname = $request->l_fname;
@@ -276,24 +454,69 @@ class studentController extends Controller
     }
 
     public function delete_student(Request $request){
+        $deleted_by = Auth::user()->emp_id;
         $student = student::find($request->id);
         $student->delete();
+
+        $delete_history = new student_delete_history;
+        $delete_history->stud_id = $student->id;
+        $delete_history->deleted_by = $deleted_by;
+        $delete_history->deleted_on = $student->deleted_at;
+        $delete_history->save();
     }
 
     public function final_student(Request $request){
         $student = student::find($request->id);
+        $edited_by = Auth::user()->emp_id;
+
+        $edit_history = new student_edit_history;
+        $edit_history->stud_id = $student->id;
+        $edit_history->field = 'Status';
+        $edit_history->previous = $student->status;
+        $edit_history->new = 'Final School';
+        $edit_history->edited_by = $edited_by;
+        $edit_history->save();
+
         $student->status = 'Final School';
         $student->save();
     }
 
     public function backout_student(Request $request){
         $student = student::find($request->id);
+        $edited_by = Auth::user()->emp_id;
+
+        $edit_history = new student_edit_history;
+        $edit_history->stud_id = $student->id;
+        $edit_history->field = 'Status';
+        $edit_history->previous = $student->status;
+        $edit_history->new = 'Back Out';
+        $edit_history->edited_by = $edited_by;
+        $edit_history->save();
+
         $student->status = 'Back Out';
         $student->save();
     }
 
     public function continue_student(Request $request){
         $student = student::find($request->id);
+        $edited_by = Auth::user()->emp_id;
+
+        $edit_history = new student_edit_history;
+        $edit_history->stud_id = $student->id;
+        $edit_history->field = 'Status';
+        $edit_history->previous = $student->status;
+        $edit_history->new = 'Active';
+        $edit_history->edited_by = $edited_by;
+        $edit_history->save();
+
+        $edit_history = new student_edit_history;
+        $edit_history->stud_id = $student->id;
+        $edit_history->field = 'COE Status';
+        $edit_history->previous = $student->coe_status;
+        $edit_history->new = 'TBA';
+        $edit_history->edited_by = $edited_by;
+        $edit_history->save();
+
         $student->status = 'Active';
         $student->coe_status = 'TBA';
         $student->save();
@@ -301,18 +524,48 @@ class studentController extends Controller
 
     public function approve_student(Request $request){
         $student = student::find($request->id);
+        $edited_by = Auth::user()->emp_id;
+
+        $edit_history = new student_edit_history;
+        $edit_history->stud_id = $student->id;
+        $edit_history->field = 'COE Status';
+        $edit_history->previous = $student->coe_status;
+        $edit_history->new = 'Approved';
+        $edit_history->edited_by = $edited_by;
+        $edit_history->save();
+
         $student->coe_status = 'Approved';
         $student->save();
     }
 
     public function deny_student(Request $request){
         $student = student::find($request->id);
+        $edited_by = Auth::user()->emp_id;
+
+        $edit_history = new student_edit_history;
+        $edit_history->stud_id = $student->id;
+        $edit_history->field = 'Status';
+        $edit_history->previous = $student->coe_status;
+        $edit_history->new = 'Denied';
+        $edit_history->edited_by = $edited_by;
+        $edit_history->save();
+
         $student->coe_status = 'Denied';
         $student->save();
     }
 
     public function cancel_student(Request $request){
         $student = student::find($request->id);
+        $edited_by = Auth::user()->emp_id;
+
+        $edit_history = new student_edit_history;
+        $edit_history->stud_id = $student->id;
+        $edit_history->field = 'Status';
+        $edit_history->previous = $student->status;
+        $edit_history->new = 'Cancelled';
+        $edit_history->edited_by = $edited_by;
+        $edit_history->save();
+
         $student->status = 'Cancelled';
         $student->save();
     }
@@ -320,7 +573,7 @@ class studentController extends Controller
     public function view_profile(Request $request){
         $id = $request->id;
         $student = student::with('program', 'school', 'benefactor', 'referral', 'branch', 'course', 'departure_year', 'departure_month')->find($id);
-
+        
         return $student;
     }
 

@@ -15,7 +15,7 @@ class books extends Model
     public $timestamps = true;
     
     public function student(){
-        return $this->hasOne('App\student', 'id', 'stud_id');
+        return $this->hasOne('App\student', 'id', 'stud_id')->withTrashed();
     }
 
     public function book_type(){
