@@ -56,6 +56,13 @@ Route::group(['middleware' => ['auth', 'student_list']], function(){
     Route::post('/save_language_student', 'studentController@save_language_student');
     Route::get('/get_student', 'studentController@get_student');
     Route::get('/delete_student', 'studentController@delete_student');
+
+    //Student Logs
+    Route::get('/student_edit_history', 'studentLogsController@edit_history_page');
+    Route::get('/student_edit_history_table', 'studentLogsController@edit_history_table');
+
+    Route::get('/student_delete_history', 'studentLogsController@delete_history_page');
+    Route::get('/student_delete_history_table', 'studentLogsController@delete_history_table');
 });
 
 Route::group(['middleware' => ['auth', 'student_settings']], function(){

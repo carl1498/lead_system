@@ -158,6 +158,13 @@
         function refresh_add_book_history(){
 
             var add_books_table = $('#add_books_table').DataTable({
+                stateSave: true,
+                stateSaveCallback: function(settings,data) {
+                    localStorage.setItem( 'DataTables_' + settings.sInstance, JSON.stringify(data) )
+                },
+                stateLoadCallback: function(settings) {
+                    return JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ) )
+                },
                 processing: true,
                 destroy: true,
                 scrollX: true,

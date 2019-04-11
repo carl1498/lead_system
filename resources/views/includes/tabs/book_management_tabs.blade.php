@@ -1,7 +1,7 @@
 <!-- BRANCH -- START -->
 
 <div class="tab-pane fade in active" id="branch_tab">
-    <table id="books_branch_table" class="table table-hover table-striped table-bordered" cellspacing="0">
+    <table id="books_branch_table" class="table table-hover table-striped table-bordered" cellspacing="0" width="100%">
         @include('includes.tables.books.books_branch_table')
     </table>
 </div>

@@ -186,10 +186,6 @@
             trigger : 'hover'
         });
 
-        /*function refresh_tables(){//reload datatable ajax
-            students_branch.ajax.reload();
-        }*/
-
         $('#student_modal').on('shown.bs.modal', function(){
             $('#fname').focus();
         });
@@ -341,6 +337,13 @@
             departure_month = $('#month_select').val();
 
             students_branch = $('#students_branch').DataTable({
+                stateSave: true,
+                stateSaveCallback: function(settings,data) {
+                    localStorage.setItem( 'DataTables_' + settings.sInstance, JSON.stringify(data) )
+                },
+                stateLoadCallback: function(settings) {
+                    return JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ) )
+                },
                 processing: true,
                 destroy: true,
                 scrollX: true,
@@ -368,6 +371,13 @@
             departure_month = $('#month_select').val();
 
             students_status = $('#students_status').DataTable({
+                stateSave: true,
+                stateSaveCallback: function(settings,data) {
+                    localStorage.setItem( 'DataTables_' + settings.sInstance, JSON.stringify(data) )
+                },
+                stateLoadCallback: function(settings) {
+                    return JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ) )
+                },
                 processing: true,
                 destroy: true,
                 scrollX: true,
@@ -394,6 +404,13 @@
             departure_month = $('#month_select').val();
 
             students_result = $('#students_result').DataTable({
+                stateSave: true,
+                stateSaveCallback: function(settings,data) {
+                    localStorage.setItem( 'DataTables_' + settings.sInstance, JSON.stringify(data) )
+                },
+                stateLoadCallback: function(settings) {
+                    return JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ) )
+                },
                 processing: true,
                 destroy: true,
                 scrollX: true,
@@ -419,6 +436,13 @@
             departure_year = $('#year_select').val();
 
             language_students = $('#language_students').DataTable({
+                stateSave: true,
+                stateSaveCallback: function(settings,data) {
+                    localStorage.setItem( 'DataTables_' + settings.sInstance, JSON.stringify(data) )
+                },
+                stateLoadCallback: function(settings) {
+                    return JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ) )
+                },
                 processing: true,
                 destroy: true,
                 scrollX: true,

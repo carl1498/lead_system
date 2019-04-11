@@ -186,6 +186,13 @@
 
         function refresh_request_books(){
             var request_books_table = $('#books_request_table').DataTable({
+                stateSave: true,
+                stateSaveCallback: function(settings,data) {
+                    localStorage.setItem( 'DataTables_' + settings.sInstance, JSON.stringify(data) )
+                },
+                stateLoadCallback: function(settings) {
+                    return JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ) )
+                },
                 processing: true,
                 destroy: true,
                 scrollX: true,
@@ -223,6 +230,13 @@
 
         function refresh_release_books(){
             var release_books_table = $('#books_release_table').DataTable({
+                stateSave: true,
+                stateSaveCallback: function(settings,data) {
+                    localStorage.setItem( 'DataTables_' + settings.sInstance, JSON.stringify(data) )
+                },
+                stateLoadCallback: function(settings) {
+                    return JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ) )
+                },
                 processing: true,
                 destroy: true,
                 scrollX: true,
@@ -262,6 +276,13 @@
         
         function refresh_assign_books(){
             var assign_books_table = $('#books_assign_table').DataTable({
+                stateSave: true,
+                stateSaveCallback: function(settings,data) {
+                    localStorage.setItem( 'DataTables_' + settings.sInstance, JSON.stringify(data) )
+                },
+                stateLoadCallback: function(settings) {
+                    return JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ) )
+                },
                 processing: true,
                 destroy: true,
                 scrollX: true,
@@ -293,6 +314,13 @@
 
         function refresh_books(){
             var books_table = $('#books_table').DataTable({
+                stateSave: true,
+                stateSaveCallback: function(settings,data) {
+                    localStorage.setItem( 'DataTables_' + settings.sInstance, JSON.stringify(data) )
+                },
+                stateLoadCallback: function(settings) {
+                    return JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ) )
+                },
                 processing: true,
                 destroy: true,
                 scrollX: true,
@@ -327,6 +355,14 @@
 
         function refresh_books_student_table(){
             var books_student_table = $('#books_student_table').DataTable({
+                stateSave: true,
+                stateSaveCallback: function(settings,data) {
+                    localStorage.setItem( 'DataTables_' + settings.sInstance, JSON.stringify(data) )
+                },
+                stateLoadCallback: function(settings) {
+                    return JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ) )
+                },
+                dom: 'Bflrtip',
                 processing: true,
                 destroy: true,
                 scrollX: true,
@@ -334,6 +370,10 @@
                 fixedColumns: {
                     leftColumns: 1
                 },
+                buttons: [
+                    {extend: 'print', title: 'LEAD System - '+book_status+' Books' },
+                    {extend: 'pdfHtml5', title: 'LEAD System - '+book_status+' Books' },
+                ],
                 responsive: true,
                 ajax: {
                     url: '/view_student_books',
@@ -371,6 +411,13 @@
 
         function refresh_books_branch_table(){
             var books_branch_table = $('#books_branch_table').DataTable({
+                stateSave: true,
+                stateSaveCallback: function(settings,data) {
+                    localStorage.setItem( 'DataTables_' + settings.sInstance, JSON.stringify(data) )
+                },
+                stateLoadCallback: function(settings) {
+                    return JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ) )
+                },
                 dom: 'Bflrtip',
                 processing: true,
                 destroy: true,
@@ -379,10 +426,10 @@
                 fixedColumns: {
                     leftColumns: 1
                 },
-                buttons: [{
-                    extend: 'print',
-                    title: 'LEAD System - '+book_status+' Books'
-                }],
+                buttons: [
+                    {extend: 'print', title: 'LEAD System - '+book_status+' Books' },
+                    {extend: 'pdfHtml5', title: 'LEAD System - '+book_status+' Books' },
+                ],
                 responsive: true,
                 ajax: '/view_branch_books/'+book_status,
                 columns: [
@@ -406,6 +453,14 @@
 
         function refresh_lost_books(){
             var books_lost_table = $('#books_lost_table').DataTable({
+                stateSave: true,
+                stateSaveCallback: function(settings,data) {
+                    localStorage.setItem( 'DataTables_' + settings.sInstance, JSON.stringify(data) )
+                },
+                stateLoadCallback: function(settings) {
+                    return JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ) )
+                },
+                dom: 'Bflrtip',
                 processing: true,
                 scrollX: true,
                 destroy: true,
@@ -413,6 +468,10 @@
                 fixedColumns: {
                     leftColumns: 1
                 },
+                buttons: [
+                    {extend: 'print', title: 'LEAD System - '+book_status+' Books' },
+                    {extend: 'pdfHtml5', title: 'LEAD System - '+book_status+' Books' },
+                ],
                 responsive: true,
                 ajax: '/view_books_lost/'+book_type_select,
                 columns: [
@@ -437,6 +496,13 @@
 
         function refresh_return_books(){
             var books_return_table = $('#books_return_table').DataTable({
+                stateSave: true,
+                stateSaveCallback: function(settings,data) {
+                    localStorage.setItem( 'DataTables_' + settings.sInstance, JSON.stringify(data) )
+                },
+                stateLoadCallback: function(settings) {
+                    return JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ) )
+                },
                 processing: true,
                 destroy: true,
                 scrollX: true,

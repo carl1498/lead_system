@@ -25,7 +25,8 @@
 				</li>
 
 				@if(canAccessAll() || canAccessStudents())
-                <li class="{{ (Request::path() == 'students' || Request::path() == 'student_settings') ? 'active' : '' }} treeview">
+                <li class="{{ (Request::path() == 'students' || Request::path() == 'student_settings' || 
+					Request::path() == 'student_edit_history' || Request::path() == 'student_delete_history') ? 'active' : '' }} treeview">
 					<a href="">
 						<i class="fa fa-user-graduate"></i> <span>Students</span>
 						<span class="pull-right-container">
@@ -38,6 +39,20 @@
 						@endif
 						@if(canAccessAll() || canAccessStudentSettings())
 						<li class="{{ (Request::path() == 'student_settings') ? 'active' : '' }}"><a href="/student_settings"><i class="fa fa-cog"></i> Settings</a></li>
+						@endif
+						@if(canAccessAll() || canAccessStudentList())
+						<li class="{{ (Request::path() == 'student_edit_history' || Request::path() == 'student_delete_history') ? 'active' : '' }} treeview">
+							<a href="">
+								<i class="fa fa-history"></i> <span>Student Logs</span>
+								<span class="pull-right-container">
+									<i class="fa fa-angle-left pull-right"></i>
+								</span>
+							</a>
+							<ul class="treeview-menu">
+								<li class="{{ (Request::path() == 'student_edit_history') ? 'active' : '' }}"><a href="/student_edit_history"><i class="fa fa-edit"></i> Edit History</a></li>
+								<li class="{{ (Request::path() == 'student_delete_history') ? 'active' : '' }}"><a href="/student_delete_history"><i class="fa fa-trash"></i> Delete History</a></li>
+							</ul>
+						</li>
 						@endif
 					</ul>
 				</li>
@@ -52,14 +67,6 @@
 					</a>
 				</li>
 				@endif
-
-                <!--<li>
-					<a href="#">
-						<i class="fa fa-file-alt"></i> <span>Documentation</span>
-						<span class="pull-right-container">
-						</span>
-					</a>
-				</li>-->
 
 				@if(canAccessAll() || canAccessBooks())
 				<li class="{{ (Request::path() == 'invoice' || Request::path() == 'book_management') ? 'active' : '' }} treeview">

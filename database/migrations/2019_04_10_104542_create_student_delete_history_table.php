@@ -19,7 +19,6 @@ class CreateStudentDeleteHistoryTable extends Migration
             $table->foreign('stud_id')->references('id')->on('students')->onDelete('cascade');
             $table->unsignedInteger('deleted_by');
             $table->foreign('deleted_by')->references('id')->on('employees')->onDelete('cascade');
-            $table->timestamp('deleted_on')->nullable();
             $table->timestamps();
         });
     }

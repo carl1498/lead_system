@@ -461,7 +461,6 @@ class studentController extends Controller
         $delete_history = new student_delete_history;
         $delete_history->stud_id = $student->id;
         $delete_history->deleted_by = $deleted_by;
-        $delete_history->deleted_on = $student->deleted_at;
         $delete_history->save();
     }
 
@@ -591,7 +590,7 @@ class studentController extends Controller
     }
 
     public function program_all(Request $request){
-        $program = program::where('name', 'LIKE', '%'.$request->name.'%')->get()->toArray();
+        $program = program::where('name', 'LIKE', '%'.$request->name.'%')->where('name', '<>', 'Language Only')->get()->toArray();
 
         $array = [];
         foreach ($program as $key => $value){
