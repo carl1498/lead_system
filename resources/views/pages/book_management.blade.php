@@ -203,6 +203,7 @@
                 responsive: true,
                 ajax: '/view_request_books/'+book_type_select,
                 columns: [
+                    {data: 'id', name: 'id'},
                     {data: 'pending_request.branch.name', name: 'branch'},
                     {data: 'pending_request.book_type.name', name: 'book'},
                     {data: 'previous_pending', name: 'previous_pending'},
@@ -213,14 +214,15 @@
                     {data: 'action', orderable: false, searchable: false}
                 ],
                 columnDefs: [
-                    { width: 80, targets: 0 }, //branch
-                    { width: 80, targets: 1 }, //book type
-                    { width: 70, targets: 2 }, //previous
-                    { width: 70, targets: 3 }, //quantity
-                    { width: 70, targets: 4 }, //pending
-                    { width: 130, targets: 5 }, //date
-                    { width: 160, targets: 6 }, //remarks
-                    { width: 110, targets: 7 }, //action
+                    { width: 30, targets: 0 }, //id
+                    { width: 80, targets: 1 }, //branch
+                    { width: 80, targets: 2 }, //book type
+                    { width: 70, targets: 3 }, //previous
+                    { width: 70, targets: 4 }, //quantity
+                    { width: 70, targets: 5 }, //pending
+                    { width: 130, targets: 6 }, //date
+                    { width: 160, targets: 7 }, //remarks
+                    { width: 60, targets: 8 }, //action
                 ],
                 order: [[
                     5, 'desc'
@@ -371,8 +373,8 @@
                     leftColumns: 1
                 },
                 buttons: [
-                    {extend: 'print', title: 'LEAD System - '+book_status+' Books' },
-                    {extend: 'pdfHtml5', title: 'LEAD System - '+book_status+' Books' },
+                    {extend: 'print', title: 'LEAD System', orientation: 'landscape', pageSize: 'FOLIO'},
+                    {extend: 'pdfHtml5', title: 'LEAD System', orientation: 'portrait', pageSize: 'FOLIO'},
                 ],
                 responsive: true,
                 ajax: {
@@ -397,11 +399,11 @@
                 columnDefs: [
                     { width: 250, targets: 0 }, //student name
                     { width: 100, targets: 1 }, //branch
-                    { width: 80, targets: 2 }, //book 1
-                    { width: 80, targets: 3 }, //wb 1
-                    { width: 80, targets: 4 }, //book 2
-                    { width: 80, targets: 5 }, //wb 2
-                    { width: 80, targets: 6 }, //kanji
+                    { width: 50, targets: 2 }, //book 1
+                    { width: 50, targets: 3 }, //wb 1
+                    { width: 50, targets: 4 }, //book 2
+                    { width: 50, targets: 5 }, //wb 2
+                    { width: 50, targets: 6 }, //kanji
                     { width: 150, targets: 7 }, //program
                     { width: 110, targets: 8 }, //status
                     { width: 110, targets: 9 }, //departure

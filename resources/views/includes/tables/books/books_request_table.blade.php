@@ -1,5 +1,6 @@
 <thead>
     <tr>
+        <th>ID</th>
         <th>Branch</th>
         <th>Book</th>
         <th>Previous</th>
