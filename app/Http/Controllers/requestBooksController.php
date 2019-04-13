@@ -85,9 +85,90 @@ class requestBooksController extends Controller
         }
         
         return Datatables::of($request_books)
-        ->addColumn('action', function($data){
-            return 'TEMP';
+        ->editColumn('status', function($data){
+            if($data->status == 'Pending'){
+                $status = 'warning';
+            }else if($data->status == 'Approved'){
+                $status = 'info';
+            }else if($data->status == 'Delivered'){
+                $status = 'success';
+            }else if($data->status == 'Cancelled'){
+                $status = 'danger';
+            }
+
+            return '<span class="label label-'.$status.'">'.$data->status.'</span>';
         })
+        ->addColumn('action', function($data){
+            $user = Auth::user()->emp_id;
+            $user = employee::with('role')->where('id', $user)->first();
+            $html = '';
+
+            if(canAccessAll() || $user->role->name == 'Language Head'){
+                if($data->status == 'Pending'){
+                    $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Approve" class="btn btn-info btn-xs approve_request" id="'.$data->id.'"><i class="fa fa-check"></i></button>&nbsp;';
+                }
+
+                if($data->status != 'Delivered' && $data->status != 'Cancelled'){
+                    $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delivered" class="btn btn-success btn-xs deliver_request" id="'.$data->id.'"><i class="fa fa-thumbs-up"></i></button>&nbsp;';
+                }
+                
+                if($data->status == 'Approved' || $data->status == 'Delivered'){
+                    $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Pending" class="btn btn-warning btn-xs pending_request" id="'.$data->id.'"><i class="fa fa-minus"></i></button>&nbsp;';
+                }
+            }
+
+            if($data->status == 'Pending'){
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Cancel" class="btn btn-danger btn-xs cancel_request" id="'.$data->id.'"><i class="fa fa-times"></i></button>&nbsp;';
+            }
+
+            return $html;
+        })
+        ->rawColumns(['status', 'action'])
         ->make(true);
+    }
+
+    public function approve_book_request(Request $request){
+        $id = $request->id;
+        $approve_request = request_books::find($id);
+        $approve_request->status = 'Approved';
+        $approve_request->save();
+    }
+
+    public function delivered_book_request(Request $request){
+        $id = $request->id;
+        $delivered_request = request_books::find($id);
+        $delivered_request->status = 'Delivered';
+        $delivered_request->save();
+    }
+
+    public function pending_book_request(Request $request){
+        $id = $request->id;
+        $pending_request = request_books::find($id);
+        $pending_request->status = 'Pending';
+        $pending_request->save();
+    }
+
+    public function cancel_book_request(Request $request){
+        $id = $request->id;
+        $cancel_request = request_books::find($id);
+        $current_pending = pending_request::where('id', $cancel_request->p_request_id)->first();
+
+        if($current_pending->pending < $cancel_request->quantity){
+            return 1;
+        }
+        $cancel_request->status = 'Cancelled';
+        $cancel_request->save();
+
+        $cancel = new request_books;
+        $cancel->p_request_id = $cancel_request->p_request_id;
+        $cancel->previous_pending = $current_pending->pending;
+        $cancel->quantity = -1 * abs($cancel_request->quantity);
+        $cancel->pending = $current_pending->pending + $cancel->quantity;
+        $cancel->status = 'Cancelled';
+        $cancel->remarks = 'Cancelled Request ID: '.$id;
+        $cancel->save();
+        
+        $current_pending->pending = $current_pending->pending + $cancel->quantity;
+        $current_pending->save();
     }
 }

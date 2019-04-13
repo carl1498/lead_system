@@ -126,6 +126,10 @@ Route::group(['middleware' => ['auth', 'book_management']], function(){
     //Request Books
     Route::get('/view_request_books/{book_type_select}', 'requestBooksController@view_request_books');
     Route::get('/getRequestPending/{book_type}', 'requestBooksController@get_pending');
+    Route::get('/approve_book_request/{id}', 'requestBooksController@approve_book_request');
+    Route::get('/delivered_book_request/{id}', 'requestBooksController@delivered_book_request');
+    Route::get('/pending_book_request/{id}', 'requestBooksController@pending_book_request');
+    Route::get('/cancel_book_request/{id}', 'requestBooksController@cancel_book_request');
     Route::post('/save_book_request', 'requestBooksController@save_book_request');
     
     //Release Books

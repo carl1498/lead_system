@@ -7,6 +7,7 @@
         <th>Quantity</th>
         <th>Pending</th>
         <th>Date</th>
+        <th>Status</th>
         <th>Remarks</th>
         <th>Action</th>
     </tr>

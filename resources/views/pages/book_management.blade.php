@@ -198,7 +198,7 @@
                 scrollX: true,
                 scrollCollapse: true,
                 fixedColumns: {
-                    leftColumns: 2
+                    leftColumns: 3
                 },
                 responsive: true,
                 ajax: '/view_request_books/'+book_type_select,
@@ -210,6 +210,7 @@
                     {data: 'quantity', name: 'quantity'},
                     {data: 'pending', name: 'pending'},
                     {data: 'created_at', name: 'date'},
+                    {data: 'status', name: 'status'},
                     {data: 'remarks', name: 'remarks'},
                     {data: 'action', orderable: false, searchable: false}
                 ],
@@ -221,11 +222,12 @@
                     { width: 70, targets: 4 }, //quantity
                     { width: 70, targets: 5 }, //pending
                     { width: 130, targets: 6 }, //date
-                    { width: 160, targets: 7 }, //remarks
-                    { width: 60, targets: 8 }, //action
+                    { width: 50, targets: 7 }, //status
+                    { width: 160, targets: 8 }, //remarks
+                    { width: 100, targets: 9 }, //action
                 ],
                 order: [[
-                    5, 'desc'
+                    6, 'desc'
                 ]]
             });
         }
@@ -625,6 +627,123 @@
                     swal("Oh no!", "Something went wrong, try again.", "error");
                     button.disabled = false;
                     input.html('SAVE CHANGES');
+                }
+            });
+        });
+
+        $(document).on('click', '.approve_request', function(){
+            var id = $(this).attr('id');
+
+            swal({
+                title: 'Approve Book Request?',
+                type: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!'
+            }).then((result) => {
+                if(result.value){
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: '/approve_book_request/'+id,
+                        method: 'get',
+                        type: 'json',
+                        success:function(data){
+                            swal('Book Request Approved!', '', 'success');
+                            pickRefresh();
+                        }
+                    })
+                }
+            });
+        });
+
+        $(document).on('click', '.deliver_request', function(){
+            var id = $(this).attr('id');
+
+            swal({
+                title: 'Book Request Delivered?',
+                type: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!'
+            }).then((result) => {
+                if(result.value){
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: '/delivered_book_request/'+id,
+                        method: 'get',
+                        type: 'json',
+                        success:function(data){
+                            swal('Book Request Delivered!', '', 'success');
+                            pickRefresh();
+                        }
+                    })
+                }
+            });
+        });
+
+        $(document).on('click', '.pending_request', function(){
+            var id = $(this).attr('id');
+
+            swal({
+                title: 'Book Request Back to Pending?',
+                type: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!'
+            }).then((result) => {
+                if(result.value){
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: '/pending_book_request/'+id,
+                        method: 'get',
+                        type: 'json',
+                        success:function(data){
+                            swal('Book Request Pending Again!', '', 'info');
+                            pickRefresh();
+                        }
+                    })
+                }
+            });
+        });
+
+        $(document).on('click', '.cancel_request', function(){
+            var id = $(this).attr('id');
+
+            swal({
+                title: 'Cancel Book Request?',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!'
+            }).then((result) => {
+                if(result.value){
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: '/cancel_book_request/'+id,
+                        method: 'get',
+                        type: 'json',
+                        success:function(data){
+                            console.log(data);
+                            if(data == 1){
+                                swal('Cancel not allowed!', 'Quantity to cancel higher than current pending', 'info');
+                                return;
+                            }
+                            swal('Book Request Cancelled!', '', 'info');
+                            pickRefresh();
+                        }
+                    })
                 }
             });
         });
