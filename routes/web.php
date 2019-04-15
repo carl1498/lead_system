@@ -138,6 +138,9 @@ Route::group(['middleware' => ['auth', 'book_management']], function(){
     Route::get('/get_release_books/{branch_id}', 'releaseBooksController@get_books');
     Route::get('/get_release_pending/{book_type}/{branch_id}', 'releaseBooksController@get_pending');
     Route::post('/save_book_release', 'releaseBooksController@save_book_release');
+    Route::get('/received_book_release/{id}', 'releaseBooksController@received_book_release');
+    Route::get('/pending_book_release/{id}', 'releaseBooksController@pending_book_release');
+    Route::get('/return_book_release/{id}', 'releaseBooksController@return_book_release');
     
     //Assign Books
     Route::get('/view_assign_books/{book_type_select}', 'assignBooksController@view_assign_books');

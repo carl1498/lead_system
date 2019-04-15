@@ -251,6 +251,7 @@
                 responsive: true,
                 ajax: '/view_release_books/'+book_type_select,
                 columns: [
+                    {data: 'id', name: 'id'},
                     {data: 'pending_request.branch.name', name: 'branch'},
                     {data: 'pending_request.book_type.name', name: 'book'},
                     {data: 'previous_pending', name: 'previous_pending'},
@@ -258,22 +259,25 @@
                     {data: 'pending', name: 'pending'},
                     {data: 'book_range', name: 'book_range'},
                     {data: 'created_at', name: 'date'},
+                    {data: 'status', name: 'status'},
                     {data: 'remarks', name: 'remarks'},
                     {data: 'action', orderable: false, searchable: false}
                 ],
                 columnDefs: [
-                    { width: 80, targets: 0 }, //branch
-                    { width: 80, targets: 1 }, //book type
-                    { width: 70, targets: 2 }, //previous
-                    { width: 70, targets: 3 }, //quantity
-                    { width: 70, targets: 4 }, //pending
-                    { width: 130, targets: 5 }, //book range
-                    { width: 130, targets: 6 }, //date
-                    { width: 160, targets: 7 }, //remarks
-                    { width: 110, targets: 8 }, //action
+                    { width: 30, targets: 0 }, //branch
+                    { width: 80, targets: 1 }, //branch
+                    { width: 80, targets: 2 }, //book type
+                    { width: 70, targets: 3 }, //previous
+                    { width: 70, targets: 4 }, //quantity
+                    { width: 70, targets: 5 }, //pending
+                    { width: 130, targets: 6 }, //book range
+                    { width: 130, targets: 7 }, //date
+                    { width: 50, targets: 8 }, //status
+                    { width: 160, targets: 9 }, //remarks
+                    { width: 110, targets: 10 }, //action
                 ],
                 order: [[
-                    6, 'desc'
+                    7, 'desc'
                 ]]
             });
         }
@@ -735,7 +739,6 @@
                         method: 'get',
                         type: 'json',
                         success:function(data){
-                            console.log(data);
                             if(data == 1){
                                 swal('Cancel not allowed!', 'Quantity to cancel higher than current pending', 'info');
                                 return;
@@ -854,6 +857,90 @@
                     swal("Oh no!", "Something went wrong, try again.", "error");
                     button.disabled = false;
                     input.html('SAVE CHANGES');
+                }
+            });
+        });
+
+        $(document).on('click', '.receive_release', function(){
+            var id = $(this).attr('id');
+
+            swal({
+                title: 'Book Received?',
+                type: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!'
+            }).then((result) => {
+                if(result.value){
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: '/received_book_release/'+id,
+                        method: 'get',
+                        type: 'json',
+                        success:function(data){
+                            swal('Book Release Pending Again!', '', 'success');
+                            pickRefresh();
+                        }
+                    })
+                }
+            });
+        });
+
+        $(document).on('click', '.pending_release', function(){
+            var id = $(this).attr('id');
+
+            swal({
+                title: 'Book Release back to Pending?',
+                type: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!'
+            }).then((result) => {
+                if(result.value){
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: '/pending_book_release/'+id,
+                        method: 'get',
+                        type: 'json',
+                        success:function(data){
+                            swal('Book Received!', '', 'success');
+                            pickRefresh();
+                        }
+                    })
+                }
+            });
+        });
+
+        $(document).on('click', '.return_release', function(){
+            var id = $(this).attr('id');
+
+            swal({
+                title: 'Return Book Released?',
+                type: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!'
+            }).then((result) => {
+                if(result.value){
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: '/return_book_release/'+id,
+                        method: 'get',
+                        type: 'json',
+                        success:function(data){
+                            swal('Book Returned!', '', 'success');
+                            pickRefresh();
+                        }
+                    })
                 }
             });
         });

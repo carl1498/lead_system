@@ -741,7 +741,7 @@
                         data: {id: id},
                         dataType: 'text',
                         success: function(data){
-                            swal('This Student has backed out!', 'warning');
+                            swal('This Student has backed out!', '', 'warning');
 
                             refresh_student_branch();
                             refresh_student_status();
@@ -836,7 +836,7 @@
                         data: {id: id},
                         dataType: 'text',
                         success: function(data){
-                            swal('Student COE Denied', 'warning');
+                            swal('Student COE Denied', '', 'warning');
 
                             refresh_student_branch();
                             refresh_student_status();
@@ -867,7 +867,7 @@
                         data: {id: id},
                         dataType: 'text',
                         success: function(data){
-                            swal('Student Cancelled', 'warning');
+                            swal('Student Cancelled', '', 'warning');
 
                             refresh_student_branch();
                             refresh_student_status();
