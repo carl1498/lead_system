@@ -165,6 +165,9 @@
                 stateLoadCallback: function(settings) {
                     return JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ) )
                 },
+                stateLoadParams: function( settings, data ) {
+                    if (data.order) delete data.order;
+                },
                 processing: true,
                 destroy: true,
                 scrollX: true,
