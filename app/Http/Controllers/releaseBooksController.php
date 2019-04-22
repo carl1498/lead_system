@@ -39,14 +39,14 @@ class releaseBooksController extends Controller
         $branch = $request->branch_id;
         $book = pending_request::with('book_type')->where('branch_id', $branch)
             ->whereHas('book_type', function($query) use ($request) {
-                $query->where('name', 'LIKE', '%'.$request->name.'%');
+                $query->where('description', 'LIKE', '%'.$request->name.'%');
             })
             ->where('pending', '>', 0)->get();
         $array = [];
         foreach ($book as $key => $value){
             $array[] = [
                 'id' =>$value['book_type_id'],
-                'text' => $value['book_type']['name']
+                'text' => $value['book_type']['description']
             ];
         }
         return json_encode(['results' => $array]);
@@ -116,6 +116,7 @@ class releaseBooksController extends Controller
 
     public function view_release_books(Request $request){
         $book_type_select = $request->book_type_select;
+        $branch_select = $request->branch_select;
         $get_branch = employee::with('branch')->where('id', Auth::user()->emp_id)->first();
         $branch = $get_branch->branch->name;
 
@@ -127,6 +128,10 @@ class releaseBooksController extends Controller
 
         if($book_type_select != 'All'){
             $release_books = $release_books->where('pending_request.book_type_id', $book_type_select);
+        }
+
+        if($branch_select != 'All'){
+            $release_books = $release_books->where('pending_request.branch_id', $branch_select);
         }
 
         return Datatables::of($release_books)

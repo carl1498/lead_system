@@ -33,11 +33,13 @@ class returnBookController extends Controller
 
     public function view_books_return(Request $request){
         $book_type_select = $request->book_type_select;
+        $branch_select = $request->branch_select;
+        $invoice_select = $request->invoice_select;
         $get_branch = employee::with('branch')->where('id', Auth::user()->emp_id)->first();
         $branch_name = $get_branch->branch->name;
         $branch = $get_branch->branch->id;
 
-        $return_books = return_books::with('books.reference_no', 'books.book_type', 'student')->get();
+        $return_books = return_books::with('books.reference_no', 'books.book_type', 'books.branch', 'student')->get();
 
         if($branch_name != 'Makati'){
             $return_books = $return_books->where('books.branch_id', $branch);
@@ -45,6 +47,14 @@ class returnBookController extends Controller
 
         if($book_type_select != 'All'){
             $return_books = $return_books->where('books.book_type_id', $book_type_select);
+        }
+        
+        if($branch_select != 'All'){
+            $return_books = $return_books->where('books.branch_id', $branch_select);
+        }
+        
+        if($invoice_select != 'All'){
+            $return_books = $return_books->where('books.invoice_ref_id', $invoice_select);
         }
     
         return Datatables::of($return_books)

@@ -71,6 +71,7 @@ class requestBooksController extends Controller
 
     public function view_request_books(Request $request){
         $book_type_select = $request->book_type_select;
+        $branch_select = $request->branch_select;
         $get_branch = employee::with('branch')->where('id', Auth::user()->emp_id)->first();
         $branch = $get_branch->branch->name;
 
@@ -82,6 +83,10 @@ class requestBooksController extends Controller
 
         if($book_type_select != 'All'){
             $request_books = $request_books->where('pending_request.book_type_id', $book_type_select);
+        }
+
+        if($branch_select != 'All'){
+            $request_books = $request_books->where('pending_request.branch_id', $branch_select);
         }
         
         return Datatables::of($request_books)

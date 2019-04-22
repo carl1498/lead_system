@@ -80,6 +80,8 @@
         var book_type_select = $('#book_type_select').val();
         var student_status_select = $('#student_status_select').val();
         var program_select = $('#program_select').val();
+        var branch_select = $('#branch_select').val();
+        var invoice_select = $('#invoice_select').val();
 
 
         $('body').tooltip({
@@ -115,21 +117,36 @@
             placeholder: "Select Branch"
         });
 
-        //Hide book type select on load
-        $('.book_type_select').hide();
-        $('#book_type_select').next(".select2-container").hide();
-
         $('.books_pick').on('click', function(){
             current_tab = $(this).text();
             pickRefresh();
         })
 
         function pickRefresh(){
-            if(current_tab != 'Branch'){
-                $('.status_select').hide();
-                $('#status_select').next(".select2-container").hide();
+            if(current_tab != 'Branch' && current_tab != 'Student'){
                 $('.book_type_select').show();
                 $('#book_type_select').next(".select2-container").show();
+            }
+            else{
+                $('.book_type_select').hide();
+                $('#book_type_select').next(".select2-container").hide();
+            }
+
+            if(current_tab != 'Branch'){
+                $('.branch_select').show();
+                $('#branch_select').next(".select2-container").show();
+
+                $('.status_select').hide();
+                $('#status_select').next(".select2-container").hide();
+            }
+
+            if(current_tab != 'Student' && current_tab != 'Request History' && current_tab != 'Release History'){
+                $('.invoice_select').show();
+                $('#invoice_select').next(".select2-container").show();
+            }
+            else{
+                $('.invoice_select').hide();
+                $('#invoice_select').next(".select2-container").hide();
             }
 
             if(current_tab != 'Student'){
@@ -142,17 +159,18 @@
             if(current_tab == 'Branch'){
                 $('.status_select').show();
                 $('#status_select').next(".select2-container").show();
-                $('.book_type_select').hide();
-                $('#book_type_select').next(".select2-container").hide();
+
+                $('.branch_select').hide();
+                $('#branch_select').next(".select2-container").hide();
+
                 refresh_books_branch_table();
             }
             else if(current_tab == 'Student'){
-                $('.book_type_select').hide();
-                $('#book_type_select').next(".select2-container").hide();
                 $('.student_status_select').show();
                 $('#student_status_select').next(".select2-container").show();
                 $('.program_select').show();
                 $('#program_select').next(".select2-container").show();
+
                 refresh_books_student_table();
             }
             else if(current_tab == 'Books'){
@@ -204,7 +222,13 @@
                     leftColumns: 3
                 },
                 responsive: true,
-                ajax: '/view_request_books/'+book_type_select,
+                ajax: {
+                    url: '/view_request_books',
+                    data: {
+                        book_type_select: book_type_select,
+                        branch_select: branch_select,
+                    }
+                },
                 columns: [
                     {data: 'id', name: 'id'},
                     {data: 'pending_request.branch.name', name: 'branch'},
@@ -252,10 +276,16 @@
                 scrollX: true,
                 scrollCollapse: true,
                 fixedColumns: {
-                    leftColumns: 2
+                    leftColumns: 3
                 },
                 responsive: true,
-                ajax: '/view_release_books/'+book_type_select,
+                ajax: {
+                    url: '/view_release_books',
+                    data: {
+                        book_type_select: book_type_select,
+                        branch_select: branch_select,
+                    }
+                },
                 columns: [
                     {data: 'id', name: 'id'},
                     {data: 'pending_request.branch.name', name: 'branch'},
@@ -308,12 +338,20 @@
                     leftColumns: 1
                 },
                 responsive: true,
-                ajax: '/view_assign_books/'+book_type_select,
+                ajax: {
+                    url: '/view_assign_books',
+                    data: {
+                        book_type_select: book_type_select,
+                        branch_select: branch_select,
+                        invoice_select: invoice_select,
+                    }
+                },
                 columns: [
                     {data: 'student_name', name: 'name'},
                     {data: 'student.branch.name', name: 'branch'},
                     {data: 'books.book_type.description', name: 'book'},
                     {data: 'books.name', name: 'book_no'},
+                    {data: 'books.reference_no.invoice_ref_no', name: 'reference_no'},
                     {data: 'created_at', name: 'date'},
                 ],
                 columnDefs: [
@@ -321,10 +359,11 @@
                     { width: 150, targets: 1 }, //branch
                     { width: 150, targets: 2 }, //book
                     { width: 100, targets: 3 }, //book no.
-                    { width: 200, targets: 4 }, //date
+                    { width: 130, targets: 4 }, //reference no.
+                    { width: 200, targets: 5 }, //date
                 ],
                 order: [[
-                    4, 'desc'
+                    5, 'desc'
                 ]]
             });
         }
@@ -350,6 +389,14 @@
                 },
                 responsive: true,
                 ajax: '/view_books/'+book_type_select,
+                ajax: {
+                    url: '/view_books',
+                    data: {
+                        book_type_select: book_type_select,
+                        branch_select: branch_select,
+                        invoice_select: invoice_select,
+                    }
+                },
                 columns: [
                     {data: 'book_type.description', name: 'book_type'},
                     {data: 'name', name: 'book_no'},
@@ -402,7 +449,8 @@
                     url: '/view_student_books',
                     data:{ 
                         student_status_select: student_status_select,
-                        program_select: program_select
+                        program_select: program_select,
+                        branch_select: branch_select,
                     }
                 },
                 columns: [
@@ -457,7 +505,13 @@
                     {extend: 'pdfHtml5', title: 'LEAD System - '+book_status+' Books' },
                 ],
                 responsive: true,
-                ajax: '/view_branch_books/'+book_status,
+                ajax: {
+                    url: '/view_branch_books',
+                    data: {
+                        book_status: book_status,
+                        invoice_select: invoice_select,
+                    }
+                },
                 columns: [
                     {data: 'name', name: 'branch'},
                     {data: 'book_1', name: 'book_1'},
@@ -489,7 +543,7 @@
                 stateLoadParams: function( settings, data ) {
                     if (data.order) delete data.order;
                 },
-                dom: 'Bflrtip',
+                //dom: 'Bflrtip',
                 processing: true,
                 scrollX: true,
                 destroy: true,
@@ -497,16 +551,20 @@
                 fixedColumns: {
                     leftColumns: 1
                 },
-                buttons: [
-                    {extend: 'print', title: 'LEAD System - '+book_status+' Books' },
-                    {extend: 'pdfHtml5', title: 'LEAD System - '+book_status+' Books' },
-                ],
                 responsive: true,
-                ajax: '/view_books_lost/'+book_type_select,
+                ajax: {
+                    url: '/view_books_lost',
+                    data: {
+                        book_type_select: book_type_select,
+                        branch_select: branch_select,
+                        invoice_select: invoice_select,
+                    }
+                },
                 columns: [
                     {data: 'books.book_type.description', name: 'book'},
                     {data: 'books.name', name: 'book_no'},
                     {data: 'books.reference_no.invoice_ref_no', name: 'invoice_ref_no'},
+                    {data: 'books.branch.name', name: 'branch'},
                     {data: 'stud_id', name: 'student_name'},
                     {data: 'created_at', name: 'date'},
                 ],
@@ -514,11 +572,12 @@
                     { width: 170, targets: 0 }, //book type
                     { width: 130, targets: 1 }, //book no
                     { width: 130, targets: 2 }, //invoice ref no
-                    { width: 250, targets: 3 }, //student name
-                    { width: 130, targets: 4 }, //date
+                    { width: 70, targets: 3 }, //branch
+                    { width: 250, targets: 4 }, //student name
+                    { width: 130, targets: 5 }, //date
                 ],
                 order: [[
-                    4, 'desc'
+                    5, 'desc'
                 ]]
             });
         }
@@ -543,11 +602,19 @@
                     leftColumns: 1
                 },
                 responsive: true,
-                ajax: '/view_books_return/'+book_type_select,
+                ajax: {
+                    url: '/view_books_return',
+                    data: {
+                        book_type_select: book_type_select,
+                        branch_select: branch_select,
+                        invoice_select: invoice_select,
+                    }
+                },
                 columns: [
                     {data: 'books.book_type.description', name: 'book'},
                     {data: 'books.name', name: 'book_no'},
                     {data: 'books.reference_no.invoice_ref_no', name: 'invoice_ref_no'},
+                    {data: 'books.branch.name', name: 'branch'},
                     {data: 'stud_id', name: 'student_name'},
                     {data: 'created_at', name: 'date'},
                 ],
@@ -555,11 +622,12 @@
                     { width: 170, targets: 0 }, //book type
                     { width: 130, targets: 1 }, //book no
                     { width: 130, targets: 2 }, //invoice ref no
-                    { width: 250, targets: 3 }, //student name
-                    { width: 130, targets: 4 }, //date
+                    { width: 70, targets: 3 }, //branch
+                    { width: 250, targets: 4 }, //student name
+                    { width: 130, targets: 5 }, //date
                 ],
                 order: [[
-                    4, 'desc'
+                    5, 'desc'
                 ]]
             });
         }
@@ -587,6 +655,16 @@
 
         $('#program_select').on('change', function(){
             program_select = $(this).val();
+            pickRefresh();
+        });
+
+        $('#branch_select').on('change', function(){
+            branch_select = $(this).val();
+            pickRefresh();
+        });
+        
+        $('#invoice_select').on('change', function(){
+            invoice_select = $(this).val();
             pickRefresh();
         });
 

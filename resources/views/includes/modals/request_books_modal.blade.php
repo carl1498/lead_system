@@ -23,7 +23,7 @@
                                     <select type="text" id="request_book" name="request_book" class="form-control select2 required" style="width: 100%;" required>
                                         <option value="">Select Book</option>
                                         @foreach($book_type as $b)
-                                            <option value="{{ $b->id }}">{{ $b->name }}</option>
+                                            <option value="{{ $b->id }}">{{ $b->description }}</option>
                                         @endforeach
                                     </select>
                                 </div>

@@ -120,11 +120,11 @@ Route::group(['middleware' => ['auth', 'book_management']], function(){
     //Book Management
     Route::get('/book_management', 'bookManagementController@index');
     Route::get('/view_student_books', 'bookManagementController@view_student_books');
-    Route::get('/view_books/{book_type_select}', 'bookManagementController@view_books');
-    Route::get('/view_branch_books/{book_status}', 'bookManagementController@view_branch_books');
+    Route::get('/view_books', 'bookManagementController@view_books');
+    Route::get('/view_branch_books', 'bookManagementController@view_branch_books');
     
     //Request Books
-    Route::get('/view_request_books/{book_type_select}', 'requestBooksController@view_request_books');
+    Route::get('/view_request_books', 'requestBooksController@view_request_books');
     Route::get('/getRequestPending/{book_type}', 'requestBooksController@get_pending');
     Route::get('/approve_book_request/{id}', 'requestBooksController@approve_book_request');
     Route::get('/delivered_book_request/{id}', 'requestBooksController@delivered_book_request');
@@ -133,7 +133,7 @@ Route::group(['middleware' => ['auth', 'book_management']], function(){
     Route::post('/save_book_request', 'requestBooksController@save_book_request');
     
     //Release Books
-    Route::get('/view_release_books/{book_type_select}', 'releaseBooksController@view_release_books');
+    Route::get('/view_release_books', 'releaseBooksController@view_release_books');
     Route::get('/get_release_branch', 'releaseBooksController@get_branch');
     Route::get('/get_release_books/{branch_id}', 'releaseBooksController@get_books');
     Route::get('/get_release_pending/{book_type}/{branch_id}', 'releaseBooksController@get_pending');
@@ -143,18 +143,18 @@ Route::group(['middleware' => ['auth', 'book_management']], function(){
     Route::get('/return_book_release/{id}', 'releaseBooksController@return_book_release');
     
     //Assign Books
-    Route::get('/view_assign_books/{book_type_select}', 'assignBooksController@view_assign_books');
+    Route::get('/view_assign_books', 'assignBooksController@view_assign_books');
     Route::get('/get_assign_student', 'assignBooksController@get_student');
     Route::get('/get_available_book_type/{student_id}', 'assignBooksController@get_available_book_type');
     Route::get('/get_available_book/{book_type}', 'assignBooksController@get_available_book');
     Route::post('/save_book_assign', 'assignBooksController@save_book_assign');
     
     //Lost Books
-    Route::get('/view_books_lost/{book_type_select}', 'lostBookController@view_books_lost');
+    Route::get('/view_books_lost', 'lostBookController@view_books_lost');
     Route::get('/lost_book/{id}', 'lostBookController@lost_book');
     
     //Return Books
-    Route::get('/view_books_return/{book_type_select}', 'returnBookController@view_books_return');
+    Route::get('/view_books_return', 'returnBookController@view_books_return');
     Route::get('/return_book/{id}', 'returnBookController@return_book');
 });
 
