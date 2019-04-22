@@ -7,10 +7,10 @@
     <option value="Lost">Lost</option>
 </select>
 <label class="book_type_select">Book: </label>
-<select type="text" id="book_type_select" class="book_status_select form-control select2" style="width: 100px;">
+<select type="text" id="book_type_select" class="book_status_select form-control select2" style="width: 200px;">
     <option value="All">All</option>
     @foreach ($book_type as $b)
-    <option value="{{ $b->id }}">{{ $b->name }}</option>
+    <option value="{{ $b->id }}">{{ $b->description }}</option>
     @endforeach
 </select>
 <label class="student_status_select">Student Status: </label>

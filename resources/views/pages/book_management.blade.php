@@ -208,7 +208,7 @@
                 columns: [
                     {data: 'id', name: 'id'},
                     {data: 'pending_request.branch.name', name: 'branch'},
-                    {data: 'pending_request.book_type.name', name: 'book'},
+                    {data: 'pending_request.book_type.description', name: 'book'},
                     {data: 'previous_pending', name: 'previous_pending'},
                     {data: 'quantity', name: 'quantity'},
                     {data: 'pending', name: 'pending'},
@@ -220,7 +220,7 @@
                 columnDefs: [
                     { width: 30, targets: 0 }, //id
                     { width: 80, targets: 1 }, //branch
-                    { width: 80, targets: 2 }, //book type
+                    { width: 150, targets: 2 }, //book type
                     { width: 70, targets: 3 }, //previous
                     { width: 70, targets: 4 }, //quantity
                     { width: 70, targets: 5 }, //pending
@@ -259,7 +259,7 @@
                 columns: [
                     {data: 'id', name: 'id'},
                     {data: 'pending_request.branch.name', name: 'branch'},
-                    {data: 'pending_request.book_type.name', name: 'book'},
+                    {data: 'pending_request.book_type.description', name: 'book'},
                     {data: 'previous_pending', name: 'previous_pending'},
                     {data: 'quantity', name: 'quantity'},
                     {data: 'pending', name: 'pending'},
@@ -270,9 +270,9 @@
                     {data: 'action', orderable: false, searchable: false}
                 ],
                 columnDefs: [
-                    { width: 30, targets: 0 }, //branch
+                    { width: 30, targets: 0 }, //id
                     { width: 80, targets: 1 }, //branch
-                    { width: 80, targets: 2 }, //book type
+                    { width: 150, targets: 2 }, //book type
                     { width: 70, targets: 3 }, //previous
                     { width: 70, targets: 4 }, //quantity
                     { width: 70, targets: 5 }, //pending
@@ -312,7 +312,7 @@
                 columns: [
                     {data: 'student_name', name: 'name'},
                     {data: 'student.branch.name', name: 'branch'},
-                    {data: 'books.book_type.name', name: 'book'},
+                    {data: 'books.book_type.description', name: 'book'},
                     {data: 'books.name', name: 'book_no'},
                     {data: 'created_at', name: 'date'},
                 ],
@@ -351,7 +351,7 @@
                 responsive: true,
                 ajax: '/view_books/'+book_type_select,
                 columns: [
-                    {data: 'book_type.name', name: 'book_type'},
+                    {data: 'book_type.description', name: 'book_type'},
                     {data: 'name', name: 'book_no'},
                     {data: 'reference_no.lead_ref_no', name: 'lead_ref_no'},
                     {data: 'reference_no.invoice_ref_no', name: 'invoice_ref_no'},
@@ -361,7 +361,7 @@
                     {data: 'action', orderable: false, searchable: false}
                 ],
                 columnDefs: [
-                    { width: 80, targets: 0 }, //book type
+                    { width: 150, targets: 0 }, //book type
                     { width: 80, targets: 1 }, //book no.
                     { width: 130, targets: 2 }, //lead ref no
                     { width: 130, targets: 3 }, //invoice ref no
@@ -420,11 +420,11 @@
                 columnDefs: [
                     { width: 250, targets: 0 }, //student name
                     { width: 100, targets: 1 }, //branch
-                    { width: 50, targets: 2 }, //book 1
-                    { width: 50, targets: 3 }, //wb 1
-                    { width: 50, targets: 4 }, //book 2
-                    { width: 50, targets: 5 }, //wb 2
-                    { width: 50, targets: 6 }, //kanji
+                    { width: 60, targets: 2 }, //book 1
+                    { width: 60, targets: 3 }, //wb 1
+                    { width: 60, targets: 4 }, //book 2
+                    { width: 60, targets: 5 }, //wb 2
+                    { width: 60, targets: 6 }, //kanji
                     { width: 150, targets: 7 }, //program
                     { width: 110, targets: 8 }, //status
                     { width: 110, targets: 9 }, //departure
@@ -504,14 +504,14 @@
                 responsive: true,
                 ajax: '/view_books_lost/'+book_type_select,
                 columns: [
-                    {data: 'books.book_type.name', name: 'book'},
+                    {data: 'books.book_type.description', name: 'book'},
                     {data: 'books.name', name: 'book_no'},
                     {data: 'books.reference_no.invoice_ref_no', name: 'invoice_ref_no'},
                     {data: 'stud_id', name: 'student_name'},
                     {data: 'created_at', name: 'date'},
                 ],
                 columnDefs: [
-                    { width: 170, targets: 0 }, //book
+                    { width: 170, targets: 0 }, //book type
                     { width: 130, targets: 1 }, //book no
                     { width: 130, targets: 2 }, //invoice ref no
                     { width: 250, targets: 3 }, //student name
@@ -545,14 +545,14 @@
                 responsive: true,
                 ajax: '/view_books_return/'+book_type_select,
                 columns: [
-                    {data: 'books.book_type.name', name: 'book'},
+                    {data: 'books.book_type.description', name: 'book'},
                     {data: 'books.name', name: 'book_no'},
                     {data: 'books.reference_no.invoice_ref_no', name: 'invoice_ref_no'},
                     {data: 'stud_id', name: 'student_name'},
                     {data: 'created_at', name: 'date'},
                 ],
                 columnDefs: [
-                    { width: 170, targets: 0 }, //book
+                    { width: 170, targets: 0 }, //book type
                     { width: 130, targets: 1 }, //book no
                     { width: 130, targets: 2 }, //invoice ref no
                     { width: 250, targets: 3 }, //student name
