@@ -11,6 +11,7 @@ use App\student;
 use App\program;
 use App\pending_request;
 use App\reference_no;
+use App\invoice;
 use Auth;
 use Yajra\Datatables\Datatables;
 
@@ -194,8 +195,24 @@ class bookManagementController extends Controller
                 }
             }
             else if($status == 'Pending'){
-                $book = pending_request::where('branch_id', $data->id)->where('book_type_id', $get_book_id)->first();
-                $book = ($book) ? $book->pending : 0;
+                if($data->name == 'Makati'){
+                    if($invoice_select == 'All'){
+                        $invoice = invoice::where('book_type_id', $get_book_id)->get();
+                        $book = 0;
+                        foreach($invoice as $i){
+                            $book += $i->pending;
+                        }
+                    }
+                    else{
+                        $book = invoice::where('book_type_id', $get_book_id)
+                            ->where('ref_no_id', $invoice_select)->first();
+                        $book = $book->pending;
+                    }
+                }
+                else{
+                    $book = pending_request::where('branch_id', $data->id)->where('book_type_id', $get_book_id)->first();
+                    $book = ($book) ? $book->pending : 0;
+                }
             }
             else{
                 if($invoice_select == 'All'){
@@ -224,8 +241,24 @@ class bookManagementController extends Controller
                 }
             }
             else if($status == 'Pending'){
-                $book = pending_request::where('branch_id', $data->id)->where('book_type_id', $get_book_id)->first();
-                $book = ($book) ? $book->pending : 0;
+                if($data->name == 'Makati'){
+                    if($invoice_select == 'All'){
+                        $invoice = invoice::where('book_type_id', $get_book_id)->get();
+                        $book = 0;
+                        foreach($invoice as $i){
+                            $book += $i->pending;
+                        }
+                    }
+                    else{
+                        $book = invoice::where('book_type_id', $get_book_id)
+                            ->where('ref_no_id', $invoice_select)->first();
+                        $book = $book->pending;
+                    }
+                }
+                else{
+                    $book = pending_request::where('branch_id', $data->id)->where('book_type_id', $get_book_id)->first();
+                    $book = ($book) ? $book->pending : 0;
+                }
             }
             else{
                 if($invoice_select == 'All'){
@@ -254,8 +287,24 @@ class bookManagementController extends Controller
                 }
             }
             else if($status == 'Pending'){
-                $book = pending_request::where('branch_id', $data->id)->where('book_type_id', $get_book_id)->first();
-                $book = ($book) ? $book->pending : 0;
+                if($data->name == 'Makati'){
+                    if($invoice_select == 'All'){
+                        $invoice = invoice::where('book_type_id', $get_book_id)->get();
+                        $book = 0;
+                        foreach($invoice as $i){
+                            $book += $i->pending;
+                        }
+                    }
+                    else{
+                        $book = invoice::where('book_type_id', $get_book_id)
+                            ->where('ref_no_id', $invoice_select)->first();
+                        $book = $book->pending;
+                    }
+                }
+                else{
+                    $book = pending_request::where('branch_id', $data->id)->where('book_type_id', $get_book_id)->first();
+                    $book = ($book) ? $book->pending : 0;
+                }
             }
             else{
                 if($invoice_select == 'All'){
@@ -284,8 +333,24 @@ class bookManagementController extends Controller
                 }
             }
             else if($status == 'Pending'){
-                $book = pending_request::where('branch_id', $data->id)->where('book_type_id', $get_book_id)->first();
-                $book = ($book) ? $book->pending : 0;
+                if($data->name == 'Makati'){
+                    if($invoice_select == 'All'){
+                        $invoice = invoice::where('book_type_id', $get_book_id)->get();
+                        $book = 0;
+                        foreach($invoice as $i){
+                            $book += $i->pending;
+                        }
+                    }
+                    else{
+                        $book = invoice::where('book_type_id', $get_book_id)
+                            ->where('ref_no_id', $invoice_select)->first();
+                        $book = $book->pending;
+                    }
+                }
+                else{
+                    $book = pending_request::where('branch_id', $data->id)->where('book_type_id', $get_book_id)->first();
+                    $book = ($book) ? $book->pending : 0;
+                }
             }
             else{
                 if($invoice_select == 'All'){
@@ -314,8 +379,24 @@ class bookManagementController extends Controller
                 }
             }
             else if($status == 'Pending'){
-                $book = pending_request::where('branch_id', $data->id)->where('book_type_id', $get_book_id)->first();
-                $book = ($book) ? $book->pending : 0;
+                if($data->name == 'Makati'){
+                    if($invoice_select == 'All'){
+                        $invoice = invoice::where('book_type_id', $get_book_id)->get();
+                        $book = 0;
+                        foreach($invoice as $i){
+                            $book += $i->pending;
+                        }
+                    }
+                    else{
+                        $book = invoice::where('book_type_id', $get_book_id)
+                            ->where('ref_no_id', $invoice_select)->first();
+                        $book = $book->pending;
+                    }
+                }
+                else{
+                    $book = pending_request::where('branch_id', $data->id)->where('book_type_id', $get_book_id)->first();
+                    $book = ($book) ? $book->pending : 0;
+                }
             }
             else{
                 if($invoice_select == 'All'){

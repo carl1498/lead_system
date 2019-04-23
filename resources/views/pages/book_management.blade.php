@@ -356,7 +356,7 @@
                 ],
                 columnDefs: [
                     { width: 250, targets: 0 }, //student name
-                    { width: 150, targets: 1 }, //branch
+                    { width: 80, targets: 1 }, //branch
                     { width: 150, targets: 2 }, //book
                     { width: 100, targets: 3 }, //book no.
                     { width: 130, targets: 4 }, //reference no.
