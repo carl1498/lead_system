@@ -496,6 +496,7 @@ class studentController extends Controller
         $student->age = $request->s_age;
         $student->contact = $request->s_contact;
         $student->program = $request->s_program;
+        //WA PA NI NAHUMAN
     }
 
     public function get_student(Request $request){
