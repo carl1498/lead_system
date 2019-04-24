@@ -119,6 +119,7 @@
                     <li><a class="status_pick" href="#students_status_tab" data-toggle="tab">Back Out / Cancelled</a></li>
                     <li><a class="result_pick" href="#students_result_tab" data-toggle="tab">Result Monitoring</a></li>
                     <li><a class="language_pick" href="#language_student_tab" data-toggle="tab">Language</a></li>
+                    <li><a class="ssv_pick" href="#language_student_tab" data-toggle="tab">SSV</a></li>
                 </ul>
 
                 <div class="tab-content">

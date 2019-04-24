@@ -78,7 +78,7 @@ class studentSettingsController extends Controller
         }
         else{
             if($current_settings == 'Program'){
-                $settings = program::where('name', 'Language Only')->get();
+                $settings = program::find($id);
             }
             else if($current_settings == 'School'){
                 $settings = school::find($id);

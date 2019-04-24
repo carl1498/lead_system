@@ -441,7 +441,6 @@ class studentController extends Controller
         $student->branch_id = $request->l_branch;
         $student->course_id = $request->l_course;
         $student->departure_year_id = $request->l_year;
-        $student->departure_month_id = 1;
         $student->remarks = $request->l_remarks;
         $student->save();
     }

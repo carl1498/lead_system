@@ -10,12 +10,14 @@
             <ul class="nav nav-tabs" id="student_type_tab">
                 <li><a class="student_type" href="#student_form" data-toggle="tab">Student</a></li>
                 <li><a class="student_type" href="#language_student_form" data-toggle="tab">Language Only</a></li>
+                <li><a class="student_type" href="#ssv_student_form" data-toggle="tab">SSV</a></li>
             </ul>
 
             <div class="tab-content">
                 
                 @include('includes.modals.forms.student_form')
                 @include('includes.modals.forms.language_student_form')
+                @include('includes.modals.forms.ssv_student_form')
 
             </div>
 
