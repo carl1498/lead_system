@@ -37,6 +37,7 @@ Route::group(['middleware' => ['auth', 'student_list']], function(){
     Route::get('/student_status', 'studentController@status');
     Route::get('/student_result', 'studentController@result');
     Route::get('/language_student', 'studentController@language');
+    Route::get('/ssv_student', 'studentController@ssv');
     
     Route::get('/continue_student', 'studentController@continue_student');
     Route::get('/backout_student', 'studentController@backout_student');
@@ -46,6 +47,7 @@ Route::group(['middleware' => ['auth', 'student_list']], function(){
     Route::get('/programAll', 'studentController@program_all');
     Route::get('/schoolAll', 'studentController@school_all');
     Route::get('/benefactorAll', 'studentController@benefactor_all');
+    Route::get('/programSSV', 'studentController@program_ssv');
 
     //Result Monitoring
     Route::get('/approve_student', 'studentController@approve_student');
@@ -54,6 +56,7 @@ Route::group(['middleware' => ['auth', 'student_list']], function(){
 
     Route::post('/save_student', 'studentController@save_student');
     Route::post('/save_language_student', 'studentController@save_language_student');
+    Route::post('/save_ssv_student', 'studentController@save_ssv_student');
     Route::get('/get_student', 'studentController@get_student');
     Route::get('/delete_student', 'studentController@delete_student');
 

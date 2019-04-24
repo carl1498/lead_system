@@ -160,6 +160,7 @@
         var students_status;
         var students_result;
         var language_students;
+        var ssv_students;
 
         $.ajax({
             headers: {
@@ -173,7 +174,6 @@
                 departure_year = $('#year_select').val();
 			}
 		});
-
         
         $(".datepicker").datepicker({
             format: 'yyyy-mm-dd',
@@ -310,7 +310,6 @@
 
         var columns_language_students = [
             {data: 'name', name: 'name'},
-            {data: 'branch.name', name: 'branch'},
             {data: 'contact', name: 'contact'},
             {data: 'gender', name: 'gender'},
             {data: 'age', name: 'age'},
@@ -330,6 +329,33 @@
             { width: 120, targets: 6 }, //referral
             { width: 250, targets: 7 }, //remarks
             { width: 150, targets: 8 }, //action
+            {defaultContent: "", targets: "_all"}
+        ]
+
+        var columns_ssv_students = [
+            {data: 'name', name: 'name'},
+            {data: 'contact', name: 'contact'},
+            {data: 'gender', name: 'gender'},
+            {data: 'age', name: 'age'},
+            {data: 'program.name', name: 'program'},
+            {data: 'benefactor.name', name: 'benefactor'},
+            {data: 'course.name', name: 'course'},
+            {data: 'referral.fname', name: 'referral'},
+            {data: 'remarks', name: 'remarks'},
+            {data: "action", orderable:false,searchable:false}
+        ]
+
+        var columnDef_ssv_students = [
+            { width: 220, targets: 0 }, //name
+            { width: 90, targets: 1 }, //contact
+            { width: 60, targets: 2 }, //gender
+            { width: 45, targets: 3 }, //age
+            { width: 130, targets: 4 }, //program
+            { width: 130, targets: 5 }, //benefactor
+            { width: 200, targets: 6 }, //course
+            { width: 120, targets: 7 }, //referral
+            { width: 250, targets: 8 }, //remarks
+            { width: 150, targets: 9 }, //action
             {defaultContent: "", targets: "_all"}
         ]
 
@@ -473,6 +499,38 @@
             });
         }
 
+        function refresh_ssv_student(){
+            
+            departure_year = $('#year_select').val();
+
+            ssv_students = $('#ssv_students').DataTable({
+                stateSave: true,
+                stateSaveCallback: function(settings,data) {
+                    localStorage.setItem( 'DataTables_' + settings.sInstance, JSON.stringify(data) )
+                },
+                stateLoadCallback: function(settings) {
+                    return JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ) )
+                },
+                stateLoadParams: function( settings, data ) {
+                    if (data.order) delete data.order;
+                },
+                processing: true,
+                destroy: true,
+                scrollX: true,
+                scrollCollapse: true,
+                fixedColumns: true,
+                responsive: true,
+                ajax: {
+                    url: '/ssv_student',
+                    data: {
+                        departure_year: departure_year
+                    }
+                },
+                columnDefs: columnDef_ssv_students,
+                columns: columns_ssv_students,
+            });
+        }
+
         //DATATABLES -- END
 
         //FUNCTIONS -- START
@@ -512,11 +570,20 @@
             $('.select_description').text('Year:');
         });
 
+        $('.ssv_pick').on('click', function(){
+            refresh_ssv_student();
+            
+            $('.month_select').hide();
+            $('#month_select').next(".select2-container").hide();
+            $('.select_description').text('Year:');
+        });
+
         $(document).on('change', '#year_select, #month_select', function(){
             refresh_student_branch();
             refresh_student_status();
             refresh_student_result();
             refresh_language_student();
+            refresh_ssv_student();
         });
 
         $('.save_student').on('click', function(e){
@@ -573,6 +640,37 @@
                     button.disabled = false;
                     input.html('SAVE CHANGES');
                     refresh_language_student();
+                },
+                error: function(data){
+                    swal("Oh no!", "Something went wrong, try again.", "error");
+                    button.disabled = false;
+                    input.html('SAVE CHANGES');
+                }
+            });
+        });
+
+        $('.save_ssv_student').on('click', function(e){
+            e.preventDefault();
+
+            var input = $(this);
+            var button = this;
+
+            button.disabled = true;
+            input.html('SAVING...');
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '/save_ssv_student',
+                method: 'POST',
+                data: $('#ssv_student_form').serialize(),
+                success: function(data){
+                    swal('Success!', 'Record has been saved to the Database!', 'success');
+                    $('#student_modal').modal('hide');
+                    button.disabled = false;
+                    input.html('SAVE CHANGES');
+                    refresh_ssv_student();
                 },
                 error: function(data){
                     swal("Oh no!", "Something went wrong, try again.", "error");
@@ -1005,6 +1103,28 @@
             },
         });
 
+        $('#s_program').select2({
+            allowClear: true,
+            placeholder: 'Select Program',
+            ajax: {
+                url: "/programSSV",
+                dataType: 'json',
+
+                data: function (params){
+                    return {
+                        name: params.term,
+                        page:params.page
+                    }
+                },
+                
+                processResults: function (data){
+                    return {
+                        results:data.results      
+                    }
+                }
+            },
+        });
+
         //School Select 2
         $('#school').select2({
             allowClear: true,
@@ -1030,6 +1150,28 @@
 
         //Benefactor Select 2
         $('#benefactor').select2({
+            allowClear: true,
+            placeholder: 'Select Benefactor',
+            ajax: {
+                url: "/benefactorAll",
+                dataType: 'json',
+
+                data: function (params){
+                    return {
+                        name: params.term,
+                        page:params.page
+                    }
+                },
+                
+                processResults: function (data){
+                    return {
+                        results:data.results      
+                    }
+                }
+            },
+        });
+
+        $('#s_benefactor').select2({
             allowClear: true,
             placeholder: 'Select Benefactor',
             ajax: {

@@ -78,14 +78,8 @@
                         <label for="s_program" class="pull-right">Program</label>
                 </div>
                 <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
-                    <div class="form-group">
+                    <div class="form-group required">
                         <select type="text" id="s_program" name="s_program" class="form-control select2" style="width: 100%;">
-                            <option value="" disabled selected>Select Program</option>
-                            @foreach($program as $p)
-                                @if($p->name == 'SSV (Careworker)' || $p->name == 'SSV (Hospitality)')
-                                <option value="{{ $p->id }}">{{ $p->name }}</option>
-                                @endif
-                            @endforeach
                         </select>
                     </div>
                 </div>

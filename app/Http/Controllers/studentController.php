@@ -196,6 +196,35 @@ class studentController extends Controller
         ->make(true);
     }
 
+    public function ssv(Request $request){
+        $departure_year = $request->departure_year;
+
+        $s = student::with('program', 'referral', 'course', 'departure_year')->get();
+        
+        $ssv = $s->where('program.name', 'SSV (Careworker)')->Where('program.name', 'SSV (Hospitality)')
+                ->where('departure_year_id', $departure_year);
+
+        return $this->refreshDatatableSSV($ssv);
+    }
+
+    public function refreshDatatableSSV($ssv){
+        return Datatables::of($ssv)
+        ->editColumn('name', function($data){
+            return $data->lname.', '.$data->fname.' '.$data->mname;
+        })->addColumn('action', function($data){
+            $html = '';
+
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-primary btn-xs view_profile" id="'.$data->id.'"><i class="fa fa-eye"></i></button>&nbsp;';
+
+            if(canAccessAll()){
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_ssv_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_student" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>&nbsp;';
+            }
+            return  $html;
+        })
+        ->make(true);
+    }
+
     public function save_student(Request $request){
         $add_edit = $request->add_edit;
 
@@ -356,7 +385,7 @@ class studentController extends Controller
             $student = student::find($id);
             $edited_by = Auth::user()->emp_id;
         }
-
+        
         if(isset($edited_by)){
             $edit_fields = ['First Name', 'Middle Name', 'Last Name', 'Birth Date',
                 'Age', 'Contact #', 'Address', 'Email', 'Referred By', 'Gender', 
@@ -443,6 +472,30 @@ class studentController extends Controller
         $student->departure_year_id = $request->l_year;
         $student->remarks = $request->l_remarks;
         $student->save();
+    }
+
+    public function save_ssv_student(Request $request){
+        $add_edit = $request->s_add_edit;
+        $type = $request->s_student_type;
+
+        if($add_edit == 'add'){
+            $student = new student;
+            $student->status = 'Active';
+            $student->coe_status = 'TBA';
+        }
+        else{
+            $id = $request->s_id;
+            $student = student::find($id);
+            $edited_by = Auth::user()->emp_id;
+        }
+
+        $student->fname = $request->s_fname;
+        $student->mname = $request->s_mname;
+        $student->lname = $request->s_lname;
+        $student->birthdate = Carbon::parse($request->s_birthdate);
+        $student->age = $request->s_age;
+        $student->contact = $request->s_contact;
+        $student->program = $request->s_program;
     }
 
     public function get_student(Request $request){
@@ -589,7 +642,23 @@ class studentController extends Controller
     }
 
     public function program_all(Request $request){
-        $program = program::where('name', 'LIKE', '%'.$request->name.'%')->where('name', '<>', 'Language Only')->get()->toArray();
+        $program = program::where('name', 'LIKE', '%'.$request->name.'%')
+            ->where('name', '<>', 'Language Only')->where('name', '<>', 'SSV (Careworker)')
+            ->where('name', '<>', 'SSV (Hospitality)')->get()->toArray();
+
+        $array = [];
+        foreach ($program as $key => $value){
+            $array[] = [
+                'id' => $value['id'],
+                'text' => $value['name']
+            ];
+        }
+        return json_encode(['results' => $array]);
+    }
+
+    public function program_ssv(Request $request){
+        $program = program::where('name', 'LIKE', '%'.$request->name.'%')
+            ->where('name', '=', 'SSV (Careworker)')->orWhere('name', '=', 'SSV (Hospitality)')->get()->toArray();
 
         $array = [];
         foreach ($program as $key => $value){
