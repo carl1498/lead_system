@@ -119,7 +119,7 @@
                     <li><a class="status_pick" href="#students_status_tab" data-toggle="tab">Back Out / Cancelled</a></li>
                     <li><a class="result_pick" href="#students_result_tab" data-toggle="tab">Result Monitoring</a></li>
                     <li><a class="language_pick" href="#language_student_tab" data-toggle="tab">Language</a></li>
-                    <li><a class="ssv_pick" href="#language_student_tab" data-toggle="tab">SSV</a></li>
+                    <li><a class="ssv_pick" href="#ssv_student_tab" data-toggle="tab">SSV</a></li>
                 </ul>
 
                 <div class="tab-content">
@@ -310,6 +310,7 @@
 
         var columns_language_students = [
             {data: 'name', name: 'name'},
+            {data: 'branch.name', name: 'branch'},
             {data: 'contact', name: 'contact'},
             {data: 'gender', name: 'gender'},
             {data: 'age', name: 'age'},
@@ -684,12 +685,13 @@
         $('.add_student').on('click', function(){
             $('#add_edit').val('add');
             $('#l_add_edit').val('add');
+            $('#s_add_edit').val('add');
             $('#student_type_tab a:first').tab('show');
         });
 
         //Open Student Modal (EDIT)
         $(document).on('click', '.edit_student', function(){
-            $('#student_type_tab a:first').tab('show');
+            $('#student_type_tab a[href="#student_form"]').tab('show');
             var id = $(this).attr('id');
 
             $.ajax({
@@ -737,7 +739,7 @@
 
         //Open Language Student Modal (EDIT)
         $(document).on('click', '.edit_language_student', function(){
-            $('#student_type_tab a:last').tab('show');
+            $('#student_type_tab a[href="#language_student_form"]').tab('show');
             var id = $(this).attr('id');
 
             $.ajax({
@@ -762,6 +764,41 @@
                     $('#l_course').val(data.course.id).trigger('change');
                     $('#l_year').val(data.departure_year.id).trigger('change');
                     $('#l_remarks').val(data.remarks);
+                    $('#student_modal').modal('toggle');
+                    $('#student_modal').modal('show');
+                }
+            });
+        });
+
+        //Open Language Student Modal (EDIT)
+        $(document).on('click', '.edit_ssv_student', function(){
+            $('#student_type_tab a[href="#ssv_student_form"]').tab('show');
+            var id = $(this).attr('id');
+
+            $.ajax({
+                url: '/get_student',
+                method: 'get',
+                data: {id: id},
+                dataType: 'json',
+                success:function(data){
+                    $('#s_add_edit').val('edit');
+                    $('#s_id').val(data.id);
+                    $('#s_fname').val(data.fname);
+                    $('#s_mname').val(data.mname);
+                    $('#s_lname').val(data.lname);
+                    $('#s_birthdate').val(data.birthdate);
+                    $('#s_age').val(data.age);
+                    $('#s_contact').val(data.contact);      
+                    $('#s_program').val(data.program.id).trigger('change');
+                    $('#s_benefactor').val(data.benefactor.id).trigger('change');              
+                    $('#s_address').val(data.address);
+                    $('#s_email').val(data.email);
+                    $('#s_referral').val(data.referral.id).trigger('change');
+                    $('#s_gender').val(data.gender).trigger('change');
+                    $('#s_branch').val(data.branch.id).trigger('change');
+                    $('#s_course').val(data.course.id).trigger('change');
+                    $('#s_year').val(data.departure_year.id).trigger('change');
+                    $('#s_remarks').val(data.remarks);
                     $('#student_modal').modal('toggle');
                     $('#student_modal').modal('show');
                 }
@@ -1005,7 +1042,8 @@
                     }
                     
                     if(data.program){
-                        if(data.program.name != 'Language Only'){
+                        if(data.program.name != 'Language Only' && data.program.name != 'SSV (Careworker)' &&
+                             data.program.name != 'SSV (Hospitality)'){
                             $('#p_departure').text(data.departure_year.name + ' ' + data.departure_month.name);
                         }
                         else{
@@ -1038,28 +1076,7 @@
         });        
 
         //Course Select 2
-        $('#course').select2({
-            placeholder: 'Select Course',
-            ajax: {
-                url: "/courseAll",
-                dataType: 'json',
-
-                data: function (params){
-                    return {
-                        name: params.term,
-                        page:params.page
-                    }
-                },
-                
-                processResults: function (data){
-                    return {
-                        results:data.results      
-                    }
-                }
-            },
-        });
-
-        $('#l_course').select2({
+        $('#course, #l_course, #s_course').select2({
             placeholder: 'Select Course',
             ajax: {
                 url: "/courseAll",
@@ -1149,29 +1166,7 @@
         });
 
         //Benefactor Select 2
-        $('#benefactor').select2({
-            allowClear: true,
-            placeholder: 'Select Benefactor',
-            ajax: {
-                url: "/benefactorAll",
-                dataType: 'json',
-
-                data: function (params){
-                    return {
-                        name: params.term,
-                        page:params.page
-                    }
-                },
-                
-                processResults: function (data){
-                    return {
-                        results:data.results      
-                    }
-                }
-            },
-        });
-
-        $('#s_benefactor').select2({
+        $('#benefactor, #s_benefactor').select2({
             allowClear: true,
             placeholder: 'Select Benefactor',
             ajax: {

@@ -199,10 +199,12 @@ class studentController extends Controller
     public function ssv(Request $request){
         $departure_year = $request->departure_year;
 
-        $s = student::with('program', 'referral', 'course', 'departure_year')->get();
+        $s = student::with('program', 'referral', 'course', 'departure_year')
+            ->whereHas('program', function($query) use ($request) {
+                $query->where('name', 'SSV (Careworker)')->orWhere('name', 'SSV (Hospitality)');
+            })->get();
         
-        $ssv = $s->where('program.name', 'SSV (Careworker)')->Where('program.name', 'SSV (Hospitality)')
-                ->where('departure_year_id', $departure_year);
+        $ssv = $s->where('departure_year_id', $departure_year);
 
         return $this->refreshDatatableSSV($ssv);
     }
@@ -265,8 +267,8 @@ class studentController extends Controller
                     $edit_history->stud_id = $student->id;
                     $edit_history->field = $edit_fields[$x];
                     if($edit_fields[$x] == 'Program' || $edit_fields[$x] == 'School' || $edit_fields[$x] == 'Benefactor' ||
-                        $edit_fields[$x] == 'Branch' || $edit_fields[$x] == 'Course' || $edit_fields[$x] == 'Year' ||
-                        $edit_fields[$x] == 'Month'){
+                        $edit_fields[$x] == 'Referred By' || $edit_fields[$x] == 'Branch' || $edit_fields[$x] == 'Course' || 
+                        $edit_fields[$x] == 'Year' || $edit_fields[$x] == 'Month'){
                         if($student_fields[$x] == null){
                             $prev = 'N/A';
                         }else{
@@ -278,6 +280,9 @@ class studentController extends Controller
                             }
                             else if($edit_fields[$x] == 'Benefactor'){
                                 $prev = benefactor::where('id', $student_fields[$x])->pluck('name');
+                            }
+                            else if($edit_fields[$x] == 'Referred By'){
+                                $prev = employee::where('id', $student_fields[$x])->pluck('fname');
                             }
                             else if($edit_fields[$x] == 'Branch'){
                                 $prev = branch::where('id', $student_fields[$x])->pluck('name');
@@ -309,6 +314,9 @@ class studentController extends Controller
                             else if($edit_fields[$x] == 'Benefactor'){
                                 $new = benefactor::where('id', $request_fields[$x])->pluck('name');
                             }
+                            else if($edit_fields[$x] == 'Referred By'){
+                                $new = employee::where('id', $request_fields[$x])->pluck('fname');
+                            }
                             else if($edit_fields[$x] == 'Branch'){
                                 $new = branch::where('id', $request_fields[$x])->pluck('name');
                             }
@@ -324,15 +332,6 @@ class studentController extends Controller
                             $new = $new[0];
                         }
 
-                        $edit_history->new = $new;
-                    }
-                    else if($edit_fields[$x] == 'Referred By'){
-                        $prev = employee::find($student_fields[$x]);
-                        $prev = $prev->fname;
-                        $new = employee::find($request_fields[$x]);
-                        $new = $new->fname;
-
-                        $edit_history->previous = $prev;
                         $edit_history->new = $new;
                     }
                     else{
@@ -408,39 +407,47 @@ class studentController extends Controller
                     $edit_history = new student_edit_history;
                     $edit_history->stud_id = $student->id;
                     $edit_history->field = $edit_fields[$x];
-                    if($edit_fields[$x] == 'Branch' || $edit_fields[$x] == 'Course' || $edit_fields[$x] == 'Year'){
-                        if($edit_fields[$x] == 'Branch'){
-                            $prev = branch::where('id', $student_fields[$x])->pluck('name');
-                        }
-                        else if($edit_fields[$x] == 'Course'){
-                            $prev = course::where('id', $student_fields[$x])->pluck('name');
-                        }
-                        else if($edit_fields[$x] == 'Year'){
-                            $prev = departure_year::where('id', $student_fields[$x])->pluck('name');
+                    if($edit_fields[$x] == 'Referred By' || $edit_fields[$x] == 'Branch' ||
+                        $edit_fields[$x] == 'Course' || $edit_fields[$x] == 'Year'){
+                        if($student_fields[$x] == null){
+                            $prev = 'N/A';
+                        }else{
+                            if($edit_fields[$x] == 'Referred By'){
+                                $prev = employee::where('id', $student_fields[$x])->pluck('fname');
+                            }
+                            else if($edit_fields[$x] == 'Branch'){
+                                $prev = branch::where('id', $student_fields[$x])->pluck('name');
+                            }
+                            else if($edit_fields[$x] == 'Course'){
+                                $prev = course::where('id', $student_fields[$x])->pluck('name');
+                            }
+                            else if($edit_fields[$x] == 'Year'){
+                                $prev = departure_year::where('id', $student_fields[$x])->pluck('name');
+                            }
+                            $prev = $prev[0];
                         }
 
                         $edit_history->previous = $prev[0];
 
-                        if($edit_fields[$x] == 'Branch'){
-                            $new = branch::where('id', $request_fields[$x])->pluck('name');
-                        }
-                        else if($edit_fields[$x] == 'Course'){
-                            $new = course::where('id', $request_fields[$x])->pluck('name');
-                        }
-                        else if($edit_fields[$x] == 'Year'){
-                            $new = departure_year::where('id', $request_fields[$x])->pluck('name');
+                        if($request_fields[$x] == null){
+                            $new = 'N/A';
+                        }else{
+                            if($edit_fields[$x] == 'Referred By'){
+                                $new = employee::where('id', $student_fields[$x])->pluck('fname');
+                            }
+                            else if($edit_fields[$x] == 'Branch'){
+                                $new = branch::where('id', $request_fields[$x])->pluck('name');
+                            }
+                            else if($edit_fields[$x] == 'Course'){
+                                $new = course::where('id', $request_fields[$x])->pluck('name');
+                            }
+                            else if($edit_fields[$x] == 'Year'){
+                                $new = departure_year::where('id', $request_fields[$x])->pluck('name');
+                            }
+                            $new = $new[0];
                         }
 
                         $edit_history->new = $new[0];
-                    }
-                    else if($edit_fields[$x] == 'Referred By'){
-                        $prev = employee::find($student_fields[$x]);
-                        $prev = $prev->fname;
-                        $new = employee::find($request_fields[$x]);
-                        $new = $new->fname;
-    
-                        $edit_history->previous = $prev;
-                        $edit_history->new = $new;
                     }
                     else{
                         $edit_history->previous = (isset($student_fields[$x])) ? (string) $student_fields[$x] : 'N/A';
@@ -489,14 +496,110 @@ class studentController extends Controller
             $edited_by = Auth::user()->emp_id;
         }
 
+        if(isset($edited_by)){
+            $edit_fields = ['First Name', 'Middle Name', 'Last Name', 'Birth Date',
+                'Age', 'Contact #', 'Program', 'Benefactor', 'Address', 'Email',
+                'Referred By', 'Gender', 'Branch', 'Course', 'Year', 'Remarks'];
+
+            $student_fields = [$student->fname, $student->mname, $student->lname,
+                $student->birthdate, $student->age, $student->contact, $student->program_id,
+                $student->benefactor_id, $student->address, $student->email,
+                $student->referral_id, $student->gender, $student->branch_id,
+                $student->course_id, $student->departure_year_id, $student->remarks];
+
+            $request_fields = [$request->s_fname, $request->s_mname, $request->s_lname,
+                $request->s_birthdate, $request->s_age, $request->s_contact, $request->s_program,
+                $request->s_benefactor, $request->s_address, $request->s_email,
+                $request->s_referral, $request->s_gender, $request->s_branch,
+                $request->s_course, $request->s_year, $request->s_remarks];
+        
+            for($x = 0; $x<count($edit_fields); $x++){
+                if($student_fields[$x] != $request_fields[$x]){
+
+                    $edit_history = new student_edit_history;
+                    $edit_history->stud_id = $student->id;
+                    $edit_history->field = $edit_fields[$x];
+                    if($edit_fields[$x] == 'Program' || $edit_fields[$x] == 'Benefactor' || 
+                        $edit_fields[$x] == 'Referred By' || $edit_fields[$x] == 'Branch' || 
+                        $edit_fields[$x] == 'Course' || $edit_fields[$x] == 'Year'){
+                        if($student_fields[$x] == null){
+                            $prev = 'N/A';
+                        }else{
+                            if($edit_fields[$x] == 'Program'){
+                                $prev = program::where('id', $student_fields[$x])->pluck('name');
+                            }
+                            else if($edit_fields[$x] == 'Benefactor'){
+                                $prev = benefactor::where('id', $student_fields[$x])->pluck('name');
+                            }
+                            else if($edit_fields[$x] == 'Referred By'){
+                                $prev = employee::where('id', $student_fields[$x])->pluck('fname');
+                            }
+                            else if($edit_fields[$x] == 'Branch'){
+                                $prev = branch::where('id', $student_fields[$x])->pluck('name');
+                            }
+                            else if($edit_fields[$x] == 'Course'){
+                                $prev = course::where('id', $student_fields[$x])->pluck('name');
+                            }
+                            else if($edit_fields[$x] == 'Year'){
+                                $prev = departure_year::where('id', $student_fields[$x])->pluck('name');
+                            }
+                            $prev = $prev[0];
+                        }
+                        $edit_history->previous = $prev;
+
+                        if($request_fields[$x] == null){
+                            $new = 'N/A';
+                        }else{
+                            if($edit_fields[$x] == 'Program'){
+                                $new = program::where('id', $request_fields[$x])->pluck('name');
+                            }
+                            else if($edit_fields[$x] == 'Benefactor'){
+                                $new = benefactor::where('id', $request_fields[$x])->pluck('name');
+                            }
+                            else if($edit_fields[$x] == 'Referred By'){
+                                $new = employee::where('id', $request_fields[$x])->pluck('fname');
+                            }
+                            else if($edit_fields[$x] == 'Branch'){
+                                $new = branch::where('id', $request_fields[$x])->pluck('name');
+                            }
+                            else if($edit_fields[$x] == 'Course'){
+                                $new = course::where('id', $request_fields[$x])->pluck('name');
+                            }
+                            else if($edit_fields[$x] == 'Year'){
+                                $new = departure_year::where('id', $request_fields[$x])->pluck('name');
+                            }
+                            $new = $new[0];
+                        }
+
+                        $edit_history->new = $new;                  
+                    }
+                    else{
+                        $edit_history->previous = (isset($student_fields[$x])) ? (string) $student_fields[$x] : 'N/A';
+                        $edit_history->new = (isset($request_fields[$x])) ? (string) $request_fields[$x] : 'N/A';
+                    }
+                    $edit_history->edited_by = $edited_by;
+                    $edit_history->save();
+                }
+            }
+        }
+
         $student->fname = $request->s_fname;
         $student->mname = $request->s_mname;
         $student->lname = $request->s_lname;
         $student->birthdate = Carbon::parse($request->s_birthdate);
         $student->age = $request->s_age;
         $student->contact = $request->s_contact;
-        $student->program = $request->s_program;
-        //WA PA NI NAHUMAN
+        $student->program_id = $request->s_program;
+        $student->benefactor_id = $request->s_benefactor;
+        $student->address = $request->s_address;
+        $student->email = $request->s_email;
+        $student->referral_id = $request->s_referral;
+        $student->gender = $request->s_gender;
+        $student->branch_id = $request->s_branch;
+        $student->course_id = $request->s_course;
+        $student->departure_year_id = $request->s_year;
+        $student->remarks = $request->s_remarks;
+        $student->save();
     }
 
     public function get_student(Request $request){

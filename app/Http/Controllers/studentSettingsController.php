@@ -45,7 +45,13 @@ class studentSettingsController extends Controller
         }
 
         return Datatables::of($settings)
-        ->addColumn('action', function($data){
+        ->addColumn('action', function($data) use($current_settings){
+            $html = '';
+            if($current_settings == 'Program'){
+                if($data->name == 'Language Only' || $data->name == 'SSV (Careworker)' || $data->name == 'SSV (Hospitality)'){
+                    return;
+                }
+            }
             return  '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-warning btn-sm edit_student_settings" id="'.$data->id.'"><i class="fa fa-pen"></i></button>
                     <button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-sm delete_student_settings" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
         })
