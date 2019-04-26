@@ -135,6 +135,11 @@
                     {data: 'book_2', name: 'book_2'},
                     {data: 'wb_2', name: 'wb_2'},
                     {data: 'kanji', name: 'kanji'},
+                    {data: 'book_1_ssv', name: 'book_1_ssv'},
+                    {data: 'wb_1_ssv', name: 'wb_1_ssv'},
+                    {data: 'book_2_ssv', name: 'book_2_ssv'},
+                    {data: 'wb_2_ssv', name: 'wb_2_ssv'},
+                    {data: 'kanji_ssv', name: 'kanji_ssv'},
                     {data: 'created_at', name: 'date'},
                     {data: 'action', orderable: false, searchable: false}
                 ],
@@ -146,11 +151,16 @@
                     { width: 60, targets: 4 }, //book 2
                     { width: 60, targets: 5 }, //wb 2
                     { width: 60, targets: 6 }, //kanji
-                    { width: 130, targets: 7 }, //date
-                    { width: 80, targets: 8 }, //action
+                    { width: 90, targets: 7 }, //book 1 ssv
+                    { width: 90, targets: 8 }, //wb 1 ssv
+                    { width: 90, targets: 9 }, //book 2 ssv
+                    { width: 90, targets: 10 }, //wb 2 ssv
+                    { width: 90, targets: 11 }, //kanji
+                    { width: 130, targets: 12 }, //date
+                    { width: 80, targets: 13 }, //action
                 ],
                 order: [[
-                    7, 'desc'
+                    12, 'desc'
                 ]]
             });
         }
@@ -182,7 +192,7 @@
                 columns: [
                     {data: 'reference_no.lead_ref_no', name: 'lead_ref_no'},
                     {data: 'reference_no.invoice_ref_no', name: 'invoice_ref_no'},
-                    {data: 'book_type.name', name: 'book_type'},
+                    {data: 'book_type.description', name: 'book_type'},
                     {data: 'previous_pending', name: 'previous_pending'},
                     {data: 'quantity', name: 'quantity'},
                     {data: 'pending', name: 'pending'},
@@ -194,7 +204,7 @@
                 columnDefs: [
                     { width: 120, targets: 0 }, //lead ref no
                     { width: 120, targets: 1 }, //invoice ref no
-                    { width: 80, targets: 2 }, //book type
+                    { width: 180, targets: 2 }, //book type
                     { width: 60, targets: 3 }, //previous pending
                     { width: 60, targets: 4 }, //quantity
                     { width: 60, targets: 5 }, //pending
@@ -416,31 +426,59 @@
 
         $(document).on('click', '.delete_invoice', function(){
             var id = $(this).attr('id');
-            console.log('mao ni');
 
-            swal({
-                title: 'Warning',
-                text: 'This may delete data of books added for this invoice.',
-                type: 'warning',
+            swal.fire({
+                title: 'Confirm User',
+                text: 'For security purposes, input your password again.',
+                input: 'password',
+                inputAttributes: {
+                    autocapitalize: 'off'
+                },
                 showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if(result.value){
+                confirmButtonText: 'Confirm',
+                showLoaderOnConfirm: true,
+                preConfirm: (password) => {
                     $.ajax({
                         headers: {
                             'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
                         },
-                        url: '/delete_invoice/'+id,
-                        method: 'get',
-                        type: 'json',
-                        success:function(data){
-                            swal('Success!', 'This invoice has been Deleted', 'success');
-                            refresh_invoice();
+                        url: '/confirm_user',
+                        data: { password:password },
+                        method: 'POST',
+                        success: function(data){
+                            if(data == 0){
+                                swal('Password Incorrect!', 'Please try again', 'error');
+                                return;
+                            }
+                            else{
+                                swal({
+                                    title: 'Warning',
+                                    text: 'This may delete data of books added for this invoice.',
+                                    type: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: 'Yes, delete it!'
+                                }).then((result) => {
+                                    if(result.value){
+                                        $.ajax({
+                                            headers: {
+                                                'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                                            },
+                                            url: '/delete_invoice/'+id,
+                                            method: 'get',
+                                            type: 'json',
+                                            success:function(data){
+                                                swal('Success!', 'This invoice has been Deleted', 'success');
+                                                refresh_invoice();
+                                            }
+                                        })
+                                    }
+                                });
+                            }
                         }
-                    })
-                }
+                    });
+                },
             });
         });
 

@@ -18,6 +18,12 @@ Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 
 Auth::routes();
 
+//GENERAL ROUTES -- START
+
+Route::post('/confirm_user', 'employeeController@confirm_user');
+
+//GENERAL ROUTES -- END
+
 //DASHBOARD ROUTES -- START
 
 Route::get('/dashboard', 'dashboardController@index');
@@ -95,7 +101,6 @@ Route::group(['middleware' => ['auth', 'employee']], function(){
 
     //Account
     Route::get('/get_account/{id}', 'employeeController@get_account');
-    Route::post('/confirm_user', 'employeeController@confirm_user');
     Route::post('/save_account', 'employeeController@save_account');
 });
 
@@ -123,6 +128,7 @@ Route::group(['middleware' => ['auth', 'book_management']], function(){
     //Book Management
     Route::get('/book_management', 'bookManagementController@index');
     Route::get('/view_student_books', 'bookManagementController@view_student_books');
+    Route::get('/view_ssv_student_books', 'bookManagementController@view_ssv_student_books');
     Route::get('/view_books', 'bookManagementController@view_books');
     Route::get('/view_branch_books', 'bookManagementController@view_branch_books');
     

@@ -183,7 +183,6 @@ class employeeController extends Controller
     public function save_account(Request $request){
         $id = $request->a_id;
         $user = User::find($id);
-        info($user);
 
         $user->email = $request->a_email;
         if($request->password){

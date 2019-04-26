@@ -11,8 +11,8 @@
                 <div class="modal-body clearfix">
 
                     <div class="col-md-12">
-                        <input type="hidden" name="id" id="id">
-                        <input type="hidden" name="add_edit" id="add_edit">
+                        <!--<input type="hidden" name="id" id="id">
+                        <input type="hidden" name="add_edit" id="add_edit">-->
 
                         <div class="row clearfix">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 form-control-label">

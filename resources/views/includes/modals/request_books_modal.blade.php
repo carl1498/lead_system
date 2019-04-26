@@ -24,6 +24,7 @@
                                         <option value="">Select Book</option>
                                         @foreach($book_type as $b)
                                             <option value="{{ $b->id }}">{{ $b->description }}</option>
+                                            @if($b->id == 5) @break @endif
                                         @endforeach
                                     </select>
                                 </div>

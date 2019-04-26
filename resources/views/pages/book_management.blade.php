@@ -34,6 +34,7 @@
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
                     <li class="active"><a class="books_pick" href="#branch_tab" data-toggle="tab">Branch</a></li>
+                    <li><a class="books_pick" href="#ssv_student_tab" data-toggle="tab">SSV</a></li>
                     <li><a class="books_pick" href="#student_tab" data-toggle="tab">Student</a></li>
                     <li><a class="books_pick" href="#books_tab" data-toggle="tab">Books</a></li>
                     <li><a class="books_pick" href="#request_tab" data-toggle="tab">Request History</a></li>
@@ -123,7 +124,7 @@
         })
 
         function pickRefresh(){
-            if(current_tab != 'Branch' && current_tab != 'Student'){
+            if(current_tab != 'Branch' && current_tab != 'Student' && current_tab != 'SSV' ){
                 $('.book_type_select').show();
                 $('#book_type_select').next(".select2-container").show();
             }
@@ -140,7 +141,8 @@
                 $('#status_select').next(".select2-container").hide();
             }
 
-            if(current_tab != 'Student' && current_tab != 'Request History' && current_tab != 'Release History'){
+            if(current_tab != 'Student' && current_tab != 'SSV' &&
+                current_tab != 'Request History' && current_tab != 'Release History'){
                 $('.invoice_select').show();
                 $('#invoice_select').next(".select2-container").show();
             }
@@ -149,7 +151,7 @@
                 $('#invoice_select').next(".select2-container").hide();
             }
 
-            if(current_tab != 'Student'){
+            if(current_tab != 'Student' && current_tab != current_tab != 'SSV'){
                 $('.student_status_select').hide();
                 $('#student_status_select').next(".select2-container").hide();
                 $('.program_select').hide();
@@ -172,6 +174,14 @@
                 $('#program_select').next(".select2-container").show();
 
                 refresh_books_student_table();
+            }
+            else if(current_tab == 'SSV'){
+                $('.student_status_select').show();
+                $('#student_status_select').next(".select2-container").show();
+                $('.program_select').show();
+                $('#program_select').next(".select2-container").show();
+
+                refresh_books_ssv_student_table();
             }
             else if(current_tab == 'Books'){
                 refresh_books();
@@ -244,7 +254,7 @@
                 columnDefs: [
                     { width: 30, targets: 0 }, //id
                     { width: 80, targets: 1 }, //branch
-                    { width: 150, targets: 2 }, //book type
+                    { width: 180, targets: 2 }, //book type
                     { width: 70, targets: 3 }, //previous
                     { width: 70, targets: 4 }, //quantity
                     { width: 70, targets: 5 }, //pending
@@ -302,7 +312,7 @@
                 columnDefs: [
                     { width: 30, targets: 0 }, //id
                     { width: 80, targets: 1 }, //branch
-                    { width: 150, targets: 2 }, //book type
+                    { width: 180, targets: 2 }, //book type
                     { width: 70, targets: 3 }, //previous
                     { width: 70, targets: 4 }, //quantity
                     { width: 70, targets: 5 }, //pending
@@ -408,7 +418,7 @@
                     {data: 'action', orderable: false, searchable: false}
                 ],
                 columnDefs: [
-                    { width: 150, targets: 0 }, //book type
+                    { width: 180, targets: 0 }, //book type
                     { width: 80, targets: 1 }, //book no.
                     { width: 130, targets: 2 }, //lead ref no
                     { width: 130, targets: 3 }, //invoice ref no
@@ -480,6 +490,64 @@
             });
         }
 
+        function refresh_books_ssv_student_table(){
+            var books_ssv_student_table = $('#books_ssv_student_table').DataTable({
+                stateSave: true,
+                stateSaveCallback: function(settings,data) {
+                    localStorage.setItem( 'DataTables_' + settings.sInstance, JSON.stringify(data) )
+                },
+                stateLoadCallback: function(settings) {
+                    return JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ) )
+                },
+                stateLoadParams: function( settings, data ) {
+                    if (data.order) delete data.order;
+                },
+                dom: 'Bflrtip',
+                processing: true,
+                destroy: true,
+                scrollX: true,
+                scrollCollapse: true,
+                fixedColumns: {
+                    leftColumns: 1
+                },
+                buttons: [
+                    {extend: 'print', title: 'LEAD System', orientation: 'landscape', pageSize: 'FOLIO'},
+                    {extend: 'pdfHtml5', title: 'LEAD System', orientation: 'portrait', pageSize: 'FOLIO'},
+                ],
+                responsive: true,
+                ajax: {
+                    url: '/view_ssv_student_books',
+                    data:{ 
+                        student_status_select: student_status_select,
+                        program_select: program_select,
+                        branch_select: branch_select,
+                    }
+                },
+                columns: [
+                    {data: 'student_name', name: 'student_name'},
+                    {data: 'branch.name', name: 'branch'},
+                    {data: 'book_1_ssv', name: 'book_1_ssv'},
+                    {data: 'wb_1_ssv', name: 'wb_1_ssv'},
+                    {data: 'book_2_ssv', name: 'book_2_ssv'},
+                    {data: 'wb_2_ssv', name: 'wb_2_ssv'},
+                    {data: 'kanji_ssv', name: 'kanji_ssv'},
+                    {data: 'program.name', name: 'program', defaultContent: ''},
+                    {data: 'status', name: 'status'},
+                ],
+                columnDefs: [
+                    { width: 250, targets: 0 }, //student name
+                    { width: 100, targets: 1 }, //branch
+                    { width: 90, targets: 2 }, //book 1 ssv
+                    { width: 90, targets: 3 }, //wb 1 ssv
+                    { width: 90, targets: 4 }, //book 2 ssv
+                    { width: 90, targets: 5 }, //wb 2 ssv
+                    { width: 90, targets: 6 }, //kanji ssv
+                    { width: 150, targets: 7 }, //program
+                    { width: 110, targets: 8 }, //status
+                ]
+            });
+        }
+
         function refresh_books_branch_table(){
             var books_branch_table = $('#books_branch_table').DataTable({
                 stateSave: true,
@@ -519,14 +587,24 @@
                     {data: 'book_2', name: 'book_2'},
                     {data: 'wb_2', name: 'wb_2'},
                     {data: 'kanji', name: 'kanji'},
+                    {data: 'book_1_ssv', name: 'book_1_ssv'},
+                    {data: 'wb_1_ssv', name: 'wb_1_ssv'},
+                    {data: 'book_2_ssv', name: 'book_2_ssv'},
+                    {data: 'wb_2_ssv', name: 'wb_2_ssv'},
+                    {data: 'kanji_ssv', name: 'kanji_ssv'},
                 ],
                 columnDefs: [
-                    { width: 170, targets: 0 }, //branch
-                    { width: 130, targets: 1 }, //book 1
-                    { width: 130, targets: 2 }, //wb 1
-                    { width: 130, targets: 3 }, //book 2
-                    { width: 130, targets: 4 }, //wb 2
-                    { width: 130, targets: 5 }, //kanji
+                    { width: 70, targets: 0 }, //branch
+                    { width: 90, targets: 1 }, //book 1
+                    { width: 90, targets: 2 }, //wb 1
+                    { width: 90, targets: 3 }, //book 2
+                    { width: 90, targets: 4 }, //wb 2
+                    { width: 90, targets: 5 }, //kanji
+                    { width: 90, targets: 6 }, //book 1 ssv
+                    { width: 90, targets: 7 }, //wb 1 ssv
+                    { width: 90, targets: 8 }, //book 2 ssv
+                    { width: 90, targets: 9 }, //wb 2 ssv
+                    { width: 90, targets: 10 }, //kanji ssv
                 ]
             });
         }
@@ -569,7 +647,7 @@
                     {data: 'created_at', name: 'date'},
                 ],
                 columnDefs: [
-                    { width: 170, targets: 0 }, //book type
+                    { width: 180, targets: 0 }, //book type
                     { width: 130, targets: 1 }, //book no
                     { width: 130, targets: 2 }, //invoice ref no
                     { width: 70, targets: 3 }, //branch
@@ -619,7 +697,7 @@
                     {data: 'created_at', name: 'date'},
                 ],
                 columnDefs: [
-                    { width: 170, targets: 0 }, //book type
+                    { width: 180, targets: 0 }, //book type
                     { width: 130, targets: 1 }, //book no
                     { width: 130, targets: 2 }, //invoice ref no
                     { width: 70, targets: 3 }, //branch

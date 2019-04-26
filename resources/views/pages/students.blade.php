@@ -8,10 +8,10 @@
     </h1>
     <ol class="breadcrumb">
         <li>
-            <!--<button class="btn btn-secondary bg-red">
-                <i class="fas fa-credit-card"></i>
-            </button>-->
             @if(canAccessAll())
+            <button class="btn btn-secondary bg-red switch" data-toggle="modal">
+                <b id="switch_name">SSV</b> <i class="fa fa-sync"></i>
+            </button>
             <button class="btn btn-secondary bg-red add_student" data-toggle="modal" data-target="#student_modal">
                 <i class="fa fa-plus-square"></i>
             </button>
@@ -111,15 +111,15 @@
         <!-- /.col -->
         <div class="col-md-9">
             <div class="nav-tabs-custom">
-                <ul class="nav nav-tabs">
-                    <li class="active"><a class="branch_pick" href="#students_branch_tab" data-toggle="tab">Makati</a></li>
+                <ul class="nav nav-tabs" id="student_list_tab">
+                    <li><a style="display: none;" class="ssv_pick" href="#ssv_student_tab" data-toggle="tab">SSV</a></li>
+                    <li class="active"><a id="student_first" class="branch_pick" href="#students_branch_tab" data-toggle="tab">Makati</a></li>
                     <li><a class="branch_pick" href="#students_branch_tab" data-toggle="tab">Cebu</a></li>
                     <li><a class="branch_pick" href="#students_branch_tab" data-toggle="tab">Davao</a></li>
                     <li><a class="status_pick" href="#students_status_tab" data-toggle="tab">Final School</a></li>
                     <li><a class="status_pick" href="#students_status_tab" data-toggle="tab">Back Out / Cancelled</a></li>
                     <li><a class="result_pick" href="#students_result_tab" data-toggle="tab">Result Monitoring</a></li>
                     <li><a class="language_pick" href="#language_student_tab" data-toggle="tab">Language</a></li>
-                    <li><a class="ssv_pick" href="#ssv_student_tab" data-toggle="tab">SSV</a></li>
                 </ul>
 
                 <div class="tab-content">
@@ -535,6 +535,21 @@
         //DATATABLES -- END
 
         //FUNCTIONS -- START
+        
+        $('.switch').on('click', function(){
+            if($('#switch_name').text() == 'SSV'){
+                $('#switch_name').text('Student');
+                $('.branch_pick, .status_pick, .result_pick, .language_pick').hide();
+                $('.ssv_pick').show();
+                $('#student_list_tab a[href="#ssv_student_tab"]').click();
+            }
+            else if($('#switch_name').text() == 'Student'){
+                $('#switch_name').text('SSV');
+                $('.branch_pick, .status_pick, .result_pick, .language_pick').show();
+                $('.ssv_pick').hide();
+                $('#student_list_tab #student_first').click();
+            }
+        });
 
         function showMonthSelect(){
             $('.month_select').show();
