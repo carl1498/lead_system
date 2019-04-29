@@ -97,7 +97,6 @@ class dashboardController extends Controller
             $l = array_add($l, 'referral_count', $ref_count);
         }
         $leaderboard = $leaderboard->sortByDesc('referral_count');
-        info($leaderboard);
 
         return view('pages.dashboard', compact('referral_count', 'student_count', 'merged_birthdays', 'leaderboard'));
     }

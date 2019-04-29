@@ -8,7 +8,7 @@
     </h1>
     <ol class="breadcrumb">
         <li>
-            @if(canAccessAll())
+            @if(canAccessAll() || canAccessStudentList())
             <button class="btn btn-secondary bg-red switch" data-toggle="modal">
                 <b id="switch_name">SSV</b> <i class="fa fa-sync"></i>
             </button>

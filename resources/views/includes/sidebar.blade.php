@@ -49,6 +49,7 @@
 								</span>
 							</a>
 							<ul class="treeview-menu">
+								<li class="{{ (Request::path() == 'student_add_history') ? 'active' : '' }}"><a href="/student_add_history"><i class="fa fa-plus"></i> Add History</a></li>
 								<li class="{{ (Request::path() == 'student_edit_history') ? 'active' : '' }}"><a href="/student_edit_history"><i class="fa fa-edit"></i> Edit History</a></li>
 								<li class="{{ (Request::path() == 'student_delete_history') ? 'active' : '' }}"><a href="/student_delete_history"><i class="fa fa-trash"></i> Delete History</a></li>
 							</ul>

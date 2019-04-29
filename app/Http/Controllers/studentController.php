@@ -12,6 +12,7 @@ use App\branch;
 use App\course;
 use App\departure_year;
 use App\departure_month;
+use App\student_add_history;
 use App\student_edit_history;
 use App\student_delete_history;
 use Carbon\Carbon;
@@ -249,6 +250,7 @@ class studentController extends Controller
             $student = new student;
             $student->status = 'Active';
             $student->coe_status = 'TBA';
+            $added_by = Auth::user()->emp_id;
         }
         else{
             $id = $request->id;
@@ -275,7 +277,48 @@ class studentController extends Controller
                 $request->benefactor, $request->address, $request->email, $request->referral,
                 $request->sign_up, $request->medical, $request->completion, $request->gender, 
                 $request->branch, $request->course, $request->year, $request->month, $request->remarks];
+        }
 
+        // EDIT HISTORY -- END
+
+        $student->fname = $request->fname;
+        $student->mname = $request->mname;
+        $student->lname = $request->lname;
+        $student->birthdate = Carbon::parse($request->birthdate);
+        $student->age = $request->age;
+        $student->contact = $request->contact;
+        $student->program_id = $request->program;
+        $student->school_id = $request->school;
+        $student->benefactor_id = $request->benefactor;
+        $student->address = $request->address;
+        $student->email = $request->email;
+        $student->referral_id = $request->referral;
+        $student->date_of_signup = Carbon::parse($request->sign_up);
+        $student->date_of_medical = $request->medical ? Carbon::parse($request->medical) : null;
+        $student->date_of_completion = $request->completion ? Carbon::parse($request->completion) : null;
+        $student->gender = $request->gender;
+        $student->branch_id = $request->branch;
+        $student->course_id = $request->course;
+        $student->departure_year_id = $request->year;
+        $student->departure_month_id = $request->month;
+        $student->remarks = $request->remarks;
+        $student->save();
+
+        // ADD HISTORY -- START
+
+        if(isset($added_by)){
+            $add_history = new student_add_history;
+            $add_history->stud_id = $student->id;
+            $add_history->type = 'Student';
+            $add_history->added_by = $added_by;
+            $add_history->save();
+        }
+
+        // ADD HISTORY -- END
+
+        // EDIT HISTORY PT. 2 -- START
+
+        if(isset($edited_by)){
             for($x = 0; $x<count($edit_fields); $x++){
                 if($student_fields[$x] != $request_fields[$x]){
                     $edit_history = new student_edit_history;
@@ -359,30 +402,7 @@ class studentController extends Controller
             }
         }
 
-        // EDIT HISTORY -- END
-
-        $student->fname = $request->fname;
-        $student->mname = $request->mname;
-        $student->lname = $request->lname;
-        $student->birthdate = Carbon::parse($request->birthdate);
-        $student->age = $request->age;
-        $student->contact = $request->contact;
-        $student->program_id = $request->program;
-        $student->school_id = $request->school;
-        $student->benefactor_id = $request->benefactor;
-        $student->address = $request->address;
-        $student->email = $request->email;
-        $student->referral_id = $request->referral;
-        $student->date_of_signup = Carbon::parse($request->sign_up);
-        $student->date_of_medical = $request->medical ? Carbon::parse($request->medical) : null;
-        $student->date_of_completion = $request->completion ? Carbon::parse($request->completion) : null;
-        $student->gender = $request->gender;
-        $student->branch_id = $request->branch;
-        $student->course_id = $request->course;
-        $student->departure_year_id = $request->year;
-        $student->departure_month_id = $request->month;
-        $student->remarks = $request->remarks;
-        $student->save();
+        // EDIT HISTORY PT. 2 -- END
     }
 
     public function save_language_student(Request $request){
@@ -393,6 +413,7 @@ class studentController extends Controller
             $student = new student;
             $student->status = 'Active';
             $student->coe_status = 'TBA';
+            $added_by = Auth::user()->emp_id;
         }
         else{
             $id = $request->l_id;
@@ -415,7 +436,44 @@ class studentController extends Controller
                 $request->l_birthdate, $request->l_age, $request->l_contact, $request->l_address,
                 $request->l_email, $request->l_referral, $request->l_gender, 
                 $request->l_branch, $request->l_course, $request->l_year, $request->l_remarks];
+        }
+        
+        $student->fname = $request->l_fname;
+        $student->mname = $request->l_mname;
+        $student->lname = $request->l_lname;
+        $student->birthdate = Carbon::parse($request->l_birthdate);
+        $student->age = $request->l_age;
+        $student->contact = $request->l_contact;
 
+        $program = program::where('name', 'Language Only')->first();
+        $student->program_id = $program->id;
+
+        $student->address = $request->l_address;
+        $student->email = $request->l_email;
+        $student->referral_id = $request->l_referral;
+        $student->date_of_signup = Carbon::now();
+        $student->gender = $request->l_gender;
+        $student->branch_id = $request->l_branch;
+        $student->course_id = $request->l_course;
+        $student->departure_year_id = $request->l_year;
+        $student->remarks = $request->l_remarks;
+        $student->save();
+
+        // ADD HISTORY -- START
+
+        if(isset($added_by)){
+            $add_history = new student_add_history;
+            $add_history->stud_id = $student->id;
+            $add_history->type = 'Language Only';
+            $add_history->added_by = $added_by;
+            $add_history->save();
+        }
+
+        // ADD HISTORY -- END
+
+        // EDIT HISTORY PT. 2 -- START
+
+        if(isset($edited_by)){
             for($x = 0; $x<count($edit_fields); $x++){
                 if($student_fields[$x] != $request_fields[$x]){
                     
@@ -441,9 +499,9 @@ class studentController extends Controller
                             }
                             $prev = $prev[0];
                         }
-
+    
                         $edit_history->previous = $prev[0];
-
+    
                         if($request_fields[$x] == null){
                             $new = 'N/A';
                         }else{
@@ -461,7 +519,7 @@ class studentController extends Controller
                             }
                             $new = $new[0];
                         }
-
+    
                         $edit_history->new = $new[0];
                     }
                     else{
@@ -473,27 +531,8 @@ class studentController extends Controller
                 }
             }
         }
-        
-        $student->fname = $request->l_fname;
-        $student->mname = $request->l_mname;
-        $student->lname = $request->l_lname;
-        $student->birthdate = Carbon::parse($request->l_birthdate);
-        $student->age = $request->l_age;
-        $student->contact = $request->l_contact;
 
-        $program = program::where('name', 'Language Only')->first();
-        $student->program_id = $program->id;
-
-        $student->address = $request->l_address;
-        $student->email = $request->l_email;
-        $student->referral_id = $request->l_referral;
-        $student->date_of_signup = Carbon::now();
-        $student->gender = $request->l_gender;
-        $student->branch_id = $request->l_branch;
-        $student->course_id = $request->l_course;
-        $student->departure_year_id = $request->l_year;
-        $student->remarks = $request->l_remarks;
-        $student->save();
+        // EDIT HISTORY PT. 2 -- END
     }
 
     public function save_ssv_student(Request $request){
@@ -504,6 +543,7 @@ class studentController extends Controller
             $student = new student;
             $student->status = 'Active';
             $student->coe_status = 'TBA';
+            $added_by = Auth::user()->emp_id;
         }
         else{
             $id = $request->s_id;
@@ -527,10 +567,44 @@ class studentController extends Controller
                 $request->s_benefactor, $request->s_address, $request->s_email,
                 $request->s_referral, $request->s_gender, $request->s_branch,
                 $request->s_course, $request->s_year, $request->s_remarks];
+        }
+
+        $student->fname = $request->s_fname;
+        $student->mname = $request->s_mname;
+        $student->lname = $request->s_lname;
+        $student->birthdate = Carbon::parse($request->s_birthdate);
+        $student->age = $request->s_age;
+        $student->contact = $request->s_contact;
+        $student->program_id = $request->s_program;
+        $student->benefactor_id = $request->s_benefactor;
+        $student->address = $request->s_address;
+        $student->email = $request->s_email;
+        $student->referral_id = $request->s_referral;
+        $student->gender = $request->s_gender;
+        $student->branch_id = $request->s_branch;
+        $student->course_id = $request->s_course;
+        $student->departure_year_id = $request->s_year;
+        $student->remarks = $request->s_remarks;
+        $student->save();
         
+        // ADD HISTORY -- START
+
+        if(isset($added_by)){
+            $add_history = new student_add_history;
+            $add_history->stud_id = $student->id;
+            $add_history->type = 'SSV';
+            $add_history->added_by = $added_by;
+            $add_history->save();
+        }
+
+        // ADD HISTORY -- END
+
+        // EDIT HISTORY PT. 2 -- START
+
+        if(isset($edited_by)){
             for($x = 0; $x<count($edit_fields); $x++){
                 if($student_fields[$x] != $request_fields[$x]){
-
+    
                     $edit_history = new student_edit_history;
                     $edit_history->stud_id = $student->id;
                     $edit_history->field = $edit_fields[$x];
@@ -561,7 +635,7 @@ class studentController extends Controller
                             $prev = $prev[0];
                         }
                         $edit_history->previous = $prev;
-
+    
                         if($request_fields[$x] == null){
                             $new = 'N/A';
                         }else{
@@ -585,7 +659,7 @@ class studentController extends Controller
                             }
                             $new = $new[0];
                         }
-
+    
                         $edit_history->new = $new;                  
                     }
                     else{
@@ -597,24 +671,9 @@ class studentController extends Controller
                 }
             }
         }
+        
 
-        $student->fname = $request->s_fname;
-        $student->mname = $request->s_mname;
-        $student->lname = $request->s_lname;
-        $student->birthdate = Carbon::parse($request->s_birthdate);
-        $student->age = $request->s_age;
-        $student->contact = $request->s_contact;
-        $student->program_id = $request->s_program;
-        $student->benefactor_id = $request->s_benefactor;
-        $student->address = $request->s_address;
-        $student->email = $request->s_email;
-        $student->referral_id = $request->s_referral;
-        $student->gender = $request->s_gender;
-        $student->branch_id = $request->s_branch;
-        $student->course_id = $request->s_course;
-        $student->departure_year_id = $request->s_year;
-        $student->remarks = $request->s_remarks;
-        $student->save();
+        // EDIT HISTORY PT. 2 -- END
     }
 
     public function get_student(Request $request){

@@ -16,6 +16,9 @@ $(document).ready(function(){
             stateLoadCallback: function(settings) {
                 return JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ) )
             },
+            stateLoadParams: function( settings, data ) {
+                if (data.order) delete data.order;
+            },
             ajax: '/student_edit_history_table',
             columns: [
                 {data: 'stud_id', name: 'student'},

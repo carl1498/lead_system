@@ -37,7 +37,7 @@ function departure_month(){
 //Access Pages
 
 function canAccessAll(){
-    $id = Auth::user()->emp_id;
+    $id = Auth::user()->id;
     $user = \App\User::with('employee.role')->find($id);
     $authorized = ['President', 'Finance Director', 'HR Head', 'IT Officer'];
 
@@ -50,13 +50,11 @@ function canAccessAll(){
 }
 
 function canAccessStudents(){
-    $id = Auth::user()->emp_id;
-    $user = \App\User::with('employee.role')->find($id);
-    $id = Auth::user()->emp_id;
+    $id = Auth::user()->id;
     $user = \App\User::with('employee.role')->find($id);
     $authorized = ['President', 'Finance Director', 'Admin', 'Manager', 'OIC', 'HR Head',
         'HR', 'IT Officer', 'Marketing Manager', 'Marketing Head', 'Marketing Officer',
-        'Documentation Head', 'Documentation Officer', 'Language Head'];
+        'Documentation Head', 'Documentation Officer', 'Language Head', 'Intern'];
 
     foreach($authorized as $auth){
         if($user->employee->role->name == $auth){
@@ -67,10 +65,11 @@ function canAccessStudents(){
 }
 
 function canAccessStudentList(){
-    $id = Auth::user()->emp_id;
+    $id = Auth::user()->id;
     $user = \App\User::with('employee.role')->find($id);
     $authorized = ['Admin', 'Manager', 'OIC', 'HR', 'Marketing Manager', 'Marketing Head', 
-        'Marketing Officer', 'Documentation Head', 'Documentation Officer', 'Language Head'];
+        'Marketing Officer', 'Documentation Head', 'Documentation Officer', 'Language Head',
+        'Intern'];
 
     foreach($authorized as $auth){
         if($user->employee->role->name == $auth){
@@ -81,7 +80,7 @@ function canAccessStudentList(){
 }
 
 function canEditStudentList(){
-    $id = Auth::user()->emp_id;
+    $id = Auth::user()->id;
     $user = \App\User::with('employee.role')->find($id);
     $authorized = ['Melba', 'Jovelyn'];
 
@@ -94,7 +93,7 @@ function canEditStudentList(){
 }
 
 function canEditLanguageStudent(){
-    $id = Auth::user()->emp_id;
+    $id = Auth::user()->id;
     $user = \App\User::with('employee.role')->find($id);
     $authorized = ['HR Head'];
 
@@ -107,7 +106,7 @@ function canEditLanguageStudent(){
 }
 
 function canAccessStudentSettings(){
-    $id = Auth::user()->emp_id;
+    $id = Auth::user()->id;
     $user = \App\User::with('employee.role')->find($id);
     $authorized = ['President', 'Finance Director', 'HR Head', 'IT Officer', 'Language Head'];
 
@@ -120,7 +119,7 @@ function canAccessStudentSettings(){
 }
 
 function canAccessEmployees(){
-    $id = Auth::user()->emp_id;
+    $id = Auth::user()->id;
     $user = \App\User::with('employee.role')->find($id);
     $authorized = ['HR'];
 
@@ -133,7 +132,7 @@ function canAccessEmployees(){
 }
 
 function canAccessBooks(){
-    $id = Auth::user()->emp_id;
+    $id = Auth::user()->id;
     $user = \App\User::with('employee.role')->find($id);
     $authorized = ['HR', 'Language Head'];
 
@@ -146,7 +145,7 @@ function canAccessBooks(){
 }
 
 function canAccessInvoice(){
-    $id = Auth::user()->emp_id;
+    $id = Auth::user()->id;
     $user = \App\User::with('employee.role')->find($id);
     $authorized = ['Language Head'];
     
@@ -159,7 +158,7 @@ function canAccessInvoice(){
 }
 
 function canAccessBookManagement(){
-    $id = Auth::user()->emp_id;
+    $id = Auth::user()->id;
     $user = \App\User::with('employee.role')->find($id);
     $authorized = ['HR', 'Language Head'];
     

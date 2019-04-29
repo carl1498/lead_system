@@ -7,7 +7,7 @@ $(document).ready(function(){
     //DATATABLES -- START
 
     function load(){
-        var student_delete_history = $('#student_delete_history').DataTable({
+        var student_add_history = $('#student_add_history').DataTable({
             destroy: true,
             stateSave: true,
             stateSaveCallback: function(settings,data) {
@@ -19,13 +19,18 @@ $(document).ready(function(){
             stateLoadParams: function( settings, data ) {
                 if (data.order) delete data.order;
             },
-            ajax: '/student_delete_history_table',
+            ajax: '/student_add_history_table',
             columns: [
                 {data: 'stud_id', name: 'student'},
-                {data: 'deleted_by.fname', name: 'deleted_by'},
+                {data: 'student.program.name', name: 'program'},
+                {data: 'type', name: 'type'},
+                {data: 'added_by.fname', name: 'added_by'},
                 {data: 'created_at', name: 'created_at'},
             ],
-            order: [[2, 'desc']]
+            columnDefs: [
+                {defaultContent: "", targets: "_all"}
+            ],
+            order: [[4, 'desc']]
         });
     }
 
