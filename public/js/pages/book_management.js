@@ -416,7 +416,8 @@ $(document).ready(function(){
                 { width: 150, targets: 7 }, //program
                 { width: 110, targets: 8 }, //status
                 { width: 110, targets: 9 }, //departure
-            ]
+            ],
+            order: [[5, 'asc']]
         });
     }
 

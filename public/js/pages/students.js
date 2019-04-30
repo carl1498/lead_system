@@ -83,6 +83,7 @@ $(document).ready(function(){
         {data: 'gender', name: 'gender'},
         {data: 'age', name: 'age'},
         {data: 'course.name', name: 'course'},
+        {data: 'email', name: 'email'},
         {data: 'date_of_signup', name: 'date_of_signup'},
         {data: 'referral.fname', name: 'referral'},
         {data: 'remarks', name: 'remarks'},
@@ -98,10 +99,11 @@ $(document).ready(function(){
         { width: 60, targets: 5 }, //gender
         { width: 45, targets: 6 }, //age
         { width: 200, targets: 7 }, //course
-        { width: 120, targets: 8 }, //signup
-        { width: 120, targets: 9 }, //referral
-        { width: 250, targets: 10 }, //remarks
-        { width: 150, targets: 11 }, //action
+        { width: 200, targets: 8 }, //course
+        { width: 120, targets: 9 }, //signup
+        { width: 120, targets: 10 }, //referral
+        { width: 250, targets: 11 }, //remarks
+        { width: 150, targets: 12 }, //action
         {defaultContent: "", targets: "_all"}
     ]
 
@@ -115,6 +117,7 @@ $(document).ready(function(){
         {data: 'gender', name: 'gender'},
         {data: 'age', name: 'age'},
         {data: 'course.name', name: 'course'},
+        {data: 'email', name: 'email'},
         {data: 'date_of_signup', name: 'date_of_signup'},
         {data: 'referral.fname', name: 'referral'},
         {data: 'status', name: 'status'},
@@ -132,11 +135,12 @@ $(document).ready(function(){
         { width: 60, targets: 6 },
         { width: 45, targets: 7 },
         { width: 200, targets: 8 },
-        { width: 120, targets: 9 },
+        { width: 200, targets: 9 },
         { width: 120, targets: 10 },
-        { width: 100, targets: 11 },
-        { width: 250, targets: 12 },
-        { width: 150, targets: 13 },
+        { width: 120, targets: 11 },
+        { width: 100, targets: 12 },
+        { width: 250, targets: 13 },
+        { width: 150, targets: 14 },
         {defaultContent: "", targets: "_all"}
     ]
 
@@ -170,6 +174,7 @@ $(document).ready(function(){
         {data: 'gender', name: 'gender'},
         {data: 'age', name: 'age'},
         {data: 'course.name', name: 'course'},
+        {data: 'email', name: 'email'},
         {data: 'referral.fname', name: 'referral'},
         {data: 'remarks', name: 'remarks'},
         {data: "action", orderable:false,searchable:false}
@@ -182,9 +187,10 @@ $(document).ready(function(){
         { width: 60, targets: 3 }, //gender
         { width: 45, targets: 4 }, //age
         { width: 200, targets: 5 }, //course
-        { width: 120, targets: 6 }, //referral
-        { width: 250, targets: 7 }, //remarks
-        { width: 150, targets: 8 }, //action
+        { width: 200, targets: 6 }, //email
+        { width: 120, targets: 7 }, //referral
+        { width: 250, targets: 8 }, //remarks
+        { width: 150, targets: 9 }, //action
         {defaultContent: "", targets: "_all"}
     ]
 
@@ -196,6 +202,7 @@ $(document).ready(function(){
         {data: 'program.name', name: 'program'},
         {data: 'benefactor.name', name: 'benefactor'},
         {data: 'course.name', name: 'course'},
+        {data: 'email', name: 'email'},
         {data: 'referral.fname', name: 'referral'},
         {data: 'remarks', name: 'remarks'},
         {data: "action", orderable:false,searchable:false}
@@ -209,9 +216,10 @@ $(document).ready(function(){
         { width: 130, targets: 4 }, //program
         { width: 130, targets: 5 }, //benefactor
         { width: 200, targets: 6 }, //course
-        { width: 120, targets: 7 }, //referral
-        { width: 250, targets: 8 }, //remarks
-        { width: 150, targets: 9 }, //action
+        { width: 200, targets: 7 }, //course
+        { width: 120, targets: 8 }, //referral
+        { width: 250, targets: 9 }, //remarks
+        { width: 150, targets: 10 }, //action
         {defaultContent: "", targets: "_all"}
     ]
 
@@ -420,8 +428,8 @@ $(document).ready(function(){
                     current_ssv: current_ssv
                 }
             },
-            columnDefs: columnDef_ssv_students,
-            columns: columns_ssv_students,
+            columnDefs: columnDef_ssv_backout,
+            columns: columns_ssv_backout,
             order: [[4,'asc']]
         });
     }

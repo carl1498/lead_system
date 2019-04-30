@@ -138,11 +138,14 @@ $(document).ready(function(){
 
                 var makati_progress = 0, cebu_progress = 0, davao_progress = 0;
 
-                makati_progress = (data.makati_final / data.makati) * 100;
-                $('.makati_progress').css('width', makati_progress + '%');
+                makati_progress = ((data.makati_final / data.makati) * 100);
                 cebu_progress = (data.cebu_final / data.cebu) * 100;
-                $('.cebu_progress').css('width', cebu_progress + '%');
                 davao_progress = (data.davao_final / data.davao) * 100;
+                makati_progress = isNaN(makati_progress) ? 0 : makati_progress;
+                cebu_progress = isNaN(cebu_progress) ? 0 : cebu_progress;
+                davao_progress = isNaN(davao_progress) ? 0 : davao_progress;
+                $('.makati_progress').css('width', makati_progress + '%');
+                $('.cebu_progress').css('width', cebu_progress + '%');
                 $('.davao_progress').css('width', davao_progress + '%');
             }
         });

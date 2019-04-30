@@ -8,6 +8,7 @@
         <th>Gender</th>
         <th>Age</th>
         <th>Course</th>
+        <th>Email</th>
         <th>Sign Up Date</th>
         <th>Referred By</th>
         <th>Remarks</th>

@@ -7,6 +7,7 @@
         <th>Program</th>
         <th>Benefactor</th>
         <th>Course</th>
+        <th>Email</th>
         <th>Referred By</th>
         <th>Remarks</th>
         <th>Action</th>
