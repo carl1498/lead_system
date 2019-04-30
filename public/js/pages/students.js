@@ -99,7 +99,7 @@ $(document).ready(function(){
         { width: 60, targets: 5 }, //gender
         { width: 45, targets: 6 }, //age
         { width: 200, targets: 7 }, //course
-        { width: 200, targets: 8 }, //course
+        { width: 200, targets: 8 }, //email
         { width: 120, targets: 9 }, //signup
         { width: 120, targets: 10 }, //referral
         { width: 250, targets: 11 }, //remarks
@@ -216,7 +216,7 @@ $(document).ready(function(){
         { width: 130, targets: 4 }, //program
         { width: 130, targets: 5 }, //benefactor
         { width: 200, targets: 6 }, //course
-        { width: 200, targets: 7 }, //course
+        { width: 200, targets: 7 }, //email
         { width: 120, targets: 8 }, //referral
         { width: 250, targets: 9 }, //remarks
         { width: 150, targets: 10 }, //action

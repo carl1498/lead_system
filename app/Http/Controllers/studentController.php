@@ -201,7 +201,7 @@ class studentController extends Controller
         $departure_year = $request->departure_year;
         $current_ssv = $request->current_ssv;
 
-        $s = student::with('program', 'referral', 'course', 'departure_year')
+        $s = student::with('program', 'benefactor', 'referral', 'course', 'departure_year')
             ->whereHas('program', function($query) use ($request) {
                 $query->where('name', 'SSV (Careworker)')->orWhere('name', 'SSV (Hospitality)');
             })->get();
