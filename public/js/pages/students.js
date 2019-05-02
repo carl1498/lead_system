@@ -503,7 +503,7 @@ $(document).ready(function(){
 
     $('.ssv_pick').on('click', function(){
         current_ssv = $(this).text();
-        ssv_students.destroy();
+        
         refresh_ssv_student();
         
         $('.month_select').hide();
