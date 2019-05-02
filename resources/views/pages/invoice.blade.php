@@ -8,10 +8,10 @@
     </h1>
     <ol class="breadcrumb">
         <li>
-            <button class="btn btn-secondary bg-red add_books">
+            <button data-container="body" data-toggle="tooltip" data-placement="left" title="Add Books" class="btn btn-secondary bg-red add_books">
             <i class="fas fa-book-medical"></i>
             </button>
-            <button class="btn btn-secondary bg-red add_invoice">
+            <button data-container="body" data-toggle="tooltip" data-placement="left" title="Add Invoice" class="btn btn-secondary bg-red add_invoice">
             <i class="fas fa-file-medical"></i>
             </button>
         </li>

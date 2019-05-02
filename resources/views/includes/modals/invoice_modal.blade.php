@@ -32,7 +32,7 @@
                                 </div>
                                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                     <div class="form-group">
-                                        <input type="number" id="book_1" name="book_1" class="form-control required" placeholder="Minna  I">
+                                        <input type="number" id="book_1" name="book_1" class="form-control required" placeholder="Student">
                                     </div>
                                 </div>
                             </div>
@@ -43,7 +43,7 @@
                                 </div>
                                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                     <div class="form-group">
-                                        <input type="number" id="wb_1" name="wb_1" class="form-control required" placeholder="Minna I WB">
+                                        <input type="number" id="wb_1" name="wb_1" class="form-control required" placeholder="Student">
                                     </div>
                                 </div>
                             </div>
@@ -54,7 +54,7 @@
                                 </div>
                                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                     <div class="form-group">
-                                        <input type="number" id="book_2" name="book_2" class="form-control required" placeholder="Minna II">
+                                        <input type="number" id="book_2" name="book_2" class="form-control required" placeholder="Student">
                                     </div>
                                 </div>
                             </div>
@@ -65,7 +65,7 @@
                                 </div>
                                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                     <div class="form-group">
-                                        <input type="number" id="wb_2" name="wb_2" class="form-control required" placeholder="Minna II WB">
+                                        <input type="number" id="wb_2" name="wb_2" class="form-control required" placeholder="Student">
                                     </div>
                                 </div>
                             </div>
@@ -76,7 +76,7 @@
                                 </div>
                                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                     <div class="form-group">
-                                        <input type="number" id="kanji" name="kanji" class="form-control required" placeholder="Kanji">
+                                        <input type="number" id="kanji" name="kanji" class="form-control required" placeholder="Student">
                                     </div>
                                 </div>
                             </div>
@@ -88,55 +88,55 @@
 
                             <div class="row clearfix">
                                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7 form-control-label">
-                                    <label for="book_1_ssv" class="pull-right">Minna no Nihongo I (SSV)</label>
+                                    <label for="book_1_ssv" class="pull-right">Minna no Nihongo I</label>
                                 </div>
                                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                     <div class="form-group">
-                                        <input type="number" id="book_1_ssv" name="book_1_ssv" class="form-control required" placeholder="Minna I SSV">
+                                        <input type="number" id="book_1_ssv" name="book_1_ssv" class="form-control required" placeholder="SSV">
                                     </div>
                                 </div>
                             </div>
 
                             <div class="row clearfix">
                                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7 form-control-label">
-                                    <label for="wb_1_ssv" class="pull-right">Work Book I (SSV)</label>
+                                    <label for="wb_1_ssv" class="pull-right">Work Book I</label>
                                 </div>
                                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                     <div class="form-group">
-                                        <input type="number" id="wb_1_ssv" name="wb_1_ssv" class="form-control required" placeholder="Minna I WB SSV">
+                                        <input type="number" id="wb_1_ssv" name="wb_1_ssv" class="form-control required" placeholder="SSV">
                                     </div>
                                 </div>
                             </div>
 
                             <div class="row clearfix">
                                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7 form-control-label">
-                                    <label for="book_2_ssv" class="pull-right">Minna no Nihongo II (SSV)</label>
+                                    <label for="book_2_ssv" class="pull-right">Minna no Nihongo II</label>
                                 </div>
                                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                     <div class="form-group">
-                                        <input type="number" id="book_2_ssv" name="book_2_ssv" class="form-control required" placeholder="Minna II SSV">
+                                        <input type="number" id="book_2_ssv" name="book_2_ssv" class="form-control required" placeholder="SSV">
                                     </div>
                                 </div>
                             </div>
 
                             <div class="row clearfix">
                                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7 form-control-label">
-                                    <label for="wb_2_ssv" class="pull-right">Work Book II (SSV)</label>
+                                    <label for="wb_2_ssv" class="pull-right">Work Book II</label>
                                 </div>
                                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                     <div class="form-group">
-                                        <input type="number" id="wb_2_ssv" name="wb_2_ssv" class="form-control required" placeholder="Minna II WB SSV">
+                                        <input type="number" id="wb_2_ssv" name="wb_2_ssv" class="form-control required" placeholder="SSV">
                                     </div>
                                 </div>
                             </div>
 
                             <div class="row clearfix">
                                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7 form-control-label">
-                                    <label for="kanji_ssv" class="pull-right">Kanji (SSV)</label>
+                                    <label for="kanji_ssv" class="pull-right">Kanji</label>
                                 </div>
                                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                     <div class="form-group">
-                                        <input type="number" id="kanji_ssv" name="kanji_ssv" class="form-control required" placeholder="Kanji SSV">
+                                        <input type="number" id="kanji_ssv" name="kanji_ssv" class="form-control required" placeholder="SSV">
                                     </div>
                                 </div>
                             </div>

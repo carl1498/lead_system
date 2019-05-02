@@ -9,10 +9,10 @@
     <ol class="breadcrumb">
         <li>
             @if(canAccessAll() || canAccessStudentList())
-            <button class="btn btn-secondary bg-red switch" data-toggle="modal">
+            <button class="btn btn-secondary bg-red switch">
                 <b id="switch_name">SSV</b> <i class="fa fa-sync"></i>
             </button>
-            <button class="btn btn-secondary bg-red add_student" data-toggle="modal" data-target="#student_modal">
+            <button data-container="body" data-toggle="tooltip" data-placement="left" title="Add Student" class="btn btn-secondary bg-red add_student">
                 <i class="fa fa-plus-square"></i>
             </button>
             @endif

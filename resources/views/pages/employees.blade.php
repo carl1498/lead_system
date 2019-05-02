@@ -9,7 +9,7 @@
     <ol class="breadcrumb">
         <li>
             @if(canAccessAll())
-            <button class="btn btn-secondary bg-red add_employee" data-toggle="modal" data-target="#employee_modal">
+            <button data-container="body" data-toggle="tooltip" data-placement="left" title="Add Employee" class="btn btn-secondary bg-red add_employee" data-toggle="modal" data-target="#employee_modal">
                 <i class="fa fa-plus-square"></i>
             </button>
             @endif

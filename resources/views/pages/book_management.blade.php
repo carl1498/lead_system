@@ -8,16 +8,16 @@
     </h1>
     <ol class="breadcrumb">
         <li>
-            <button class="btn btn-secondary bg-red assign_books">
+            <button data-container="body" data-toggle="tooltip" data-placement="left" title="Assign Books" class="btn btn-secondary bg-red assign_books">
             <i class="fas fa-people-carry"></i>
             </button>
             @if(onLoadBranch() == 'Makati')
-            <button class="btn btn-secondary bg-red release_books">
+            <button data-container="body" data-toggle="tooltip" data-placement="left" title="Release Books" class="btn btn-secondary bg-red release_books">
             <i class="fas fa-external-link-alt"></i>
             </button>
             @endif
             @if(onLoadBranch() != 'Makati')
-            <button class="btn btn-secondary bg-red request_books">
+            <button data-container="body" data-toggle="tooltip" data-placement="left" title="Request Books" class="btn btn-secondary bg-red request_books">
             <i class="fas fa-hand-holding"></i>
             </button>
             @endif

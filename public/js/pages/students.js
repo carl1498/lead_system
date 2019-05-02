@@ -8,14 +8,6 @@ $(document).ready(function(){
     var current_ssv = '';
     var departure_year;
     var departure_month = $('#month_select').val();
-    var student_type = 'Student';
-
-    //datatables
-    var students_branch;
-    var students_status;
-    var students_result;
-    var language_students;
-    var ssv_students;
 
     $.ajax({
         headers: {
@@ -438,6 +430,27 @@ $(document).ready(function(){
 
     //FUNCTIONS -- START
     
+    //Open Add Students Modal
+    $('.add_student').on('click', function(){
+        $('#student_modal').modal('toggle');
+        $('#student_modal').modal('show');
+    });
+
+    $('#birthdate').on('change', function(){
+        var tempAge = getAge($(this).val());
+        $('#age').val(tempAge);
+    })
+
+    $('#l_birthdate').on('change', function(){
+        var tempAge = getAge($(this).val());
+        $('#l_age').val(tempAge);
+    })
+
+    $('#s_birthdate').on('change', function(){
+        var tempAge = getAge($(this).val());
+        $('#s_age').val(tempAge);
+    })
+    
     $('.switch').on('click', function(){
         if($('#switch_name').text() == 'SSV'){
             $('#switch_name').text('Student');
@@ -490,7 +503,7 @@ $(document).ready(function(){
 
     $('.ssv_pick').on('click', function(){
         current_ssv = $(this).text();
-
+        ssv_students.destroy();
         refresh_ssv_student();
         
         $('.month_select').hide();

@@ -44,6 +44,11 @@ $(document).ready(function(){
     });
 
     $('input, select').attr('autocomplete', 'off');
+    
+    $('body').tooltip({
+        selector: '[data-toggle="tooltip"]',
+        trigger : 'hover'
+    });
 
     //INITIALIZE -- END
 
