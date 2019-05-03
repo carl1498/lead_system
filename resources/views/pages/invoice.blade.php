@@ -8,12 +8,14 @@
     </h1>
     <ol class="breadcrumb">
         <li>
+            @if(canAccessAll() || canEditInvoice())
             <button data-container="body" data-toggle="tooltip" data-placement="left" title="Add Books" class="btn btn-secondary bg-red add_books">
             <i class="fas fa-book-medical"></i>
             </button>
             <button data-container="body" data-toggle="tooltip" data-placement="left" title="Add Invoice" class="btn btn-secondary bg-red add_invoice">
             <i class="fas fa-file-medical"></i>
             </button>
+            @endif
         </li>
     </ol>
 </section>
@@ -26,10 +28,8 @@
         <div class="col-md-12">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
-                    @if(canAccessAll() || canEditInvoice())
                     <li class="active"><a class="invoice_pick" href="#invoice_tab" data-toggle="tab">Invoice</a></li>
                     <li><a class="invoice_pick" href="#add_books_tab" data-toggle="tab">Add Book History</a></li>
-                    @endif
                 </ul>
 
                 <div class="tab-content">
