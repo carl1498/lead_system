@@ -89,6 +89,11 @@ $(document).ready(function(){
         refresh_employee_branch();
     });
 
+    $('.add_employee').on('click', function(){
+        $('#employee_modal').modal('toggle');
+        $('#employee_modal').modal('show');
+    });
+
     //Add or Edit School
     $('.save_employee').on('click', function(e){
         e.preventDefault();
