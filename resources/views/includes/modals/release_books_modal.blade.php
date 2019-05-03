@@ -18,7 +18,7 @@
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 form-control-label">
                                 <label for="release_branch" class="pull-right">Branch</label>
                             </div>
-                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                 <div class="form-group required">
                                     <select type="text" id="release_branch" name="release_branch" class="form-control select2 required" style="width: 100%;" required>
                                         <!-- Controller: releaseBooksController@get_branch -->
@@ -31,7 +31,7 @@
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 form-control-label">
                                 <label for="release_book" class="pull-right">Book</label>
                             </div>
-                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                 <div class="form-group required">
                                     <select type="text" id="release_book" name="release_book" class="form-control select2 required" style="width: 100%;" required disabled>
                                         <!-- Controller: releaseBooksController@get_books -->
@@ -44,7 +44,7 @@
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 form-control-label">
                                 <label for="release_stocks" class="pull-right">Stocks On Hand</label>
                             </div>
-                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                 <div class="form-group required">
                                     <input type="number" min="0" id="release_stocks" name="release_stocks" class="form-control required" style="width: 100%;" required readonly>
                                 </div>
@@ -55,7 +55,7 @@
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 form-control-label">
                                 <label for="release_previous_pending" class="pull-right">Pending</label>
                             </div>
-                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                 <div class="form-group required">
                                     <input type="number" min="0" id="release_previous_pending" name="release_previous_pending" class="form-control required" style="width: 100%;" required readonly>
                                 </div>
@@ -66,7 +66,7 @@
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 form-control-label">
                                 <label for="release_quantity" class="pull-right">Quantity</label>
                             </div>
-                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                 <div class="form-group required">
                                     <input type="number" min="0" id="release_quantity" name="release_quantity" class="form-control required" style="width: 100%;" required disabled>
                                 </div>
@@ -77,7 +77,7 @@
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 form-control-label">
                                 <label for="release_pending" class="pull-right">Total Pending</label>
                             </div>
-                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                 <div class="form-group required">
                                     <input type="number" min="0" id="release_pending" name="release_pending" class="form-control required" style="width: 100%;" required readonly>
                                 </div>
@@ -88,7 +88,7 @@
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 form-control-label">
                                 <label for="release_starting" class="pull-right">Starting No.</label>
                             </div>
-                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                 <div class="form-group required">
                                     <input type="number" min="0" id="release_starting" name="release_starting" class="form-control required" style="width: 100%;" required disabled>
                                 </div>
@@ -99,7 +99,7 @@
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 form-control-label">
                                 <label for="release_start" class="pull-right">Start</label>
                             </div>
-                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                 <div class="form-group required">
                                     <input type="number" min="0" id="release_start" name="release_start" class="form-control required" style="width: 100%;" required readonly>
                                 </div>
@@ -110,7 +110,7 @@
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 form-control-label">
                                 <label for="release_end" class="pull-right">End</label>
                             </div>
-                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                 <div class="form-group required">
                                     <input type="number" min="0" id="release_end" name="release_end" class="form-control required" style="width: 100%;" required readonly>
                                 </div>
@@ -121,7 +121,7 @@
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 form-control-label">
                                 <label for="release_remarks" class="pull-right">Remarks</label>
                             </div>
-                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                 <div class="form-group">
                                     <input type="text" id="release_remarks" name="release_remarks" class="form-control" style="width: 100%;" disabled>
                                 </div>

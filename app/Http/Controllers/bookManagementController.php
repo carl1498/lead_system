@@ -111,7 +111,7 @@ class bookManagementController extends Controller
             return $data->lname . ', ' . $data->fname . ' ' . $data->mname;
         })
         ->addColumn('book_1', function($data){
-            $get_book = book_type::where('name', 'Minna 1')->first();
+            $get_book = book_type::where('name', 'Minna 1 (Student)')->first();
             $get_book_id = $get_book->id;
             $book = books::where('stud_id', $data->id)->where('book_type_id', $get_book_id)->first();
 
@@ -120,7 +120,7 @@ class bookManagementController extends Controller
             }
         })
         ->addColumn('wb_1', function($data){
-            $get_book = book_type::where('name', 'WB 1')->first();
+            $get_book = book_type::where('name', 'WB 1 (Student)')->first();
             $get_book_id = $get_book->id;
             $book = books::where('stud_id', $data->id)->where('book_type_id', $get_book_id)->first();
 
@@ -129,7 +129,7 @@ class bookManagementController extends Controller
             }
         })
         ->addColumn('book_2', function($data){
-            $get_book = book_type::where('name', 'Minna 2')->first();
+            $get_book = book_type::where('name', 'Minna 2 (Student)')->first();
             $get_book_id = $get_book->id;
             $book = books::where('stud_id', $data->id)->where('book_type_id', $get_book_id)->first();
 
@@ -138,7 +138,7 @@ class bookManagementController extends Controller
             }
         })
         ->addColumn('wb_2', function($data){
-            $get_book = book_type::where('name', 'WB 2')->first();
+            $get_book = book_type::where('name', 'WB 2 (Student)')->first();
             $get_book_id = $get_book->id;
             $book = books::where('stud_id', $data->id)->where('book_type_id', $get_book_id)->first();
 
@@ -147,7 +147,7 @@ class bookManagementController extends Controller
             }
         })
         ->addColumn('kanji', function($data){
-            $get_book = book_type::where('name', 'Kanji')->first();
+            $get_book = book_type::where('name', 'Kanji (Student)')->first();
             $get_book_id = $get_book->id;
             $book = books::where('stud_id', $data->id)->where('book_type_id', $get_book_id)->first();
 
@@ -265,7 +265,7 @@ class bookManagementController extends Controller
 
         return Datatables::of($branch)
         ->addColumn('book_1', function($data) use($status, $invoice_select){
-            $get_book = book_type::where('name', 'Minna 1')->first();
+            $get_book = book_type::where('name', 'Minna 1 (Student)')->first();
             $get_book_id = $get_book->id;
 
             if($status == 'All'){
@@ -311,7 +311,7 @@ class bookManagementController extends Controller
             return $book;
         })
         ->addColumn('wb_1', function($data) use($status, $invoice_select){
-            $get_book = book_type::where('name', 'WB 1')->first();
+            $get_book = book_type::where('name', 'WB 1 (Student)')->first();
             $get_book_id = $get_book->id;
 
             if($status == 'All'){
@@ -357,7 +357,7 @@ class bookManagementController extends Controller
             return $book;
         })
         ->addColumn('book_2', function($data) use($status, $invoice_select){
-            $get_book = book_type::where('name', 'Minna 2')->first();
+            $get_book = book_type::where('name', 'Minna 2 (Student)')->first();
             $get_book_id = $get_book->id;
 
             if($status == 'All'){
@@ -403,7 +403,7 @@ class bookManagementController extends Controller
             return $book;
         })
         ->addColumn('wb_2', function($data) use($status, $invoice_select){
-            $get_book = book_type::where('name', 'WB 2')->first();
+            $get_book = book_type::where('name', 'WB 2 (Student)')->first();
             $get_book_id = $get_book->id;
 
             if($status == 'All'){
@@ -449,7 +449,7 @@ class bookManagementController extends Controller
             return $book;
         })
         ->addColumn('kanji', function($data) use($status, $invoice_select){
-            $get_book = book_type::where('name', 'Kanji')->first();
+            $get_book = book_type::where('name', 'Kanji (Student)')->first();
             $get_book_id = $get_book->id;
 
             if($status == 'All'){

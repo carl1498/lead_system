@@ -34,7 +34,7 @@ class invoiceController extends Controller
 
         return Datatables::of($invoice)
         ->addColumn('book_1', function($data) use($invoice_select){
-            $get_book = book_type::where('name', 'Minna 1')->first();
+            $get_book = book_type::where('name', 'Minna 1 (Student)')->first();
             $get_book_id = $get_book->id;
             $book = $data->where('ref_no_id', $data->ref_no_id)->where('book_type_id', $get_book_id)->first();
             if((empty($book))){return 0;}
@@ -46,7 +46,7 @@ class invoiceController extends Controller
             }
         })
         ->addColumn('wb_1', function($data) use($invoice_select){
-            $get_book = book_type::where('name', 'WB 1')->first();
+            $get_book = book_type::where('name', 'WB 1 (Student)')->first();
             $get_book_id = $get_book->id;
             $book = $data->where('ref_no_id', $data->ref_no_id)->where('book_type_id', $get_book_id)->first();
             if((empty($book))){return 0;}
@@ -58,7 +58,7 @@ class invoiceController extends Controller
             }
         })
         ->addColumn('book_2', function($data) use($invoice_select){
-            $get_book = book_type::where('name', 'Minna 2')->first();
+            $get_book = book_type::where('name', 'Minna 2 (Student)')->first();
             $get_book_id = $get_book->id;
             $book = $data->where('ref_no_id', $data->ref_no_id)->where('book_type_id', $get_book_id)->first();
             if((empty($book))){return 0;}
@@ -70,7 +70,7 @@ class invoiceController extends Controller
             }
         })
         ->addColumn('wb_2', function($data) use($invoice_select){
-            $get_book = book_type::where('name', 'WB 2')->first();
+            $get_book = book_type::where('name', 'WB 2 (Student)')->first();
             $get_book_id = $get_book->id;
             $book = $data->where('ref_no_id', $data->ref_no_id)->where('book_type_id', $get_book_id)->first();
             if((empty($book))){return 0;}
@@ -82,7 +82,7 @@ class invoiceController extends Controller
             }
         })
         ->addColumn('kanji', function($data) use($invoice_select){
-            $get_book = book_type::where('name', 'Kanji')->first();
+            $get_book = book_type::where('name', 'Kanji (Student)')->first();
             $get_book_id = $get_book->id;
             $book = $data->where('ref_no_id', $data->ref_no_id)->where('book_type_id', $get_book_id)->first();
             if((empty($book))){return 0;}
@@ -201,7 +201,7 @@ class invoiceController extends Controller
         $quantity = array($request->book_1, $request->wb_1, $request->book_2, $request->wb_2, $request->kanji,
         $request->book_1_ssv, $request->wb_1_ssv, $request->book_2_ssv, $request->wb_2_ssv, $request->kanji_ssv);
         
-        $book_types = array('Minna 1', 'WB 1', 'Minna 2', 'WB 2', 'Kanji',
+        $book_types = array('Minna 1 (Student)', 'WB 1 (Student)', 'Minna 2 (Student)', 'WB 2 (Student)', 'Kanji (Student)',
         'Minna 1 (SSV)', 'WB 1 (SSV)', 'Minna 2 (SSV)', 'WB 2 (SSV)', 'Kanji (SSV)');
 
         for($x = 0; $x < count($book_types); $x++){

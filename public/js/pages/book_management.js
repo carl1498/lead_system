@@ -184,7 +184,7 @@ $(document).ready(function(){
             columnDefs: [
                 { width: 30, targets: 0 }, //id
                 { width: 80, targets: 1 }, //branch
-                { width: 180, targets: 2 }, //book type
+                { width: 200, targets: 2 }, //book type
                 { width: 70, targets: 3 }, //previous
                 { width: 70, targets: 4 }, //quantity
                 { width: 70, targets: 5 }, //pending
@@ -242,7 +242,7 @@ $(document).ready(function(){
             columnDefs: [
                 { width: 30, targets: 0 }, //id
                 { width: 80, targets: 1 }, //branch
-                { width: 180, targets: 2 }, //book type
+                { width: 20200, targets: 2 }, //book type
                 { width: 70, targets: 3 }, //previous
                 { width: 70, targets: 4 }, //quantity
                 { width: 70, targets: 5 }, //pending
@@ -348,7 +348,7 @@ $(document).ready(function(){
                 {data: 'action', orderable: false, searchable: false}
             ],
             columnDefs: [
-                { width: 180, targets: 0 }, //book type
+                { width: 20200, targets: 0 }, //book type
                 { width: 80, targets: 1 }, //book no.
                 { width: 130, targets: 2 }, //lead ref no
                 { width: 130, targets: 3 }, //invoice ref no
@@ -468,11 +468,11 @@ $(document).ready(function(){
             columnDefs: [
                 { width: 250, targets: 0 }, //student name
                 { width: 100, targets: 1 }, //branch
-                { width: 90, targets: 2 }, //book 1 ssv
-                { width: 90, targets: 3 }, //wb 1 ssv
-                { width: 90, targets: 4 }, //book 2 ssv
-                { width: 90, targets: 5 }, //wb 2 ssv
-                { width: 90, targets: 6 }, //kanji ssv
+                { width: 60, targets: 2 }, //book 1 ssv
+                { width: 60, targets: 3 }, //wb 1 ssv
+                { width: 60, targets: 4 }, //book 2 ssv
+                { width: 60, targets: 5 }, //wb 2 ssv
+                { width: 60, targets: 6 }, //kanji ssv
                 { width: 150, targets: 7 }, //program
                 { width: 110, targets: 8 }, //status
             ]
@@ -578,7 +578,7 @@ $(document).ready(function(){
                 {data: 'created_at', name: 'date'},
             ],
             columnDefs: [
-                { width: 180, targets: 0 }, //book type
+                { width: 200, targets: 0 }, //book type
                 { width: 130, targets: 1 }, //book no
                 { width: 130, targets: 2 }, //invoice ref no
                 { width: 70, targets: 3 }, //branch
@@ -628,7 +628,7 @@ $(document).ready(function(){
                 {data: 'created_at', name: 'date'},
             ],
             columnDefs: [
-                { width: 180, targets: 0 }, //book type
+                { width: 200, targets: 0 }, //book type
                 { width: 130, targets: 1 }, //book no
                 { width: 130, targets: 2 }, //invoice ref no
                 { width: 70, targets: 3 }, //branch

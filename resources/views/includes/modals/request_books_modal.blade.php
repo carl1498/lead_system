@@ -18,7 +18,7 @@
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 form-control-label">
                                 <label for="request_book" class="pull-right">Book</label>
                             </div>
-                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                 <div class="form-group required">
                                     <select type="text" id="request_book" name="request_book" class="form-control select2 required" style="width: 100%;" required>
                                         <option value="">Select Book</option>
@@ -35,7 +35,7 @@
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 form-control-label">
                                 <label for="request_previous_pending" class="pull-right">Pending</label>
                             </div>
-                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                 <div class="form-group required">
                                     <input type="number" min="0" id="request_previous_pending" name="request_previous_pending" class="form-control required" style="width: 100%;" required readonly>
                                 </div>
@@ -46,7 +46,7 @@
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 form-control-label">
                                 <label for="request_quantity" class="pull-right">Quantity</label>
                             </div>
-                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                 <div class="form-group required">
                                     <input type="number" min="0" id="request_quantity" name="request_quantity" class="form-control required" style="width: 100%;" required disabled>
                                 </div>
@@ -57,7 +57,7 @@
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 form-control-label">
                                 <label for="request_pending" class="pull-right">Total Pending</label>
                             </div>
-                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                 <div class="form-group required">
                                     <input type="number" min="0" id="request_pending" name="request_pending" class="form-control required" style="width: 100%;" required readonly>
                                 </div>
@@ -68,7 +68,7 @@
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 form-control-label">
                                 <label for="request_remarks" class="pull-right">Remarks</label>
                             </div>
-                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                 <div class="form-group">
                                     <input type="text" id="request_remarks" name="request_remarks" class="form-control" style="width: 100%;" required disabled>
                                 </div>

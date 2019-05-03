@@ -19,7 +19,8 @@ class Employee
     {
         $id = Auth::user()->id;
         $user = User::with('employee.role')->find($id);
-        $authorized = ['President', 'Finance Director', 'HR Head', 'IT Officer', 'HR'];
+        $authorized = ['President', 'Finance Director', 'HR/Finance Head', 'IT Officer', 'HR', 
+                        'Assistant Finance Officer'];
 
         foreach($authorized as $auth){
             if($user->employee->role->name == $auth){

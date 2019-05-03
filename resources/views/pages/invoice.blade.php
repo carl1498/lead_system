@@ -26,8 +26,10 @@
         <div class="col-md-12">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
+                    @if(canAccessAll() || canEditBookManagement())
                     <li class="active"><a class="invoice_pick" href="#invoice_tab" data-toggle="tab">Invoice</a></li>
                     <li><a class="invoice_pick" href="#add_books_tab" data-toggle="tab">Add Book History</a></li>
+                    @endif
                 </ul>
 
                 <div class="tab-content">
