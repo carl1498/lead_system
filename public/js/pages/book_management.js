@@ -242,7 +242,7 @@ $(document).ready(function(){
             columnDefs: [
                 { width: 30, targets: 0 }, //id
                 { width: 80, targets: 1 }, //branch
-                { width: 20200, targets: 2 }, //book type
+                { width: 200, targets: 2 }, //book type
                 { width: 70, targets: 3 }, //previous
                 { width: 70, targets: 4 }, //quantity
                 { width: 70, targets: 5 }, //pending
@@ -348,7 +348,7 @@ $(document).ready(function(){
                 {data: 'action', orderable: false, searchable: false}
             ],
             columnDefs: [
-                { width: 20200, targets: 0 }, //book type
+                { width: 200, targets: 0 }, //book type
                 { width: 80, targets: 1 }, //book no.
                 { width: 130, targets: 2 }, //lead ref no
                 { width: 130, targets: 3 }, //invoice ref no

@@ -9,7 +9,7 @@
 				</div>
         		<div class="pull-left info">
 					<p>{{ onLoadName() }}</p>
-					<p style="font-size: 10px;">{{ onLoadPosition() }}</p>
+					<p style="font-size: 11px;">{{ onLoadPosition() }}</p>
         		</div>
       		</div>
 			<!-- sidebar menu: : style can be found in sidebar.less -->
