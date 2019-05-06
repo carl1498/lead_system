@@ -16,10 +16,6 @@ $(document).ready(function(){
 
     $('.select2').select2();
 
-    function refresh_tables(){//reload datatable ajax
-        employees_branch.ajax.reload();
-    }
-
     $('#employee_modal').on('shown.bs.modal', function(){
         $('#fname').focus();
     });

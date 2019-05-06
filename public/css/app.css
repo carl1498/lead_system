@@ -16158,6 +16158,6 @@ readers do not read off random characters that represent icons */
 }
 
 .box-profile{
-  height: 300px;
+  height: 450px;
   overflow-y: scroll;
 }

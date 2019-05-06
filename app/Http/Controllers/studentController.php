@@ -197,6 +197,26 @@ class studentController extends Controller
         ->make(true);
     }
 
+    public function all(){
+        $all = student::with('branch', 'program', 'school', 'benefactor', 'course', 'referral')->get();
+
+        return $this->refreshDatatableAll($all);
+    }
+
+    public function refreshDatatableAll($all){
+        return Datatables::of($all)
+        ->editColumn('name', function($data){
+            return $data->lname.', '.$data->fname.' '.$data->mname;
+        })->addColumn('action', function($data){
+            $html = '';
+
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-primary btn-xs view_profile" id="'.$data->id.'"><i class="fa fa-eye"></i></button>&nbsp;';
+
+            return  $html;
+        })
+        ->make(true);
+    }
+
     public function ssv(Request $request){
         $departure_year = $request->departure_year;
         $current_ssv = $request->current_ssv;

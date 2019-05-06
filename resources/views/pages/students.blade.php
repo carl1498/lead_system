@@ -121,6 +121,7 @@
                     <li class="status_pick"><a class="status_pick" href="#students_status_tab" data-toggle="tab">Back Out / Cancelled</a></li>
                     <li class="result_pick"><a class="result_pick" href="#students_result_tab" data-toggle="tab">Result Monitoring</a></li>
                     <li class="language_pick"><a class="language_pick" href="#language_student_tab" data-toggle="tab">Language</a></li>
+                    <li class="all_pick"><a class="all_pick" href="#all_student_tab" data-toggle="tab">All</a></li>
                 </ul>
 
                 <div class="tab-content">

@@ -71,6 +71,7 @@ $(document).ready(function(){
         else if(current_tab == 'Language'){refresh_language_student();}
         else if(current_tab == 'SSV'){refresh_ssv_student();}
         else if(current_tab == 'SSV Backout'){refresh_ssv_backout();}
+        else if(current_tab == 'All'){refresh_all_student();}
 
         $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
     });
@@ -181,7 +182,7 @@ $(document).ready(function(){
         {data: "action", orderable:false,searchable:false}
     ]
 
-    var columnDef_language_students = [
+    var columnDefs_language_students = [
         { width: 220, targets: 0 }, //name
         { width: 70, targets: 1 }, //branch
         { width: 90, targets: 2 }, //contact
@@ -194,6 +195,9 @@ $(document).ready(function(){
         { width: 150, targets: 9 }, //action
         {defaultContent: "", targets: "_all"}
     ]
+
+    var columns_all_students = columns_students_status;
+    var columnDefs_all_students = columnDefs_students_status;
 
     var columns_ssv_students = [
         {data: 'name', name: 'name'},
@@ -209,7 +213,7 @@ $(document).ready(function(){
         {data: "action", orderable:false,searchable:false}
     ]
 
-    var columnDef_ssv_students = [
+    var columnDefs_ssv_students = [
         { width: 220, targets: 0 }, //name
         { width: 90, targets: 1 }, //contact
         { width: 60, targets: 2 }, //gender
@@ -225,7 +229,7 @@ $(document).ready(function(){
     ]
 
     var columns_ssv_backout = columns_ssv_students;
-    var columnDef_ssv_backout = columnDef_ssv_students;
+    var columnDefs_ssv_backout = columnDefs_ssv_students;
 
     function refresh_student_branch(){
         departure_year = $('#year_select').val();
@@ -295,7 +299,7 @@ $(document).ready(function(){
             },
             columnDefs: columnDefs_students_status,
             columns: columns_students_status,
-            order: [[3,'asc']]
+            order: [[4,'asc']]
         });
     }
 
@@ -331,7 +335,7 @@ $(document).ready(function(){
             },
             columnDefs: columnDefs_students_result,
             columns: columns_students_result,
-            order: [[3,'asc']]
+            order: [[4,'asc']]
         });
     }
 
@@ -362,8 +366,36 @@ $(document).ready(function(){
                     departure_year: departure_year
                 }
             },
-            columnDefs: columnDef_language_students,
+            columnDefs: columnDefs_language_students,
             columns: columns_language_students,
+        });
+    }
+
+    function refresh_all_student(){
+
+        all_students = $('#all_students').DataTable({
+            stateSave: true,
+            stateSaveCallback: function(settings,data) {
+                localStorage.setItem( 'DataTables_' + settings.sInstance, JSON.stringify(data) )
+            },
+            stateLoadCallback: function(settings) {
+                return JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ) )
+            },
+            stateLoadParams: function( settings, data ) {
+                if (data.order) delete data.order;
+            },
+            processing: true,
+            destroy: true,
+            scrollX: true,
+            scrollCollapse: true,
+            fixedColumns: true,
+            responsive: true,
+            ajax: {
+                url: '/all_student',
+                data: {}
+            },
+            columnDefs: columnDefs_all_students,
+            columns: columns_all_students,
         });
     }
 
@@ -395,7 +427,7 @@ $(document).ready(function(){
                     current_ssv: current_ssv
                 }
             },
-            columnDefs: columnDef_ssv_students,
+            columnDefs: columnDefs_ssv_students,
             columns: columns_ssv_students,
             order: [[4,'asc']]
         });
@@ -429,7 +461,7 @@ $(document).ready(function(){
                     current_ssv: current_ssv
                 }
             },
-            columnDefs: columnDef_ssv_backout,
+            columnDefs: columnDefs_ssv_backout,
             columns: columns_ssv_backout,
             order: [[4,'asc']]
         });
@@ -504,6 +536,14 @@ $(document).ready(function(){
 
     $('.language_pick').on('click', function(){
         current_tab = 'Language';
+        
+        $('.month_select').hide();
+        $('#month_select').next(".select2-container").hide();
+        $('.select_description').text('Year:');
+    });
+
+    $('.all_pick').on('click', function(){
+        current_tab = 'All';
         
         $('.month_select').hide();
         $('#month_select').next(".select2-container").hide();
