@@ -8,6 +8,7 @@ $(document).ready(function(){
     var current_ssv = '';
     var departure_year;
     var departure_month = $('#month_select').val();
+    var current_tab = 'Branch';
 
     $.ajax({
         headers: {
@@ -63,6 +64,14 @@ $(document).ready(function(){
     //DATATABLES -- START
 
     $(document).on('shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
+        
+        if(current_tab == 'Branch'){refresh_student_branch();}
+        else if(current_tab == 'Status'){refresh_student_status();}
+        else if(current_tab == 'Result'){refresh_student_result();}
+        else if(current_tab == 'Language'){refresh_language_student();}
+        else if(current_tab == 'SSV'){refresh_ssv_student();}
+        else if(current_tab == 'SSV Backout'){refresh_ssv_backout();}
+
         $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
     });
 
@@ -473,28 +482,28 @@ $(document).ready(function(){
     }
 
     $('.branch_pick').on('click', function(){
+        current_tab = 'Branch';
         current_branch = $(this).text();
         
         showMonthSelect();
-        refresh_student_branch();
     });
 
     $('.status_pick').on('click', function(){
+        current_tab = 'Status';
         current_status = $(this).text();
 
         showMonthSelect();
-        refresh_student_status();
     });
 
     $('.result_pick').on('click', function(){
+        current_tab = 'Result';
         current_result = $(this).text();
 
         showMonthSelect();
-        refresh_student_result();
     });
 
     $('.language_pick').on('click', function(){
-        refresh_language_student();
+        current_tab = 'Language';
         
         $('.month_select').hide();
         $('#month_select').next(".select2-container").hide();
@@ -502,9 +511,8 @@ $(document).ready(function(){
     });
 
     $('.ssv_pick').on('click', function(){
+        current_tab = 'SSV';
         current_ssv = $(this).text();
-        
-        refresh_ssv_student();
         
         $('.month_select').hide();
         $('#month_select').next(".select2-container").hide();
@@ -512,9 +520,8 @@ $(document).ready(function(){
     });
 
     $('.ssv_backout_pick').on('click', function(){
+        current_tab = 'SSV Backout';
         current_ssv = $(this).text();
-
-        refresh_ssv_backout();
         
         $('.month_select').hide();
         $('#month_select').next(".select2-container").hide();
