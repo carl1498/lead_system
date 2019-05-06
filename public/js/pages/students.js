@@ -507,6 +507,11 @@ $(document).ready(function(){
         }
     });
 
+    function showYearSelect(){
+        $('.year_select').show();
+        $('#year_select').next(".select2-container").show();
+    }
+
     function showMonthSelect(){
         $('.month_select').show();
         $('#month_select').next(".select2-container").show();
@@ -517,6 +522,7 @@ $(document).ready(function(){
         current_tab = 'Branch';
         current_branch = $(this).text();
         
+        showYearSelect();
         showMonthSelect();
     });
 
@@ -524,6 +530,7 @@ $(document).ready(function(){
         current_tab = 'Status';
         current_status = $(this).text();
 
+        showYearSelect();
         showMonthSelect();
     });
 
@@ -531,12 +538,14 @@ $(document).ready(function(){
         current_tab = 'Result';
         current_result = $(this).text();
 
+        showYearSelect();
         showMonthSelect();
     });
 
     $('.language_pick').on('click', function(){
         current_tab = 'Language';
         
+        showYearSelect();
         $('.month_select').hide();
         $('#month_select').next(".select2-container").hide();
         $('.select_description').text('Year:');
@@ -545,15 +554,18 @@ $(document).ready(function(){
     $('.all_pick').on('click', function(){
         current_tab = 'All';
         
+        $('.year_select').hide();
+        $('#year_select').next(".select2-container").hide();
         $('.month_select').hide();
         $('#month_select').next(".select2-container").hide();
-        $('.select_description').text('Year:');
+        $('.select_description').text('');
     });
 
     $('.ssv_pick').on('click', function(){
         current_tab = 'SSV';
         current_ssv = $(this).text();
         
+        showYearSelect();
         $('.month_select').hide();
         $('#month_select').next(".select2-container").hide();
         $('.select_description').text('Year:');
@@ -563,6 +575,7 @@ $(document).ready(function(){
         current_tab = 'SSV Backout';
         current_ssv = $(this).text();
         
+        showYearSelect();
         $('.month_select').hide();
         $('#month_select').next(".select2-container").hide();
         $('.select_description').text('Year:');
