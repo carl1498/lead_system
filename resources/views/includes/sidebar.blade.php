@@ -26,7 +26,8 @@
 
 				@if(canAccessAll() || canAccessStudents())
                 <li class="{{ (Request::path() == 'students' || Request::path() == 'student_settings' || 
-					Request::path() == 'student_edit_history' || Request::path() == 'student_delete_history') ? 'active' : '' }} treeview">
+					Request::path() == 'student_add_history' || Request::path() == 'student_edit_history' || 
+					Request::path() == 'student_delete_history') ? 'active' : '' }} treeview">
 					<a href="">
 						<i class="fa fa-user-graduate"></i> <span>Students</span>
 						<span class="pull-right-container">
@@ -41,7 +42,8 @@
 						<li class="{{ (Request::path() == 'student_settings') ? 'active' : '' }}"><a href="/student_settings"><i class="fa fa-cog"></i> Settings</a></li>
 						@endif
 						@if(canAccessAll() || canAccessStudentList())
-						<li class="{{ (Request::path() == 'student_edit_history' || Request::path() == 'student_delete_history') ? 'active' : '' }} treeview">
+						<li class="{{ (Request::path() == 'student_add_history' || Request::path() == 'student_edit_history') ? 'active' : '' }} ||
+										Request::path() == 'student_delete_history') ? 'active' : '' }} treeview">
 							<a href="">
 								<i class="fa fa-history"></i> <span>Student Logs</span>
 								<span class="pull-right-container">
