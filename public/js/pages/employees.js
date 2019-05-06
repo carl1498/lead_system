@@ -89,6 +89,12 @@ $(document).ready(function(){
         refresh_employee_branch();
     });
 
+    $('.add_employee').on('click', function(){
+        $('#add_edit').val('add');
+        $('#employee_modal').modal('toggle');
+        $('#employee_modal').modal('show');
+    });
+
     //Add or Edit School
     $('.save_employee').on('click', function(e){
         e.preventDefault();
@@ -127,9 +133,6 @@ $(document).ready(function(){
 
     //Open Employee Modal (ADD)
     $('.add_employee').on('click', function(){
-        $('#add_edit').val('add');
-        $('#employee_modal').modal('toggle');
-        $('#employee_modal').modal('show');
     });
 
     //Open Employee Modal (EDIT)

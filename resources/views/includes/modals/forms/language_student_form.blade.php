@@ -79,7 +79,7 @@
                 </div>
                 <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
                     <div class="form-group">
-                        <input type="text" id="l_address" name="l_address" class="form-control required" placeholder="Enter Address" required>
+                        <input type="text" id="l_address" name="l_address" class="form-control required" placeholder="Blg No., Street, City, Province, Zip" required>
                     </div>
                 </div>
             </div>

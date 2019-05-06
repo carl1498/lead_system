@@ -129,7 +129,7 @@
                             </div>
                             <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
                                 <div class="form-group">
-                                    <input type="text" id="address" name="address" class="form-control required" placeholder="Enter Address" required>
+                                    <input type="text" id="address" name="address" class="form-control required" placeholder="Blg No., Street, City, Province, Zip" required>
                                 </div>
                             </div>
                         </div>

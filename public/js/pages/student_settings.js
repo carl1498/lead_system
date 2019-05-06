@@ -84,7 +84,7 @@ $(document).ready(function(){
                 refresh_student_settings();
             },
             error: function(data){
-                swal("Oh no!", "Something went wrong, try again.", "error");
+                swal("Duplicate!", "Data already exists.", "error");
                 button.disabled = false;
                 input.html('SAVE CHANGES');
             }
