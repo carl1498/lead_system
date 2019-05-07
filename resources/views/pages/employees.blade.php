@@ -27,12 +27,11 @@
             <div class="box box-primary">
                 <div class="box-body box-profile">
                     <div style="width: auto; height: 125px;">
-                    <img id="p_picture" class="profile-user-img img-responsive img-rounded pull-left" src="./img/avatar5.png" alt="User profile picture">
+                        <img id="p_picture" class="profile-user-img img-responsive img-rounded pull-left" src="./img/avatar5.png" alt="User Profile Picture">
+                        
+                        <h4 id="p_emp_name" class="profile-username text-center">Employee Name</h4>
 
-                    
-                    <h4 id="p_emp_name" class="profile-username text-center">Employee Name</h4>
-
-                    <p id="p_position" class="text-muted text-center">Position</p>
+                        <p id="p_position" class="text-muted text-center">Position</p>
                     </div>
 
                     <ul class="list-group list-group-unbordered">

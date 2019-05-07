@@ -146,7 +146,6 @@ class employeeController extends Controller
 
             $employee->picture = $filename;
 
-
             $employee->save();
         }
 

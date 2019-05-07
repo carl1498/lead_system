@@ -29,11 +29,13 @@
             <!-- Profile Image -->
             <div class="box box-primary">
                 <div class="box-body box-profile">
-                    <!--<img class="profile-user-img img-responsive img-circle" src="./img/avatar5.png" alt="User profile picture">-->
+                    <div style="width: auto; height: 125px;">
+                        <img id="p_picture" class="profile-user-img img-responsive img-rounded pull-left" src="./img/avatar5.png" alt="Student Profile Picture">
 
-                    <h3 id="p_stud_name" class="profile-username text-center">Student Name</h3>
+                        <h3 id="p_stud_name" class="profile-username text-center">Student Name</h3>
 
-                    <p id="p_departure" class="text-muted text-center">Departure</p>
+                        <p id="p_departure" class="text-muted text-center">Departure</p>
+                    </div>
 
                     <ul class="list-group list-group-unbordered">
                         <li class="list-group-item">

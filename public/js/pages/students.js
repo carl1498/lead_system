@@ -9,6 +9,7 @@ $(document).ready(function(){
     var departure_year;
     var departure_month = $('#month_select').val();
     var current_tab = 'Branch';
+    var modal_close = true;
 
     $.ajax({
         headers: {
@@ -48,6 +49,7 @@ $(document).ready(function(){
         });
         $(this).find("input,textarea,select").val('').end();
         $('.select2').trigger('change.select2');
+        modal_close = true;
     });
 
     $('input, select').attr('autocomplete', 'off');
@@ -65,15 +67,17 @@ $(document).ready(function(){
 
     $(document).on('shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
         
-        if(current_tab == 'Branch'){refresh_student_branch();}
-        else if(current_tab == 'Status'){refresh_student_status();}
-        else if(current_tab == 'Result'){refresh_student_result();}
-        else if(current_tab == 'Language'){refresh_language_student();}
-        else if(current_tab == 'SSV'){refresh_ssv_student();}
-        else if(current_tab == 'SSV Backout'){refresh_ssv_backout();}
-        else if(current_tab == 'All'){refresh_all_student();}
+        if(modal_close == true){
+            if(current_tab == 'Branch'){refresh_student_branch();}
+            else if(current_tab == 'Status'){refresh_student_status();}
+            else if(current_tab == 'Result'){refresh_student_result();}
+            else if(current_tab == 'Language'){refresh_language_student();}
+            else if(current_tab == 'SSV'){refresh_ssv_student();}
+            else if(current_tab == 'SSV Backout'){refresh_ssv_backout();}
+            else if(current_tab == 'All'){refresh_all_student();}
 
-        $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
+            $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
+        }
     });
 
     var columns_students = [
@@ -475,6 +479,7 @@ $(document).ready(function(){
     $('.add_student').on('click', function(){
         $('#student_modal').modal('toggle');
         $('#student_modal').modal('show');
+        modal_close = false;
     });
 
     $('#birthdate').on('change', function(){

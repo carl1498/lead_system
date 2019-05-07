@@ -37,30 +37,30 @@
 			<div class="navbar-custom-menu">
 				<ul class="nav navbar-nav">
 					<!-- User Account: style can be found in dropdown.less -->
-					<li class="dropdown user user-menu">
+					<!--<li class="dropdown user user-menu">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 							<span class="hidden-xs">{{ onLoadName() }}</span>
 						</a>
 						<ul class="dropdown-menu" style="width: 100px;">
-							<!-- User image -->
-							<!--<li class="user-header">
+							User image
+							<li class="user-header">
 								<img src="./img/avatar5.png" class="img-circle" alt="User Image">
 								<p>
 									{{ onLoadName() }} - {{ onLoadPosition() }}
 									<small>Member since {{ Auth::user()->created_at }}</small>
 								</p>
-							</li>-->
-							<!-- Menu Footer-->
+							</li>
+							Menu Footer
 							<li class="user-footer">
-								<!--<div class="pull-left">
+								<div class="pull-left">
 									<a href="#" class="btn btn-default btn-flat">Profile</a>
-								</div>-->
+								</div>
 								<div class="pull-right">
 									<a href="/logout" class="btn btn-default btn-flat">Sign out</a>
 								</div>
 							</li>
 						</ul>
-					</li>
+					</li>-->
 				</ul>
 			</div>
 		</nav>
@@ -74,13 +74,13 @@
   	</div>
   	<!-- /.content-wrapper -->
 
-  	<footer class="main-footer">
+  	<!--<footer class="main-footer">
 		<div class="pull-right hidden-xs">
 			<b>Version</b> 2.4.0
 		</div>
     	<strong>Copyright &copy; 2014-2016 <a href="https://adminlte.io">Almsaeed Studio</a>.</strong> All rights
     	reserved.
-  	</footer>
+  	</footer>-->
 </div>
 <!-- ./wrapper -->
 <script src="/js/jquery.js"></script>
@@ -101,5 +101,22 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
 <script src="/js/app.js"></script>
 @yield('script')
+<script>
+	$('#logout_button').on('click', function(){
+		swal({
+            title: 'Log Out',
+            text: 'Are you sure you want to logout?',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if(result.value){
+                location.href = '/logout';
+            }
+        });
+	});
+</script>
 </body>
 </html>

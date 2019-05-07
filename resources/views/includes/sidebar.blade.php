@@ -65,8 +65,6 @@
 				<li class="{{ (Request::path() == 'employees') ? 'active' : '' }}">
 					<a href="/employees" >
 						<i class="fa fa-address-card"></i> <span>Employees</span>
-						<span class="pull-right-container">
-						</span>
 					</a>
 				</li>
 				@endif
@@ -89,6 +87,12 @@
 					</ul>
 				</li>
 				@endif
+
+				<li>
+					<a id="logout_button" role="button">
+						<i class="fa fa-power-off text-red"></i> <span class="text-red">Logout</span>
+					</a>
+				</li>
       		</ul>
     	</section>
     	<!-- /.sidebar -->
