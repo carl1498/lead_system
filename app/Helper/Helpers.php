@@ -22,6 +22,14 @@ function onLoadBranch(){
     return $branch->name;
 }
 
+function picture(){
+    $id = Auth::user()->id;
+    $employee = \App\employee::find($id);
+    $picture = $employee->picture;
+
+    return $picture;
+}
+
 function departure_year(){
     $departure_year = \App\departure_year::orderBy('name')->get();
 
