@@ -477,9 +477,9 @@ $(document).ready(function(){
     
     //Open Add Students Modal
     $('.add_student').on('click', function(){
+        modal_close = false;
         $('#student_modal').modal('toggle');
         $('#student_modal').modal('show');
-        modal_close = false;
     });
 
     $('#birthdate').on('change', function(){
@@ -602,6 +602,8 @@ $(document).ready(function(){
 
         button.disabled = true;
         input.html('SAVING...');
+
+        var formData = new FormData($('#student_form')[0]);
         
         $.ajax({
             headers: {
@@ -609,7 +611,9 @@ $(document).ready(function(){
             },
             url: '/save_student',
             method: 'POST',
-            data: $('#student_form').serialize(),
+            data: formData,
+            processData: false,
+            contentType: false,
             success: function(data){
                 swal('Success!', 'Record has been saved to the Database!', 'success');
                 $('#student_modal').modal('hide');
@@ -698,6 +702,7 @@ $(document).ready(function(){
 
     //Open Student Modal (EDIT)
     $(document).on('click', '.edit_student', function(){
+        modal_close = false;
         $('#student_type_tab a[href="#student_form"]').tab('show');
         var id = $(this).attr('id');
 
@@ -1049,6 +1054,8 @@ $(document).ready(function(){
             method: 'get',
             dataType: 'JSON',
             success: function(data){
+                $('#p_picture').attr('src', './storage/img/student/'+data.picture);
+                
                 if(data.mname){
                     $('#p_stud_name').text(data.lname + ', ' + data.fname + ' ' + data.mname);
                 }

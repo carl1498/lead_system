@@ -423,6 +423,18 @@ class studentController extends Controller
         }
 
         // EDIT HISTORY PT. 2 -- END
+
+        if($request->hasFile('picture')){
+            $fileextension = $request->picture->getClientOriginalExtension();
+            $encryption = sha1(time().$request->picture->getClientOriginalName());
+            $filename = $encryption.'.'.$fileextension;
+
+            $request->picture->storeAs('public/img/student', $filename);
+
+            $student->picture = $filename;
+
+            $student->save();
+        }
     }
 
     public function save_language_student(Request $request){

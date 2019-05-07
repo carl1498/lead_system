@@ -107,6 +107,17 @@
                 </div>
             </div>
 
+            <div class="row clearfix">
+                <div class="col-lg-4 col-md-4 col-sm-3 col-xs-3 form-control-label">
+                        <label for="s_picture" class="pull-right">Picture</label>
+                </div>
+                <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
+                    <div class="form-group">
+                        <input type="file" id="s_picture" name="s_picture" class="form-control inputFile">
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <!-- RIGHT COLUMN -->

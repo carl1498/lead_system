@@ -132,6 +132,17 @@
                 </div>
             </div>
 
+            <div class="row clearfix">
+                <div class="col-lg-4 col-md-4 col-sm-3 col-xs-3 form-control-label">
+                        <label for="picture" class="pull-right">Picture</label>
+                </div>
+                <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
+                    <div class="form-group">
+                        <input type="file" id="picture" name="picture" class="form-control inputFile">
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <!-- RIGHT COLUMN -->
@@ -276,18 +287,20 @@
                 </div>
             </div>
 
-        </div>
-
-        <div class="row clearfix">
+            
+            <div class="row clearfix">
                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
                         <label for="remarks" class="pull-right">Remarks</label>
                 </div>
-                <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+                <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
                     <div class="form-group required">
                     <input type="text" id="remarks" name="remarks" class="form-control" placeholder="Enter Remarks">
                     </div>
                 </div>
             </div>
+
+        </div>
+
 
     </div>
 
