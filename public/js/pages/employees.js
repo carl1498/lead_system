@@ -405,7 +405,7 @@ $(document).ready(function(){
             method: 'get',
             dataType: 'json',
             success: function(data){
-                $('#p_picture').attr('src', './img/'+data.picture);
+                $('#p_picture').attr('src', './storage/img/employee/'+data.picture);
                 if(data.mname){
                     $('#p_emp_name').text(data.lname + ', ' + data.fname + ' ' + data.mname);
                 }

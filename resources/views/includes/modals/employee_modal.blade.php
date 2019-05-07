@@ -107,7 +107,7 @@
                             </div>
                         </div>
 
-                        <!--<div class="row clearfix">
+                        <div class="row clearfix">
                             <div class="col-lg-4 col-md-4 col-sm-3 col-xs-3 form-control-label">
                                     <label for="picture" class="pull-right">Picture</label>
                             </div>
@@ -116,7 +116,7 @@
                                     <input type="file" id="picture" name="picture" class="form-control inputFile">
                                 </div>
                             </div>
-                        </div>-->
+                        </div>
 
                     </div>
 

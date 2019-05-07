@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\employee;
 use App\branch;
 use App\role;
@@ -134,6 +135,19 @@ class employeeController extends Controller
                 $employee_benefits->id_number = $request->tin;
             }
             $employee_benefits->save();
+        }
+
+        if($request->hasFile('picture')){
+            $fileextension = $request->picture->getClientOriginalExtension();
+            $encryption = sha1(time().$request->picture->getClientOriginalName());
+            $filename = $encryption.'.'.$fileextension;
+
+            $request->picture->storeAs('public/img/employee', $filename);
+
+            $employee->picture = $filename;
+
+
+            $employee->save();
         }
 
         //Create Employee Account
