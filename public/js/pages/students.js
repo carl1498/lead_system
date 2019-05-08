@@ -805,8 +805,7 @@ $(document).ready(function(){
                 $('#s_contact').val(data.contact);      
                 if(data.program){
                     $('#s_program').val(data.program.id).trigger('change'); 
-                }  
-                $('#s_benefactor').val(data.benefactor.id).trigger('change');   
+                }   
                 if(data.benefactor){
                     $('#s_benefactor').val(data.benefactor.id).trigger('change');   
                 }           
