@@ -360,7 +360,7 @@ class studentController extends Controller
                                 $prev = benefactor::where('id', $student_fields[$x])->pluck('name');
                             }
                             else if($edit_fields[$x] == 'Referred By'){
-                                $prev = employee::where('id', $student_fields[$x])->pluck('fname');
+                                $prev = employee::where('id', $student_fields[$x])->withTrashed()->pluck('fname');
                             }
                             else if($edit_fields[$x] == 'Branch'){
                                 $prev = branch::where('id', $student_fields[$x])->pluck('name');
@@ -393,7 +393,7 @@ class studentController extends Controller
                                 $new = benefactor::where('id', $request_fields[$x])->pluck('name');
                             }
                             else if($edit_fields[$x] == 'Referred By'){
-                                $new = employee::where('id', $request_fields[$x])->pluck('fname');
+                                $new = employee::where('id', $request_fields[$x])->withTrashed()->pluck('fname');
                             }
                             else if($edit_fields[$x] == 'Branch'){
                                 $new = branch::where('id', $request_fields[$x])->pluck('name');
