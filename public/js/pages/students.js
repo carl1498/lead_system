@@ -751,6 +751,7 @@ $(document).ready(function(){
 
     //Open Language Student Modal (EDIT)
     $(document).on('click', '.edit_language_student', function(){
+        modal_close = false;
         $('#student_type_tab a[href="#language_student_form"]').tab('show');
         var id = $(this).attr('id');
 
@@ -784,6 +785,7 @@ $(document).ready(function(){
 
     //Open Language Student Modal (EDIT)
     $(document).on('click', '.edit_ssv_student', function(){
+        modal_close = false;
         $('#student_type_tab a[href="#ssv_student_form"]').tab('show');
         var id = $(this).attr('id');
 
