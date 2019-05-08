@@ -801,8 +801,13 @@ $(document).ready(function(){
                 $('#s_birthdate').val(data.birthdate);
                 $('#s_age').val(data.age);
                 $('#s_contact').val(data.contact);      
-                $('#s_program').val(data.program.id).trigger('change');
-                $('#s_benefactor').val(data.benefactor.id).trigger('change');              
+                if(data.program){
+                    $('#s_program').val(data.program.id).trigger('change'); 
+                }  
+                $('#s_benefactor').val(data.benefactor.id).trigger('change');   
+                if(data.benefactor){
+                    $('#s_benefactor').val(data.benefactor.id).trigger('change');   
+                }           
                 $('#s_address').val(data.address);
                 $('#s_email').val(data.email);
                 $('#s_referral').val(data.referral.id).trigger('change');
