@@ -214,7 +214,7 @@ $(document).ready(function(){
                 else{
                     $('#emp_name').val(data.employee.lname + ', ' + data.employee.fname);
                 }
-                $('#a_email').val(data.email);
+                $('#username').val(data.username);
                 
                 $('#account_modal').modal('toggle');
                 $('#account_modal').modal('show');

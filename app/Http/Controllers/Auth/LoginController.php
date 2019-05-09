@@ -42,4 +42,8 @@ class LoginController extends Controller
         Auth::logout();
         return redirect()->to('/login');
     }
+
+    public function username(){
+        return 'username';
+    }
 }

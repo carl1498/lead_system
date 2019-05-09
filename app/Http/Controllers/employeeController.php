@@ -151,9 +151,10 @@ class employeeController extends Controller
 
         //Create Employee Account
         if($add_edit == 'add'){
+            $name = str_replace(' ','',$employee->lname);
             $user = new User;
             $user->emp_id = $employee->id;
-            $user->email = $employee->email;
+            $user->username = strtolower($name.$employee->id);
             $user->password = bcrypt('lead123');
             $user->save();
         }
@@ -197,7 +198,7 @@ class employeeController extends Controller
         $id = $request->a_id;
         $user = User::find($id);
 
-        $user->email = $request->a_email;
+        $user->username = $request->username;
         if($request->password){
             $user->password = bcrypt($request->input('password'));
         }
