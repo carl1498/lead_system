@@ -101,19 +101,6 @@ function canEditStudentList(){
     return false;
 }
 
-function canEditLanguageStudent(){
-    $id = Auth::user()->id;
-    $user = \App\User::with('employee.role')->find($id);
-    $authorized = ['HR Head'];
-
-    foreach($authorized as $auth){
-        if($user->employee->fname == $auth){
-            return true;
-        }
-    }
-    return false;
-}
-
 function canAccessStudentSettings(){
     $id = Auth::user()->id;
     $user = \App\User::with('employee.role')->find($id);

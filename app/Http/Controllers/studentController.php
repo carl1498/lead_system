@@ -188,7 +188,7 @@ class studentController extends Controller
 
             $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-primary btn-xs view_profile" id="'.$data->id.'"><i class="fa fa-eye"></i></button>&nbsp;';
 
-            if(canAccessAll() || canEditLanguageStudent()){
+            if(canAccessAll()){
                 $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_language_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
                 $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_student" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>&nbsp;';
             }
@@ -211,7 +211,26 @@ class studentController extends Controller
             $html = '';
 
             $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-primary btn-xs view_profile" id="'.$data->id.'"><i class="fa fa-eye"></i></button>&nbsp;';
-
+            
+            if(canAccessAll()){
+                if(isset($data->program)){
+                    if($data->program->name == 'SSV (Careworker)' || $data->program->name == 'SSV (Hospitality)'){
+                        $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_ssv_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
+                    }
+                    else if($data->program->name == 'Language Only'){
+                        $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_language_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
+                    }
+                    else{
+                        $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>';
+                    }
+                }
+                else{
+                    $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>';
+                }
+                
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_student" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>&nbsp;';
+            }
+            
             return  $html;
         })
         ->make(true);
