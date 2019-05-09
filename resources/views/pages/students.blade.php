@@ -9,8 +9,11 @@
     <ol class="breadcrumb">
         <li>
             @if(canAccessAll() || canAccessStudentList())
-            <button class="btn btn-secondary bg-red switch">
-                <b id="switch_name">SSV</b> <i class="fa fa-sync"></i>
+            <button data-container="body" data-toggle="tooltip" data-placement="left" title="Switch Tabs" class="btn btn-secondary bg-red switch">
+                <b id="switch_name">SSV</b> <i class="fa fa-exchange-alt"></i>
+            </button>
+            <button data-container="body" data-toggle="tooltip" data-placement="left" title="Refresh Table" class="btn btn-secondary bg-red refresh_student">
+                <i class="fa fa-sync"></i>
             </button>
             <button data-container="body" data-toggle="tooltip" data-placement="left" title="Add Student" class="btn btn-secondary bg-red add_student">
                 <i class="fa fa-plus-square"></i>

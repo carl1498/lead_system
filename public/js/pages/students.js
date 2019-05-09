@@ -267,8 +267,6 @@ $(document).ready(function(){
             columns: columns_students,
             order: [[3,'asc']]
         });
-
-        $('.tooltip').css('width', '400px');
     }
 
     function refresh_student_status(){
@@ -1238,5 +1236,15 @@ $(document).ready(function(){
 
         return age;
     }
+    
+    $('.refresh_student').on('click', function(){
+        if(current_tab == 'Branch'){refresh_student_branch();}
+        else if(current_tab == 'Status'){refresh_student_status();}
+        else if(current_tab == 'Result'){refresh_student_result();}
+        else if(current_tab == 'Language'){refresh_language_student();}
+        else if(current_tab == 'SSV'){refresh_ssv_student();}
+        else if(current_tab == 'SSV Backout'){refresh_ssv_backout();}
+        else if(current_tab == 'All'){refresh_all_student();}
+    });
     //FUNCTIONS -- END
 });
