@@ -61,7 +61,7 @@ function canAccessStudents(){
     $id = Auth::user()->id;
     $user = \App\User::with('employee.role')->find($id);
     $authorized = ['President', 'Finance Director', 'Admin', 'Branch Manager', 'OIC', 'HR/Finance Head',
-        'HR', 'IT Officer', 'Marketing Manager', 'Marketing Head', 'Marketing Officer',
+        'HR/Finance Officer', 'IT Officer', 'Marketing Manager', 'Marketing Head', 'Marketing Officer',
         'Documentation Head', 'Documentation Officer', 'Language Head', 'Intern',
         'Assistant Finance Officer'];
 
@@ -76,7 +76,7 @@ function canAccessStudents(){
 function canAccessStudentList(){
     $id = Auth::user()->id;
     $user = \App\User::with('employee.role')->find($id);
-    $authorized = ['Admin', 'Branch Manager', 'OIC', 'HR', 'Marketing Manager', 'Marketing Head', 
+    $authorized = ['Admin', 'Branch Manager', 'OIC', 'HR/Finance Officer', 'Marketing Manager', 'Marketing Head', 
         'Marketing Officer', 'Documentation Head', 'Documentation Officer', 'Language Head',
         'Intern', 'Assistant Finance Officer'];
 
@@ -131,7 +131,7 @@ function canAccessStudentSettings(){
 function canAccessEmployees(){
     $id = Auth::user()->id;
     $user = \App\User::with('employee.role')->find($id);
-    $authorized = ['HR', 'Assistant Finance Officer'];
+    $authorized = ['HR/Finance Officer', 'Assistant Finance Officer'];
 
     foreach($authorized as $auth){
         if($user->employee->role->name == $auth){
@@ -144,7 +144,7 @@ function canAccessEmployees(){
 function canAccessBooks(){
     $id = Auth::user()->id;
     $user = \App\User::with('employee.role')->find($id);
-    $authorized = ['HR', 'Language Head', 'Assistant Finance Officer'];
+    $authorized = ['HR/Finance Officer', 'Language Head', 'Assistant Finance Officer'];
 
     foreach($authorized as $auth){
         if($user->employee->role->name == $auth){
@@ -183,7 +183,7 @@ function canEditInvoice(){
 function canAccessBookManagement(){
     $id = Auth::user()->id;
     $user = \App\User::with('employee.role')->find($id);
-    $authorized = ['HR', 'Language Head', 'Assistant Finance Officer'];
+    $authorized = ['HR/Finance Officer', 'Language Head', 'Assistant Finance Officer'];
     
     foreach($authorized as $auth){
         if($user->employee->role->name == $auth){
@@ -196,7 +196,7 @@ function canAccessBookManagement(){
 function canEditBookManagement(){
     $id = Auth::user()->id;
     $user = \App\User::with('employee.role')->find($id);
-    $authorized = ['HR', 'Language Head'];
+    $authorized = ['HR/Finance Officer', 'Language Head'];
     
     foreach($authorized as $auth){
         if($user->employee->role->name == $auth){
