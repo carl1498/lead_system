@@ -158,6 +158,8 @@ class employeeController extends Controller
             $user->password = bcrypt('lead123');
             $user->save();
         }
+
+        return $employee->id;
     }
 
     public function get_employee(){

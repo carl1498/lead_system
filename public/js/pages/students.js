@@ -619,6 +619,7 @@ $(document).ready(function(){
                 input.html('SAVE CHANGES');
                 refresh_student_branch();
                 refresh_student_status();
+                view_profile(data);
             },
             error: function(data){
                 swal("Oh no!", "Something went wrong, try again.", "error");
@@ -650,6 +651,7 @@ $(document).ready(function(){
                 button.disabled = false;
                 input.html('SAVE CHANGES');
                 refresh_language_student();
+                view_profile(data);
             },
             error: function(data){
                 swal("Oh no!", "Something went wrong, try again.", "error");
@@ -681,6 +683,7 @@ $(document).ready(function(){
                 button.disabled = false;
                 input.html('SAVE CHANGES');
                 refresh_ssv_student();
+                view_profile(data);
             },
             error: function(data){
                 swal("Oh no!", "Something went wrong, try again.", "error");
@@ -1053,52 +1056,7 @@ $(document).ready(function(){
     $(document).on('click', '.view_profile', function(){
         var id = $(this).attr('id');
 
-        $.ajax({
-            url: '/view_profile_student/'+id,
-            method: 'get',
-            dataType: 'JSON',
-            success: function(data){
-                $('#p_picture').attr('src', './storage/img/student/'+data.picture);
-                
-                if(data.mname){
-                    $('#p_stud_name').text(data.lname + ', ' + data.fname + ' ' + data.mname);
-                }
-                else{
-                    $('#p_stud_name').text(data.lname + ', ' + data.fname);
-                }
-                
-                if(data.program){
-                    if(data.program.name != 'Language Only' && data.program.name != 'SSV (Careworker)' &&
-                            data.program.name != 'SSV (Hospitality)'){
-                        $('#p_departure').text(data.departure_year.name + ' ' + data.departure_month.name);
-                    }
-                    else{
-                        $('#p_departure').text('N/A');
-                    }
-                }else{
-                    $('#p_departure').text(data.departure_year.name + ' ' + data.departure_month.name);
-                }
-
-                $('#p_contact').text(data.contact);
-                $('#p_program').text(data.program ? data.program.name : '-');
-                $('#p_school').text(data.school ? data.school.name : '-');
-                $('#p_benefactor').text(data.benefactor ? data.benefactor.name : '-');
-                var age = getAge(data.birthdate);
-                $('#p_birthdate').text(data.birthdate + ' (' + age + ')');
-                $('#p_gender').text(data.gender);
-                $('#p_referral').text(data.referral.fname);
-                $('#p_sign_up').text(data.date_of_signup);
-                $('#p_medical').text(data.date_of_medical ? data.date_of_medical : '-');
-                $('#p_completion').text(data.date_of_completion ? data.date_of_completion : '-');
-                $('#p_branch').text(data.branch.name);
-                $('#p_status').text(data.status);
-                $('#p_coe_status').text(data.coe_status);
-                $('#p_email').text(data.email);
-                $('#p_course').text(data.course.name);
-                $('#p_address').text(data.address);
-                $('#p_remarks').text(data.remarks ? data.remarks : '-');
-            }
-        });
+        view_profile(id);
     });        
 
     //Course Select 2
@@ -1246,5 +1204,54 @@ $(document).ready(function(){
         else if(current_tab == 'SSV Backout'){refresh_ssv_backout();}
         else if(current_tab == 'All'){refresh_all_student();}
     });
+
+    function view_profile(id){
+        $.ajax({
+            url: '/view_profile_student/'+id,
+            method: 'get',
+            dataType: 'JSON',
+            success: function(data){
+                $('#p_picture').attr('src', './storage/img/student/'+data.picture);
+                
+                if(data.mname){
+                    $('#p_stud_name').text(data.lname + ', ' + data.fname + ' ' + data.mname);
+                }
+                else{
+                    $('#p_stud_name').text(data.lname + ', ' + data.fname);
+                }
+                
+                if(data.program){
+                    if(data.program.name != 'Language Only' && data.program.name != 'SSV (Careworker)' &&
+                            data.program.name != 'SSV (Hospitality)'){
+                        $('#p_departure').text(data.departure_year.name + ' ' + data.departure_month.name);
+                    }
+                    else{
+                        $('#p_departure').text('N/A');
+                    }
+                }else{
+                    $('#p_departure').text(data.departure_year.name + ' ' + data.departure_month.name);
+                }
+
+                $('#p_contact').text(data.contact);
+                $('#p_program').text(data.program ? data.program.name : '-');
+                $('#p_school').text(data.school ? data.school.name : '-');
+                $('#p_benefactor').text(data.benefactor ? data.benefactor.name : '-');
+                var age = getAge(data.birthdate);
+                $('#p_birthdate').text(data.birthdate + ' (' + age + ')');
+                $('#p_gender').text(data.gender);
+                $('#p_referral').text(data.referral.fname);
+                $('#p_sign_up').text(data.date_of_signup);
+                $('#p_medical').text(data.date_of_medical ? data.date_of_medical : '-');
+                $('#p_completion').text(data.date_of_completion ? data.date_of_completion : '-');
+                $('#p_branch').text(data.branch.name);
+                $('#p_status').text(data.status);
+                $('#p_coe_status').text(data.coe_status);
+                $('#p_email').text(data.email);
+                $('#p_course').text(data.course.name);
+                $('#p_address').text(data.address);
+                $('#p_remarks').text(data.remarks ? data.remarks : '-');
+            }
+        });
+    }
     //FUNCTIONS -- END
 });

@@ -435,6 +435,8 @@ class studentController extends Controller
 
             $student->save();
         }
+
+        return $student->id;
     }
 
     public function save_language_student(Request $request){
@@ -565,6 +567,8 @@ class studentController extends Controller
         }
 
         // EDIT HISTORY PT. 2 -- END
+
+        return $student->id;
     }
 
     public function save_ssv_student(Request $request){
@@ -704,8 +708,9 @@ class studentController extends Controller
             }
         }
         
-
         // EDIT HISTORY PT. 2 -- END
+
+        return $student->id;
     }
 
     public function get_student(Request $request){

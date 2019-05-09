@@ -118,6 +118,7 @@ $(document).ready(function(){
                 button.disabled = false;
                 input.html('SAVE CHANGES');
                 refresh_employee_branch();
+                view_profile(data);
             },
             error: function(data){
                 swal("Oh no!", "Something went wrong, try again.", "error");
@@ -400,6 +401,35 @@ $(document).ready(function(){
     $(document).on('click', '.view_employee_profile', function(){
         var id = $(this).attr('id');
 
+        view_profile(id);
+    }); 
+
+    //VIEW PROFILE -- END
+
+    function getAge(birthdate){
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1;
+        var yyyy = today.getFullYear();
+        
+        today = yyyy + '-' + mm + '-' + dd;
+        birth_array = birthdate.split('-');
+
+        var age = yyyy - parseInt(birth_array[0]);
+
+        if(mm == parseInt(birth_array[1])){
+            if(dd < birth_array[2]){
+                age--;
+            }
+        }
+        else if(mm < parseInt(birth_array[1])){
+            age--;
+        }
+
+        return age;
+    }
+
+    function view_profile(id){
         $.ajax({
             url: '/view_profile_employee/'+id,
             method: 'get',
@@ -430,31 +460,6 @@ $(document).ready(function(){
                 $('#p_tin').text(data.benefits[3].id_number ? data.benefits[3].id_number : '-');
             }
         });
-    }); 
-
-    //VIEW PROFILE -- END
-
-    function getAge(birthdate){
-        var today = new Date();
-        var dd = today.getDate();
-        var mm = today.getMonth() + 1;
-        var yyyy = today.getFullYear();
-        
-        today = yyyy + '-' + mm + '-' + dd;
-        birth_array = birthdate.split('-');
-
-        var age = yyyy - parseInt(birth_array[0]);
-
-        if(mm == parseInt(birth_array[1])){
-            if(dd < birth_array[2]){
-                age--;
-            }
-        }
-        else if(mm < parseInt(birth_array[1])){
-            age--;
-        }
-
-        return age;
     }
 
     //FUNCTIONS -- END
