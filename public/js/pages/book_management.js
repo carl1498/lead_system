@@ -325,7 +325,7 @@ $(document).ready(function(){
             scrollX: true,
             scrollCollapse: true,
             fixedColumns: {
-                leftColumns: 2
+                leftColumns: 3
             },
             responsive: true,
             ajax: '/view_books/'+book_type_select,
@@ -340,7 +340,6 @@ $(document).ready(function(){
             columns: [
                 {data: 'book_type.description', name: 'book_type'},
                 {data: 'name', name: 'book_no'},
-                {data: 'reference_no.lead_ref_no', name: 'lead_ref_no'},
                 {data: 'reference_no.invoice_ref_no', name: 'invoice_ref_no'},
                 {data: 'branch.name', name: 'branch'},
                 {data: 'status', name: 'status'},
@@ -350,12 +349,11 @@ $(document).ready(function(){
             columnDefs: [
                 { width: 200, targets: 0 }, //book type
                 { width: 80, targets: 1 }, //book no.
-                { width: 130, targets: 2 }, //lead ref no
-                { width: 130, targets: 3 }, //invoice ref no
-                { width: 100, targets: 4 }, //branch
-                { width: 100, targets: 5 }, //status
-                { width: 250, targets: 6 }, //student name
-                { width: 100, targets: 7 }, //action
+                { width: 130, targets: 2 }, //invoice ref no
+                { width: 100, targets: 3 }, //branch
+                { width: 100, targets: 4 }, //status
+                { width: 250, targets: 5 }, //student name
+                { width: 100, targets: 6 }, //action
             ]
         });
     }
@@ -417,7 +415,7 @@ $(document).ready(function(){
                 { width: 110, targets: 8 }, //status
                 { width: 110, targets: 9 }, //departure
             ],
-            order: [[5, 'asc']]
+            order: [[7, 'asc']]
         });
     }
 
@@ -739,7 +737,7 @@ $(document).ready(function(){
                 pickRefresh();
             },
             error: function(data){
-                swal("Oh no!", "Something went wrong, try again.", "error");
+                swal("Error!", "Something went wrong, try again.", "error");
                 button.disabled = false;
                 input.html('SAVE CHANGES');
             }
@@ -965,7 +963,7 @@ $(document).ready(function(){
                 pickRefresh();
             },
             error: function(data){
-                swal("Oh no!", "Something went wrong, try again.", "error");
+                swal("Error!", "Something went wrong, try again.", "error");
                 button.disabled = false;
                 input.html('SAVE CHANGES');
             }
@@ -1146,7 +1144,7 @@ $(document).ready(function(){
                 pickRefresh();
             },
             error: function(data){
-                swal("Oh no!", "Something went wrong, try again.", "error");
+                swal("Error!", "Something went wrong, try again.", "error");
                 button.disabled = false;
                 input.html('SAVE CHANGES');
             }

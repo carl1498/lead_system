@@ -1,6 +1,5 @@
 <thead>
     <tr>
-        <th>LEAD Ref. No.</th>
         <th>Invoice Ref. No.</th>
         <th>Minna 1</th>
         <th>WB 1</th>

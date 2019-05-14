@@ -69,7 +69,7 @@ $(document).ready(function(){
             scrollX: true,
             scrollCollapse: true,
             fixedColumns: {
-                leftColumns: 2
+                leftColumns: 1
             },
             responsive: true,
             ajax: {
@@ -77,7 +77,6 @@ $(document).ready(function(){
                 data: {invoice_select: invoice_select}
             },
             columns: [
-                {data: 'reference_no.lead_ref_no', name: 'lead_ref_no'},
                 {data: 'reference_no.invoice_ref_no', name: 'invoice_ref_no'},
                 {data: 'book_1', name: 'book_1'},
                 {data: 'wb_1', name: 'wb_1'},
@@ -93,23 +92,22 @@ $(document).ready(function(){
                 {data: 'action', orderable: false, searchable: false}
             ],
             columnDefs: [
-                { width: 120, targets: 0 }, //lead ref no
-                { width: 120, targets: 1 }, //invoice ref no
-                { width: 60, targets: 2 }, //book 1
-                { width: 60, targets: 3 }, //wb 1
-                { width: 60, targets: 4 }, //book 2
-                { width: 60, targets: 5 }, //wb 2
-                { width: 60, targets: 6 }, //kanji
-                { width: 90, targets: 7 }, //book 1 ssv
-                { width: 90, targets: 8 }, //wb 1 ssv
-                { width: 90, targets: 9 }, //book 2 ssv
-                { width: 90, targets: 10 }, //wb 2 ssv
-                { width: 90, targets: 11 }, //kanji
-                { width: 130, targets: 12 }, //date
-                { width: 80, targets: 13 }, //action
+                { width: 120, targets: 0 }, //invoice ref no
+                { width: 60, targets: 1 }, //book 1
+                { width: 60, targets: 2 }, //wb 1
+                { width: 60, targets: 3 }, //book 2
+                { width: 60, targets: 4 }, //wb 2
+                { width: 60, targets: 5 }, //kanji
+                { width: 90, targets: 6 }, //book 1 ssv
+                { width: 90, targets: 7 }, //wb 1 ssv
+                { width: 90, targets: 8 }, //book 2 ssv
+                { width: 90, targets: 9 }, //wb 2 ssv
+                { width: 90, targets: 10 }, //kanji
+                { width: 130, targets: 11 }, //date
+                { width: 80, targets: 12 }, //action
             ],
             order: [[
-                12, 'desc'
+                11, 'desc'
             ]]
         });
     }
@@ -139,7 +137,6 @@ $(document).ready(function(){
                 url: '/viewAddBooks'
             },
             columns: [
-                {data: 'reference_no.lead_ref_no', name: 'lead_ref_no'},
                 {data: 'reference_no.invoice_ref_no', name: 'invoice_ref_no'},
                 {data: 'book_type.description', name: 'book_type'},
                 {data: 'previous_pending', name: 'previous_pending'},
@@ -151,19 +148,18 @@ $(document).ready(function(){
                 {data: 'action', orderable: false, searchable: false}
             ],
             columnDefs: [
-                { width: 120, targets: 0 }, //lead ref no
-                { width: 120, targets: 1 }, //invoice ref no
-                { width: 180, targets: 2 }, //book type
-                { width: 60, targets: 3 }, //previous pending
-                { width: 60, targets: 4 }, //quantity
-                { width: 60, targets: 5 }, //pending
-                { width: 120, targets: 6 }, //book no range
-                { width: 130, targets: 7 }, //date
-                { width: 200, targets: 8 }, //remarks
-                { width: 80, targets: 9 }, //action
+                { width: 120, targets: 0 }, //invoice ref no
+                { width: 180, targets: 1 }, //book type
+                { width: 60, targets: 2 }, //previous pending
+                { width: 60, targets: 3 }, //quantity
+                { width: 60, targets: 4 }, //pending
+                { width: 120, targets: 5 }, //book no range
+                { width: 130, targets: 6 }, //date
+                { width: 200, targets: 7 }, //remarks
+                { width: 80, targets: 8 }, //action
             ],
             order: [[
-                7, 'desc'
+                6, 'desc'
             ]]
         })
 
@@ -433,7 +429,70 @@ $(document).ready(function(){
 
     //INVOICE -- END
 
+    //ADD BOOK -- START
+    $(document).on('click', '.delete_add_book', function(){
+        var id = $(this).attr('id');
 
+        swal.fire({
+            title: 'Confirm User',
+            text: 'For security purposes, input your password again.',
+            input: 'password',
+            inputAttributes: {
+                autocapitalize: 'off'
+            },
+            showCancelButton: true,
+            confirmButtonText: 'Confirm',
+            showLoaderOnConfirm: true,
+            preConfirm: (password) => {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: '/confirm_user',
+                    data: { password:password },
+                    method: 'POST',
+                    success: function(data){
+                        if(data == 0){
+                            swal('Password Incorrect!', 'Please try again', 'error');
+                            return;
+                        }
+                        else{
+                            swal({
+                                title: 'Warning',
+                                text: 'This may delete data of books.',
+                                type: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Yes, delete it!'
+                            }).then((result) => {
+                                if(result.value){
+                                    $.ajax({
+                                        headers: {
+                                            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                                        },
+                                        url: '/delete_add_book/'+id,
+                                        method: 'get',
+                                        type: 'json',
+                                        success:function(data){
+                                            if(data == 1){
+                                                swal('Error!', 'Some books within range are already released or not available', 'error');
+                                                return;
+                                            }
+                                            swal('Success!', 'This add book history has been Deleted', 'success');
+                                            refresh_add_book_history();
+                                        }
+                                    })
+                                }
+                            });
+                        }
+                    }
+                });
+            },
+        });
+    });
+
+    //ADD BOOK -- END
 
     //FUNCTIONS -- END
 });

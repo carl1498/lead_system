@@ -154,8 +154,7 @@ class invoiceController extends Controller
             }
         })
         ->addColumn('action', function($data) use($invoice_select){
-            $html = '
-                    <button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_invoice" id="'.$data->ref_no_id.'"><i class="fa fa-trash-alt"></i></button>';
+            $html = '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_invoice" id="'.$data->ref_no_id.'"><i class="fa fa-trash-alt"></i></button>';
             
             return $html;
         })
@@ -170,7 +169,9 @@ class invoiceController extends Controller
             return $data->book_no_start . ' - ' . $data->book_no_end;
         })
         ->addColumn('action', function($data){
+            $html = '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_add_book" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
             
+            return $html;
         })
         ->make(true);
     }
@@ -314,5 +315,33 @@ class invoiceController extends Controller
         $id = $request->id;
         $invoice = invoice::where('ref_no_id', $id)->delete();
         $reference_no = reference_no::find($id)->delete();
+    }
+    
+    public function delete_add_book(Request $request){
+        $id = $request->id;
+        
+        $add_book = add_books::find($id);
+        $start = $add_book->book_no_start;
+        $end = $add_book->book_no_end;
+        $book_type = $add_book->book_type_id;
+        $ref_no = $add_book->invoice_ref_id;
+
+        for($x = $start; $x <= $end; $x++){
+            $book = books::with('branch')->where('name', $x)->where('book_type_id', $book_type)->first();
+            if($book->status != 'Available' || $book->branch->name != 'Makati'){
+                return 1;
+            }
+        }
+
+        for($x = $start; $x <= $end; $x++){
+            $book = books::where('name', $x)->where('book_type_id', $book_type)->first();
+            $book->delete();
+        }
+
+        $pending = invoice::where('ref_no_id', $ref_no)->where('book_type_id', $book_type)->first();
+        $pending->pending += $add_book->quantity;
+        $pending->save();
+
+        $add_book->delete();
     }
 }

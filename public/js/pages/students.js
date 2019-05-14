@@ -622,7 +622,7 @@ $(document).ready(function(){
                 view_profile(data);
             },
             error: function(data){
-                swal("Oh no!", "Something went wrong, try again.", "error");
+                swal("Error!", "Something went wrong, try again.", "error");
                 button.disabled = false;
                 input.html('SAVE CHANGES');
             }
@@ -654,7 +654,7 @@ $(document).ready(function(){
                 view_profile(data);
             },
             error: function(data){
-                swal("Oh no!", "Something went wrong, try again.", "error");
+                swal("Error!", "Something went wrong, try again.", "error");
                 button.disabled = false;
                 input.html('SAVE CHANGES');
             }
@@ -686,7 +686,7 @@ $(document).ready(function(){
                 view_profile(data);
             },
             error: function(data){
-                swal("Oh no!", "Something went wrong, try again.", "error");
+                swal("Error!", "Something went wrong, try again.", "error");
                 button.disabled = false;
                 input.html('SAVE CHANGES');
             }

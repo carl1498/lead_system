@@ -1,6 +1,5 @@
 <thead>
     <tr>
-        <th>LEAD Ref. No.</th>
         <th>Invoice Ref. No.</th>
         <th>Book</th>
         <th>Previous</th>

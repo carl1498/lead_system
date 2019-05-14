@@ -193,12 +193,10 @@ class releaseBooksController extends Controller
         $current_pending = pending_request::where('id', $return_release->p_request_id)->first();
         $branch = branch::find($current_pending->branch_id);
         $makati_branch = branch::where('name', 'Makati')->first();
-        $counter = true;
 
         for($x = $return_release->book_no_start; $x <= $return_release->book_no_end; $x++){
             $book = books::where('branch_id', $branch->id)->where('name', $x)->first();
             if($book->status != 'Available'){
-                $counter = false;
                 return 1;
             }
         }

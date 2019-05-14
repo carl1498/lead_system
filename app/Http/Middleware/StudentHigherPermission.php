@@ -3,10 +3,10 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Auth;
 use App\User;
+use Auth;
 
-class Admin
+class StudentHigherPermission
 {
     /**
      * Handle an incoming request.
@@ -19,7 +19,7 @@ class Admin
     {
         $id = Auth::user()->id;
         $user = User::with('employee.role')->find($id);
-        $authorized = ['President', 'Finance Director', 'HR/Finance Head', 'IT Officer'];
+        $authorized = ['OIC', 'President', 'Finance Director', 'HR/Finance Head', 'IT Officer'];
 
         foreach($authorized as $auth){
             if($user->employee->role->name == $auth){

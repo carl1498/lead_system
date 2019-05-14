@@ -65,7 +65,7 @@ Route::group(['middleware' => ['auth', 'student_list']], function(){
     Route::post('/save_language_student', 'studentController@save_language_student');
     Route::post('/save_ssv_student', 'studentController@save_ssv_student');
     Route::get('/get_student', 'studentController@get_student');
-    Route::get('/delete_student', 'studentController@delete_student');
+    Route::get('/delete_student', 'studentController@delete_student')->middleware('student_high');
 
     //Student Logs
     Route::get('/student_add_history', 'studentLogsController@add_history_page');
@@ -98,7 +98,7 @@ Route::group(['middleware' => ['auth', 'employee']], function(){
     
     Route::post('/save_employee', 'employeeController@save_employee');
     Route::get('/get_employee/{id}', 'employeeController@get_employee');
-    Route::get('/delete_employee', 'employeeController@delete_employee');
+    Route::get('/delete_employee', 'employeeController@delete_employee')->middleware('admin');
     Route::post('/save_resign_employee', 'employeeController@resign_employee');
     Route::post('/save_rehire_employee', 'employeeController@rehire_employee');
     Route::get('/view_profile_employee/{id}', 'employeeController@view_profile');
@@ -117,8 +117,14 @@ Route::group(['middleware' => ['auth', 'invoice']], function(){
     Route::get('/invoice', 'invoiceController@index');
     Route::get('/view_invoice/{invoice_select}', 'invoiceController@view');
     Route::post('/save_invoice', 'invoiceController@save_invoice');
-    Route::get('/delete_invoice/{id}', 'invoiceController@delete_invoice');
+
     
+    Route::group(['middleware' => ['invoice_high']], function(){
+        Route::get('/delete_invoice/{id}', 'invoiceController@delete_invoice');
+        Route::get('/delete_add_book/{id}', 'invoiceController@delete_add_book');
+    });
+
+
     //Add Book
     Route::get('/viewAddBooks', 'invoiceController@view_add_books');
     Route::get('/invoiceAll', 'invoiceController@invoice_all');
