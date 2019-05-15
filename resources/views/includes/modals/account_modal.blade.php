@@ -19,7 +19,7 @@
                             </div>
                             <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                 <div class="form-group">
-                                    <input type="text" id="emp_name" name="emp_name" class="form-control required" readonly>
+                                    <input type="text" id="emp_name" name="emp_name" class="form-control required" required readonly>
                                 </div>
                             </div>
                         </div>
@@ -30,7 +30,7 @@
                             </div>
                             <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                 <div class="form-group">
-                                    <input type="text" id="username" name="username" class="form-control required" placeholder="Username">
+                                    <input type="text" id="username" name="username" class="form-control required" placeholder="Username" required>
                                 </div>
                             </div>
                         </div>
@@ -41,7 +41,7 @@
                             </div>
                             <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                 <div class="form-group">
-                                    <input type="password" id="password" name="password" class="form-control required" placeholder="Update Password">
+                                    <input type="password" id="password" name="password" class="form-control" placeholder="Update Password">
                                 </div>
                             </div>
                         </div>
@@ -52,7 +52,7 @@
                             </div>
                             <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                 <div class="form-group">
-                                    <input type="password" id="confirm_password" name="confirm_password" class="form-control required" placeholder="Confirm New Password">
+                                    <input type="password" id="confirm_password" name="confirm_password" class="form-control" placeholder="Confirm New Password">
                                 </div>
                             </div>
                         </div>

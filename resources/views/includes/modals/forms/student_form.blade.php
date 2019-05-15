@@ -261,7 +261,7 @@
                 </div>
                 <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
                     <div class="form-group required">
-                        <select type="text" id="year" name="year" class="form-control select2 required" style="width: 100%;" required>
+                        <select type="text" id="year" name="year" class="form-control select2" style="width: 100%;" required>
                             <option value="">Select Departure Year</option>
                             @foreach($departure_year as $dy)
                                 <option value="{{ $dy->id }}">{{ $dy->name }}</option>
@@ -277,7 +277,7 @@
                 </div>
                 <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
                     <div class="form-group required">
-                        <select type="text" id="month" name="month" class="form-control select2" style="width: 100%;">
+                        <select type="text" id="month" name="month" class="form-control select2" style="width: 100%;" required>
                             <option value="">Select Departure Month</option>
                             @foreach($departure_month as $dm)
                                 <option value="{{ $dm->id }}">{{ $dm->name }}</option>
@@ -293,7 +293,7 @@
                         <label for="remarks" class="pull-right">Remarks</label>
                 </div>
                 <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
-                    <div class="form-group required">
+                    <div class="form-group">
                     <input type="text" id="remarks" name="remarks" class="form-control" placeholder="Enter Remarks">
                     </div>
                 </div>

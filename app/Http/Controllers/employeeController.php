@@ -42,9 +42,16 @@ class employeeController extends Controller
 
     public function branch(Request $request){
         $current_branch = $_GET['current_branch'];
+        $employee_status = $_GET['employee_status'];
+        
         $b = employee::with('role', 'branch')->get();
 
-        $branch = $b->where('branch.name', $current_branch);
+        if($employee_status == 'All'){
+            $branch = $b->where('branch.name', $current_branch);
+        }
+        else{
+            $branch = $b->where('branch.name', $current_branch)->where('employment_status', $employee_status);
+        }
 
         return $this->refreshDatatable($branch);
     }
@@ -81,6 +88,14 @@ class employeeController extends Controller
     }
 
     public function save_employee(Request $request){
+        if($request->hasFile('picture')){
+            $fileextension = $request->picture->getClientOriginalExtension();
+
+            if($fileextension != 'jpg' && $fileextension != 'png' && $fileextension != 'jpeg'){
+                return 1;
+            }
+        }
+
         $add_edit = $request->add_edit;
 
         if($add_edit == 'add'){

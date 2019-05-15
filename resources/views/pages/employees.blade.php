@@ -107,6 +107,7 @@
 
                 <div class="tab-content">
 
+                    @include('includes.employee_status_select')
                     @include('includes.tabs.employee_tabs')
 
                 </div>

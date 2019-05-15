@@ -70,7 +70,7 @@
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                 <div class="form-group">
-                                    <input type="text" id="request_remarks" name="request_remarks" class="form-control" style="width: 100%;" required disabled>
+                                    <input type="text" id="request_remarks" name="request_remarks" class="form-control" style="width: 100%;" disabled>
                                 </div>
                             </div>
                         </div>

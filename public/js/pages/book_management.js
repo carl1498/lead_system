@@ -710,11 +710,11 @@ $(document).ready(function(){
         }
     });
 
-    $('.save_book_request').on('click', function(e){
+    $(document).on('submit', '#request_books_form', function(e){
         e.preventDefault();
 
-        var input = $(this);
-        var button = this;
+        var input = $('.save_book_request');
+        var button = document.getElementsByClassName("save_book_request")[0];
 
         button.disabled = true;
         input.html('SAVING...');
@@ -726,7 +726,7 @@ $(document).ready(function(){
                 'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
             },
             url: '/save_book_request',
-            data: $('#request_books_form').serialize(),
+            data: $(this).serialize(),
             method: 'POST',
             dataType: 'text',
             success: function(data){
@@ -932,11 +932,11 @@ $(document).ready(function(){
         }
     });
 
-    $('.save_book_release').on('click', function(e){
+    $(document).on('submit', '#release_books_form', function(e){
         e.preventDefault();
 
-        var input = $(this);
-        var button = this;
+        var input = $('.save_book_release');
+        var button = document.getElementsByClassName("save_book_release")[0];
 
         button.disabled = true;
         input.html('SAVING...');
@@ -946,7 +946,7 @@ $(document).ready(function(){
                 'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
             },
             url: '/save_book_release',
-            data: $('#release_books_form').serialize(),
+            data: $(this).serialize(),
             method: 'POST',
             dataType: 'text',
             success:function(data){
@@ -1119,11 +1119,11 @@ $(document).ready(function(){
         getAvailableBooks();
     });
 
-    $('.save_book_assign').on('click', function(e){
+    $(document).on('submit', '#assign_books_modal', function(e){
         e.preventDefault();
 
-        var input = $(this);
-        var button = this;
+        var input = $('.save_book_assign');
+        var button = document.getElementsByClassName("save_book_assign")[0];
 
         button.disabled = true;
         input.html('SAVING...');

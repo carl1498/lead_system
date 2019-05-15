@@ -3,6 +3,7 @@ $(document).ready(function(){
     //INITIALIZE -- START
 
     var current_branch = 'Makati';
+    var employee_status = $('#status_select').val();
 
     $(".datepicker").datepicker({
         format: 'yyyy-mm-dd',
@@ -25,7 +26,7 @@ $(document).ready(function(){
             this.style.setProperty('border-color', 'green', 'important');
         });
         $(this).find("input,textarea,select").val('').end();
-        $('.select2').trigger('change');
+        $('.select2').trigger('change.select2');
     });
 
     $("#account_modal").on("hidden.bs.modal", function(e){
@@ -57,6 +58,7 @@ $(document).ready(function(){
         {data: 'email', name: 'email'},
         {data: 'role.name', name: 'role.name'},
         {data: 'hired_date', name: 'hired_date'},
+        {data: 'employment_status', name: 'status'},
         {data: "action", orderable:false,searchable:false}
     ]
 
@@ -68,7 +70,10 @@ $(document).ready(function(){
             fixedColumns: true,
             ajax: {
                 url: '/employee_branch/{current_branch}',
-                data: {current_branch: current_branch}
+                data: {
+                    current_branch: current_branch,
+                    employee_status: employee_status
+                }
             },
             columns: columns_employees,
         });
@@ -79,6 +84,11 @@ $(document).ready(function(){
     //DATATABLES -- END
 
     //FUNCTIONS -- START
+
+    $(document).on('change', '#status_select', function(){
+        employee_status = $(this).val();
+        refresh_employee_branch();
+    });
 
     $('.tab_pick').on('click', function(){
         current_branch = $(this).text();
@@ -92,16 +102,16 @@ $(document).ready(function(){
     });
 
     //Add or Edit School
-    $('.save_employee').on('click', function(e){
+    $(document).on('submit', '#employee_form', function(e){
         e.preventDefault();
 
-        var input = $(this);
-        var button = this;
+        var input = $('.save_employee');
+        var button = document.getElementsByClassName("save_employee")[0];
 
         button.disabled = true;
         input.html('SAVING...');
 
-        var formData = new FormData($('#employee_form')[0]);
+        var formData = new FormData($(this)[0]);
         
         $.ajax({
             headers: {
@@ -113,6 +123,12 @@ $(document).ready(function(){
             processData: false,
             contentType: false,
             success: function(data){
+                if(data == 1){
+                    swal('Error!', 'File/Image format must only be .jpg | .png | .jpeg', 'error');
+                    button.disabled = false;
+                    input.html('SAVE CHANGES');
+                    return;
+                }
                 swal('Success!', 'Record has been saved to the Database!', 'success');
                 $('#employee_modal').modal('hide');
                 button.disabled = false;
@@ -125,7 +141,9 @@ $(document).ready(function(){
                 button.disabled = false;
                 input.html('SAVE CHANGES');
             }
-        })
+        });
+
+        return false;
     })
 
     //Open Employee Modal (ADD)
@@ -223,7 +241,7 @@ $(document).ready(function(){
         })
     })
 
-    $('.save_account').on('click', function(e){
+    $(document).on('submit', '#account_form', function(e){
         e.preventDefault();
 
         if($('#password').val() != ''){
@@ -291,7 +309,7 @@ $(document).ready(function(){
         $('#resign_modal').modal('show');
     });
 
-    $('.save_resign_employee').on('click', function(e){
+    $(document).on('submit', '#resign_form', function(e){
         e.preventDefault();
 
         swal.fire({
@@ -349,7 +367,7 @@ $(document).ready(function(){
         $('#rehire_modal').modal('show');
     });
 
-    $('.save_rehire_employee').on('click', function(e){
+    $(document).on('submit', '#rehire_form', function(e){
         e.preventDefault();
 
         swal.fire({

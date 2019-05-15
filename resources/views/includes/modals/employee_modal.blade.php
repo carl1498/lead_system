@@ -166,17 +166,6 @@
                             </div>
                         </div>
 
-                        <!--<div class="row clearfix">
-                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
-                                    <label for="salary" class="pull-right">Salary</label>
-                            </div>
-                            <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
-                                <div class="form-group">
-                                    <input type="number" id="salary" name="salary" class="form-control" placeholder="Enter Salary">
-                                </div>
-                            </div>
-                        </div>-->
-
                         <div class="row clearfix">
                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
                                     <label for="hired" class="pull-right">Hired</label>

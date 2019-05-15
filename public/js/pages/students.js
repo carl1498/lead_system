@@ -592,16 +592,16 @@ $(document).ready(function(){
         refresh_ssv_student();
     });
 
-    $('.save_student').on('click', function(e){
+    $(document).on('submit', '#student_form', function(e){
         e.preventDefault();
 
-        var input = $(this);
-        var button = this;
+        var input = $('.save_student');
+        var button = document.getElementsByClassName("save_student")[0];
 
         button.disabled = true;
         input.html('SAVING...');
 
-        var formData = new FormData($('#student_form')[0]);
+        var formData = new FormData($(this)[0]);
         
         $.ajax({
             headers: {
@@ -613,6 +613,12 @@ $(document).ready(function(){
             processData: false,
             contentType: false,
             success: function(data){
+                if(data == 1){
+                    swal('Error!', 'File/Image format must only be .jpg | .png | .jpeg', 'error');
+                    button.disabled = false;
+                    input.html('SAVE CHANGES');
+                    return;
+                }
                 swal('Success!', 'Record has been saved to the Database!', 'success');
                 $('#student_modal').modal('hide');
                 button.disabled = false;
@@ -629,14 +635,16 @@ $(document).ready(function(){
         });
     });
 
-    $('.save_language_student').on('click', function(e){
+    $(document).on('submit', '#language_student_form', function(e){
         e.preventDefault();
 
-        var input = $(this);
-        var button = this;
+        var input = $('.save_language_student');
+        var button = document.getElementsByClassName("save_language_student")[0];
 
         button.disabled = true;
         input.html('SAVING...');
+
+        var formData = new FormData($(this)[0]);
 
         $.ajax({
             headers: {
@@ -644,8 +652,16 @@ $(document).ready(function(){
             },
             url: '/save_language_student',
             method: 'POST',
-            data: $('#language_student_form').serialize(),
+            data: formData,
+            processData: false,
+            contentType: false,
             success: function(data){
+                if(data == 1){
+                    swal('Error!', 'File/Image format must only be .jpg | .png | .jpeg', 'error');
+                    button.disabled = false;
+                    input.html('SAVE CHANGES');
+                    return;
+                }
                 swal('Success!', 'Record has been saved to the Database!', 'success');
                 $('#student_modal').modal('hide');
                 button.disabled = false;
@@ -661,14 +677,16 @@ $(document).ready(function(){
         });
     });
 
-    $('.save_ssv_student').on('click', function(e){
+    $(document).on('submit', '#ssv_student_form', function(e){
         e.preventDefault();
 
-        var input = $(this);
-        var button = this;
+        var input = $('.save_ssv_student');
+        var button = document.getElementsByClassName("save_ssv_student")[0];
 
         button.disabled = true;
         input.html('SAVING...');
+
+        var formData = new FormData($(this)[0]);
 
         $.ajax({
             headers: {
@@ -676,8 +694,16 @@ $(document).ready(function(){
             },
             url: '/save_ssv_student',
             method: 'POST',
-            data: $('#ssv_student_form').serialize(),
+            data: formData,
+            processData: false,
+            contentType: false,
             success: function(data){
+                if(data == 1){
+                    swal('Error!', 'File/Image format must only be .jpg | .png | .jpeg', 'error');
+                    button.disabled = false;
+                    input.html('SAVE CHANGES');
+                    return;
+                }
                 swal('Success!', 'Record has been saved to the Database!', 'success');
                 $('#student_modal').modal('hide');
                 button.disabled = false;

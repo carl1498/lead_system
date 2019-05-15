@@ -283,6 +283,14 @@ class studentController extends Controller
     }
 
     public function save_student(Request $request){
+        if($request->hasFile('picture')){
+            $fileextension = $request->picture->getClientOriginalExtension();
+
+            if($fileextension != 'jpg' && $fileextension != 'png' && $fileextension != 'jpeg'){
+                return 1;
+            }
+        }
+
         $add_edit = $request->add_edit;
 
         if($add_edit == 'add'){
@@ -459,6 +467,14 @@ class studentController extends Controller
     }
 
     public function save_language_student(Request $request){
+        if($request->hasFile('l_picture')){
+            $fileextension = $request->l_picture->getClientOriginalExtension();
+
+            if($fileextension != 'jpg' && $fileextension != 'png' && $fileextension != 'jpeg'){
+                return 1;
+            }
+        }
+
         $add_edit = $request->l_add_edit;
         $type = $request->l_student_type;
 
@@ -587,10 +603,30 @@ class studentController extends Controller
 
         // EDIT HISTORY PT. 2 -- END
 
+        if($request->hasFile('l_picture')){
+            $fileextension = $request->l_picture->getClientOriginalExtension();
+            $encryption = sha1(time().$request->l_picture->getClientOriginalName());
+            $filename = $encryption.'.'.$fileextension;
+
+            $request->l_picture->storeAs('public/img/student', $filename);
+
+            $student->picture = $filename;
+
+            $student->save();
+        }
+
         return $student->id;
     }
 
     public function save_ssv_student(Request $request){
+        if($request->hasFile('s_picture')){
+            $fileextension = $request->s_picture->getClientOriginalExtension();
+
+            if($fileextension != 'jpg' && $fileextension != 'png' && $fileextension != 'jpeg'){
+                return 1;
+            }
+        }
+
         $add_edit = $request->s_add_edit;
         $type = $request->s_student_type;
 
@@ -728,6 +764,18 @@ class studentController extends Controller
         }
         
         // EDIT HISTORY PT. 2 -- END
+
+        if($request->hasFile('s_picture')){
+            $fileextension = $request->s_picture->getClientOriginalExtension();
+            $encryption = sha1(time().$request->s_picture->getClientOriginalName());
+            $filename = $encryption.'.'.$fileextension;
+
+            $request->s_picture->storeAs('public/img/student', $filename);
+
+            $student->picture = $filename;
+
+            $student->save();
+        }
 
         return $student->id;
     }

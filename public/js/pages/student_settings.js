@@ -59,11 +59,11 @@ $(document).ready(function(){
     });
 
     //save student settings
-    $('.save_student_settings').on('click', function(e){
+    $(document).on('submit', '#student_settings_form', function(e){
         e.preventDefault();
 
-        var input = $(this);
-        var button = this;
+        var input = $('.save_student_settings');
+        var button = document.getElementsByClassName("save_student_settings")[0];
 
         button.disabled = true;
         input.html('SAVING...');
@@ -75,7 +75,7 @@ $(document).ready(function(){
             type: 'json', 
             method: 'POST',
             url: '/save_student_settings',
-            data: $('#student_settings_form').serialize() + '&current_settings=' + current_settings,
+            data: $(this).serialize() + '&current_settings=' + current_settings,
             success: function(data){
                 swal('Success!', 'Record has been saved to the Database!', 'success');
                 $('#student_settings_modal').modal('hide');

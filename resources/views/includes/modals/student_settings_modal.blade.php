@@ -21,7 +21,7 @@
                             </div>
                             <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
                                 <div class="form-group">
-                                    <input type="text" id="student_settings_name" name="student_settings_name" class="form-control required">
+                                    <input type="text" id="student_settings_name" name="student_settings_name" class="form-control required" required>
                                 </div>
                             </div>
                         </div>

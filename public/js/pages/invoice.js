@@ -196,11 +196,11 @@ $(document).ready(function(){
         showBooks();
     });
 
-    $('.save_books').on('click', function(e){
+    $(document).on('submit', '#add_books_form', function(e){
         e.preventDefault();
 
-        var input = $(this);
-        var button = this;
+        var input = $('.save_books');
+        var button = document.getElementsByClassName("save_books")[0];
 
         button.disabled = true;
         input.html('SAVING...');
@@ -211,7 +211,7 @@ $(document).ready(function(){
             },
             url: '/save_books',
             method: 'POST',
-            data: $('#add_books_form').serialize(),
+            data: $(this).serialize(),
             success: function(data){
                 swal('Success!', 'Record has been saved to the Database!', 'success');
                 $('#add_books_modal').modal('hide');
@@ -337,12 +337,11 @@ $(document).ready(function(){
     });
 
     //Save Invoice
-    $('.save_invoice').on('click', function(e){
+    $(document).on('submit', '#invoice_form', function(e){
         e.preventDefault();
 
-        var input = $(this);
-        
-        var button = this;
+        var input = $('.save_invoice');
+        var button = document.getElementsByClassName("save_invoice")[0];
 
         button.disabled = true;
         input.html('SAVING...');
@@ -353,7 +352,7 @@ $(document).ready(function(){
             },
             url: '/save_invoice',
             method: 'POST',
-            data: $('#invoice_form').serialize(),
+            data: $(this).serialize(),
             success: function(data){
                 swal('Success!', 'Record has been saved to the Database!', 'success');
                 $('#invoice_modal').modal('hide');

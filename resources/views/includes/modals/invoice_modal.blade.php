@@ -18,7 +18,7 @@
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                                 <div class="form-group">
-                                    <input type="text" id="invoice_ref_no" name="invoice_ref_no" class="form-control required" placeholder="Invoice Reference Number">
+                                    <input type="text" id="invoice_ref_no" name="invoice_ref_no" class="form-control required" placeholder="Invoice Reference Number" required>
                                 </div>
                             </div>
                         </div>
@@ -32,7 +32,7 @@
                                 </div>
                                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                     <div class="form-group">
-                                        <input type="number" id="book_1" name="book_1" class="form-control required" placeholder="Student">
+                                        <input type="number" id="book_1" name="book_1" class="form-control" placeholder="Student">
                                     </div>
                                 </div>
                             </div>
@@ -43,7 +43,7 @@
                                 </div>
                                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                     <div class="form-group">
-                                        <input type="number" id="wb_1" name="wb_1" class="form-control required" placeholder="Student">
+                                        <input type="number" id="wb_1" name="wb_1" class="form-control" placeholder="Student">
                                     </div>
                                 </div>
                             </div>
@@ -54,7 +54,7 @@
                                 </div>
                                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                     <div class="form-group">
-                                        <input type="number" id="book_2" name="book_2" class="form-control required" placeholder="Student">
+                                        <input type="number" id="book_2" name="book_2" class="form-control" placeholder="Student">
                                     </div>
                                 </div>
                             </div>
@@ -65,7 +65,7 @@
                                 </div>
                                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                     <div class="form-group">
-                                        <input type="number" id="wb_2" name="wb_2" class="form-control required" placeholder="Student">
+                                        <input type="number" id="wb_2" name="wb_2" class="form-control" placeholder="Student">
                                     </div>
                                 </div>
                             </div>
@@ -76,7 +76,7 @@
                                 </div>
                                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                     <div class="form-group">
-                                        <input type="number" id="kanji" name="kanji" class="form-control required" placeholder="Student">
+                                        <input type="number" id="kanji" name="kanji" class="form-control" placeholder="Student">
                                     </div>
                                 </div>
                             </div>
@@ -92,7 +92,7 @@
                                 </div>
                                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                     <div class="form-group">
-                                        <input type="number" id="book_1_ssv" name="book_1_ssv" class="form-control required" placeholder="SSV">
+                                        <input type="number" id="book_1_ssv" name="book_1_ssv" class="form-control" placeholder="SSV">
                                     </div>
                                 </div>
                             </div>
@@ -103,7 +103,7 @@
                                 </div>
                                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                     <div class="form-group">
-                                        <input type="number" id="wb_1_ssv" name="wb_1_ssv" class="form-control required" placeholder="SSV">
+                                        <input type="number" id="wb_1_ssv" name="wb_1_ssv" class="form-control" placeholder="SSV">
                                     </div>
                                 </div>
                             </div>
@@ -114,7 +114,7 @@
                                 </div>
                                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                     <div class="form-group">
-                                        <input type="number" id="book_2_ssv" name="book_2_ssv" class="form-control required" placeholder="SSV">
+                                        <input type="number" id="book_2_ssv" name="book_2_ssv" class="form-control" placeholder="SSV">
                                     </div>
                                 </div>
                             </div>
@@ -125,7 +125,7 @@
                                 </div>
                                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                     <div class="form-group">
-                                        <input type="number" id="wb_2_ssv" name="wb_2_ssv" class="form-control required" placeholder="SSV">
+                                        <input type="number" id="wb_2_ssv" name="wb_2_ssv" class="form-control" placeholder="SSV">
                                     </div>
                                 </div>
                             </div>
@@ -136,7 +136,7 @@
                                 </div>
                                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                     <div class="form-group">
-                                        <input type="number" id="kanji_ssv" name="kanji_ssv" class="form-control required" placeholder="SSV">
+                                        <input type="number" id="kanji_ssv" name="kanji_ssv" class="form-control" placeholder="SSV">
                                     </div>
                                 </div>
                             </div>
