@@ -8,6 +8,9 @@
     </h1>
     <ol class="breadcrumb">
         <li>
+            <button data-container="body" data-toggle="tooltip" data-placement="left" title="Refresh Table" class="btn btn-secondary bg-red refresh_table" disabled>
+                <i class="fa fa-sync"></i>
+            </button>
             @if(canAccessAll())
             <button data-container="body" data-toggle="tooltip" data-placement="left" title="Add Employee" class="btn btn-secondary bg-red add_employee">
                 <i class="fa fa-plus-square"></i>
@@ -35,16 +38,18 @@
                     </div>
 
                     <ul class="list-group list-group-unbordered">
-                        <strong>Business #</strong>
-                        <p id="p_business" class="text-muted">
-                        -
-                        </p>
-
-                        <hr>
-                        <strong>Personal #</strong>
-                        <p id="p_personal" class="text-muted">
-                        -
-                        </p>
+                        <li class="list-group-item">
+                            <strong>Business #</strong>
+                            <p id="p_business" class="text-muted">
+                            -
+                            </p>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Personal #</strong>
+                            <p id="p_personal" class="text-muted">
+                            -
+                            </p>
+                        </li>
                         <li class="list-group-item">
                             <b>Birthdate</b> <p id="p_birthdate" class="pull-right text-muted">-</p>
                         </li>
@@ -63,30 +68,30 @@
                         <li class="list-group-item">
                             <b>Resignation Date</b> <p id="p_resigned" class="pull-right text-muted">-</p>
                         </li>
-                        <strong>SSS</strong>
-                        <p id="p_sss" class="text-muted">
-                        -
-                        </p>
-
-                        <hr>
-                        <strong>Pagibig</strong>
-                        <p id="p_pagibig" class="text-muted">
-                        -
-                        </p>
-
-                        <hr>
-                        <strong>Philhealth</strong>
-                        <p id="p_philhealth" class="text-muted">
-                        -
-                        </p>
-
-                        <hr>
-                        <strong>TIN</strong>
-                        <p id="p_tin" class="text-muted">
-                        -
-                        </p>
-
-                        <hr>
+                        <li class="list-group-item">
+                            <strong>SSS</strong>
+                            <p id="p_sss" class="text-muted" style="word-wrap: break-word;">
+                            -
+                            </p>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Pagibig</strong>
+                            <p id="p_pagibig" class="text-muted" style="word-wrap: break-word;">
+                            -
+                            </p>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Philhealth</strong>
+                            <p id="p_philhealth" class="text-muted" style="word-wrap: break-word;">
+                            -
+                            </p>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>TIN</strong>
+                            <p id="p_tin" class="text-muted" style="word-wrap: break-word;">
+                            -
+                            </p>
+                        </li>
                     </ul>
 
                     <!--<a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>-->
@@ -99,10 +104,9 @@
         <div class="col-md-9">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
-                    <li class="active"><a class="tab_pick" href="#employees_branch_tab" data-toggle="tab">Makati</a></li>
-                    <li><a class="tab_pick" href="#employees_branch_tab" data-toggle="tab">Cebu</a></li>
-                    <li><a class="tab_pick" href="#employees_branch_tab" data-toggle="tab">Davao</a></li>
-                    
+                    <li class="disabled tab_pick active"><a class="tab_pick" href="#employees_branch_tab" data-toggle="tab">Makati</a></li>
+                    <li class="disabled tab_pick"><a class="tab_pick" href="#employees_branch_tab" data-toggle="tab">Cebu</a></li>
+                    <li class="disabled tab_pick"><a class="tab_pick" href="#employees_branch_tab" data-toggle="tab">Davao</a></li>
                 </ul>
 
                 <div class="tab-content">

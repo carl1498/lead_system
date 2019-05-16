@@ -4,6 +4,7 @@ $(document).ready(function(){
 
     var current_branch = 'Makati';
     var employee_status = $('#status_select').val();
+    var modal_close = true;
 
     $(".datepicker").datepicker({
         format: 'yyyy-mm-dd',
@@ -13,6 +14,10 @@ $(document).ready(function(){
     $('body').tooltip({
         selector: '[data-toggle="tooltip"]',
         trigger : 'hover'
+    });
+
+    $('[data-toggle="tooltip"]').click(function () {
+        $('[data-toggle="tooltip"]').tooltip("hide");
     });
 
     $('.select2').select2();
@@ -27,10 +32,12 @@ $(document).ready(function(){
         });
         $(this).find("input,textarea,select").val('').end();
         $('.select2').trigger('change.select2');
+        modal_close = true;
     });
 
     $("#account_modal").on("hidden.bs.modal", function(e){
         $(this).find("input,textarea,select").val('').end();
+        modal_close = true;
     });
 
     $('input, select').attr('autocomplete', 'off');
@@ -40,13 +47,40 @@ $(document).ready(function(){
         height: 'auto',
         alwaysVisible: true
     });
+
+    function disableTabs(){
+        $(`li.tab_pick`).addClass('disabled').css('cursor', 'not-allowed');
+        $(`a.tab_pick`).addClass('disabled').css('pointer-events', 'none');
+
+        $('.refresh_table').attr('disabled', true);
+    }
+
+    function enableTabs(){
+        $(`li.tab_pick`).removeClass('disabled').css('cursor', 'pointer');
+        $(`a.tab_pick`).removeClass('disabled').css('pointer-events', 'auto');
+
+        $('.refresh_table').attr('disabled', false);
+    }
+
+    function refresh(){
+        disableTabs();
+        refresh_employee_branch();
+    }
+    
+    $('.refresh_table').on('click', function(){
+        refresh();
+    });
     
     //INITIALIZE -- END
 
     //DATATABLES -- START
 
     $(document).on('shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
-        $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
+        if(modal_close == true){
+            refresh();
+
+            $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
+        }
     });
 
     var columns_employees = [
@@ -64,6 +98,9 @@ $(document).ready(function(){
 
     function refresh_employee_branch(){
         var employees_branch = $('#employees_branch').DataTable({
+            initComplete: function(settings, json) {
+                enableTabs();  
+            },
             destroy: true,
             scrollX: true,
             scrollCollapse: true,
@@ -79,7 +116,7 @@ $(document).ready(function(){
         });
     }
 
-    refresh_employee_branch();
+    refresh();
 
     //DATATABLES -- END
 
@@ -87,18 +124,13 @@ $(document).ready(function(){
 
     $(document).on('change', '#status_select', function(){
         employee_status = $(this).val();
-        refresh_employee_branch();
+        refresh
     });
 
     $('.tab_pick').on('click', function(){
-        current_branch = $(this).text();
-        refresh_employee_branch();
-    });
-
-    $('.add_employee').on('click', function(){
-        $('#add_edit').val('add');
-        $('#employee_modal').modal('toggle');
-        $('#employee_modal').modal('show');
+        if(!$(this).hasClass('disabled')){
+            current_branch = $(this).text();
+        }
     });
 
     //Add or Edit School
@@ -148,10 +180,15 @@ $(document).ready(function(){
 
     //Open Employee Modal (ADD)
     $('.add_employee').on('click', function(){
+        modal_close = false;
+        $('#add_edit').val('add');
+        $('#employee_modal').modal('toggle');
+        $('#employee_modal').modal('show');
     });
 
     //Open Employee Modal (EDIT)
     $(document).on('click', '.edit_employee', function(){
+        modal_close = false;
         var id = $(this).attr('id');
 
         $.ajax({

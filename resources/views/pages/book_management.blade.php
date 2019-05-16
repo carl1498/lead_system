@@ -8,6 +8,9 @@
     </h1>
     <ol class="breadcrumb">
         <li>
+            <button data-container="body" data-toggle="tooltip" data-placement="left" title="Refresh Table" class="btn btn-secondary bg-red refresh_table" disabled>
+                <i class="fa fa-sync"></i>
+            </button>
             @if(canAccessAll() || canEditBookManagement())
             <button data-container="body" data-toggle="tooltip" data-placement="left" title="Assign Books" class="btn btn-secondary bg-red assign_books">
             <i class="fas fa-people-carry"></i>
@@ -35,15 +38,15 @@
         <div class="col-md-12">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
-                    <li class="active"><a class="books_pick" href="#branch_tab" data-toggle="tab">Branch</a></li>
-                    <li><a class="books_pick" href="#ssv_student_tab" data-toggle="tab">SSV</a></li>
-                    <li><a class="books_pick" href="#student_tab" data-toggle="tab">Student</a></li>
-                    <li><a class="books_pick" href="#books_tab" data-toggle="tab">Books</a></li>
-                    <li><a class="books_pick" href="#request_tab" data-toggle="tab">Request History</a></li>
-                    <li><a class="books_pick" href="#release_tab" data-toggle="tab">Release History</a></li>
-                    <li><a class="books_pick" href="#assign_tab" data-toggle="tab">Assign History</a></li>
-                    <li><a class="books_pick" href="#return_tab" data-toggle="tab">Return History</a></li>
-                    <li><a class="books_pick" href="#lost_tab" data-toggle="tab">Lost History</a></li>
+                    <li class="disabled books_pick active"><a class="books_pick" href="#branch_tab" data-toggle="tab">Branch</a></li>
+                    <li class="disabled books_pick"><a class="books_pick" href="#ssv_student_tab" data-toggle="tab">SSV</a></li>
+                    <li class="disabled books_pick"><a class="books_pick" href="#student_tab" data-toggle="tab">Student</a></li>
+                    <li class="disabled books_pick"><a class="books_pick" href="#books_tab" data-toggle="tab">Books</a></li>
+                    <li class="disabled books_pick"><a class="books_pick" href="#request_tab" data-toggle="tab">Request History</a></li>
+                    <li class="disabled books_pick"><a class="books_pick" href="#release_tab" data-toggle="tab">Release History</a></li>
+                    <li class="disabled books_pick"><a class="books_pick" href="#assign_tab" data-toggle="tab">Assign History</a></li>
+                    <li class="disabled books_pick"><a class="books_pick" href="#return_tab" data-toggle="tab">Return History</a></li>
+                    <li class="disabled books_pick"><a class="books_pick" href="#lost_tab" data-toggle="tab">Lost History</a></li>
                 </ul>
 
                 <div class="tab-content">

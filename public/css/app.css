@@ -16161,3 +16161,19 @@ readers do not read off random characters that represent icons */
   height: 450px;
   overflow-y: scroll;
 }
+
+li.branch_pick, li.status_pick, 
+li.result_pick, li.language_pick, 
+li.all_pick, li.ssv_pick,
+li.ssv_backout_pick, li.tab_pick,
+li.invoice_pick, li.books_pick{
+  cursor: not-allowed;
+}
+
+a.branch_pick, a.status_pick, 
+a.result_pick, a.language_pick, 
+a.all_pick, a.ssv_pick,
+a.ssv_backout_pick, a.tab_pick,
+a.invoice_pick, a.books_pick{
+  pointer-events: none;
+}

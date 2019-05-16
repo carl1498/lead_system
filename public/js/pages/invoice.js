@@ -5,12 +5,14 @@ $(document).ready(function(){
     var invoice_select = $('#invoice_select').val();
     var invoice_id, book_type;
     var current_tab = 'Invoice';
+    var modal_close = true;
 
     $("#invoice_modal").on("hidden.bs.modal", function(e){
         $('#invoice_form :input.required').each(function (){
             this.style.setProperty('border-color', 'green', 'important');
         });
         $(this).find("input,textarea,select").val('').end();
+        modal_close = true;
     });
 
     $('#add_books_modal').on('hidden.bs.modal', function(e){
@@ -18,6 +20,7 @@ $(document).ready(function(){
         $('#invoice_add_book').val('').trigger('change');
         $('#book_type_add_book').val('').trigger('change');
         $('#book_type_add_book, #quantity, #starting, #remarks').prop('disabled', true);
+        modal_close = true;
     });
 
     $('.select2').select2();
@@ -49,6 +52,45 @@ $(document).ready(function(){
         selector: '[data-toggle="tooltip"]',
         trigger : 'hover'
     });
+    
+    $('[data-toggle="tooltip"]').click(function () {
+        $('[data-toggle="tooltip"]').tooltip("hide");
+    });
+
+    function disableTabs(){
+        $(`li.invoice_pick`).addClass('disabled').css('cursor', 'not-allowed');
+        $(`a.invoice_pick`).addClass('disabled').css('pointer-events', 'none');
+
+        $('.refresh_table').attr('disabled', true);
+    }
+
+    function enableTabs(){
+        $(`li.invoice_pick`).removeClass('disabled').css('cursor', 'pointer');
+        $(`a.invoice_pick`).removeClass('disabled').css('pointer-events', 'auto');
+
+        $('.refresh_table').attr('disabled', false);
+    }
+
+    function refresh(){
+        disableTabs();
+        
+        if(current_tab == 'Invoice'){
+            $('.invoice_select').show();
+            $('#invoice_select').next(".select2-container").show();
+        }else if(current_tab == 'Add Book History'){
+            $('.invoice_select').hide();
+            $('#invoice_select').next(".select2-container").hide();
+        }
+
+        switch(current_tab){
+            case 'Invoice': refresh_invoice(); break;
+            case 'Add Book History': refresh_add_book_history(); break;
+        }
+    }
+    
+    $('.refresh_table').on('click', function(){
+        refresh();
+    });
 
     //INITIALIZE -- END
 
@@ -56,7 +98,11 @@ $(document).ready(function(){
     //DATATABLES -- START
 
     $(document).on('shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
-        $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
+        if(modal_close == true){
+            refresh();
+
+            $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
+        }
     });
 
     function refresh_invoice(){
@@ -64,6 +110,9 @@ $(document).ready(function(){
         invoice_select = $('#invoice_select').val();
 
         var invoice_table = $('#invoice_table').DataTable({
+            initComplete: function(settings, json) {
+                enableTabs();  
+            },
             processing: true,
             destroy: true,
             scrollX: true,
@@ -115,6 +164,9 @@ $(document).ready(function(){
     function refresh_add_book_history(){
 
         var add_books_table = $('#add_books_table').DataTable({
+            initComplete: function(settings, json) {
+                enableTabs();  
+            },
             stateSave: true,
             stateSaveCallback: function(settings,data) {
                 localStorage.setItem( 'DataTables_' + settings.sInstance, JSON.stringify(data) )
@@ -165,8 +217,7 @@ $(document).ready(function(){
 
     }
 
-    refresh_invoice();
-    refresh_add_book_history();
+    refresh();
 
     //DATATABLES -- END
 
@@ -174,15 +225,8 @@ $(document).ready(function(){
     //FUNCTIONS -- START
 
     $('.invoice_pick').on('click', function(){
-        current_tab = $(this).text();
-        if(current_tab == 'Invoice'){
-            $('.invoice_select').show();
-            $('#invoice_select').next(".select2-container").show();
-            refresh_invoice();
-        }else{
-            $('.invoice_select').hide();
-            $('#invoice_select').next(".select2-container").hide();
-            refresh_add_book_history();
+        if(!$(this).hasClass('disabled')){
+            current_tab = $(this).text();
         }
     });
 
@@ -217,8 +261,7 @@ $(document).ready(function(){
                 $('#add_books_modal').modal('hide');
                 button.disabled = false;
                 input.html('SAVE CHANGES');
-                refresh_invoice();
-                refresh_add_book_history();
+                refresh();
             },
             error: function(data){
                 swal("Oh no!", "Something went wrong, try again.", "error");
@@ -325,13 +368,15 @@ $(document).ready(function(){
     });
 
     //Open Add Invoice Modal
-    $('.add_invoice').on('click', function(){            
+    $('.add_invoice').on('click', function(){
+        modal_close = false;            
         $('#invoice_modal').modal('toggle');
         $('#invoice_modal').modal('show');
     });
 
     //Open Add Books Modal
     $('.add_books').on('click', function(){
+        modal_close = false;
         $('#add_books_modal').modal('toggle');
         $('#add_books_modal').modal('show');
     });
@@ -358,7 +403,7 @@ $(document).ready(function(){
                 $('#invoice_modal').modal('hide');
                 button.disabled = false;
                 input.html('SAVE CHANGES');
-                refresh_invoice();
+                refresh();
             },
             error: function(data){
                 swal("Oh no!", "Something went wrong, try again.", "error");
@@ -414,7 +459,7 @@ $(document).ready(function(){
                                         type: 'json',
                                         success:function(data){
                                             swal('Success!', 'This invoice has been Deleted', 'success');
-                                            refresh_invoice();
+                                            refresh();
                                         }
                                     })
                                 }
@@ -479,7 +524,7 @@ $(document).ready(function(){
                                                 return;
                                             }
                                             swal('Success!', 'This add book history has been Deleted', 'success');
-                                            refresh_add_book_history();
+                                            refresh();
                                         }
                                     })
                                 }

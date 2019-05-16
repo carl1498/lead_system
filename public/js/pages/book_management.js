@@ -13,29 +13,36 @@ $(document).ready(function(){
     var program_select = $('#program_select').val();
     var branch_select = $('#branch_select').val();
     var invoice_select = $('#invoice_select').val();
-
+    var modal_close = true;
 
     $('body').tooltip({
         selector: '[data-toggle="tooltip"]',
         trigger : 'hover'
     });
 
+    $('[data-toggle="tooltip"]').click(function () {
+        $('[data-toggle="tooltip"]').tooltip("hide");
+    });
+
     $('#request_books_modal').on('hidden.bs.modal', function(e){
         $(this).find("input,textarea,select").val('').end();
         $('#request_book').val('').trigger('change');
         $('#request_quantity, #request_remarks').prop('disabled', true);
+        modal_close = true;
     });
 
     $('#release_books_modal').on('hidden.bs.modal', function(e){
         $(this).find("input,textarea,select").val('').end();
         $('#release_book, #release_branch').val('').trigger('change');
         $('#release_quantity, #release_book, #release_starting, #release_remarks').prop('disabled', true);
+        modal_close = true;
     });
 
     $('#assign_books_modal').on('hidden.bs.modal', function(e){
         $(this).find("input,textarea,select").val('').end();
         $('#assign_student_name, #assign_book_type, #assign_book').val('').trigger('change');
         $('#assign_book_type, #assign_book').prop('disabled', true);
+        modal_close = true;
     });
 
     $('.select2').select2();
@@ -49,11 +56,28 @@ $(document).ready(function(){
     });
 
     $('.books_pick').on('click', function(){
-        current_tab = $(this).text();
-        pickRefresh();
-    })
+        if(!$(this).hasClass('disabled')){
+            current_tab = $(this).text();
+        }
+    });
 
-    function pickRefresh(){
+    function disableTabs(){
+        $(`li.books_pick`).addClass('disabled').css('cursor', 'not-allowed');
+        $(`a.books_pick`).addClass('disabled').css('pointer-events', 'none');
+
+        $('.refresh_table').attr('disabled', true);
+    }
+
+    function enableTabs(){
+        $(`li.books_pick`).removeClass('disabled').css('cursor', 'pointer');
+        $(`a.books_pick`).removeClass('disabled').css('pointer-events', 'auto');
+
+        $('.refresh_table').attr('disabled', false);
+    }
+
+    function refresh(){
+        disableTabs();
+
         if(current_tab != 'Branch' && current_tab != 'Student' && current_tab != 'SSV' ){
             $('.book_type_select').show();
             $('#book_type_select').next(".select2-container").show();
@@ -88,58 +112,34 @@ $(document).ready(function(){
             $('#program_select').next(".select2-container").hide();
         }
 
-        if(current_tab == 'Branch'){
-            $('.status_select').show();
-            $('#status_select').next(".select2-container").show();
-
-            $('.branch_select').hide();
-            $('#branch_select').next(".select2-container").hide();
-
-            refresh_books_branch_table();
-        }
-        else if(current_tab == 'Student'){
-            $('.student_status_select').show();
-            $('#student_status_select').next(".select2-container").show();
-            $('.program_select').show();
-            $('#program_select').next(".select2-container").show();
-
-            refresh_books_student_table();
-        }
-        else if(current_tab == 'SSV'){
-            $('.student_status_select').show();
-            $('#student_status_select').next(".select2-container").show();
-            $('.program_select').show();
-            $('#program_select').next(".select2-container").show();
-
-            refresh_books_ssv_student_table();
-        }
-        else if(current_tab == 'Books'){
-            refresh_books();
-        }
-        else if(current_tab == 'Request History'){
-            refresh_request_books();
-        }
-        else if(current_tab == 'Release History'){
-            refresh_release_books();
-        }
-        else if(current_tab == 'Assign History'){
-            refresh_assign_books();
-        }
-        else if(current_tab == 'Return History'){
-            refresh_return_books()
-        }
-        else if(current_tab == 'Lost History'){
-            refresh_lost_books()
+        switch(current_tab){
+            case 'Branch'           : refresh_books_branch_table(); break;
+            case 'Student'          : refresh_books_student_table(); break;
+            case 'SSV'              : refresh_books_ssv_student_table(); break;
+            case 'Books'            : refresh_books(); break;
+            case 'Request History'  : refresh_request_books(); break;
+            case 'Release History'  : refresh_release_books(); break;
+            case 'Assign History'   : refresh_assign_books(); break;
+            case 'Return History'   : refresh_return_books(); break;
+            case 'Lost History'     : refresh_lost_books(); break;
         }
     }
 
+    $('.refresh_table').on('click', function(){
+        refresh();
+    });
+    
     //INITIALIZE -- END
 
 
     //DATATABLES -- START
 
     $(document).on('shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
-        $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
+        if(modal_close == true){
+            refresh();
+
+            $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
+        }
     });
 
     function refresh_request_books(){
@@ -153,6 +153,9 @@ $(document).ready(function(){
             },
             stateLoadParams: function( settings, data ) {
                 if (data.order) delete data.order;
+            },
+            initComplete: function(settings, json) {
+                enableTabs();  
             },
             processing: true,
             destroy: true,
@@ -210,6 +213,9 @@ $(document).ready(function(){
             },
             stateLoadParams: function( settings, data ) {
                 if (data.order) delete data.order;
+            },
+            initComplete: function(settings, json) {
+                enableTabs();  
             },
             processing: true,
             destroy: true,
@@ -270,6 +276,9 @@ $(document).ready(function(){
             stateLoadParams: function( settings, data ) {
                 if (data.order) delete data.order;
             },
+            initComplete: function(settings, json) {
+                enableTabs();  
+            },
             processing: true,
             destroy: true,
             scrollX: true,
@@ -320,6 +329,9 @@ $(document).ready(function(){
             stateLoadParams: function( settings, data ) {
                 if (data.order) delete data.order;
             },
+            initComplete: function(settings, json) {
+                enableTabs();  
+            },
             processing: true,
             destroy: true,
             scrollX: true,
@@ -359,6 +371,11 @@ $(document).ready(function(){
     }
 
     function refresh_books_student_table(){
+        $('.student_status_select').show();
+        $('#student_status_select').next(".select2-container").show();
+        $('.program_select').show();
+        $('#program_select').next(".select2-container").show();
+
         var books_student_table = $('#books_student_table').DataTable({
             stateSave: true,
             stateSaveCallback: function(settings,data) {
@@ -369,6 +386,9 @@ $(document).ready(function(){
             },
             stateLoadParams: function( settings, data ) {
                 if (data.order) delete data.order;
+            },
+            initComplete: function(settings, json) {
+                enableTabs();  
             },
             dom: 'Bflrtip',
             processing: true,
@@ -420,6 +440,11 @@ $(document).ready(function(){
     }
 
     function refresh_books_ssv_student_table(){
+        $('.student_status_select').show();
+        $('#student_status_select').next(".select2-container").show();
+        $('.program_select').show();
+        $('#program_select').next(".select2-container").show();
+
         var books_ssv_student_table = $('#books_ssv_student_table').DataTable({
             stateSave: true,
             stateSaveCallback: function(settings,data) {
@@ -430,6 +455,9 @@ $(document).ready(function(){
             },
             stateLoadParams: function( settings, data ) {
                 if (data.order) delete data.order;
+            },
+            initComplete: function(settings, json) {
+                enableTabs();  
             },
             dom: 'Bflrtip',
             processing: true,
@@ -478,6 +506,13 @@ $(document).ready(function(){
     }
 
     function refresh_books_branch_table(){
+        $('.status_select').show();
+        $('#status_select').next(".select2-container").show();
+
+        $('.branch_select').hide();
+        $('#branch_select').next(".select2-container").hide();
+
+
         var books_branch_table = $('#books_branch_table').DataTable({
             stateSave: true,
             stateSaveCallback: function(settings,data) {
@@ -488,6 +523,9 @@ $(document).ready(function(){
             },
             stateLoadParams: function( settings, data ) {
                 if (data.order) delete data.order;
+            },
+            initComplete: function(settings, json) {
+                enableTabs();  
             },
             dom: 'Bflrtip',
             processing: true,
@@ -550,7 +588,9 @@ $(document).ready(function(){
             stateLoadParams: function( settings, data ) {
                 if (data.order) delete data.order;
             },
-            //dom: 'Bflrtip',
+            initComplete: function(settings, json) {
+                enableTabs();  
+            },
             processing: true,
             scrollX: true,
             destroy: true,
@@ -601,6 +641,9 @@ $(document).ready(function(){
             stateLoadParams: function( settings, data ) {
                 if (data.order) delete data.order;
             },
+            initComplete: function(settings, json) {
+                enableTabs();  
+            },
             processing: true,
             destroy: true,
             scrollX: true,
@@ -639,46 +682,47 @@ $(document).ready(function(){
         });
     }
 
-    pickRefresh();
+    refresh();
+    
     //DATATABLES -- END
-
 
     //FUNCTIONS -- START
 
     $('#status_select').on('change', function(){
         book_status = $(this).val();
-        refresh_books_branch_table();
+        refresh();
     });
 
     $('#book_type_select').on('change', function(){
         book_type_select = $(this).val();
-        pickRefresh();
+        refresh();
     });
 
     $('#student_status_select').on('change', function(){
         student_status_select = $(this).val();
-        pickRefresh();
+        refresh();
     });
 
     $('#program_select').on('change', function(){
         program_select = $(this).val();
-        pickRefresh();
+        refresh();
     });
 
     $('#branch_select').on('change', function(){
         branch_select = $(this).val();
-        pickRefresh();
+        refresh();
     });
     
     $('#invoice_select').on('change', function(){
         invoice_select = $(this).val();
-        pickRefresh();
+        refresh();
     });
 
     //REQUEST BOOKS -- START
 
     //Open Request Books Modal
     $('.request_books').on('click', function(){
+        modal_close = false;
         $('#request_books_modal').modal('toggle');
         $('#request_books_modal').modal('show');
     });
@@ -734,7 +778,7 @@ $(document).ready(function(){
                 $('#request_books_modal').modal('hide');
                 button.disabled = false;
                 input.html('SAVE CHANGES');
-                pickRefresh();
+                refresh();
             },
             error: function(data){
                 swal("Error!", "Something went wrong, try again.", "error");
@@ -765,7 +809,7 @@ $(document).ready(function(){
                     type: 'json',
                     success:function(data){
                         swal('Book Request Approved!', '', 'success');
-                        pickRefresh();
+                        refresh();
                     }
                 })
             }
@@ -793,7 +837,7 @@ $(document).ready(function(){
                     type: 'json',
                     success:function(data){
                         swal('Book Request Delivered!', '', 'success');
-                        pickRefresh();
+                        refresh();
                     }
                 })
             }
@@ -821,7 +865,7 @@ $(document).ready(function(){
                     type: 'json',
                     success:function(data){
                         swal('Book Request Pending Again!', '', 'info');
-                        pickRefresh();
+                        refresh();
                     }
                 })
             }
@@ -853,7 +897,7 @@ $(document).ready(function(){
                             return;
                         }
                         swal('Book Request Cancelled!', '', 'info');
-                        pickRefresh();
+                        refresh();
                     }
                 })
             }
@@ -868,6 +912,7 @@ $(document).ready(function(){
 
     //Show Release Books Modal
     $('.release_books').on('click', function(){
+        modal_close = false;
         $('#release_books_modal').modal('toggle');
         $('#release_books_modal').modal('show');
     });
@@ -960,7 +1005,7 @@ $(document).ready(function(){
                 $('#release_books_modal').modal('hide');
                 button.disabled = false;
                 input.html('SAVE CHANGES');
-                pickRefresh();
+                refresh();
             },
             error: function(data){
                 swal("Error!", "Something went wrong, try again.", "error");
@@ -991,7 +1036,7 @@ $(document).ready(function(){
                     type: 'json',
                     success:function(data){
                         swal('Book Release Pending Again!', '', 'success');
-                        pickRefresh();
+                        refresh();
                     }
                 })
             }
@@ -1019,7 +1064,7 @@ $(document).ready(function(){
                     type: 'json',
                     success:function(data){
                         swal('Book Received!', '', 'success');
-                        pickRefresh();
+                        refresh();
                     }
                 })
             }
@@ -1047,7 +1092,7 @@ $(document).ready(function(){
                     type: 'json',
                     success:function(data){
                         swal('Book Returned!', '', 'success');
-                        pickRefresh();
+                        refresh();
                     }
                 })
             }
@@ -1103,6 +1148,7 @@ $(document).ready(function(){
 
     //Show Assign Books Modal
     $('.assign_books').on('click', function(){
+        modal_close = false;
         $('#assign_books_modal').modal('toggle');
         $('#assign_books_modal').modal('show');
     });
@@ -1141,7 +1187,7 @@ $(document).ready(function(){
                 $('#assign_books_modal').modal('hide');
                 button.disabled = false;
                 input.html('SAVE CHANGES');
-                pickRefresh();
+                refresh();
             },
             error: function(data){
                 swal("Error!", "Something went wrong, try again.", "error");
@@ -1241,7 +1287,7 @@ $(document).ready(function(){
                     type: 'json',
                     success:function(data){
                         swal('Book Lost!', 'success');
-                        pickRefresh();
+                        refresh();
                     }
                 })
             }
@@ -1274,7 +1320,7 @@ $(document).ready(function(){
                     type: 'json',
                     success:function(data){
                         swal('Book Returned!', 'success');
-                        pickRefresh();
+                        refresh();
                     }
                 })
             }

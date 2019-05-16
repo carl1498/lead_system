@@ -36,6 +36,10 @@ $(document).ready(function(){
         trigger : 'hover'
     });
 
+    $('[data-toggle="tooltip"]').click(function () {
+        $('[data-toggle="tooltip"]').tooltip("hide");
+    });
+
     $('#student_modal').on('shown.bs.modal', function(){
         $('#fname').focus();
     });
@@ -60,21 +64,77 @@ $(document).ready(function(){
         alwaysVisible: false
     });
 
+    function disableTabs(){
+        $(`li.branch_pick, li.status_pick, li.result_pick, 
+        li.language_pick, li.all_pick, li.ssv_pick, li.ssv_backout_pick`
+        ).addClass('disabled').css('cursor', 'not-allowed');
+
+        $(`a.branch_pick, a.status_pick, a.result_pick,
+        a.language_pick, a.all_pick, a.ssv_pick, a.ssv_backout_pick`
+        ).addClass('disabled').css('pointer-events', 'none');
+
+        $('.switch, .refresh_table').attr('disabled', true);
+    }
+
+    function enableTabs(){
+        $(`li.branch_pick, li.status_pick, li.result_pick, 
+        li.language_pick, li.all_pick, li.ssv_pick, li.ssv_backout_pick`
+        ).removeClass('disabled').css('cursor', 'pointer');
+        
+        $(`a.branch_pick, a.status_pick, a.result_pick,
+        a.language_pick, a.all_pick, a.ssv_pick, a.ssv_backout_pick`
+        ).removeClass('disabled').css('pointer-events', 'auto');
+
+        $('.switch, .refresh_table').attr('disabled', false);
+    }
+
+    function refresh(){
+        disableTabs();
+
+        if(current_tab == 'Branch' || current_tab == 'Status' || current_tab == 'Result'){
+            showYearSelect();
+            showMonthSelect();
+        }else if(current_tab == 'Language'){
+            showYearSelect();
+            $('.month_select').hide();
+            $('#month_select').next(".select2-container").hide();
+            $('.select_description').text('Year:');
+        }else if(current_tab == 'All'){
+            $('.year_select').hide();
+            $('#year_select').next(".select2-container").hide();
+            $('.month_select').hide();
+            $('#month_select').next(".select2-container").hide();
+            $('.select_description').text('');
+        }else if(current_tab == 'SSV' || current_tab == 'SSV Backout'){
+            showYearSelect();
+            $('.month_select').hide();
+            $('#month_select').next(".select2-container").hide();
+            $('.select_description').text('Year:');
+        }
+        
+        switch(current_tab){
+            case 'Branch'       : refresh_student_branch(); break;
+            case 'Status'       : refresh_student_status(); break;
+            case 'Result'       : refresh_student_result(); break;
+            case 'Language'     : refresh_language_student(); break;
+            case 'SSV'          : refresh_ssv_student(); break;
+            case 'SSV Backout'  : refresh_ssv_backout(); break;
+            case 'All'          : refresh_all_student(); break;
+        }
+    }
+    
+    $('.refresh_table').on('click', function(){
+        refresh();
+    });
+
     //INITIALIZE -- END
 
 
     //DATATABLES -- START
 
     $(document).on('shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
-        
         if(modal_close == true){
-            if(current_tab == 'Branch'){refresh_student_branch();}
-            else if(current_tab == 'Status'){refresh_student_status();}
-            else if(current_tab == 'Result'){refresh_student_result();}
-            else if(current_tab == 'Language'){refresh_language_student();}
-            else if(current_tab == 'SSV'){refresh_ssv_student();}
-            else if(current_tab == 'SSV Backout'){refresh_ssv_backout();}
-            else if(current_tab == 'All'){refresh_all_student();}
+            refresh();
 
             $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
         }
@@ -250,6 +310,9 @@ $(document).ready(function(){
             stateLoadParams: function( settings, data ) {
                 if (data.order) delete data.order;
             },
+            initComplete: function(settings, json) {
+                enableTabs();  
+            },
             processing: true,
             destroy: true,
             scrollX: true,
@@ -284,6 +347,9 @@ $(document).ready(function(){
             },
             stateLoadParams: function( settings, data ) {
                 if (data.order) delete data.order;
+            },
+            initComplete: function(settings, json) {
+                enableTabs();  
             },
             processing: true,
             destroy: true,
@@ -321,6 +387,9 @@ $(document).ready(function(){
             stateLoadParams: function( settings, data ) {
                 if (data.order) delete data.order;
             },
+            initComplete: function(settings, json) {
+                enableTabs();  
+            },
             processing: true,
             destroy: true,
             scrollX: true,
@@ -356,6 +425,9 @@ $(document).ready(function(){
             stateLoadParams: function( settings, data ) {
                 if (data.order) delete data.order;
             },
+            initComplete: function(settings, json) {
+                enableTabs();  
+            },
             processing: true,
             destroy: true,
             scrollX: true,
@@ -386,6 +458,9 @@ $(document).ready(function(){
             stateLoadParams: function( settings, data ) {
                 if (data.order) delete data.order;
             },
+            initComplete: function(settings, json) {
+                enableTabs();  
+            },
             processing: true,
             destroy: true,
             scrollX: true,
@@ -415,6 +490,9 @@ $(document).ready(function(){
             },
             stateLoadParams: function( settings, data ) {
                 if (data.order) delete data.order;
+            },
+            initComplete: function(settings, json) {
+                enableTabs();  
             },
             processing: true,
             destroy: true,
@@ -450,6 +528,9 @@ $(document).ready(function(){
             stateLoadParams: function( settings, data ) {
                 if (data.order) delete data.order;
             },
+            initComplete: function(settings, json) {
+                enableTabs();  
+            },
             processing: true,
             destroy: true,
             scrollX: true,
@@ -475,9 +556,6 @@ $(document).ready(function(){
     
     //Open Add Students Modal
     $('.add_student').on('click', function(){
-        modal_close = false;
-        $('#student_modal').modal('toggle');
-        $('#student_modal').modal('show');
     });
 
     $('#birthdate').on('change', function(){
@@ -508,6 +586,7 @@ $(document).ready(function(){
             $('.ssv_pick, .ssv_backout_pick').hide();
             $('#student_list_tab #student_first').click();
         }
+        disableTabs();
     });
 
     function showYearSelect(){
@@ -522,74 +601,50 @@ $(document).ready(function(){
     }
 
     $('.branch_pick').on('click', function(){
-        current_tab = 'Branch';
-        current_branch = $(this).text();
-        
-        showYearSelect();
-        showMonthSelect();
+        if(!$(this).hasClass('disabled')){
+            current_tab = 'Branch';
+            current_branch = $(this).text();
+        }
     });
 
     $('.status_pick').on('click', function(){
-        current_tab = 'Status';
-        current_status = $(this).text();
-
-        showYearSelect();
-        showMonthSelect();
+        if(!$(this).hasClass('disabled')){
+            current_tab = 'Status';
+            current_status = $(this).text();
+        }
     });
 
     $('.result_pick').on('click', function(){
-        current_tab = 'Result';
-        current_result = $(this).text();
-
-        showYearSelect();
-        showMonthSelect();
+        if(!$(this).hasClass('disabled')){
+            current_tab = 'Result';
+            current_result = $(this).text();
+        }
     });
 
     $('.language_pick').on('click', function(){
-        current_tab = 'Language';
-        
-        showYearSelect();
-        $('.month_select').hide();
-        $('#month_select').next(".select2-container").hide();
-        $('.select_description').text('Year:');
+        if(!$(this).hasClass('disabled')){current_tab = 'Language';}
     });
 
     $('.all_pick').on('click', function(){
-        current_tab = 'All';
-        
-        $('.year_select').hide();
-        $('#year_select').next(".select2-container").hide();
-        $('.month_select').hide();
-        $('#month_select').next(".select2-container").hide();
-        $('.select_description').text('');
+        if(!$(this).hasClass('disabled')){current_tab = 'All';}
     });
 
     $('.ssv_pick').on('click', function(){
-        current_tab = 'SSV';
-        current_ssv = $(this).text();
-        
-        showYearSelect();
-        $('.month_select').hide();
-        $('#month_select').next(".select2-container").hide();
-        $('.select_description').text('Year:');
+        if(!$(this).hasClass('disabled')){
+            current_tab = 'SSV';
+            current_ssv = $(this).text();
+        }
     });
 
     $('.ssv_backout_pick').on('click', function(){
-        current_tab = 'SSV Backout';
-        current_ssv = $(this).text();
-        
-        showYearSelect();
-        $('.month_select').hide();
-        $('#month_select').next(".select2-container").hide();
-        $('.select_description').text('Year:');
+        if(!$(this).hasClass('disabled')){
+            current_tab = 'SSV Backout';
+            current_ssv = $(this).text();
+        }
     });
 
     $(document).on('change', '#year_select, #month_select', function(){
-        refresh_student_branch();
-        refresh_student_status();
-        refresh_student_result();
-        refresh_language_student();
-        refresh_ssv_student();
+        refresh();
     });
 
     $(document).on('submit', '#student_form', function(e){
@@ -623,8 +678,7 @@ $(document).ready(function(){
                 $('#student_modal').modal('hide');
                 button.disabled = false;
                 input.html('SAVE CHANGES');
-                refresh_student_branch();
-                refresh_student_status();
+                refresh();
                 view_profile(data);
             },
             error: function(data){
@@ -666,7 +720,7 @@ $(document).ready(function(){
                 $('#student_modal').modal('hide');
                 button.disabled = false;
                 input.html('SAVE CHANGES');
-                refresh_language_student();
+                refresh();
                 view_profile(data);
             },
             error: function(data){
@@ -708,7 +762,7 @@ $(document).ready(function(){
                 $('#student_modal').modal('hide');
                 button.disabled = false;
                 input.html('SAVE CHANGES');
-                refresh_ssv_student();
+                refresh();
                 view_profile(data);
             },
             error: function(data){
@@ -721,10 +775,13 @@ $(document).ready(function(){
 
     //Open Student Modal (ADD)
     $('.add_student').on('click', function(){
+        modal_close = false;
         $('#add_edit').val('add');
         $('#l_add_edit').val('add');
         $('#s_add_edit').val('add');
         $('#student_type_tab a:first').tab('show');
+        $('#student_modal').modal('toggle');
+        $('#student_modal').modal('show');
     });
 
     //Open Student Modal (EDIT)
@@ -875,9 +932,7 @@ $(document).ready(function(){
                     success:function(data){
                         swal('Deleted!', 'This Student has been Deleted', 'success');
 
-                        refresh_student_branch();
-                        refresh_student_status();
-                        refresh_language_student();
+                        refresh();
                     }
                 });
             }
@@ -905,9 +960,9 @@ $(document).ready(function(){
                     dataType: 'text',
                     success: function(data){
                         swal('Congratulations!', 'This Student is now in Final School!', 'success');
+                        view_profile(data);
 
-                        refresh_student_branch();
-                        refresh_student_status();
+                        refresh();
                     }
                 });
             }
@@ -935,13 +990,9 @@ $(document).ready(function(){
                     dataType: 'text',
                     success: function(data){
                         swal('This Student has backed out!', '', 'warning');
+                        view_profile(data);
 
-                        refresh_student_branch();
-                        refresh_student_status();
-                        if(current_ssv != ''){
-                            refresh_ssv_student();
-                            refresh_ssv_backout();
-                        }
+                        refresh();
                     }
                 });
             }
@@ -969,17 +1020,14 @@ $(document).ready(function(){
                     dataType: 'text',
                     success: function(data){
                         if(current_status == 'Final School'){
-                            swal('Success!', 'This Student out of Final School!', 'success');
+                            swal('Success!', 'This Student is out of Final School!', 'success');
                         }
                         else{
                             swal('Success!', 'This Student is now active again!', 'success');
                         }
-                        refresh_student_branch();
-                        refresh_student_status();
-                        if(current_ssv != ''){
-                            refresh_ssv_student();
-                            refresh_ssv_backout();
-                        }
+                        view_profile(data);
+                        
+                        refresh();
                     }
                 });
             }
@@ -1007,10 +1055,9 @@ $(document).ready(function(){
                     dataType: 'text',
                     success: function(data){
                         swal('Congratulations!', 'Student COE Approved!', 'success');
+                        view_profile(data);
 
-                        refresh_student_branch();
-                        refresh_student_status();
-                        refresh_student_result();
+                        refresh();
                     }
                 });
             }
@@ -1038,10 +1085,9 @@ $(document).ready(function(){
                     dataType: 'text',
                     success: function(data){
                         swal('Student COE Denied', '', 'warning');
+                        view_profile(data);
 
-                        refresh_student_branch();
-                        refresh_student_status();
-                        refresh_student_result();
+                        refresh();
                     }
                 });
             }
@@ -1069,10 +1115,9 @@ $(document).ready(function(){
                     dataType: 'text',
                     success: function(data){
                         swal('Student Cancelled', '', 'warning');
+                        view_profile(data);
 
-                        refresh_student_branch();
-                        refresh_student_status();
-                        refresh_student_result();
+                        refresh();
                     }
                 });
             }
@@ -1220,16 +1265,6 @@ $(document).ready(function(){
 
         return age;
     }
-    
-    $('.refresh_student').on('click', function(){
-        if(current_tab == 'Branch'){refresh_student_branch();}
-        else if(current_tab == 'Status'){refresh_student_status();}
-        else if(current_tab == 'Result'){refresh_student_result();}
-        else if(current_tab == 'Language'){refresh_language_student();}
-        else if(current_tab == 'SSV'){refresh_ssv_student();}
-        else if(current_tab == 'SSV Backout'){refresh_ssv_backout();}
-        else if(current_tab == 'All'){refresh_all_student();}
-    });
 
     function view_profile(id){
         $.ajax({
@@ -1279,5 +1314,6 @@ $(document).ready(function(){
             }
         });
     }
+
     //FUNCTIONS -- END
 });
