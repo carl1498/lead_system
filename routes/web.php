@@ -115,7 +115,7 @@ Route::group(['middleware' => ['auth', 'employee']], function(){
 Route::group(['middleware' => ['auth', 'invoice']], function(){
     //Invoice
     Route::get('/invoice', 'invoiceController@index');
-    Route::get('/view_invoice/{invoice_select}', 'invoiceController@view');
+    Route::get('/view_invoice/{type_select}', 'invoiceController@view');
     Route::post('/save_invoice', 'invoiceController@save_invoice');
 
     

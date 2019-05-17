@@ -2,6 +2,8 @@ $(document).ready(function(){
 
     //INITIALIZE -- START
 
+    var type_select = $('#type_select').val();
+    var book_type_select = $('#book_type_select').val();
     var invoice_select = $('#invoice_select').val();
     var invoice_id, book_type;
     var current_tab = 'Invoice';
@@ -75,11 +77,21 @@ $(document).ready(function(){
         disableTabs();
         
         if(current_tab == 'Invoice'){
-            $('.invoice_select').show();
-            $('#invoice_select').next(".select2-container").show();
-        }else if(current_tab == 'Add Book History'){
             $('.invoice_select').hide();
             $('#invoice_select').next(".select2-container").hide();
+            $('.book_type_select').hide();
+            $('#book_type_select').next(".select2-container").hide();
+
+            $('.type_select').show();
+            $('#type_select').next(".select2-container").show();
+        }else if(current_tab == 'Add Book History'){
+            $('.type_select').hide();
+            $('#type_select').next(".select2-container").hide();
+            
+            $('.invoice_select').show();
+            $('#invoice_select').next(".select2-container").show();
+            $('.book_type_select').show();
+            $('#book_type_select').next(".select2-container").show();
         }
 
         switch(current_tab){
@@ -107,7 +119,7 @@ $(document).ready(function(){
 
     function refresh_invoice(){
 
-        invoice_select = $('#invoice_select').val();
+        type_select = $('#type_select').val();
 
         var invoice_table = $('#invoice_table').DataTable({
             initComplete: function(settings, json) {
@@ -122,8 +134,8 @@ $(document).ready(function(){
             },
             responsive: true,
             ajax: {
-                url: '/view_invoice/{invoice_select}',
-                data: {invoice_select: invoice_select}
+                url: '/view_invoice/{type_select}',
+                data: {type_select: type_select}
             },
             columns: [
                 {data: 'reference_no.invoice_ref_no', name: 'invoice_ref_no'},
@@ -162,6 +174,9 @@ $(document).ready(function(){
     }
 
     function refresh_add_book_history(){
+        
+        book_type_select = $('#book_type_select').val();
+        invoice_select = $('#invoice_select').val();
 
         var add_books_table = $('#add_books_table').DataTable({
             initComplete: function(settings, json) {
@@ -186,7 +201,11 @@ $(document).ready(function(){
             },
             responsive: true,
             ajax: {
-                url: '/viewAddBooks'
+                url: '/viewAddBooks',
+                data: {
+                    book_type_select: book_type_select,
+                    invoice_select: invoice_select
+                }
             },
             columns: [
                 {data: 'reference_no.invoice_ref_no', name: 'invoice_ref_no'},
@@ -201,7 +220,7 @@ $(document).ready(function(){
             ],
             columnDefs: [
                 { width: 120, targets: 0 }, //invoice ref no
-                { width: 180, targets: 1 }, //book type
+                { width: 250, targets: 1 }, //book type
                 { width: 60, targets: 2 }, //previous pending
                 { width: 60, targets: 3 }, //quantity
                 { width: 60, targets: 4 }, //pending
@@ -363,8 +382,8 @@ $(document).ready(function(){
 
     //INVOICE -- START
 
-    $(document).on('change', '#invoice_select', function(){
-        refresh_invoice();
+    $(document).on('change', '#type_select', function(){
+        refresh();
     });
 
     //Open Add Invoice Modal
@@ -474,6 +493,15 @@ $(document).ready(function(){
     //INVOICE -- END
 
     //ADD BOOK -- START
+
+    $(document).on('change', '#book_type_select', function(){
+        refresh();
+    });
+
+    $(document).on('change', '#invoice_select', function(){
+        refresh();
+    });
+
     $(document).on('click', '.delete_add_book', function(){
         var id = $(this).attr('id');
 

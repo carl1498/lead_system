@@ -25,135 +25,138 @@ class invoiceController extends Controller
      */
     public function index()
     {
-        return view('pages.invoice');
+        $book_type = book_type::all();
+        $invoice = reference_no::all();
+
+        return view('pages.invoice', compact('book_type', 'invoice'));
     }
 
     public function view(Request $request){
         $invoice = invoice::with('reference_no')->groupBy('ref_no_id')->get();
-        $invoice_select = $request->invoice_select;
+        $type_select = $request->type_select;
 
         return Datatables::of($invoice)
-        ->addColumn('book_1', function($data) use($invoice_select){
+        ->addColumn('book_1', function($data) use($type_select){
             $get_book = book_type::where('name', 'Minna 1 (Student)')->first();
             $get_book_id = $get_book->id;
             $book = $data->where('ref_no_id', $data->ref_no_id)->where('book_type_id', $get_book_id)->first();
             if((empty($book))){return 0;}
-            if($invoice_select == 'Quantity'){
+            if($type_select == 'Quantity'){
                 return $book->quantity;
             }
-            else if($invoice_select == 'Pending'){
+            else if($type_select == 'Pending'){
                 return $book->pending;
             }
         })
-        ->addColumn('wb_1', function($data) use($invoice_select){
+        ->addColumn('wb_1', function($data) use($type_select){
             $get_book = book_type::where('name', 'WB 1 (Student)')->first();
             $get_book_id = $get_book->id;
             $book = $data->where('ref_no_id', $data->ref_no_id)->where('book_type_id', $get_book_id)->first();
             if((empty($book))){return 0;}
-            if($invoice_select == 'Quantity'){
+            if($type_select == 'Quantity'){
                 return $book->quantity;
             }
-            else if($invoice_select == 'Pending'){
+            else if($type_select == 'Pending'){
                 return $book->pending;
             }
         })
-        ->addColumn('book_2', function($data) use($invoice_select){
+        ->addColumn('book_2', function($data) use($type_select){
             $get_book = book_type::where('name', 'Minna 2 (Student)')->first();
             $get_book_id = $get_book->id;
             $book = $data->where('ref_no_id', $data->ref_no_id)->where('book_type_id', $get_book_id)->first();
             if((empty($book))){return 0;}
-            if($invoice_select == 'Quantity'){
+            if($type_select == 'Quantity'){
                 return $book->quantity;
             }
-            else if($invoice_select == 'Pending'){
+            else if($type_select == 'Pending'){
                 return $book->pending;
             }
         })
-        ->addColumn('wb_2', function($data) use($invoice_select){
+        ->addColumn('wb_2', function($data) use($type_select){
             $get_book = book_type::where('name', 'WB 2 (Student)')->first();
             $get_book_id = $get_book->id;
             $book = $data->where('ref_no_id', $data->ref_no_id)->where('book_type_id', $get_book_id)->first();
             if((empty($book))){return 0;}
-            if($invoice_select == 'Quantity'){
+            if($type_select == 'Quantity'){
                 return $book->quantity;
             }
-            else if($invoice_select == 'Pending'){
+            else if($type_select == 'Pending'){
                 return $book->pending;
             }
         })
-        ->addColumn('kanji', function($data) use($invoice_select){
+        ->addColumn('kanji', function($data) use($type_select){
             $get_book = book_type::where('name', 'Kanji (Student)')->first();
             $get_book_id = $get_book->id;
             $book = $data->where('ref_no_id', $data->ref_no_id)->where('book_type_id', $get_book_id)->first();
             if((empty($book))){return 0;}
-            if($invoice_select == 'Quantity'){
+            if($type_select == 'Quantity'){
                 return $book->quantity;
             }
-            else if($invoice_select == 'Pending'){
+            else if($type_select == 'Pending'){
                 return $book->pending;
             }
         })
-        ->addColumn('book_1_ssv', function($data) use($invoice_select){
+        ->addColumn('book_1_ssv', function($data) use($type_select){
             $get_book = book_type::where('name', 'Minna 1 (SSV)')->first();
             $get_book_id = $get_book->id;
             $book = $data->where('ref_no_id', $data->ref_no_id)->where('book_type_id', $get_book_id)->first();
             if((empty($book))){return 0;}
-            if($invoice_select == 'Quantity'){
+            if($type_select == 'Quantity'){
                 return $book->quantity;
             }
-            else if($invoice_select == 'Pending'){
+            else if($type_select == 'Pending'){
                 return $book->pending;
             }
         })
-        ->addColumn('wb_1_ssv', function($data) use($invoice_select){
+        ->addColumn('wb_1_ssv', function($data) use($type_select){
             $get_book = book_type::where('name', 'WB 1 (SSV)')->first();
             $get_book_id = $get_book->id;
             $book = $data->where('ref_no_id', $data->ref_no_id)->where('book_type_id', $get_book_id)->first();
             if((empty($book))){return 0;}
-            if($invoice_select == 'Quantity'){
+            if($type_select == 'Quantity'){
                 return $book->quantity;
             }
-            else if($invoice_select == 'Pending'){
+            else if($type_select == 'Pending'){
                 return $book->pending;
             }
         })
-        ->addColumn('book_2_ssv', function($data) use($invoice_select){
+        ->addColumn('book_2_ssv', function($data) use($type_select){
             $get_book = book_type::where('name', 'Minna 2 (SSV)')->first();
             $get_book_id = $get_book->id;
             $book = $data->where('ref_no_id', $data->ref_no_id)->where('book_type_id', $get_book_id)->first();
             if((empty($book))){return 0;}
-            if($invoice_select == 'Quantity'){
+            if($type_select == 'Quantity'){
                 return $book->quantity;
             }
-            else if($invoice_select == 'Pending'){
+            else if($type_select == 'Pending'){
                 return $book->pending;
             }
         })
-        ->addColumn('wb_2_ssv', function($data) use($invoice_select){
+        ->addColumn('wb_2_ssv', function($data) use($type_select){
             $get_book = book_type::where('name', 'WB 2 (SSV)')->first();
             $get_book_id = $get_book->id;
             $book = $data->where('ref_no_id', $data->ref_no_id)->where('book_type_id', $get_book_id)->first();
             if((empty($book))){return 0;}
-            if($invoice_select == 'Quantity'){
+            if($type_select == 'Quantity'){
                 return $book->quantity;
             }
-            else if($invoice_select == 'Pending'){
+            else if($type_select == 'Pending'){
                 return $book->pending;
             }
         })
-        ->addColumn('kanji_ssv', function($data) use($invoice_select){
+        ->addColumn('kanji_ssv', function($data) use($type_select){
             $get_book = book_type::where('name', 'Kanji (SSV)')->first();
             $get_book_id = $get_book->id;
             $book = $data->where('ref_no_id', $data->ref_no_id)->where('book_type_id', $get_book_id)->first();
             if((empty($book))){return 0;}
-            if($invoice_select == 'Quantity'){
+            if($type_select == 'Quantity'){
                 return $book->quantity;
             }
-            else if($invoice_select == 'Pending'){
+            else if($type_select == 'Pending'){
                 return $book->pending;
             }
         })
-        ->addColumn('action', function($data) use($invoice_select){
+        ->addColumn('action', function($data) use($type_select){
             $html = '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_invoice" id="'.$data->ref_no_id.'"><i class="fa fa-trash-alt"></i></button>';
             
             return $html;
@@ -161,8 +164,19 @@ class invoiceController extends Controller
         ->make(true);
     }
 
-    public function view_add_books(){
+    public function view_add_books(Request $request){
+        $book_type_select = $request->book_type_select;
+        $invoice_select = $request->invoice_select;
+
         $add_books = add_books::with('reference_no', 'book_type')->get();
+
+        if($book_type_select != 'All'){
+            $add_books = $add_books->where('book_type_id', $book_type_select);
+        }
+
+        if($invoice_select != 'All'){
+            $add_books = $add_books->where('invoice_ref_id', $invoice_select);
+        }
 
         return Datatables::of($add_books)
         ->addColumn('book_range', function($data){
