@@ -33,7 +33,7 @@
             <div class="box box-primary">
                 <div class="box-body box-profile">
                     <div style="width: auto; height: 125px;">
-                        <img id="p_picture" class="profile-user-img img-responsive img-rounded pull-left" src="./img/avatar5.png" alt="Student Profile Picture">
+                        <img id="p_picture" class="profile-user-img img-responsive img-rounded pull-left" src="./img/avatar5.png" alt="Student Profile Picture" style="max-width: 97px; max-height: 97px;">
 
                         <h3 id="p_stud_name" class="profile-username text-center">Student Name</h3>
 
