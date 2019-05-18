@@ -15,9 +15,9 @@
 
             <div class="tab-content">
                 
-                @include('includes.modals.forms.student_form')
-                @include('includes.modals.forms.language_student_form')
-                @include('includes.modals.forms.ssv_student_form')
+                @include('includes.modals.student_modals.student_forms.student_form')
+                @include('includes.modals.student_modals.student_forms.language_student_form')
+                @include('includes.modals.student_modals.student_forms.ssv_student_form')
 
             </div>
 

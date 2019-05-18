@@ -49,8 +49,8 @@
     <!-- MODALS -- START -->
     
     
-    @include('includes.modals.invoice_modal')
-    @include('includes.modals.add_books_modal')
+    @include('includes.modals.invoice_modals.invoice_modal')
+    @include('includes.modals.invoice_modals.add_books_modal')
 
     <!-- MODALS -- END -->
 

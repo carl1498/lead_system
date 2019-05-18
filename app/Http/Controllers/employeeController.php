@@ -36,7 +36,12 @@ class employeeController extends Controller
     {
         $branch = branch::all();
         $role = role::all();
+        $employee = employee::where('lname', 'Bermejo')->first();
 
+        /*$from = new Carbon($employee->hired_date);
+        $to = new Carbon($employee->resignation_date);
+        $months = $from->diffInMonths($to);*/
+        
         return view('pages.employees', compact('branch', 'role'));
     }
 
@@ -69,12 +74,13 @@ class employeeController extends Controller
             if(canAccessAll()){
                 $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Account" class="btn btn-info btn-xs edit_account" id="'.$data->id.'"><i class="fa fa-key"></i></button>&nbsp;';
                 $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-primary btn-xs edit_employee" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
-                if($data->employment_status == 'Active'){
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="History" class="btn btn-warning btn-xs history_employee" id="'.$data->id.'"><i class="fa fa-history"></i></button>&nbsp;';
+                /*if($data->employment_status == 'Active'){
                     $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Resign" class="btn btn-warning btn-xs resign_employee" id="'.$data->id.'"><i class="fa fa-sign-out-alt"></i></button>&nbsp;';
                 }
                 else if($data->employment_status == 'Resigned'){
                     $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Rehire" class="btn btn-warning btn-xs rehire_employee" id="'.$data->id.'"><i class="fa fa-sign-in-alt"></i></button>&nbsp;';
-                }
+                }*/
                 $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_employee" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>&nbsp;';
             }
             return $html;
@@ -177,8 +183,8 @@ class employeeController extends Controller
         return $employee->id;
     }
 
-    public function get_employee(){
-        $id = $_GET['id'];
+    public function get_employee(Request $request){
+        $id = $request->id;
         $employee = employee::find($id);
         $employee_benefits = employee_benefits::where('emp_id', $id)->get();
 

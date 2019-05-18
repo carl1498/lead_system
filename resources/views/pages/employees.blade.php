@@ -121,10 +121,11 @@
 
     <!-- MODALS -- START -->
     
-    @include('includes.modals.employee_modal')
-    @include('includes.modals.account_modal')
-    @include('includes.modals.resign_modal')
-    @include('includes.modals.rehire_modal')
+    @include('includes.modals.employee_modals.employee_modal')
+    @include('includes.modals.employee_modals.account_modal')
+    @include('includes.modals.employee_modals.resign_modal')
+    @include('includes.modals.employee_modals.rehire_modal')
+    @include('includes.modals.employee_modals.employee_history_modal')
 
     <!-- MODALS -- END -->
 

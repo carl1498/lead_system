@@ -116,6 +116,14 @@ $(document).ready(function(){
         });
     }
 
+    var employee_history = $('#employee_history_table').DataTable({
+        paging: false,
+        ordering: false,
+        info: false,
+        searching: false,
+        order: [[1, 'desc']]
+    });
+
     refresh();
 
     //DATATABLES -- END
@@ -124,7 +132,7 @@ $(document).ready(function(){
 
     $(document).on('change', '#status_select', function(){
         employee_status = $(this).val();
-        refresh
+        refresh();
     });
 
     $('.tab_pick').on('click', function(){
@@ -192,9 +200,8 @@ $(document).ready(function(){
         var id = $(this).attr('id');
 
         $.ajax({
-            url: '/get_employee/{id}',
+            url: '/get_employee/'+id,
             method: 'get',
-            data: {id: id},
             dataType: 'json',
             success:function(data){
                 $('#add_edit').val('edit');
@@ -460,6 +467,29 @@ $(document).ready(function(){
     }); 
 
     //VIEW PROFILE -- END
+
+    //EMPLOYEE HISTORY -- START
+
+    $(document).on('click', '.history_employee', function(){
+        var id = $(this).attr('id');
+
+        $.ajax({
+            url: '/get_employee/'+id,
+            method: 'get',
+            dataType: 'json',
+            success:function(data){
+                console.log(data);
+                $('#employee_history_modal .modal-title-name').text(data.employee.fname + ' ' + data.employee.lname);
+                $('#employee_history_modal .modal_title_status').text(data.employee.employment_status);
+            }
+        });
+
+
+        $('#employee_history_modal').modal('toggle');
+        $('#employee_history_modal').modal('show');
+    });
+
+    //EMPLOYEE HISTORY -- END
 
     function getAge(birthdate){
         var today = new Date();

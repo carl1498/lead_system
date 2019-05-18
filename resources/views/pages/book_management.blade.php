@@ -62,9 +62,9 @@
 
     <!-- MODALS -- START -->
     
-    @include('includes.modals.request_books_modal')
-    @include('includes.modals.release_books_modal')
-    @include('includes.modals.assign_books_modal')
+    @include('includes.modals.book_management_modals.request_books_modal')
+    @include('includes.modals.book_management_modals.release_books_modal')
+    @include('includes.modals.book_management_modals.assign_books_modal')
 
     <!-- MODALS -- END -->
 
