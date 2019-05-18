@@ -27,7 +27,7 @@
 <section class="content">
 
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-3 col-lg-2">
 
             <!-- Profile Image -->
             <div class="box box-primary">
@@ -123,7 +123,7 @@
             <!-- /.box -->
         </div>
         <!-- /.col -->
-        <div class="col-md-9">
+        <div class="col-md-9 col-lg-10">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs" id="student_list_tab">
                     <li class="disabled ssv_pick" style="display: none;"><a style="display: none;" id="ssv_first" class="ssv_pick" href="#ssv_student_tab" data-toggle="tab">SSV</a></li>
