@@ -24,7 +24,7 @@
 <section class="content">
 
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-3 col-xl-2">
 
             <!-- Profile Image -->
             <div class="box box-primary">
@@ -101,7 +101,7 @@
             <!-- /.box -->
         </div>
         <!-- /.col -->
-        <div class="col-md-9">
+        <div class="col-md-9 col-xl-10">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
                     <li class="disabled tab_pick active"><a class="tab_pick" href="#employees_branch_tab" data-toggle="tab">Makati</a></li>
