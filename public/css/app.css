@@ -16429,7 +16429,8 @@ readers do not read off random characters that represent icons */
 }
 
 .box-profile{
-  height: 450px;
+  height: 80vh;
+  overflow: auto;
   overflow-y: scroll;
 }
 
