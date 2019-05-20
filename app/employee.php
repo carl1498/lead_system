@@ -40,5 +40,13 @@ class employee extends Model
         return $this->hasMany('App\employee_benefits', 'emp_id', 'id');
     }
 
+    public function employment_history(){
+        return $this->hasMany('App\employment_history', 'emp_id', 'id');
+    }
+
+    public function current_employment_status(){
+        return $this->hasOne('App\employment_history', 'emp_id', 'id')->latest();
+    }
+
     public $timestamps = true;
 }

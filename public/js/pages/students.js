@@ -58,12 +58,6 @@ $(document).ready(function(){
 
     $('input, select').attr('autocomplete', 'off');
 
-    $('.box-profile').slimScroll({
-        size: '8px',
-        height: 'auto',
-        alwaysVisible: false
-    });
-
     function disableTabs(){
         $(`li.branch_pick, li.status_pick, li.result_pick, 
         li.language_pick, li.all_pick, li.ssv_pick, li.ssv_backout_pick`

@@ -8,6 +8,7 @@ use App\employee;
 use App\branch;
 use App\role;
 use App\employee_benefits;
+use App\employment_history;
 use App\User;
 use Carbon\Carbon;
 use Auth;
@@ -36,11 +37,15 @@ class employeeController extends Controller
     {
         $branch = branch::all();
         $role = role::all();
-        $employee = employee::where('lname', 'Bermejo')->first();
-
-        /*$from = new Carbon($employee->hired_date);
-        $to = new Carbon($employee->resignation_date);
-        $months = $from->diffInMonths($to);*/
+        $employee = employee::all();
+        
+        /*foreach($employee as $emp){
+            $employment_history = new employment_history;
+            $employment_history->emp_id = $emp->id;
+            $employment_history->hired_date = $emp->hired_date;
+            $employment_history->until = $emp->resignation_date;
+            $employment_history->save();
+        }*/
         
         return view('pages.employees', compact('branch', 'role'));
     }
@@ -49,7 +54,7 @@ class employeeController extends Controller
         $current_branch = $_GET['current_branch'];
         $employee_status = $_GET['employee_status'];
         
-        $b = employee::with('role', 'branch')->get();
+        $b = employee::with('role', 'branch', 'current_employment_status')->get();
 
         if($employee_status == 'All'){
             $branch = $b->where('branch.name', $current_branch);
@@ -87,7 +92,38 @@ class employeeController extends Controller
         })
         ->editColumn('hired_date', function($data){
             if(canAccessAll()){
-                return $data->hired_date;
+                $employment_history = $data->current_employment_status;
+
+                $from = new Carbon($employment_history->hired_date);
+                $to = ($employment_history) ? new Carbon($employment_history->until) : Carbon::now();
+                $months = $from->diffInMonths($to);
+
+                return $employment_history->hired_date . ' (' . $months . ')';
+            }
+        })
+        ->make(true);
+    }
+
+    public function view_employment_history(Request $request){
+        $id = $request->id;
+
+        $employment_history = employment_history::where('emp_id', $id)->orderBy('id', 'desc')->get();
+
+        return Datatables::of($employment_history)
+        ->addColumn('months', function($data){
+            $from = new Carbon($data->hired_date);
+            $to = ($data) ? new Carbon($data->until) : new Carbon(Carbon::now());
+            $months = $from->diffInMonths($to);
+
+            $word = ($months>1) ? 'months' : 'month';
+
+            return $months . ' ' . $word;
+        })
+        ->editColumn('until', function($data){
+            if($data->until){
+                return $data->until;
+            }else{
+                return 'Present';
             }
         })
         ->make(true);
@@ -125,7 +161,6 @@ class employeeController extends Controller
         $employee->branch_id = $request->branch;
         $employee->role_id = $request->role;
         $employee->salary = $request->salary;
-        $employee->hired_date = Carbon::parse($request->hired);
         $employee->save();
 
         $employee_id = employee::orderBy('id', 'DESC')->first();
@@ -170,8 +205,15 @@ class employeeController extends Controller
             $employee->save();
         }
 
-        //Create Employee Account
+
         if($add_edit == 'add'){
+            //Employee History
+            $employment_history = new employment_history;
+            $employment_history->emp_id = $employee->id;
+            $employment_history->hired_date = Carbon::parse($request->hired);
+            $employment_history->save();
+
+            //Create Employee Account
             $name = str_replace(' ','',$employee->lname);
             $user = new User;
             $user->emp_id = $employee->id;
@@ -233,8 +275,12 @@ class employeeController extends Controller
         
         $employee = employee::find($id);
         $employee->employment_status = 'Resigned';
-        $employee->resignation_date = $request->resignation_date;
+        $employment_history = employment_history::where('emp_id', $id)->orderBy('id', 'desc')->first();
+        $employment_history->until = $request->resignation_date;
+        $employment_history->save();
         $employee->save();
+
+        return $id;
     }
 
     public function rehire_employee(Request $request){
@@ -242,9 +288,13 @@ class employeeController extends Controller
 
         $employee = employee::find($id);
         $employee->employment_status = 'Active';
-        $employee->resignation_date = null;
-        $employee->hired_date = $request->rehiring_date;
+        $employment_history = new employment_history;
+        $employment_history->emp_id = $id;
+        $employment_history->hired_date = $request->rehiring_date;
+        $employment_history->save();
         $employee->save();
+
+        return $id;
     }
 
     public function view_profile(Request $request){

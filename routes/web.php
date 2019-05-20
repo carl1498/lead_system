@@ -106,6 +106,9 @@ Route::group(['middleware' => ['auth', 'employee']], function(){
     //Account
     Route::get('/get_account/{id}', 'employeeController@get_account');
     Route::post('/save_account', 'employeeController@save_account');
+
+    //Employment History
+    Route::get('/view_employment_history/{id}', 'employeeController@view_employment_history')->middleware('admin');
 });
 
 //EMPLOYEE ROUTES -- END

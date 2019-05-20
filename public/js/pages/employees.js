@@ -40,13 +40,16 @@ $(document).ready(function(){
         modal_close = true;
     });
 
-    $('input, select').attr('autocomplete', 'off');
-
-    $('.box-profile').slimScroll({
-        size: '8px',
-        height: 'auto',
-        alwaysVisible: true
+    $("#employee_history_modal").on("hidden.bs.modal", function(e){
+        modal_close = true;
     });
+
+    $("#resign_modal, #rehire_modal").on("hidden.bs.modal", function(e){
+        $(this).find("#resignation_date, #rehiring_date").val('').end();
+        modal_close = true;
+    });
+
+    $('input, select').attr('autocomplete', 'off');
 
     function disableTabs(){
         $(`li.tab_pick`).addClass('disabled').css('cursor', 'not-allowed');
@@ -97,7 +100,7 @@ $(document).ready(function(){
     ]
 
     function refresh_employee_branch(){
-        var employees_branch = $('#employees_branch').DataTable({
+        $('#employees_branch').DataTable({
             initComplete: function(settings, json) {
                 enableTabs();  
             },
@@ -116,13 +119,26 @@ $(document).ready(function(){
         });
     }
 
-    var employee_history = $('#employee_history_table').DataTable({
-        paging: false,
-        ordering: false,
-        info: false,
-        searching: false,
-        order: [[1, 'desc']]
-    });
+    function refresh_employment_history(id){
+        var employment_history_table = $('#employment_history_table').DataTable({
+            paging: false,
+            ordering: false,
+            info: false,
+            searching: false,
+            destroy: true,
+            ajax: '/view_employment_history/'+id,
+            columns: [
+                {data: 'hired_date', name: 'hired_date'},
+                {data: 'until', name: 'until'},
+                {data: 'months', name: 'months'}
+            ],
+            columnDefs: [
+                {width: '33.33%', targets: 0},
+                {width: '33.33%', targets: 1},
+                {width: '33.33%', targets: 2},
+            ]
+        });
+    }
 
     refresh();
 
@@ -330,7 +346,7 @@ $(document).ready(function(){
                                 success: function(data){
                                     swal('Success!', 'User Data has been saved!', 'success');
                                     $('#account_modal').modal('hide');
-                                    refresh_employee_branch();
+                                    refresh();
                                 }
                             })
                         }
@@ -346,7 +362,6 @@ $(document).ready(function(){
 
     $(document).on('click', '.resign_employee', function(){
         var id = $(this).attr('id');
-
 
         $('#r_id').val(id);
         $('#resign_modal').modal('toggle');
@@ -388,7 +403,14 @@ $(document).ready(function(){
                                 success: function (data){
                                     $('#resign_modal').modal('hide');
                                     swal('Employee now resigned.', '', 'info');
-                                    refresh_employee_branch();
+
+                                    $('.modal_title_status').text('Resigned');
+                                    $('.resign_rehire').attr('data-original-title', 'Rehire').attr('id', data)
+                                    .removeClass('resign_employee').addClass('rehire_employee');
+                                    $('.resign_rehire i').removeClass('fa-sign-out-alt').addClass('fa-sign-in-alt');
+                                    
+                                    refresh_employment_history(data);
+                                    refresh();
                                 }
                             });
                         }
@@ -404,7 +426,6 @@ $(document).ready(function(){
 
     $(document).on('click', '.rehire_employee', function(){
         var id = $(this).attr('id');
-
 
         $('#rh_id').val(id);
         $('#rehire_modal').modal('toggle');
@@ -446,7 +467,14 @@ $(document).ready(function(){
                                 success: function (data){
                                     $('#rehire_modal').modal('hide');
                                     swal('Success!', 'Employee now rehired', 'success');
-                                    refresh_employee_branch();
+
+                                    $('.modal_title_status').text('Active');
+                                    $('.resign_rehire').attr('data-original-title', 'Resign').attr('id', data)
+                                    .removeClass('rehire_employee').addClass('resign_employee');
+                                    $('.resign_rehire i').removeClass('fa-sign-in-alt').addClass('fa-sign-out-alt');
+                                    
+                                    refresh_employment_history(data);
+                                    refresh();
                                 }
                             });
                         }
@@ -478,12 +506,22 @@ $(document).ready(function(){
             method: 'get',
             dataType: 'json',
             success:function(data){
-                console.log(data);
                 $('#employee_history_modal .modal-title-name').text(data.employee.fname + ' ' + data.employee.lname);
                 $('#employee_history_modal .modal_title_status').text(data.employee.employment_status);
+
+                if(data.employee.employment_status == 'Active'){
+                    $('.resign_rehire').attr({'data-original-title': 'Resign', 'id': id})
+                    .removeClass('rehire_employee').addClass('resign_employee');
+                    $('.resign_rehire i').removeClass('fa-sign-in-alt').addClass('fa-sign-out-alt');
+                }else{
+                    $('.resign_rehire').attr({'data-original-title': 'Rehire', 'id': id})
+                    .removeClass('resign_employee').addClass('rehire_employee');
+                    $('.resign_rehire i').removeClass('fa-sign-out-alt').addClass('fa-sign-in-alt');
+                }
+
+                refresh_employment_history(id);
             }
         });
-
 
         $('#employee_history_modal').modal('toggle');
         $('#employee_history_modal').modal('show');
