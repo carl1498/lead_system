@@ -120,7 +120,7 @@ class employeeController extends Controller
             $fileextension = $request->picture->getClientOriginalExtension();
 
             if($fileextension != 'jpg' && $fileextension != 'png' && $fileextension != 'jpeg'){
-                return 1;
+                return false;
             }
         }
 
