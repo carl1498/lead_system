@@ -9,15 +9,15 @@
             </div>
             <div class="modal-body">
 
-            <table id="employment_history_table" class="table table-hover table-striped table-bordered" cellspacing="0">
-                <thead>
-                    <tr>
-                        <th>Hired Date</th>
-                        <th>Until</th>
-                        <th>Months</th>
-                    </tr>
-                </thead>
-            </table>
+                <table id="employment_history_table" class="table table-hover table-striped table-bordered" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Hired Date</th>
+                            <th>Until</th>
+                            <th>Months</th>
+                        </tr>
+                    </thead>
+                </table>
 
             </div>
         </div>

@@ -66,7 +66,7 @@
                             <b>Hired Date</b> <p id="p_hired" class="pull-right text-muted">-</p>
                         </li>
                         <li class="list-group-item">
-                            <b>Resignation Date</b> <p id="p_resigned" class="pull-right text-muted">-</p>
+                            <b>Until</b> <p id="p_until" class="pull-right text-muted">-</p>
                         </li>
                         <li class="list-group-item">
                             <strong>SSS</strong>

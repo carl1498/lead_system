@@ -220,6 +220,7 @@ $(document).ready(function(){
             method: 'get',
             dataType: 'json',
             success:function(data){
+                console.log(data);
                 $('#add_edit').val('edit');
                 $('#id').val(data.employee.id);
                 $('#fname').val(data.employee.fname);
@@ -235,7 +236,7 @@ $(document).ready(function(){
                 $('#branch').val(data.employee.branch_id).trigger('change');
                 $('#role').val(data.employee.role_id).trigger('change');
                 $('#salary').val(data.employee.salary);
-                $('#hired').val(data.employee.hired_date);
+                $('#hired').val(data.employment_history.hired_date);
                 $('#sss').val(data.benefits[0].id_number);
                 $('#pagibig').val(data.benefits[1].id_number);
                 $('#philhealth').val(data.benefits[2].id_number);
@@ -575,8 +576,9 @@ $(document).ready(function(){
                 $('#p_gender').text(data.gender);
                 $('#p_branch').text(data.branch.name);
                 $('#p_status').text(data.employment_status);
-                $('#p_hired').text(data.hired_date ? data.hired_date : '-');
-                $('#p_resigned').text(data.resignation_date ? data.resignation_date : '-');
+                $('#p_hired').text(data.current_employment_status.hired_date ? data.current_employment_status.hired_date : '-');
+                var months = (data.months) ? data.months : '';
+                $('#p_until').text(data.current_employment_status.until ? data.current_employment_status.until + ' (' + months + ')' : 'Present (' + data.months + ')');
                 $('#p_sss').text(data.benefits[0].id_number ? data.benefits[0].id_number : '-');
                 $('#p_pagibig').text(data.benefits[1].id_number ? data.benefits[1].id_number : '-');
                 $('#p_philhealth').text(data.benefits[2].id_number ? data.benefits[2].id_number : '-');

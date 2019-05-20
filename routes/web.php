@@ -96,19 +96,24 @@ Route::group(['middleware' => ['auth', 'employee']], function(){
     Route::get('/employees', 'employeeController@index');
     Route::get('/employee_branch/{current_branch}', 'employeeController@branch');
     
-    Route::post('/save_employee', 'employeeController@save_employee');
     Route::get('/get_employee/{id}', 'employeeController@get_employee');
-    Route::get('/delete_employee', 'employeeController@delete_employee')->middleware('admin');
-    Route::post('/save_resign_employee', 'employeeController@resign_employee');
-    Route::post('/save_rehire_employee', 'employeeController@rehire_employee');
     Route::get('/view_profile_employee/{id}', 'employeeController@view_profile');
 
-    //Account
-    Route::get('/get_account/{id}', 'employeeController@get_account');
-    Route::post('/save_account', 'employeeController@save_account');
+    Route::group(['middleware' => ['admin']], function(){
+        Route::post('/save_employee', 'employeeController@save_employee');
+        Route::get('/delete_employee', 'employeeController@delete_employee');
+        Route::post('/save_resign_employee', 'employeeController@resign_employee');
+        Route::post('/save_rehire_employee', 'employeeController@rehire_employee');
+        
+        //Account
+        Route::get('/get_account/{id}', 'employeeController@get_account');
+        Route::post('/save_account', 'employeeController@save_account');
 
-    //Employment History
-    Route::get('/view_employment_history/{id}', 'employeeController@view_employment_history')->middleware('admin');
+        //Employment History
+        Route::get('/view_employment_history/{id}', 'employeeController@view_employment_history');
+    });
+
+
 });
 
 //EMPLOYEE ROUTES -- END
