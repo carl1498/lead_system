@@ -46,20 +46,31 @@ class employeeController extends Controller
         $current_branch = $_GET['current_branch'];
         $employee_status = $_GET['employee_status'];
         
-        $b = employee::with('role', 'branch', 'current_employment_status')->get();
+        $branch = employee::with('role', 'branch', 'current_employment_status')->get();
 
-        if($employee_status == 'All'){
-            $branch = $b->where('branch.name', $current_branch);
-        }
-        else{
-            $branch = $b->where('branch.name', $current_branch)->where('employment_status', $employee_status);
+        $branch = $branch->where('branch.name', $current_branch);
+
+        if($employee_status != 'All'){
+            $branch = $branch->where('branch.name', $current_branch)->where('employment_status', $employee_status);
         }
 
         return $this->refreshDatatable($branch);
     }
 
-    public function refreshDatatable($branch){
-        return Datatables::of($branch)
+    public function all(Request $request){
+        $employee_status = $request->employee_status;
+
+        $all = employee::with('role', 'branch', 'current_employment_status')->get();
+
+        if($employee_status != 'All'){
+            $all = $all->where('employment_status', $employee_status);
+        }
+
+        return $this->refreshDatatable($all);
+    }
+
+    public function refreshDatatable($request){
+        return Datatables::of($request)
         ->editColumn('name', function($data){
             return $data->lname.', '.$data->fname.' '.$data->mname; 
         })
@@ -219,6 +230,22 @@ class employeeController extends Controller
         $employee = employee::find($id);
         $employee_benefits = employee_benefits::where('emp_id', $id)->get();
         $employment_history = employment_history::where('emp_id', $id)->orderBy('id', 'desc')->first();
+        
+        $from = new Carbon($employment_history->hired_date);
+        $to = ($employment_history) ? new Carbon($employment_history->until) : Carbon::now();
+        $months = $from->diffInMonths($to);
+
+        if($months >= 13){
+            $employee->probationary = 'Regular';
+        }else if($months >= 12){
+            $employee->probationary = 'Evaluation';
+        }else if($months >= 6){
+            $employee->probationary = 'Evaluation | With Insurance';
+        }else if($months >= 4){
+            $employee->probationary = 'Mandatory Benefits';
+        }else{
+            $employee->probationary = 'Evaluation | Probationary/Training Period';
+        }
 
         $output = array(
             'employee' => $employee,
@@ -298,6 +325,18 @@ class employeeController extends Controller
         $from = new Carbon($employment_history->hired_date);
         $to = ($employment_history) ? new Carbon($employment_history->until) : Carbon::now();
         $months = $from->diffInMonths($to);
+        
+        if($months >= 13){
+            $employee->probationary = 'Regular';
+        }else if($months == 12){
+            $employee->probationary = 'Evaluation';
+        }else if($months >= 6){
+            $employee->probationary = 'Evaluation | With Insurance';
+        }else if($months >= 4){
+            $employee->probationary = 'Mandatory Benefits';
+        }else{
+            $employee->probationary = 'Evaluation | Probationary/Training Period';
+        }
 
         $employee->months = $months;
 

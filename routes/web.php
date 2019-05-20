@@ -95,6 +95,7 @@ Route::group(['middleware' => ['auth', 'student_settings']], function(){
 Route::group(['middleware' => ['auth', 'employee']], function(){
     Route::get('/employees', 'employeeController@index');
     Route::get('/employee_branch/{current_branch}', 'employeeController@branch');
+    Route::get('/employee_all/{employee_status}', 'employeeController@all');
     
     Route::get('/get_employee/{id}', 'employeeController@get_employee');
     Route::get('/view_profile_employee/{id}', 'employeeController@view_profile');

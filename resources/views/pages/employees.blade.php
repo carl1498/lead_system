@@ -60,7 +60,13 @@
                             <b>Branch</b> <p id="p_branch" class="pull-right text-muted">-</p>
                         </li>
                         <li class="list-group-item">
-                            <b>Employment Status</b> <p id="p_status" class="pull-right text-muted">-</p>
+                            <strong>Employment Status</strong>
+                            <p id="p_status" class="text-muted" style="word-wrap: break-word;">
+                            -
+                            </p>
+                            <p id="p_probationary" class="text-muted" style="word-wrap: break-word;">
+                            -
+                            </p>
                         </li>
                         <li class="list-group-item">
                             <b>Hired Date</b> <p id="p_hired" class="pull-right text-muted">-</p>
@@ -104,7 +110,8 @@
         <div class="col-md-9 col-xl-10">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
-                    <li class="disabled tab_pick active"><a class="tab_pick" href="#employees_branch_tab" data-toggle="tab">Makati</a></li>
+                    <li class="disabled tab_pick active"><a class="tab_pick" href="#employees_branch_tab" data-toggle="tab">All</a></li>
+                    <li class="disabled tab_pick"><a class="tab_pick" href="#employees_branch_tab" data-toggle="tab">Makati</a></li>
                     <li class="disabled tab_pick"><a class="tab_pick" href="#employees_branch_tab" data-toggle="tab">Cebu</a></li>
                     <li class="disabled tab_pick"><a class="tab_pick" href="#employees_branch_tab" data-toggle="tab">Davao</a></li>
                 </ul>

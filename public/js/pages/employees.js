@@ -2,7 +2,7 @@ $(document).ready(function(){
 
     //INITIALIZE -- START
 
-    var current_branch = 'Makati';
+    var current_branch = 'All';
     var employee_status = $('#status_select').val();
     var modal_close = true;
 
@@ -67,7 +67,12 @@ $(document).ready(function(){
 
     function refresh(){
         disableTabs();
-        refresh_employee_branch();
+
+        if(current_branch == 'All'){
+            refresh_employee_all();
+        }else{
+            refresh_employee_branch();
+        }
     }
     
     $('.refresh_table').on('click', function(){
@@ -99,6 +104,20 @@ $(document).ready(function(){
         {data: "action", orderable:false,searchable:false}
     ]
 
+    var columns_employees_all = [
+        {data: 'name', name: 'name'},
+        {data: 'branch.name', name: 'branch'},
+        {data: 'contact_personal', name: 'contact_personal'},
+        {data: 'contact_business', name: 'contact_business'},
+        {data: 'birthdate', name: 'birthdate'},
+        {data: 'gender', name: 'gender'},
+        {data: 'email', name: 'email'},
+        {data: 'role.name', name: 'role.name'},
+        {data: 'hired_date', name: 'hired_date'},
+        {data: 'employment_status', name: 'status'},
+        {data: "action", orderable:false,searchable:false}
+    ]
+
     function refresh_employee_branch(){
         $('#employees_branch').DataTable({
             initComplete: function(settings, json) {
@@ -116,6 +135,20 @@ $(document).ready(function(){
                 }
             },
             columns: columns_employees,
+        });
+    }
+
+    function refresh_employee_all(){
+        $('#employees_all').DataTable({
+            initComplete: function(settings, json) {
+                enableTabs();  
+            },
+            destroy: true,
+            scrollX: true,
+            scrollCollapse: true,
+            fixedColumns: true,
+            ajax: '/employee_all/'+employee_status,
+            columns: columns_employees_all,
         });
     }
 
@@ -230,7 +263,6 @@ $(document).ready(function(){
                 $('#personal_no').val(data.employee.contact_personal);
                 $('#business_no').val(data.employee.contact_business);
                 $('#email').val(data.employee.email);
-                //reserved for picture
                 $('#address').val(data.employee.address);
                 $('#branch').val(data.employee.branch_id).trigger('change');
                 $('#role').val(data.employee.role_id).trigger('change');
@@ -506,8 +538,9 @@ $(document).ready(function(){
             method: 'get',
             dataType: 'json',
             success:function(data){
-                $('#employee_history_modal .modal-title-name').text(data.employee.fname + ' ' + data.employee.lname);
-                $('#employee_history_modal .modal_title_status').text(data.employee.employment_status);
+                $('#employee_history_modal .title_name').text(data.employee.fname + ' ' + data.employee.lname);
+                $('#employee_history_modal .title_status').text(data.employee.employment_status);
+                $('#employee_history_modal .title_probationary').text(data.employee.probationary);
 
                 if(data.employee.employment_status == 'Active'){
                     $('.resign_rehire').attr({'data-original-title': 'Resign', 'id': id})
@@ -575,6 +608,7 @@ $(document).ready(function(){
                 $('#p_gender').text(data.gender);
                 $('#p_branch').text(data.branch.name);
                 $('#p_status').text(data.employment_status);
+                $('#p_probationary').text(data.probationary);
                 $('#p_hired').text(data.current_employment_status.hired_date ? data.current_employment_status.hired_date : '-');
                 var months = (data.months) ? data.months : '';
                 $('#p_until').text(data.current_employment_status.until ? data.current_employment_status.until + ' (' + months + ')' : 'Present (' + data.months + ')');

@@ -1,32 +1,22 @@
+<!-- EMPLOYEES ALL -- START -->
+
+<div class="tab-pane fade in active" id="employees_all_tab">
+    <table id="employees_all" class="table table-hover table-striped table-bordered" cellspacing="0">
+        @include('includes.tables.employee_all_table')
+    </table>
+</div>
+
+<!-- EMPLOYEES ALL -- END -->
+
 <!-- EMPLOYEES MAKATI -- START -->
 
-<div class="tab-pane fade in active" id="employees_branch_tab">
+<div class="tab-pane fade in" id="employees_branch_tab">
     <table id="employees_branch" class="table table-hover table-striped table-bordered" cellspacing="0">
         @include('includes.tables.employee_table')
     </table>
 </div>
 
 <!-- EMPLOYEES MAKATI -- END -->
-
-<!-- EMPLOYEES NAGA -- START -->
-
-<div class="tab-pane fade in" id="employees_naga_tab">
-    <table id="employees_naga" class="table table-hover table-striped table-bordered" cellspacing="0">
-        @include('includes.tables.employee_table')
-    </table>
-</div>
-
-<!-- EMPLOYEES NAGA -- END -->
-
-<!-- EMPLOYEES NAGA -- START -->
-
-<div class="tab-pane fade in" id="employees_naga_tab">
-    <table id="employees_naga" class="table table-hover table-striped table-bordered" cellspacing="0">
-        @include('includes.tables.employee_table')
-    </table>
-</div>
-
-<!-- EMPLOYEES NAGA -- END -->
 
 <!-- EMPLOYEES CEBU -- START -->
 
