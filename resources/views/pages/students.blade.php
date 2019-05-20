@@ -72,13 +72,13 @@
                             <b>Referral</b> <p id="p_referral" class="pull-right text-muted">-</p>
                         </li>
                         <li class="list-group-item">
-                            <b>Date of Sign Up</b> <p id="p_sign_up" class="pull-right text-muted">-</p>
+                            <b>Sign Up</b> <p id="p_sign_up" class="pull-right text-muted">-</p>
                         </li>
                         <li class="list-group-item">
-                            <b>Date of Medical</b> <p id="p_medical" class="pull-right text-muted">-</p>
+                            <b>Medical</b> <p id="p_medical" class="pull-right text-muted">-</p>
                         </li>
                         <li class="list-group-item">
-                            <b>Date of Completion</b> <p id="p_completion" class="pull-right text-muted">-</p>
+                            <b>Completion</b> <p id="p_completion" class="pull-right text-muted">-</p>
                         </li>
                         <li class="list-group-item">
                             <b>Branch</b> <p id="p_branch" class="pull-right text-muted">-</p>
