@@ -151,7 +151,7 @@ $(document).ready(function(){
     ]
 
     var columnDefs_students = [
-        { width: 220, targets: 0 }, //name
+        { width: 230, targets: 0 }, //name
         { width: 90, targets: 1 }, //contact
         { width: 130, targets: 2 }, //program
         { width: 130, targets: 3 }, //school
@@ -186,7 +186,7 @@ $(document).ready(function(){
     ]
     
     var columnDefs_students_status = [
-        { width: 220, targets: 0 },
+        { width: 230, targets: 0 },
         { width: 70, targets: 1 },
         { width: 90, targets: 2 },
         { width: 130, targets: 3 },
@@ -216,7 +216,7 @@ $(document).ready(function(){
     ]
     
     var columnDefs_students_result = [
-        { width: 220, targets: 0 },
+        { width: 230, targets: 0 },
         { width: 70, targets: 1 },
         { width: 90, targets: 2 },
         { width: 130, targets: 3 },
@@ -241,7 +241,7 @@ $(document).ready(function(){
     ]
 
     var columnDefs_language_students = [
-        { width: 220, targets: 0 }, //name
+        { width: 230, targets: 0 }, //name
         { width: 70, targets: 1 }, //branch
         { width: 90, targets: 2 }, //contact
         { width: 60, targets: 3 }, //gender
@@ -272,7 +272,7 @@ $(document).ready(function(){
     ]
 
     var columnDefs_ssv_students = [
-        { width: 220, targets: 0 }, //name
+        { width: 230, targets: 0 }, //name
         { width: 90, targets: 1 }, //contact
         { width: 60, targets: 2 }, //gender
         { width: 45, targets: 3 }, //age
