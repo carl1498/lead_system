@@ -222,7 +222,7 @@ $(document).ready(function(){
                 $('#employee_modal').modal('hide');
                 button.disabled = false;
                 input.html('SAVE CHANGES');
-                refresh_employee_branch();
+                refresh();
                 view_profile(data);
             },
             error: function(data){
@@ -302,7 +302,7 @@ $(document).ready(function(){
                     type: 'json',
                     success:function(data){
                         swal('Deleted!', 'This Employee has been Deleted', 'success');
-                        refresh_employee_branch();
+                        refresh();
                     }
                 })
             }
