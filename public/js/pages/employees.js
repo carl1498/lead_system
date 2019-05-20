@@ -220,7 +220,6 @@ $(document).ready(function(){
             method: 'get',
             dataType: 'json',
             success:function(data){
-                console.log(data);
                 $('#add_edit').val('edit');
                 $('#id').val(data.employee.id);
                 $('#fname').val(data.employee.fname);
