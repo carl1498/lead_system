@@ -39,14 +39,6 @@ class employeeController extends Controller
         $role = role::all();
         $employee = employee::all();
         
-        foreach($employee as $emp){
-            $employment_history = new employment_history;
-            $employment_history->emp_id = $emp->id;
-            $employment_history->hired_date = $emp->hired_date;
-            $employment_history->until = $emp->resignation_date;
-            $employment_history->save();
-        }
-        
         return view('pages.employees', compact('branch', 'role'));
     }
 
