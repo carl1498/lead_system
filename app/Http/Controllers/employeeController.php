@@ -170,15 +170,13 @@ class employeeController extends Controller
         $employee->salary = $request->salary;
         $employee->save();
 
-        $employee_id = employee::orderBy('id', 'DESC')->first();
-
         for($x = 0; $x < 4; $x++){
             if($add_edit == 'add'){
                 $employee_benefits = new employee_benefits;
-                $employee_benefits->emp_id = $employee_id->id;
+                $employee_benefits->emp_id = $employee->id;
             }
             else{
-                $employee_benefits = employee_benefits::where('emp_id', $employee_id->id)
+                $employee_benefits = employee_benefits::where('emp_id', $employee->id)
                     ->where('benefits_id', $x+1)->first();
             }
             if($x == 0){//SSS
