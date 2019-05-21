@@ -112,6 +112,8 @@ Route::group(['middleware' => ['auth', 'employee']], function(){
 
         //Employment History
         Route::get('/view_employment_history/{id}', 'employeeController@view_employment_history');
+        Route::get('/get_employment_history/{id}', 'employeeController@get_employment_history');
+        Route::post('/save_employment_history', 'employeeController@save_employment_history');
     });
 
 

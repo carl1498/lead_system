@@ -17,6 +17,7 @@
                             <th>Hired Date</th>
                             <th>Until</th>
                             <th>Months</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                 </table>

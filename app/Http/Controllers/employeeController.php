@@ -123,6 +123,13 @@ class employeeController extends Controller
                 return 'Present';
             }
         })
+        ->addColumn('action', function($data){
+            $html = '';
+            if($data->until){
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-primary btn-xs edit_employment_history" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
+            }
+            return $html;
+        })
         ->make(true);
     }
 
@@ -225,6 +232,17 @@ class employeeController extends Controller
         return $employee->id;
     }
 
+    public function save_employment_history(Request $request){
+        $id = $request->eh_id;
+        $employment_history = employment_history::find($id);
+
+        $employment_history->hired_date = $request->edit_hired_date;
+        $employment_history->until = $request->edit_until;
+        $employment_history->save();
+
+        return $employment_history->emp_id;
+    }
+
     public function get_employee(Request $request){
         $id = $request->id;
         $employee = employee::find($id);
@@ -254,6 +272,14 @@ class employeeController extends Controller
         );
 
         echo json_encode($output);
+    }
+
+    public function get_employment_history(Request $request){
+        $id = $request->id;
+
+        $employment_history = employment_history::find($id);
+
+        return $employment_history;
     }
 
     public function delete_employee(Request $request){

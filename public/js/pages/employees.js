@@ -163,12 +163,14 @@ $(document).ready(function(){
             columns: [
                 {data: 'hired_date', name: 'hired_date'},
                 {data: 'until', name: 'until'},
-                {data: 'months', name: 'months'}
+                {data: 'months', name: 'months'},
+                {data: "action", orderable:false,searchable:false}
             ],
             columnDefs: [
-                {width: '33.33%', targets: 0},
-                {width: '33.33%', targets: 1},
-                {width: '33.33%', targets: 2},
+                {width: '30%', targets: 0},
+                {width: '30%', targets: 1},
+                {width: '30%', targets: 2},
+                {width: '10%', targets: 3},
             ]
         });
     }
@@ -558,6 +560,42 @@ $(document).ready(function(){
 
         $('#employee_history_modal').modal('toggle');
         $('#employee_history_modal').modal('show');
+    });
+
+    $(document).on('click', '.edit_employment_history', function(){
+        var id = $(this).attr('id');
+
+        $.ajax({
+            url: '/get_employment_history/'+id,
+            method: 'get',
+            dataType: 'json',
+            success:function(data){
+                $('#eh_id').val(data.id);
+                $('#edit_hired_date').val(data.hired_date);
+                $('#edit_until').val(data.until);
+            }
+        });
+        
+        $('#edit_employee_history_modal').modal('toggle');
+        $('#edit_employee_history_modal').modal('show');
+    });
+
+    $(document).on('submit', '#edit_employee_history_form', function(e){
+        e.preventDefault();
+
+        $.ajax({
+            url: '/save_employment_history',
+            method: 'POST',
+            dataType: 'text',
+            data: $(this).serialize(),
+            success: function (data){
+                swal('Edit Success!', '', 'success');
+                
+                $('#edit_employee_history_modal').modal('hide');
+                refresh_employment_history(data);
+                refresh();
+            }
+        });
     });
 
     //EMPLOYEE HISTORY -- END
