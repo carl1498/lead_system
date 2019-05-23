@@ -130,6 +130,7 @@
     
     @include('includes.modals.employee_modals.employee_history_modal')
     @include('includes.modals.employee_modals.edit_employee_history_modal')
+    @include('includes.modals.employee_modals.employee_family_modal')
     @include('includes.modals.employee_modals.employee_modal')
     @include('includes.modals.employee_modals.account_modal')
     @include('includes.modals.employee_modals.resign_modal')

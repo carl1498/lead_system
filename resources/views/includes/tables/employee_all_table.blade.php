@@ -10,6 +10,6 @@
         <th style="width: 130px;">Role</th>
         <th style="width: 130px;">Hired Date</th>
         <th style="width: 130px;">Status</th>
-        <th style="width: 150px;">Action</th>
+        <th style="width: 180px;">Action</th>
     </tr>
 </thead>

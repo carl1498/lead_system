@@ -774,7 +774,7 @@ $(document).ready(function(){
             method: 'POST',
             dataType: 'text',
             success: function(data){
-                swal('Success!', 'Record has been saved to the Database!', 'success');
+                notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
                 $('#request_books_modal').modal('hide');
                 button.disabled = false;
                 input.html('SAVE CHANGES');
@@ -808,7 +808,7 @@ $(document).ready(function(){
                     method: 'get',
                     type: 'json',
                     success:function(data){
-                        swal('Book Request Approved!', '', 'success');
+                        notif('Book Request Approved!', '', 'success', 'glyphicon-ok');
                         refresh();
                     }
                 })
@@ -836,7 +836,7 @@ $(document).ready(function(){
                     method: 'get',
                     type: 'json',
                     success:function(data){
-                        swal('Book Request Delivered!', '', 'success');
+                        notif('Book Request Delivered!', '', 'success', 'glyphicon-ok');
                         refresh();
                     }
                 })
@@ -864,7 +864,7 @@ $(document).ready(function(){
                     method: 'get',
                     type: 'json',
                     success:function(data){
-                        swal('Book Request Pending Again!', '', 'info');
+                        notif('Book Request Pending Again!', '', 'info', 'glyphicon-info-sign');
                         refresh();
                     }
                 })
@@ -896,7 +896,7 @@ $(document).ready(function(){
                             swal('Cancel not allowed!', 'Quantity to cancel higher than current pending', 'info');
                             return;
                         }
-                        swal('Book Request Cancelled!', '', 'info');
+                        notif('Book Request Cancelled!', '', 'info', 'glyphicon-info-sign');
                         refresh();
                     }
                 })
@@ -1001,7 +1001,7 @@ $(document).ready(function(){
                     input.html('SAVE CHANGES');
                     return;
                 }
-                swal('Success!', 'Record has been saved to the Database!', 'success');
+                notif('Success!', 'Books Released!', 'success', 'glyphicon-ok');
                 $('#release_books_modal').modal('hide');
                 button.disabled = false;
                 input.html('SAVE CHANGES');
@@ -1035,7 +1035,7 @@ $(document).ready(function(){
                     method: 'get',
                     type: 'json',
                     success:function(data){
-                        swal('Book Release Pending Again!', '', 'success');
+                        notif('Book Release Pending Again!', '', 'success', 'glyphicon-ok');
                         refresh();
                     }
                 })
@@ -1063,7 +1063,7 @@ $(document).ready(function(){
                     method: 'get',
                     type: 'json',
                     success:function(data){
-                        swal('Book Received!', '', 'success');
+                        notif('Book Received!', '', 'success', 'glyphicon-ok');
                         refresh();
                     }
                 })
@@ -1091,7 +1091,7 @@ $(document).ready(function(){
                     method: 'get',
                     type: 'json',
                     success:function(data){
-                        swal('Book Returned!', '', 'success');
+                        notif('Book Returned!', '', 'success', 'glyphicon-ok');
                         refresh();
                     }
                 })
@@ -1183,7 +1183,7 @@ $(document).ready(function(){
             method: 'POST',
             dataType: 'text',
             success:function(data){
-                swal('Success!', 'Record has been saved to the Database!', 'success');
+                notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
                 $('#assign_books_modal').modal('hide');
                 button.disabled = false;
                 input.html('SAVE CHANGES');
@@ -1286,7 +1286,7 @@ $(document).ready(function(){
                     method: 'get',
                     type: 'json',
                     success:function(data){
-                        swal('Book Lost!', 'success');
+                        notif('Book Lost!', '', 'info', 'glyphicon-info-sign');
                         refresh();
                     }
                 })
@@ -1319,7 +1319,7 @@ $(document).ready(function(){
                     method: 'get',
                     type: 'json',
                     success:function(data){
-                        swal('Book Returned!', 'success');
+                        notif('Book Returned!', '', 'success', 'glyphicon-ok');
                         refresh();
                     }
                 })

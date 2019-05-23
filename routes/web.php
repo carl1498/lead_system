@@ -114,8 +114,12 @@ Route::group(['middleware' => ['auth', 'employee']], function(){
         Route::get('/view_employment_history/{id}', 'employeeController@view_employment_history');
         Route::get('/get_employment_history/{id}', 'employeeController@get_employment_history');
         Route::post('/save_employment_history', 'employeeController@save_employment_history');
-    });
 
+        //Employee Family
+        Route::get('/view_employee_emergency/{id}', 'employeeController@view_employee_emergency');
+        Route::get('/view_employee_spouse/{id}', 'employeeController@view_employee_spouse');
+        Route::get('/view_employee_child/{id}', 'employeeController@view_employee_child');
+    });
 
 });
 

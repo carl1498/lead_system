@@ -9,6 +9,9 @@ use App\branch;
 use App\role;
 use App\employee_benefits;
 use App\employment_history;
+use App\employee_child;
+use App\employee_emergency;
+use App\employee_spouse;
 use App\User;
 use Carbon\Carbon;
 use Auth;
@@ -83,6 +86,7 @@ class employeeController extends Controller
                 $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Account" class="btn btn-info btn-xs edit_account" id="'.$data->id.'"><i class="fa fa-key"></i></button>&nbsp;';
                 $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-primary btn-xs edit_employee" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
                 $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="History" class="btn btn-warning btn-xs history_employee" id="'.$data->id.'"><i class="fa fa-history"></i></button>&nbsp;';
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Family" class="btn btn-default btn-xs family_employee" id="'.$data->id.'"><i class="fa fa-users"></i></button>&nbsp;';
                 $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_employee" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>&nbsp;';
             }
             return $html;
@@ -129,6 +133,51 @@ class employeeController extends Controller
                 $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-primary btn-xs edit_employment_history" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
             }
             return $html;
+        })
+        ->make(true);
+    }
+
+    public function view_employee_emergency(Request $request){
+        $id = $request->id;
+
+        $employee_emergency = employee_emergency::where('emp_id', $id)->get();
+
+        return Datatables::of($employee_emergency)
+        ->editColumn('name', function($data){
+            return $data->lname.', '.$data->fname.' '.$data->mname; 
+        })
+        ->addColumn('action', function($data){
+
+        })
+        ->make(true);
+    }
+
+    public function view_employee_spouse(Request $request){
+        $id = $request->id;
+
+        $employee_spouse = employee_spouse::where('emp_id', $id)->get();
+
+        return Datatables::of($employee_spouse)
+        ->editColumn('name', function($data){
+            return $data->lname.', '.$data->fname.' '.$data->mname; 
+        })
+        ->addColumn('action', function($data){
+            
+        })
+        ->make(true);
+    }
+
+    public function view_employee_child(Request $request){
+        $id = $request->id;
+
+        $employee_child = employee_child::where('emp_id', $id)->get();
+
+        return Datatables::of($employee_child)
+        ->editColumn('name', function($data){
+            return $data->lname.', '.$data->fname.' '.$data->mname; 
+        })
+        ->addColumn('action', function($data){
+            
         })
         ->make(true);
     }

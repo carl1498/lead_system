@@ -152,6 +152,8 @@ $(document).ready(function(){
         });
     }
 
+    refresh();
+
     function refresh_employment_history(id){
         var employment_history_table = $('#employment_history_table').DataTable({
             paging: false,
@@ -175,7 +177,70 @@ $(document).ready(function(){
         });
     }
 
-    refresh();
+    function refresh_employee_family(id){
+        $('#employment_emergency_table').DataTable({
+            paging: false,
+            ordering: false,
+            info: false,
+            searching: false,
+            destroy: true,
+            ajax: '/view_employee_emergency/'+id,
+            columns: [
+                {data: 'name', name: 'name'},
+                {data: 'relationship', name: 'relationship'},
+                {data: 'contact', name: 'contact'},
+                {data: "action", orderable:false,searchable:false}
+            ],
+            columnDefs: [
+                {width: '30%', targets: 0},
+                {width: '30%', targets: 1},
+                {width: '30%', targets: 2},
+                {width: '10%', targets: 3},
+            ]
+        });
+        
+        $('#employment_spouse_table').DataTable({
+            paging: false,
+            ordering: false,
+            info: false,
+            searching: false,
+            destroy: true,
+            ajax: '/view_employee_emergency/'+id,
+            columns: [
+                {data: 'name', name: 'name'},
+                {data: 'birthdate', name: 'birthdate'},
+                {data: 'contact', name: 'contact'},
+                {data: "action", orderable:false,searchable:false}
+            ],
+            columnDefs: [
+                {width: '30%', targets: 0},
+                {width: '30%', targets: 1},
+                {width: '30%', targets: 2},
+                {width: '10%', targets: 3},
+            ]
+        });
+        
+        $('#employment_child_table').DataTable({
+            paging: false,
+            ordering: false,
+            info: false,
+            searching: false,
+            destroy: true,
+            ajax: '/view_employee_emergency/'+id,
+            columns: [
+                {data: 'name', name: 'name'},
+                {data: 'birthdate', name: 'birthdate'},
+                {data: 'gender', name: 'gender'},
+                {data: "action", orderable:false,searchable:false}
+            ],
+            columnDefs: [
+                {width: '30%', targets: 0},
+                {width: '30%', targets: 1},
+                {width: '30%', targets: 2},
+                {width: '10%', targets: 3},
+            ]
+        });
+    }
 
     //DATATABLES -- END
 
@@ -220,8 +285,8 @@ $(document).ready(function(){
                     input.html('SAVE CHANGES');
                     return;
                 }
-                swal('Success!', 'Record has been saved to the Database!', 'success');
                 $('#employee_modal').modal('hide');
+                notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
                 button.disabled = false;
                 input.html('SAVE CHANGES');
                 refresh();
@@ -303,7 +368,7 @@ $(document).ready(function(){
                     data: {id:id},
                     type: 'json',
                     success:function(data){
-                        swal('Deleted!', 'This Employee has been Deleted', 'success');
+                        notif('Deleted!', 'This Employee has been Deleted', 'success', 'glyphicon-ok');
                         refresh();
                     }
                 })
@@ -378,7 +443,7 @@ $(document).ready(function(){
                                 method: 'POST',
                                 dataType: 'text',
                                 success: function(data){
-                                    swal('Success!', 'User Data has been saved!', 'success');
+                                    notif('Success!', 'User Data has been saved!', 'success', 'glyphicon-ok');
                                     $('#account_modal').modal('hide');
                                     refresh();
                                 }
@@ -436,7 +501,7 @@ $(document).ready(function(){
                                 data: $('#resign_form').serialize(),
                                 success: function (data){
                                     $('#resign_modal').modal('hide');
-                                    swal('Employee now resigned.', '', 'info');
+                                    notif('Employee now resigned.', '', 'info', 'glyphicon-info-sign');
 
                                     $('.modal_title_status').text('Resigned');
                                     $('.resign_rehire').attr('data-original-title', 'Rehire').attr('id', data)
@@ -500,7 +565,7 @@ $(document).ready(function(){
                                 data: $('#rehire_form').serialize(),
                                 success: function (data){
                                     $('#rehire_modal').modal('hide');
-                                    swal('Success!', 'Employee now rehired', 'success');
+                                    notif('Success!', 'Employee now rehired', 'success', 'glyphicon-ok');
 
                                     $('.modal_title_status').text('Active');
                                     $('.resign_rehire').attr('data-original-title', 'Resign').attr('id', data)
@@ -589,7 +654,7 @@ $(document).ready(function(){
             dataType: 'text',
             data: $(this).serialize(),
             success: function (data){
-                swal('Edit Success!', '', 'success');
+                notif('Edit Success!', '', 'success', 'glyphicon-ok');
                 
                 $('#edit_employee_history_modal').modal('hide');
                 refresh_employment_history(data);
@@ -599,6 +664,28 @@ $(document).ready(function(){
     });
 
     //EMPLOYEE HISTORY -- END
+
+    //EMPLOYEE FAMILY -- START
+
+    $(document).on('click', '.family_employee', function(){
+        var id = $(this).attr('id');
+
+        $.ajax({
+            url: '/get_employee/'+id,
+            method: 'get',
+            dataType: 'json',
+            success: function (data){
+                $('#employee_family_modal .modal-title').text(data.employee.fname + ' ' + data.employee.lname);
+            }
+        });
+
+        refresh_employee_family(id);
+
+        $('#employee_family_modal').modal('toggle');
+        $('#employee_family_modal').modal('show');
+    });
+
+    //EMPLOYEE FAMILY -- END
 
     function getAge(birthdate){
         var today = new Date();

@@ -1,5 +1,5 @@
 <div class="modal fade" id="employee_history_modal">
-    <div class="modal-dialog" style="width: 100%; max-width: 600px;">
+    <div class="modal-dialog" style="width: 100%; max-width: 600px; scroll-y: true;">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">

@@ -276,14 +276,14 @@ $(document).ready(function(){
             method: 'POST',
             data: $(this).serialize(),
             success: function(data){
-                swal('Success!', 'Record has been saved to the Database!', 'success');
+                notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
                 $('#add_books_modal').modal('hide');
                 button.disabled = false;
                 input.html('SAVE CHANGES');
                 refresh();
             },
             error: function(data){
-                swal("Oh no!", "Something went wrong, try again.", "error");
+                swal("Error!", "Something went wrong, try again.", "error");
                 button.disabled = false;
                 input.html('SAVE CHANGES');
             }
@@ -418,14 +418,14 @@ $(document).ready(function(){
             method: 'POST',
             data: $(this).serialize(),
             success: function(data){
-                swal('Success!', 'Record has been saved to the Database!', 'success');
+                notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
                 $('#invoice_modal').modal('hide');
                 button.disabled = false;
                 input.html('SAVE CHANGES');
                 refresh();
             },
             error: function(data){
-                swal("Oh no!", "Something went wrong, try again.", "error");
+                swal("Error!", "Something went wrong, try again.", "error");
                 button.disabled = false;
                 input.html('SAVE CHANGES');
             }
@@ -477,7 +477,7 @@ $(document).ready(function(){
                                         method: 'get',
                                         type: 'json',
                                         success:function(data){
-                                            swal('Success!', 'This invoice has been Deleted', 'success');
+                                            notif('Success!', 'This invoice has been Deleted', 'success', 'glyphicon-ok');
                                             refresh();
                                         }
                                     })
@@ -551,7 +551,7 @@ $(document).ready(function(){
                                                 swal('Error!', 'Some books within range are already released or not available', 'error');
                                                 return;
                                             }
-                                            swal('Success!', 'This add book history has been Deleted', 'success');
+                                            notif('Success!', 'This add book history has been Deleted', 'success', 'glyphicon-ok');
                                             refresh();
                                         }
                                     })

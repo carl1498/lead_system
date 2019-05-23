@@ -11,6 +11,7 @@
 	<link rel="stylesheet" type="text/css" href="/css/datatables-bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="/css/fixedColumns-bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="/css/bootstrap-datepicker.min.css">
+	<link rel="stylesheet" type="text/css" href="/css/animate.css">
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
 	<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.6/css/buttons.bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="/css/app.css">
@@ -80,7 +81,8 @@
 		</div>
     	<strong>Copyright &copy; 2014-2016 <a href="https://adminlte.io">Almsaeed Studio</a>.</strong> All rights
     	reserved.
-  	</footer>-->
+	  </footer>-->
+	
 </div>
 <!-- ./wrapper -->
 <script src="/js/jquery.js"></script>
@@ -90,6 +92,8 @@
 <script src="/js/datatables-fixedColumns.min.js"></script>
 <script src="/js/datatables-bootstrap.min.js"></script>
 <script src="/js/bootstrap-datepicker.min.js"></script>
+<script src="/js/bootstrap-notify.min.js"></script>
+<script src="/js/custom_notify.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.bootstrap.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
