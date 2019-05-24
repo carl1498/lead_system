@@ -147,7 +147,10 @@ class employeeController extends Controller
             return $data->lname.', '.$data->fname.' '.$data->mname; 
         })
         ->addColumn('action', function($data){
-
+            $html = '';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-primary btn-xs edit_employee_emergency" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_employee_emergency" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>&nbsp;';
+            return $html;
         })
         ->make(true);
     }
@@ -161,8 +164,16 @@ class employeeController extends Controller
         ->editColumn('name', function($data){
             return $data->lname.', '.$data->fname.' '.$data->mname; 
         })
+        ->editColumn('birthdate', function($data){
+            $birth = new Carbon($data->birthdate);
+            $age = $birth->diffInYears(Carbon::now());
+            return $data->birthdate . ' (' . $age . ')';
+        })
         ->addColumn('action', function($data){
-            
+            $html = '';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-primary btn-xs edit_employee_spouse" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_employee_spouse" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>&nbsp;';
+            return $html;
         })
         ->make(true);
     }
@@ -176,8 +187,16 @@ class employeeController extends Controller
         ->editColumn('name', function($data){
             return $data->lname.', '.$data->fname.' '.$data->mname; 
         })
+        ->editColumn('birthdate', function($data){
+            $birth = new Carbon($data->birthdate);
+            $age = $birth->diffInYears(Carbon::now());
+            return $data->birthdate . ' (' . $age . ')';
+        })
         ->addColumn('action', function($data){
-            
+            $html = '';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-primary btn-xs edit_employee_child" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_employee_child" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>&nbsp;';
+            return $html;
         })
         ->make(true);
     }
@@ -290,6 +309,54 @@ class employeeController extends Controller
         return $employment_history->emp_id;
     }
 
+    public function save_employee_emergency(Request $request){
+        $id = $request->e_id;
+        $add_edit = $request->e_add_edit;
+
+        $employee_emergency = ($add_edit  == 'add') ? new employee_emergency: employee_emergency::find($id);
+        $employee_emergency->emp_id = $request->e_emp_id;
+        $employee_emergency->fname = $request->e_fname;
+        $employee_emergency->mname = $request->e_mname;
+        $employee_emergency->lname = $request->e_lname;
+        $employee_emergency->relationship = $request->e_relationship;
+        $employee_emergency->contact = $request->e_contact;
+        $employee_emergency->save();
+
+        return $employee_emergency->emp_id;
+    }
+
+    public function save_employee_spouse(Request $request){
+        $id = $request->s_id;
+        $add_edit = $request->s_add_edit;
+
+        $employee_spouse = ($add_edit  == 'add') ? new employee_spouse: employee_spouse::find($id);
+        $employee_spouse->emp_id = $request->s_emp_id;
+        $employee_spouse->fname = $request->s_fname;
+        $employee_spouse->mname = $request->s_mname;
+        $employee_spouse->lname = $request->s_lname;
+        $employee_spouse->birthdate = $request->s_birthdate;
+        $employee_spouse->contact = $request->s_contact;
+        $employee_spouse->save();
+
+        return $employee_spouse->emp_id;
+    }
+
+    public function save_employee_child(Request $request){
+        $id = $request->c_id;
+        $add_edit = $request->c_add_edit;
+
+        $employee_child = ($add_edit  == 'add') ? new employee_child: employee_child::find($id);
+        $employee_child->emp_id = $request->c_emp_id;
+        $employee_child->fname = $request->c_fname;
+        $employee_child->mname = $request->c_mname;
+        $employee_child->lname = $request->c_lname;
+        $employee_child->birthdate = $request->c_birthdate;
+        $employee_child->gender = $request->c_gender;
+        $employee_child->save();
+
+        return $employee_child->emp_id;
+    }
+
     public function get_employee(Request $request){
         $id = $request->id;
         $employee = employee::find($id);
@@ -329,9 +396,57 @@ class employeeController extends Controller
         return $employment_history;
     }
 
+    public function get_employee_emergency(Request $request){
+        $id = $request->id;
+
+        $employee_emergency = employee_emergency::find($id);
+
+        return $employee_emergency;
+    }
+
+    public function get_employee_spouse(Request $request){
+        $id = $request->id;
+
+        $employee_spouse = employee_spouse::find($id);
+
+        return $employee_spouse;
+    }
+
+    public function get_employee_child(Request $request){
+        $id = $request->id;
+
+        $employee_child = employee_child::find($id);
+
+        return $employee_child;
+    }
+
     public function delete_employee(Request $request){
         $employee = employee::find($request->id);
         $employee->delete();
+    }
+
+    public function delete_employee_emergency(Request $request){
+        $employee_emergency = employee_emergency::find($request->id);
+        $emp_id = $employee_emergency->emp_id;
+        $employee_emergency->delete();
+
+        return $emp_id;
+    }
+
+    public function delete_employee_spouse(Request $request){
+        $employee_spouse = employee_spouse::find($request->id);
+        $emp_id = $employee_spouse->emp_id;
+        $employee_spouse->delete();
+
+        return $emp_id;
+    }
+
+    public function delete_employee_child(Request $request){
+        $employee_child = employee_child::find($request->id);
+        $emp_id = $employee_child->emp_id;
+        $employee_child->delete();
+
+        return $emp_id;
     }
 
     public function get_account(Request $request){
@@ -391,7 +506,7 @@ class employeeController extends Controller
     public function view_profile(Request $request){
         $id = $request->id;
 
-        $employee = employee::with('benefits', 'branch', 'role', 'current_employment_status')->find($id);
+        $employee = employee::with('benefits', 'branch', 'role', 'current_employment_status', 'employee_emergency')->find($id);
         
         $employment_history = $employee->current_employment_status;
 
@@ -412,6 +527,9 @@ class employeeController extends Controller
         }
 
         $employee->months = $months;
+
+        $birth = new Carbon($employee->birthdate);
+        $employee->age = $birth->diffInYears(Carbon::now());
 
         if(!canAccessAll()){
             $employee->current_employment_status->hired_date = null;

@@ -668,8 +668,8 @@ $(document).ready(function(){
                     input.html('SAVE CHANGES');
                     return;
                 }
-                swal('Success!', 'Record has been saved to the Database!', 'success');
                 $('#student_modal').modal('hide');
+                notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
                 button.disabled = false;
                 input.html('SAVE CHANGES');
                 refresh();
@@ -710,8 +710,8 @@ $(document).ready(function(){
                     input.html('SAVE CHANGES');
                     return;
                 }
-                swal('Success!', 'Record has been saved to the Database!', 'success');
                 $('#student_modal').modal('hide');
+                notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
                 button.disabled = false;
                 input.html('SAVE CHANGES');
                 refresh();
@@ -752,8 +752,8 @@ $(document).ready(function(){
                     input.html('SAVE CHANGES');
                     return;
                 }
-                swal('Success!', 'Record has been saved to the Database!', 'success');
                 $('#student_modal').modal('hide');
+                notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
                 button.disabled = false;
                 input.html('SAVE CHANGES');
                 refresh();
@@ -924,7 +924,7 @@ $(document).ready(function(){
                     data: {id:id},
                     type: 'json',
                     success:function(data){
-                        swal('Deleted!', 'This Student has been Deleted', 'success');
+                        notif('Success!', 'This Student has been Deleted', 'success', 'glyphicon-ok');
 
                         refresh();
                     }
@@ -953,7 +953,7 @@ $(document).ready(function(){
                     data: {id: id},
                     dataType: 'text',
                     success: function(data){
-                        swal('Congratulations!', 'This Student is now in Final School!', 'success');
+                        notif('Success!', 'This Student is now in Final School!', 'success', 'glyphicon-ok');
                         view_profile(data);
 
                         refresh();
@@ -983,7 +983,7 @@ $(document).ready(function(){
                     data: {id: id},
                     dataType: 'text',
                     success: function(data){
-                        swal('This Student has backed out!', '', 'warning');
+                        notif('This Student has backed out!', '', 'warning', 'glyphicon-warning-sign');
                         view_profile(data);
 
                         refresh();
@@ -1014,10 +1014,10 @@ $(document).ready(function(){
                     dataType: 'text',
                     success: function(data){
                         if(current_status == 'Final School'){
-                            swal('Success!', 'This Student is out of Final School!', 'success');
+                            notif('Success!', 'This Student is out of Final School!', 'success', 'glyphicon-ok');
                         }
                         else{
-                            swal('Success!', 'This Student is now active again!', 'success');
+                            notif('Success!', 'This Student is now active again!', 'success', 'glyphicon-ok');
                         }
                         view_profile(data);
                         
@@ -1048,7 +1048,7 @@ $(document).ready(function(){
                     data: {id: id},
                     dataType: 'text',
                     success: function(data){
-                        swal('Congratulations!', 'Student COE Approved!', 'success');
+                        notif('Congratulations!', 'Student COE Approved!', 'success', 'glyphicon-ok');
                         view_profile(data);
 
                         refresh();
@@ -1078,7 +1078,7 @@ $(document).ready(function(){
                     data: {id: id},
                     dataType: 'text',
                     success: function(data){
-                        swal('Student COE Denied', '', 'warning');
+                        notif('Student COE Denied', '', 'warning', 'glyphicon-warning-sign');
                         view_profile(data);
 
                         refresh();
@@ -1108,7 +1108,7 @@ $(document).ready(function(){
                     data: {id: id},
                     dataType: 'text',
                     success: function(data){
-                        swal('Student Cancelled', '', 'warning');
+                        notif('Student Cancelled', '', 'warning', 'glyphicon-warning-sign');
                         view_profile(data);
 
                         refresh();
@@ -1291,8 +1291,7 @@ $(document).ready(function(){
                 $('#p_program').text(data.program ? data.program.name : '-');
                 $('#p_school').text(data.school ? data.school.name : '-');
                 $('#p_benefactor').text(data.benefactor ? data.benefactor.name : '-');
-                var age = getAge(data.birthdate);
-                $('#p_birthdate').text(data.birthdate + ' (' + age + ')');
+                $('#p_birthdate').text(data.birthdate + ' (' + data.age + ')');
                 $('#p_gender').text(data.gender);
                 $('#p_referral').text(data.referral.fname);
                 $('#p_sign_up').text(data.date_of_signup);

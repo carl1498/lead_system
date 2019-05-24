@@ -15,7 +15,7 @@
 @yield('content')
 
 
+<script src="/js/jquery.js"></script>
 <script src="/js/app.js"></script>
-<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 </body>
 </html>

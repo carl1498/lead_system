@@ -48,5 +48,9 @@ class employee extends Model
         return $this->hasOne('App\employment_history', 'emp_id', 'id')->latest();
     }
 
+    public function employee_emergency(){
+        return $this->hasMany('App\employee_emergency', 'emp_id', 'id');
+    }
+
     public $timestamps = true;
 }

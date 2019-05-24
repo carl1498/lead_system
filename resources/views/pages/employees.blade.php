@@ -51,6 +51,12 @@
                             </p>
                         </li>
                         <li class="list-group-item">
+                            <strong>Email</strong>
+                            <p id="p_email" class="text-muted" style="word-wrap: break-word;">
+                            -
+                            </p>
+                        </li>
+                        <li class="list-group-item">
                             <b>Birthdate</b> <p id="p_birthdate" class="pull-right text-muted">-</p>
                         </li>
                         <li class="list-group-item">
@@ -98,6 +104,12 @@
                             -
                             </p>
                         </li>
+                        <li class="list-group-item">
+                            <strong>In case of Emergency</strong>
+                            <p id="p_emergency" class="text-muted" style="word-wrap: break-word;">
+                            -
+                            </p>
+                        </li>
                     </ul>
 
                     <!--<a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>-->
@@ -131,6 +143,9 @@
     @include('includes.modals.employee_modals.employee_history_modal')
     @include('includes.modals.employee_modals.edit_employee_history_modal')
     @include('includes.modals.employee_modals.employee_family_modal')
+    @include('includes.modals.employee_modals.employee_emergency_modal')
+    @include('includes.modals.employee_modals.employee_spouse_modal')
+    @include('includes.modals.employee_modals.employee_child_modal')
     @include('includes.modals.employee_modals.employee_modal')
     @include('includes.modals.employee_modals.account_modal')
     @include('includes.modals.employee_modals.resign_modal')

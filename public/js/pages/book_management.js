@@ -774,8 +774,8 @@ $(document).ready(function(){
             method: 'POST',
             dataType: 'text',
             success: function(data){
-                notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
                 $('#request_books_modal').modal('hide');
+                notif('Success!', 'Books Requested!', 'success', 'glyphicon-ok');
                 button.disabled = false;
                 input.html('SAVE CHANGES');
                 refresh();
@@ -1183,8 +1183,8 @@ $(document).ready(function(){
             method: 'POST',
             dataType: 'text',
             success:function(data){
-                notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
                 $('#assign_books_modal').modal('hide');
+                notif('Success!', 'Book Assigned!', 'success', 'glyphicon-ok');
                 button.disabled = false;
                 input.html('SAVE CHANGES');
                 refresh();
@@ -1319,7 +1319,7 @@ $(document).ready(function(){
                     method: 'get',
                     type: 'json',
                     success:function(data){
-                        notif('Book Returned!', '', 'success', 'glyphicon-ok');
+                        notif('Success!', 'Book Returned!', 'success', 'glyphicon-ok');
                         refresh();
                     }
                 })

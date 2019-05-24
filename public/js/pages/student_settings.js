@@ -77,7 +77,7 @@ $(document).ready(function(){
             url: '/save_student_settings',
             data: $(this).serialize() + '&current_settings=' + current_settings,
             success: function(data){
-                swal('Success!', 'Record has been saved to the Database!', 'success');
+                notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
                 $('#student_settings_modal').modal('hide');
                 button.disabled = false;
                 input.html('SAVE CHANGES');
@@ -154,7 +154,7 @@ $(document).ready(function(){
                     },
                     type: 'json',
                     success:function(data){
-                        swal('Deleted!', 'This Student Setting has been Deleted', 'success');
+                        notif('Success!', 'This Student Setting has been Deleted', 'success', 'glyphicon-ok');
                         refresh_student_settings();
                     }
                 })

@@ -119,6 +119,18 @@ Route::group(['middleware' => ['auth', 'employee']], function(){
         Route::get('/view_employee_emergency/{id}', 'employeeController@view_employee_emergency');
         Route::get('/view_employee_spouse/{id}', 'employeeController@view_employee_spouse');
         Route::get('/view_employee_child/{id}', 'employeeController@view_employee_child');
+
+        Route::post('/save_employee_emergency', 'employeeController@save_employee_emergency');
+        Route::post('/save_employee_spouse', 'employeeController@save_employee_spouse');
+        Route::post('/save_employee_child', 'employeeController@save_employee_child');
+
+        Route::get('/get_employee_emergency/{id}', 'employeeController@get_employee_emergency');
+        Route::get('/get_employee_spouse/{id}', 'employeeController@get_employee_spouse');
+        Route::get('/get_employee_child/{id}', 'employeeController@get_employee_child');
+        
+        Route::get('/delete_employee_emergency/{id}', 'employeeController@delete_employee_emergency');
+        Route::get('/delete_employee_spouse/{id}', 'employeeController@delete_employee_spouse');
+        Route::get('/delete_employee_child/{id}', 'employeeController@delete_employee_child');
     });
 
 });

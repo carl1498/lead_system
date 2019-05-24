@@ -803,6 +803,8 @@ class studentController extends Controller
 
         $student->status = 'Final School';
         $student->save();
+
+        return $student->id;
     }
 
     public function backout_student(Request $request){
@@ -819,6 +821,8 @@ class studentController extends Controller
 
         $student->status = 'Back Out';
         $student->save();
+
+        return $student->id;
     }
 
     public function continue_student(Request $request){
@@ -844,6 +848,8 @@ class studentController extends Controller
         $student->status = 'Active';
         $student->coe_status = 'TBA';
         $student->save();
+
+        return $student->id;
     }
 
     public function approve_student(Request $request){
@@ -860,6 +866,8 @@ class studentController extends Controller
 
         $student->coe_status = 'Approved';
         $student->save();
+
+        return $student->id;
     }
 
     public function deny_student(Request $request){
@@ -876,6 +884,8 @@ class studentController extends Controller
 
         $student->coe_status = 'Denied';
         $student->save();
+
+        return $student->id;
     }
 
     public function cancel_student(Request $request){
@@ -892,12 +902,17 @@ class studentController extends Controller
 
         $student->status = 'Cancelled';
         $student->save();
+
+        return $student->id;
     }
 
     public function view_profile(Request $request){
         $id = $request->id;
         $student = student::with('program', 'school', 'benefactor', 'referral', 'branch', 'course', 'departure_year', 'departure_month')->find($id);
         
+        $birth = new Carbon($student->birthdate);
+        $student->age = $birth->diffInYears(Carbon::now());
+
         return $student;
     }
 
