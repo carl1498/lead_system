@@ -181,7 +181,7 @@ class employeeController extends Controller
     public function view_employee_child(Request $request){
         $id = $request->id;
 
-        $employee_child = employee_child::where('emp_id', $id)->get();
+        $employee_child = employee_child::where('emp_id', $id)->orderBy('birthdate', 'asc')->get();
 
         return Datatables::of($employee_child)
         ->editColumn('name', function($data){

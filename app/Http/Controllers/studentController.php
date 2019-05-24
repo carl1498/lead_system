@@ -449,9 +449,20 @@ class studentController extends Controller
 
             $request->picture->storeAs('public/img/student', $filename);
 
+            $prev = $student->picture;
             $student->picture = $filename;
 
             $student->save();
+
+            if(isset($edited_by)){
+                $edit_history = new student_edit_history;
+                $edit_history->stud_id = $student->id;
+                $edit_history->field = 'Picture';
+                $edit_history->previous = 'Uploaded';
+                $edit_history->new = 'New Picture';
+                $edit_history->edited_by = $edited_by;
+                $edit_history->save();
+            }
         }
 
         return $student->id;

@@ -6,6 +6,13 @@
     <h1>
         Student Edit History
     </h1>
+    <ol class="breadcrumb">
+        <li>
+            <button data-container="body" data-toggle="tooltip" data-placement="left" title="Refresh Table" class="btn btn-secondary bg-red refresh_table">
+                <i class="fa fa-sync"></i>
+            </button>
+        </li>
+    </ol>
 </section>
 
 <!-- Main content -->

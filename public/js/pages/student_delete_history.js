@@ -39,5 +39,9 @@ $(document).ready(function(){
         load();
     }, 300000);
 
+    $(document).on('click', '.refresh_table', function(){
+        load();
+    });
+
     //FUNCTIONS -- END
 });
