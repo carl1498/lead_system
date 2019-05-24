@@ -968,6 +968,7 @@ $(document).ready(function(){
             method: 'get',
             dataType: 'json',
             success: function(data){
+                console.log(data);
                 $('#p_picture').attr('src', './storage/img/employee/'+data.picture);
                 if(data.mname){
                     $('#p_emp_name').text(data.lname + ', ' + data.fname + ' ' + data.mname);
@@ -984,7 +985,7 @@ $(document).ready(function(){
                 $('#p_birthdate').text(data.birthdate + ' (' + data.age + ')');
                 $('#p_gender').text(data.gender);
                 $('#p_branch').text(data.branch.name);
-                $('#p_status').text(data.employment_status);
+                $('#p_status').text(data.employment_status + ' ' + data.leaves);
                 $('#p_probationary').text(data.probationary);
                 $('#p_hired').text(data.current_employment_status.hired_date ? data.current_employment_status.hired_date : '-');
                 var months = (data.months) ? data.months : '';

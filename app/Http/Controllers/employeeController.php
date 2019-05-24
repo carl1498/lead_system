@@ -513,6 +513,7 @@ class employeeController extends Controller
         $from = new Carbon($employment_history->hired_date);
         $to = ($employment_history) ? new Carbon($employment_history->until) : Carbon::now();
         $months = $from->diffInMonths($to);
+        $years = $from->diffInYears($to);
         
         if($months >= 13){
             $employee->probationary = 'Regular';
@@ -527,6 +528,17 @@ class employeeController extends Controller
         }
 
         $employee->months = $months;
+
+        $leaves = 0;
+
+        if($years == 1){
+            $leaves = 3;
+        }
+        else if($years > 1){
+            $leaves = 3 + $years;
+        }
+        
+        $employee->leaves = ($leaves == 0) ? '': '(VL:'.$leaves.') (SL:2)';
 
         $birth = new Carbon($employee->birthdate);
         $employee->age = $birth->diffInYears(Carbon::now());
