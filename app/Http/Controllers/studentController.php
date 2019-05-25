@@ -281,7 +281,7 @@ class studentController extends Controller
             $fileextension = $request->picture->getClientOriginalExtension();
 
             if($fileextension != 'jpg' && $fileextension != 'png' && $fileextension != 'jpeg'){
-                return 1;
+                return false;
             }
         }
 
@@ -476,7 +476,7 @@ class studentController extends Controller
             $fileextension = $request->l_picture->getClientOriginalExtension();
 
             if($fileextension != 'jpg' && $fileextension != 'png' && $fileextension != 'jpeg'){
-                return 1;
+                return false;
             }
         }
 
@@ -628,7 +628,7 @@ class studentController extends Controller
             $fileextension = $request->s_picture->getClientOriginalExtension();
 
             if($fileextension != 'jpg' && $fileextension != 'png' && $fileextension != 'jpeg'){
-                return 1;
+                return false;
             }
         }
 

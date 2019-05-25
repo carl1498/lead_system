@@ -662,7 +662,7 @@ $(document).ready(function(){
             processData: false,
             contentType: false,
             success: function(data){
-                if(data == 1){
+                if(data == false){
                     swal('Error!', 'File/Image format must only be .jpg | .png | .jpeg', 'error');
                     button.disabled = false;
                     input.html('SAVE CHANGES');
@@ -704,7 +704,7 @@ $(document).ready(function(){
             processData: false,
             contentType: false,
             success: function(data){
-                if(data == 1){
+                if(data == false){
                     swal('Error!', 'File/Image format must only be .jpg | .png | .jpeg', 'error');
                     button.disabled = false;
                     input.html('SAVE CHANGES');
@@ -746,7 +746,7 @@ $(document).ready(function(){
             processData: false,
             contentType: false,
             success: function(data){
-                if(data == 1){
+                if(data == false){
                     swal('Error!', 'File/Image format must only be .jpg | .png | .jpeg', 'error');
                     button.disabled = false;
                     input.html('SAVE CHANGES');
