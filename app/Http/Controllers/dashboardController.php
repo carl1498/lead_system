@@ -41,27 +41,30 @@ class dashboardController extends Controller
         }
 
         //User Referrals
-        $referral_count = student::where('referral_id', $employee->id)->count();
-        $student_count = student::count();
+        $referral_count = 0; $student_count = 0;
+
+        $referral_count += student::where('referral_id', $employee->id)->whereNull('program_id')->count();
+        $referral_count += student::with('program')->where('referral_id', $employee->id)
+            ->whereHas('program', function($query){
+                $query->where('name', '<>', 'SSV (Careworker)');
+                $query->where('name', '<>', 'SSV (Hospitality)');
+            })->count();
+
+        $student_count += student::whereNull('program_id')->count();
+        $student_count += student::with('program')
+            ->whereHas('program', function($query){
+                $query->where('name', '<>', 'SSV (Careworker)');
+                $query->where('name', '<>', 'SSV (Hospitality)');
+            })->count();
 
         //Birthdays
-        $year = Carbon::now()->year;
         $month = Carbon::now()->month;
-        $day = Carbon::now()->day;
         $student_birthdays = student::whereMonth('birthdate', $month)->get();
         foreach($student_birthdays as $student){
             $birthdate = $student['birthdate'];
-            $birth = explode('-', $birthdate);
+            $birth = new Carbon($birthdate);
             
-            $age = $year - $birth[0];
-            if($month == $birth[1]){
-                if($day < $birth[2]){
-                    $age--;
-                }
-            }
-            else if($month < $birth[1]){
-                $age--;
-            }
+            $age = $birth->diffInYears(Carbon::now());
 
             $getDay = strtotime($student->birthdate);
             $birth_day = date('d', $getDay);
@@ -71,17 +74,9 @@ class dashboardController extends Controller
         $employee_birthdays = employee::whereMonth('birthdate', $month)->get();
         foreach($employee_birthdays as $employee){
             $birthdate = $employee['birthdate'];
-            $birth = explode('-', $birthdate);
+            $birth = new Carbon($birthdate);
             
-            $age = $year - $birth[0];
-            if($month == $birth[1]){
-                if($day < $birth[2]){
-                    $age--;
-                }
-            }
-            else if($month < $birth[1]){
-                $age--;
-            }
+            $age = $birth->diffInYears(Carbon::now());
             
             $getDay = strtotime($employee->birthdate);
             $birth_day = date('d', $getDay);
@@ -104,8 +99,21 @@ class dashboardController extends Controller
     public function update_signup_count(){
         $id = Auth::user()->emp_id;
         $employee = employee::find($id);
-        $referral_count = student::where('referral_id', $employee->id)->count();
-        $student_count = student::count();
+        $referral_count = 0; $student_count = 0;
+
+        $referral_count += student::where('referral_id', $employee->id)->whereNull('program_id')->count();
+        $referral_count += student::with('program')->where('referral_id', $employee->id)
+            ->whereHas('program', function($query){
+                $query->where('name', '<>', 'SSV (Careworker)');
+                $query->where('name', '<>', 'SSV (Hospitality)');
+            })->count();
+
+        $student_count += student::whereNull('program_id')->count();
+        $student_count += student::with('program')
+            ->whereHas('program', function($query){
+                $query->where('name', '<>', 'SSV (Careworker)');
+                $query->where('name', '<>', 'SSV (Hospitality)');
+            })->count();
 
         $output = array(
             'referral_count' => $referral_count,
@@ -124,14 +132,15 @@ class dashboardController extends Controller
         for($x = 1; $x <= 12; $x++){
             //MAKATI
             $makati[$x-1] += student::with('referral.branch', 'program')
-            ->whereNull('program_id')
+            ->whereNull('program_id') //get students with null program because whereHas and whereNull does not work together
             ->whereHas('referral.branch', function($query) {
                 $query->where('name', 'Makati');
             })->whereMonth('date_of_signup', $x)->whereYear('date_of_signup', $year)->count();
 
             $makati[$x-1] += student::with('referral.branch', 'program')
             ->whereHas('program', function($query){
-                $query->where('name', '<>', 'Language Only');
+                $query->where('name', '<>', 'SSV (Careworker)');
+                $query->where('name', '<>', 'SSV (Hospitality)');
             })
             ->whereHas('referral.branch', function($query) {
                 $query->where('name', 'Makati');
@@ -146,7 +155,8 @@ class dashboardController extends Controller
 
             $cebu[$x-1] = student::with('branch', 'program')
             ->whereHas('program', function($query){
-                $query->where('name', '<>', 'Language Only');
+                $query->where('name', '<>', 'SSV (Careworker)');
+                $query->where('name', '<>', 'SSV (Hospitality)');
             })
             ->whereHas('referral.branch', function($query) {
                 $query->where('name', 'Cebu');
@@ -161,7 +171,8 @@ class dashboardController extends Controller
 
             $davao[$x-1] = student::with('branch', 'program')
             ->whereHas('program', function($query){
-                $query->where('name', '<>', 'Language Only');
+                $query->where('name', '<>', 'SSV (Careworker)');
+                $query->where('name', '<>', 'SSV (Hospitality)');
             })
             ->whereHas('referral.branch', function($query) {
                 $query->where('name', 'Davao');
@@ -189,10 +200,12 @@ class dashboardController extends Controller
         ->whereHas('referral.branch', function($query){
             $query->where('name', 'Makati');
         })->count();
+
         
-        $makati += student::with('referral.branch')->whereYear('date_of_signup', $year)
+        $makati += student::with('referral.branch', 'program')->whereYear('date_of_signup', $year)
         ->whereHas('program', function($query){
-            $query->where('name', '<>', 'Language Only');
+            $query->where('name', '<>', 'SSV (Careworker)');
+            $query->where('name', '<>', 'SSV (Hospitality)');
         })
         ->whereHas('referral.branch', function($query){
             $query->where('name', 'Makati');
@@ -205,9 +218,10 @@ class dashboardController extends Controller
             $query->where('name', 'Cebu');
         })->count();
 
-        $cebu += student::with('referral.branch')->whereYear('date_of_signup', $year)
+        $cebu += student::with('referral.branch', 'program')->whereYear('date_of_signup', $year)
         ->whereHas('program', function($query){
-            $query->where('name', '<>', 'Language Only');
+            $query->where('name', '<>', 'SSV (Careworker)');
+            $query->where('name', '<>', 'SSV (Hospitality)');
         })
         ->whereHas('referral.branch', function($query){
             $query->where('name', 'Cebu');
@@ -220,9 +234,10 @@ class dashboardController extends Controller
             $query->where('name', 'Davao');
         })->count();
 
-        $davao += student::with('referral.branch')->whereYear('date_of_signup', $year)
+        $davao += student::with('referral.branch', 'program')->whereYear('date_of_signup', $year)
         ->whereHas('program', function($query){
-            $query->where('name', '<>', 'Language Only');
+            $query->where('name', '<>', 'SSV (Careworker)');
+            $query->where('name', '<>', 'SSV (Hospitality)');
         })
         ->whereHas('referral.branch', function($query){
             $query->where('name', 'Davao');

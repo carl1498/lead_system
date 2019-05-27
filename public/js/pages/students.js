@@ -146,6 +146,8 @@ $(document).ready(function(){
         {data: 'email', name: 'email'},
         {data: 'date_of_signup', name: 'date_of_signup'},
         {data: 'referral.fname', name: 'referral'},
+        {data: 'status', name: 'status'},
+        {data: 'coe_status', name: 'coe_status'},
         {data: 'remarks', name: 'remarks'},
         {data: "action", orderable:false,searchable:false}
     ]
@@ -162,8 +164,10 @@ $(document).ready(function(){
         { width: 200, targets: 8 }, //email
         { width: 120, targets: 9 }, //signup
         { width: 120, targets: 10 }, //referral
-        { width: 250, targets: 11 }, //remarks
-        { width: 150, targets: 12 }, //action
+        { width: 100, targets: 11 }, //status
+        { width: 100, targets: 12 }, //coe status
+        { width: 250, targets: 13 }, //remarks
+        { width: 150, targets: 14 }, //action
         {defaultContent: "", targets: "_all"}
     ]
 
@@ -181,6 +185,7 @@ $(document).ready(function(){
         {data: 'date_of_signup', name: 'date_of_signup'},
         {data: 'referral.fname', name: 'referral'},
         {data: 'status', name: 'status'},
+        {data: 'coe_status', name: 'coe_status'},
         {data: 'remarks', name: 'remarks'},
         {data: "action", orderable:false,searchable:false}
     ]
@@ -199,8 +204,9 @@ $(document).ready(function(){
         { width: 120, targets: 10 },
         { width: 120, targets: 11 },
         { width: 100, targets: 12 },
-        { width: 250, targets: 13 },
-        { width: 150, targets: 14 },
+        { width: 100, targets: 13 },
+        { width: 250, targets: 14 },
+        { width: 150, targets: 15 },
         {defaultContent: "", targets: "_all"}
     ]
 
@@ -209,8 +215,8 @@ $(document).ready(function(){
         {data: 'branch.name', name: 'branch'},
         {data: 'program.name', name: 'program'},
         {data: 'school.name', name: 'school'},
-        {data: 'coe_status', name: 'coe_status'},
         {data: 'status', name: 'status'},
+        {data: 'coe_status', name: 'coe_status'},
         {data: 'referral.fname', name: 'referral'},
         {data: "action", orderable:false,searchable:false}
     ]
@@ -400,7 +406,7 @@ $(document).ready(function(){
             },
             columnDefs: columnDefs_students_result,
             columns: columns_students_result,
-            order: [[4,'asc']]
+            order: [[3,'asc']]
         });
     }
 

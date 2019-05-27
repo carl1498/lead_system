@@ -13,6 +13,7 @@
         <th>Sign Up Date</th>
         <th>Referred By</th>
         <th>Status</th>
+        <th>COE Status</th>
         <th>Remarks</th>
         <th>Action</th>
     </tr>
