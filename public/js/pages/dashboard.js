@@ -3,6 +3,14 @@ $(document).ready(function(){
     var monthly_signup, monthly_signup_chart; //monthly signup chart
 
     //INITIALIZE -- START
+    $('body').tooltip({
+        selector: '[data-toggle="tooltip"]',
+        trigger : 'hover'
+    });
+
+    $('[data-toggle="tooltip"]').click(function () {
+        $('[data-toggle="tooltip"]').tooltip("hide");
+    });
 
     $.ajax({
         headers: {
@@ -47,6 +55,11 @@ $(document).ready(function(){
                         data: data.davao,
                         label: "Davao",
                         borderColor: "#00A65A",
+                        fill: false
+                    }, { 
+                        data: data.all,
+                        label: "All",
+                        borderColor: "#f39c12",
                         fill: false
                     }]
                 },
@@ -94,6 +107,7 @@ $(document).ready(function(){
                 monthly_signup_chart.config.data.datasets[0].data = data.makati;
                 monthly_signup_chart.config.data.datasets[1].data = data.cebu;
                 monthly_signup_chart.config.data.datasets[2].data = data.davao;
+                monthly_signup_chart.config.data.datasets[3].data = data.all;
                 monthly_signup_chart.update();
             }
         });
@@ -129,24 +143,39 @@ $(document).ready(function(){
             method: 'get',
             dataType: 'json',
             success: function(data){
-                $('.makati_total').text(data.makati);
-                $('.cebu_total').text(data.cebu);
-                $('.davao_total').text(data.davao);
-                $('.makati_final').text(data.makati_final);
-                $('.cebu_final').text(data.cebu_final);
-                $('.davao_final').text(data.davao_final);
+                console.log(data);
+                var branch_class = [
+                    '.makati_approved', '.makati_denied', '.makati_cancelled', '.makati_final', '.makati_active', '.makati_backout', '.makati_total',
+                    '.cebu_approved', '.cebu_denied', '.cebu_cancelled', '.cebu_final', '.cebu_active', '.cebu_backout', '.cebu_total',
+                    '.davao_approved', '.davao_denied', '.davao_cancelled', '.davao_final', '.davao_active', '.davao_backout', '.davao_total',
+                    '.all_approved', '.all_denied', '.all_cancelled', '.all_final', '.all_active', '.all_backout', '.all_total',
+                ]
 
-                var makati_progress = 0, cebu_progress = 0, davao_progress = 0;
+                var branch_data = [
+                    data.approved[0], data.denied[0], data.cancelled[0], data.final[0], data.active[0], data.backout[0], data.total[0],
+                    data.approved[1], data.denied[1], data.cancelled[1], data.final[1], data.active[1], data.backout[1], data.total[1],
+                    data.approved[2], data.denied[2], data.cancelled[2], data.final[2], data.active[2], data.backout[2], data.total[2],
+                    data.all[0], data.all[1], data.all[2], data.all[3], data.all[4], data.all[5], data.all[6],
+                ]//Approved[0], Denied[1], Cancelled[2], Final School[3], Active[4], Back Out[5], Total[6]
 
-                makati_progress = ((data.makati_final / data.makati) * 100);
-                cebu_progress = (data.cebu_final / data.cebu) * 100;
-                davao_progress = (data.davao_final / data.davao) * 100;
+                for(var x = 0; x < branch_class.length; x++){
+                    $(branch_class[x]).text(branch_data[x]);
+                }
+
+                var makati_progress = 0, cebu_progress = 0, davao_progress = 0, all_progress = 0;
+
+                makati_progress = ((data.approved[0] / data.final[0]) * 100);
+                cebu_progress = (data.approved[1] / data.final[1]) * 100;
+                davao_progress = (data.approved[2] / data.final[2]) * 100;
+                all_progress = (data.all[0] / data.all[3]) * 100;
                 makati_progress = isNaN(makati_progress) ? 0 : makati_progress;
                 cebu_progress = isNaN(cebu_progress) ? 0 : cebu_progress;
                 davao_progress = isNaN(davao_progress) ? 0 : davao_progress;
+                all_progress = isNaN(all_progress) ? 0 : all_progress;
                 $('.makati_progress').css('width', makati_progress + '%');
                 $('.cebu_progress').css('width', cebu_progress + '%');
                 $('.davao_progress').css('width', davao_progress + '%');
+                $('.all_progress').css('width', all_progress + '%');
             }
         });
     }

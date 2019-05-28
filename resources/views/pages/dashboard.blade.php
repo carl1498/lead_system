@@ -80,37 +80,93 @@
 					</div>
                 <!-- /.col -->
                 <div class="col-md-4">
-                  <p class="text-center">
-                    <strong>Sign Ups per branch</strong>
-                  </p>
+                    <p class="text-center">
+                        <strong>Sign Ups per branch</strong>
+                    </p>
 
-                  <div class="progress-group">
-                    <span class="progress-text">Makati</span>
-                    <span class="progress-number"><b class="makati_final"></b>/<span class="makati_total"></span></span>
+                    <div class="progress-group">
+                        <span class="progress-text">Makati</span>
+                        <span class="progress-number">
+                            <b data-container="body" data-toggle="tooltip" data-placement="left" title="Approved" class="label label-success makati_approved"></b> /
+                            <span data-container="body" data-toggle="tooltip" data-placement="left" title="Denied" class="label label-danger makati_denied"></span> /
+                            <span data-container="body" data-toggle="tooltip" data-placement="left" title="Cancelled" class="label label-warning makati_cancelled"></span> /
+                            <span data-container="body" data-toggle="tooltip" data-placement="left" title="Final School" class="label label-primary makati_final"></span> /
+                            <span data-container="body" data-toggle="tooltip" data-placement="left" title="Active" class="label label-info makati_active"></span> /
+                            <span data-container="body" data-toggle="tooltip" data-placement="left" title="Back Out" class="label label-default makati_backout"></span> /
+                            <span data-container="body" data-toggle="tooltip" data-placement="left" title="Total" class="makati_total"></span>
+                        </span>
 
-                    <div class="progress sm">
-                      <div class="progress-bar progress-bar-red makati_progress"></div>
+                        <div class="progress sm">
+                            <div class="progress-bar progress-bar-striped progress-bar-red makati_progress"></div>
+                        </div>
                     </div>
-                  </div>
-                  <!-- /.progress-group -->
-                  <div class="progress-group">
-                    <span class="progress-text">Cebu</span>
-                    <span class="progress-number"><b class="cebu_final"></b>/<span class="cebu_total"></span></span>
 
-                    <div class="progress sm">
-                      <div class="progress-bar progress-bar-aqua cebu_progress"></div>
-                    </div>
-                  </div>
-                  <!-- /.progress-group -->
-                  <div class="progress-group">
-                    <span class="progress-text">Davao</span>
-                    <span class="progress-number"><b class="davao_final"></b>/<span class="davao_total"></span></span>
+                    <!-- /.progress-group -->
+                    <div class="progress-group">
+                        <span class="progress-text">Cebu</span>
+                        <span class="progress-number">
+                            <b data-container="body" data-toggle="tooltip" data-placement="left" title="Approved" class="label label-success cebu_approved"></b> /
+                            <span data-container="body" data-toggle="tooltip" data-placement="left" title="Denied" class="label label-danger cebu_denied"></span> /
+                            <span data-container="body" data-toggle="tooltip" data-placement="left" title="Cancelled" class="label label-warning cebu_cancelled"></span> /
+                            <span data-container="body" data-toggle="tooltip" data-placement="left" title="Final School" class="label label-primary cebu_final"></span> /
+                            <span data-container="body" data-toggle="tooltip" data-placement="left" title="Active" class="label label-info cebu_active"></span> /
+                            <span data-container="body" data-toggle="tooltip" data-placement="left" title="Back Out" class="label label-default cebu_backout"></span> /
+                            <span data-container="body" data-toggle="tooltip" data-placement="left" title="Total" class="cebu_total"></span>
+                        </span>
 
-                    <div class="progress sm">
-                      <div class="progress-bar progress-bar-green davao_progress"></div>
+                        <div class="progress sm">
+                            <div class="progress-bar progress-bar-striped progress-bar-aqua cebu_progress"></div>
+                        </div>
                     </div>
-                  </div>
-                  <!-- /.progress-group -->
+
+                    <!-- /.progress-group -->
+                    <div class="progress-group">
+                        <span class="progress-text">Davao</span>
+                        <span class="progress-number">
+                            <b data-container="body" data-toggle="tooltip" data-placement="left" title="Approved" class="label label-success davao_approved"></b> /
+                            <span data-container="body" data-toggle="tooltip" data-placement="left" title="Denied" class="label label-danger davao_denied"></span> /
+                            <span data-container="body" data-toggle="tooltip" data-placement="left" title="Cancelled" class="label label-warning davao_cancelled"></span> /
+                            <span data-container="body" data-toggle="tooltip" data-placement="left" title="Final School" class="label label-primary davao_final"></span> /
+                            <span data-container="body" data-toggle="tooltip" data-placement="left" title="Active" class="label label-info davao_active"></span> /
+                            <span data-container="body" data-toggle="tooltip" data-placement="left" title="Back Out" class="label label-default davao_backout"></span> /
+                            <span data-container="body" data-toggle="tooltip" data-placement="left" title="Total" class="davao_total"></span>
+                        </span>
+
+                        <div class="progress sm">
+                            <div class="progress-bar progress-bar-striped progress-bar-green davao_progress"></div>
+                        </div>
+                    </div>
+
+                    <!-- /.progress-group -->
+                    <div class="progress-group">
+                        <span class="progress-text">All</span>
+                        <span class="progress-number">
+                            <b data-container="body" data-toggle="tooltip" data-placement="left" title="Approved" class="label label-success all_approved"></b> /
+                            <span data-container="body" data-toggle="tooltip" data-placement="left" title="Denied" class="label label-danger all_denied"></span> /
+                            <span data-container="body" data-toggle="tooltip" data-placement="left" title="Cancelled" class="label label-warning all_cancelled"></span> /
+                            <span data-container="body" data-toggle="tooltip" data-placement="left" title="Final School" class="label label-primary all_final"></span> /
+                            <span data-container="body" data-toggle="tooltip" data-placement="left" title="Active" class="label label-info all_active"></span> /
+                            <span data-container="body" data-toggle="tooltip" data-placement="left" title="Back Out" class="label label-default all_backout"></span> /
+                            <span data-container="body" data-toggle="tooltip" data-placement="left" title="Total" class="all_total"></span>
+                        </span>
+
+                        <div class="progress sm">
+                            <div class="progress-bar progress-bar-striped progress-bar-yellow all_progress"></div>
+                        </div>
+                    </div>
+
+                    <div style="width: 100%;text-align: center;">
+                        <span class="label label-success">Approved</span>
+                        <span class="label label-danger">Denied</span>
+                        <span class="label label-warning">Cancelled</span><br>
+                        <span class="label label-primary">Final School</span>
+                        <span class="label label-info">Active</span>
+                        <span class="label label-default">Back Out</span>
+                        <span>Total</span>
+                    </div>
+
+                    <!--</div>-->
+                    <!-- /.progress-group -->
                 </div>
                 <!-- /.col -->
               </div>

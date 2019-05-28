@@ -125,64 +125,37 @@ class dashboardController extends Controller
 
     public function monthly_referral(Request $request){
         $year = $request->year;
-        $makati = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-        $cebu = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-        $davao = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $all = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $branch_array = [$all, $all, $all]; //Makati, Cebu, Davao | Just copied from all variable
 
-        for($x = 1; $x <= 12; $x++){
-            //MAKATI
-            $makati[$x-1] += student::with('referral.branch', 'program')
-            ->whereNull('program_id') //get students with null program because whereHas and whereNull does not work together
-            ->whereHas('referral.branch', function($query) {
-                $query->where('name', 'Makati');
-            })->whereMonth('date_of_signup', $x)->whereYear('date_of_signup', $year)->count();
+        for($x = 0; $x < 12; $x++){
+            for($y = 0; $y < 3; $y++){ //get students with null program because whereHas and whereNull does not work together
+                $branch_array[$y][$x] += student::whereNull('program_id')->where('branch_id', $y+1)
+                ->whereMonth('date_of_signup', $x+1)->whereYear('date_of_signup', $year)->count();
 
-            $makati[$x-1] += student::with('referral.branch', 'program')
+                $branch_array[$y][$x] += student::with('program')->where('branch_id', $y+1)
+                ->whereHas('program', function($query){
+                    $query->where('name', '<>', 'SSV (Careworker)');
+                    $query->where('name', '<>', 'SSV (Hospitality)');
+                })->whereMonth('date_of_signup', $x+1)->whereYear('date_of_signup', $year)->count();
+            }
+
+            //ALL
+            $all[$x] += student::whereNull('program_id')->whereMonth('date_of_signup', $x+1)
+            ->whereYear('date_of_signup', $year)->count();
+
+            $all[$x] += student::with('program')
             ->whereHas('program', function($query){
                 $query->where('name', '<>', 'SSV (Careworker)');
                 $query->where('name', '<>', 'SSV (Hospitality)');
-            })
-            ->whereHas('referral.branch', function($query) {
-                $query->where('name', 'Makati');
-            })->whereMonth('date_of_signup', $x)->whereYear('date_of_signup', $year)->count();
-
-            //CEBU
-            $cebu[$x-1] += student::with('referral.branch', 'program')
-            ->whereNull('program_id')
-            ->whereHas('referral.branch', function($query) {
-                $query->where('name', 'Makati');
-            })->whereMonth('date_of_signup', $x)->whereYear('date_of_signup', $year)->count();
-
-            $cebu[$x-1] = student::with('branch', 'program')
-            ->whereHas('program', function($query){
-                $query->where('name', '<>', 'SSV (Careworker)');
-                $query->where('name', '<>', 'SSV (Hospitality)');
-            })
-            ->whereHas('referral.branch', function($query) {
-                $query->where('name', 'Cebu');
-            })->whereMonth('date_of_signup', $x)->whereYear('date_of_signup', $year)->count();
-
-            //DAVAO
-            $davao[$x-1] += student::with('referral.branch', 'program')
-            ->whereNull('program_id')
-            ->whereHas('referral.branch', function($query) {
-                $query->where('name', 'Makati');
-            })->whereMonth('date_of_signup', $x)->whereYear('date_of_signup', $year)->count();
-
-            $davao[$x-1] = student::with('branch', 'program')
-            ->whereHas('program', function($query){
-                $query->where('name', '<>', 'SSV (Careworker)');
-                $query->where('name', '<>', 'SSV (Hospitality)');
-            })
-            ->whereHas('referral.branch', function($query) {
-                $query->where('name', 'Davao');
-            })->whereMonth('date_of_signup', $x)->whereYear('date_of_signup', $year)->count();
+            })->whereMonth('date_of_signup', $x+1)->whereYear('date_of_signup', $year)->count();
         }
         
         $output = array(
-            'makati' => $makati,
-            'cebu' => $cebu,
-            'davao' => $davao
+            'makati' => $branch_array[0],
+            'cebu' => $branch_array[1],
+            'davao' => $branch_array[2],
+            'all' => $all
         );
 
         echo json_encode($output);
@@ -190,82 +163,82 @@ class dashboardController extends Controller
 
     public function branch_signups(Request $request){
         $year = $request->year;
-        $makati = 0;
-        $cebu = 0;
-        $davao = 0;
+        $all_total = 0; $total = [0, 0, 0]; //Makati, Cebu, Davao
+        $approved = []; $denied = []; $cancelled = []; 
+        $final = []; $active = []; $backout = [];
 
-        //MAKATI
-        $makati += student::with('referral.branch')->whereYear('date_of_signup', $year)
-        ->whereNull('program_id')
-        ->whereHas('referral.branch', function($query){
-            $query->where('name', 'Makati');
+        //Total
+        for($x = 0; $x < 3; $x++){
+            $total[$x] += student::whereNull('program_id')->where('branch_id', $x+1)->whereYear('date_of_signup', $year)->count();
+            
+            $total[$x] += student::with('program')->where('branch_id', $x+1)->whereYear('date_of_signup', $year)
+            ->whereHas('program', function($query){
+                $query->where('name', '<>', 'SSV (Careworker)');
+                $query->where('name', '<>', 'SSV (Hospitality)');
+            })->count();
+        }
+
+        $all_total += student::whereYear('date_of_signup', $year)->whereNull('program_id')->count();
+
+        $all_total += student::with('program')->whereYear('date_of_signup', $year)
+        ->whereHas('program', function($query){
+            $query->where('name', '<>', 'SSV (Careworker)');
+            $query->where('name', '<>', 'SSV (Hospitality)');
         })->count();
 
+
+        //IF APPROVED
+        for($x = 0; $x < 3; $x++){
+            $approved[$x] = student::where('branch_id', $x+1)->where('coe_status', 'Approved')->whereYear('date_of_signup', $year)->count();
+        }
         
-        $makati += student::with('referral.branch', 'program')->whereYear('date_of_signup', $year)
-        ->whereHas('program', function($query){
-            $query->where('name', '<>', 'SSV (Careworker)');
-            $query->where('name', '<>', 'SSV (Hospitality)');
-        })
-        ->whereHas('referral.branch', function($query){
-            $query->where('name', 'Makati');
-        })->count();
+        $all_approved = student::where('coe_status', 'Approved')->whereYear('date_of_signup', $year)->count();
 
-        //CEBU
-        $cebu += student::with('referral.branch')->whereYear('date_of_signup', $year)
-        ->whereNull('program_id')
-        ->whereHas('referral.branch', function($query){
-            $query->where('name', 'Cebu');
-        })->count();
+        for($x = 0; $x < 3; $x++){
+            $denied[$x] = student::where('branch_id', $x+1)->where('coe_status', 'Denied')->whereYear('date_of_signup', $year)->count();
+        }
 
-        $cebu += student::with('referral.branch', 'program')->whereYear('date_of_signup', $year)
-        ->whereHas('program', function($query){
-            $query->where('name', '<>', 'SSV (Careworker)');
-            $query->where('name', '<>', 'SSV (Hospitality)');
-        })
-        ->whereHas('referral.branch', function($query){
-            $query->where('name', 'Cebu');
-        })->count();
+        $all_denied = student::where('coe_status', 'Denied')->whereYear('date_of_signup', $year)->count();
 
-        //DAVAO
-        $davao += student::with('referral.branch')->whereYear('date_of_signup', $year)
-        ->whereNull('program_id')
-        ->whereHas('referral.branch', function($query){
-            $query->where('name', 'Davao');
-        })->count();
 
-        $davao += student::with('referral.branch', 'program')->whereYear('date_of_signup', $year)
-        ->whereHas('program', function($query){
-            $query->where('name', '<>', 'SSV (Careworker)');
-            $query->where('name', '<>', 'SSV (Hospitality)');
-        })
-        ->whereHas('referral.branch', function($query){
-            $query->where('name', 'Davao');
-        })->count();
+        //IF CANCELLED
+        for($x = 0; $x < 3; $x++){
+            $cancelled[$x] = student::where('branch_id', $x+1)->where('status', 'Cancelled')->whereYear('date_of_signup', $year)->count();
+        }
+        
+        $all_cancelled = student::where('status', 'Cancelled')->whereYear('date_of_signup', $year)->count();
+
 
         //IF FINAL SCHOOL
-        $makati_final = student::with('referral.branch')->where('status', 'Final School')
-        ->whereHas('referral.branch', function($query){
-            $query->where('name', 'Makati');
-        })->whereYear('date_of_signup', $year)->count();
+        for($x = 0; $x < 3; $x++){
+            $final[$x] = student::where('branch_id', $x+1)->where('status', 'Final School')->whereYear('date_of_signup', $year)->count();
+        }
 
-        $cebu_final = student::with('referral.branch')->where('status', 'Final School')
-        ->whereHas('referral.branch', function($query){
-            $query->where('name', 'Cebu');
-        })->whereYear('date_of_signup', $year)->count();
+        $all_final = student::where('status', 'Final School')->whereYear('date_of_signup', $year)->count();
+        
 
-        $davao_final = student::with('referral.branch')->where('status', 'Final School')
-        ->whereHas('referral.branch', function($query){
-            $query->where('name', 'Davao');
-        })->whereYear('date_of_signup', $year)->count();
+        //IF ACTIVE
+        for($x = 0; $x < 3; $x++){
+            $active[$x] = student::where('branch_id', $x+1)->where('status', 'Active')->whereYear('date_of_signup', $year)->count();
+        }
+
+        $all_active = student::where('status', 'Active')->whereYear('date_of_signup', $year)->count();
+        
+
+        //IF BACK OUT
+        for($x = 0; $x < 3; $x++){
+            $backout[$x] = student::where('branch_id', $x+1)->where('status', 'Back Out')->whereYear('date_of_signup', $year)->count();
+        }
+
+        $all_backout = student::where('status', 'Back Out')->whereYear('date_of_signup', $year)->count();
+
+        $all = [$all_approved, $all_denied, $all_cancelled, $all_final,
+                $all_active, $all_backout, $all_total];
 
         $output = array(
-            'makati' => $makati,
-            'cebu' => $cebu,
-            'davao' => $davao,
-            'makati_final' => $makati_final,
-            'cebu_final' => $cebu_final,
-            'davao_final' => $davao_final
+            'total' => $total, 'approved' => $approved, 'denied' => $denied, 
+            'cancelled' => $cancelled, 'final' => $final, 'active' => $active, 
+            'backout' => $backout, 'all' => $all
         );
 
         echo json_encode($output);
