@@ -5,6 +5,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+	<meta http-equiv="Cache-control" content="no-cache">
 	<title>Lead System</title>
 
 	<link rel="shortcut icon" type="image/png" href="./img/favicon.png"/>
