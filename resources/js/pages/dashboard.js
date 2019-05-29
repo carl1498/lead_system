@@ -143,7 +143,6 @@ $(document).ready(function(){
             method: 'get',
             dataType: 'json',
             success: function(data){
-                console.log(data);
                 var branch_class = [
                     '.makati_approved', '.makati_denied', '.makati_cancelled', '.makati_final', '.makati_active', '.makati_backout', '.makati_total',
                     '.cebu_approved', '.cebu_denied', '.cebu_cancelled', '.cebu_final', '.cebu_active', '.cebu_backout', '.cebu_total',
