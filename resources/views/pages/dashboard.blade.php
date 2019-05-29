@@ -237,5 +237,5 @@
 @endsection
 
 @section('script')
-<script src="{{ ('/js/pages/dashboard.js') }}"></script>
+<script src="{{ mix('/js/pages/dashboard.js') }}"></script>
 @endsection
