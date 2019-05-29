@@ -104,22 +104,6 @@
 <script src="{{ mix('/js/app.js') }}"></script>
 @yield('script')
 <script>
-	$('#logout_button').on('click', function(){
-		swal({
-            title: 'Log Out',
-            text: 'Are you sure you want to logout?',
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes'
-        }).then((result) => {
-            if(result.value){
-                location.href = '/logout';
-            }
-        });
-	});
-
 	function notif(title, message, type, glyphicon){
 		$.notify({
 			icon: 'glyphicon '+glyphicon,

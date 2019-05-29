@@ -13,3 +13,19 @@ window.Vue = require('vue');
 require('admin-lte');
 
 window.datatables = require('datatables.net-bs');
+
+$('#logout_button').on('click', function(){
+    swal({
+        title: 'Log Out',
+        text: 'Are you sure you want to logout?',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes'
+    }).then((result) => {
+        if(result.value){
+            location.href = '/logout';
+        }
+    });
+});
