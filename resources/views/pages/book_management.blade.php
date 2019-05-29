@@ -72,5 +72,5 @@
 @endsection
 
 @section('script')
-<script src="{{ ('/js/pages/book_management.js') }}"></script>
+<script src="{{ mix('/js/pages/book_management.js') }}"></script>
 @endsection
