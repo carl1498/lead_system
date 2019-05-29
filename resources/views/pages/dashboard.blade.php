@@ -237,5 +237,5 @@
 @endsection
 
 @section('script')
-<script src="/js/pages/dashboard.js"></script>
+<script src="{{ ('/js/pages/dashboard.js') }}"></script>
 @endsection

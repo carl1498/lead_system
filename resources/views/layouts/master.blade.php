@@ -14,7 +14,7 @@
 	<link rel="stylesheet" type="text/css" href="/css/animate.css">
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
 	<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.6/css/buttons.bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="/css/app.css">
+	<link rel="stylesheet" type="text/css" href="{{ mix('/css/app.css') }}">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -85,7 +85,7 @@
 	
 </div>
 <!-- ./wrapper -->
-<script src="/js/jquery.js"></script>
+<script charset="utf-8" src="/js/jquery.js"></script>
 <script src="/js/bootstrap.min.js"></script>
 <script src="/js/sweetalert2-all.min.js"></script>
 <script src="/js/jquery-datatables.min.js"></script>
@@ -93,7 +93,6 @@
 <script src="/js/datatables-bootstrap.min.js"></script>
 <script src="/js/bootstrap-datepicker.min.js"></script>
 <script src="/js/bootstrap-notify.min.js"></script>
-<script src="/js/custom_notify.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.bootstrap.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
@@ -102,7 +101,7 @@
 <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
-<script src="/js/app.js"></script>
+<script src="{{ mix('/js/app.js') }}"></script>
 @yield('script')
 <script>
 	$('#logout_button').on('click', function(){
@@ -120,6 +119,28 @@
             }
         });
 	});
+
+	function notif(title, message, type, glyphicon){
+		$.notify({
+			icon: 'glyphicon '+glyphicon,
+			title: title,
+			message: message,
+		},{
+			type:type,
+			delay: 2000,
+			animate: {
+				enter: 'animated fadeInDown',
+				exit: 'animated fadeOutUp'
+			},
+			allow_dismiss: true,
+			placement: {
+				from: "top",
+				align: "right"
+			},
+			offset: 1,
+			z_index: 3000,
+		});
+	}
 </script>
 </body>
 </html>

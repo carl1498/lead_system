@@ -12,4 +12,14 @@ const mix = require('laravel-mix');
  */
 
 mix.js('resources/js/app.js', 'public/js')
-   .sass('resources/sass/app.scss', 'public/css');
+   .js('resources/js/pages/book_management.js', 'public/js/pages')
+   .js('resources/js/pages/dashboard.js', 'public/js/pages')
+   .js('resources/js/pages/employees.js', 'public/js/pages')
+   .js('resources/js/pages/invoice.js', 'public/js/pages')
+   .js('resources/js/pages/student_add_history.js', 'public/js/pages')
+   .js('resources/js/pages/student_delete_history.js', 'public/js/pages')
+   .js('resources/js/pages/student_edit_history.js', 'public/js/pages')
+   .js('resources/js/pages/student_settings.js', 'public/js/pages')
+   .js('resources/js/pages/students.js', 'public/js/pages')
+   .sass('resources/sass/app.scss', 'public/css')
+   .version();

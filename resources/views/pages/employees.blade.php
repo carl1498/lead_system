@@ -157,5 +157,5 @@
 @endsection
 
 @section('script')
-<script src="/js/pages/employees.js"></script>
+<script src="{{ mix('/js/pages/employees.js') }}"></script>
 @endsection

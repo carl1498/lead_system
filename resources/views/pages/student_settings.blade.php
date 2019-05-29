@@ -51,5 +51,5 @@
 @endsection
 
 @section('script')
-<script src="/js/pages/student_settings.js"></script>
+<script src="{{ mix('/js/pages/student_settings.js') }}"></script>
 @endsection

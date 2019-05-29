@@ -1,4 +1,13 @@
 {
-    "/js/app.js": "/js/app.js",
-    "/css/app.css": "/css/app.css"
+    "/js/app.js": "/js/app.js?id=a8c8f34d1a0f9243f972",
+    "/css/app.css": "/css/app.css?id=e40247f4ab998a525d28",
+    "/js/pages/students.js": "/js/pages/students.js?id=09201e32c7c22a607ff4",
+    "/js/pages/student_settings.js": "/js/pages/student_settings.js?id=6c143412741e164b7cc3",
+    "/js/pages/student_edit_history.js": "/js/pages/student_edit_history.js?id=0acfb592565fd631737f",
+    "/js/pages/student_delete_history.js": "/js/pages/student_delete_history.js?id=158b9100ce6eac5bdeb2",
+    "/js/pages/student_add_history.js": "/js/pages/student_add_history.js?id=29c80fc82bc56168143f",
+    "/js/pages/invoice.js": "/js/pages/invoice.js?id=c50950cd9a927df9c460",
+    "/js/pages/employees.js": "/js/pages/employees.js?id=d187efea56219100da43",
+    "/js/pages/dashboard.js": "/js/pages/dashboard.js?id=e063c1da2b365ede90fb",
+    "/js/pages/book_management.js": "/js/pages/book_management.js?id=f8d0f7ed3dccf6afb278"
 }

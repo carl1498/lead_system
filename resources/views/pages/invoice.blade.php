@@ -58,5 +58,5 @@
 @endsection
 
 @section('script')
-<script src="/js/pages/invoice.js"></script>
+<script src="{{ mix('/js/pages/invoice.js') }}"></script>
 @endsection

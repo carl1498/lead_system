@@ -40,5 +40,5 @@
 @endsection
 
 @section('script')
-<script src="/js/pages/student_edit_history.js"></script>
+<script src="{{ mix('/js/pages/student_edit_history.js') }}"></script>
 @endsection

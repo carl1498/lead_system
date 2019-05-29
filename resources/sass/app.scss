@@ -23,7 +23,6 @@ $fa-font-path: "../webfonts";
 
 #makati_paginate, #makati_filter,
 #students_makati_paginate, #students_makati_filter,
-#students_naga_paginate, #students_naga_filter,
 #students_cebu_paginate, #students_cebu_filter,
 #students_davao_paginate, #students_davao_filter {
   float: right;
@@ -52,4 +51,49 @@ $fa-font-path: "../webfonts";
 
 .tooltip-inner {
   max-width: 100% !important;
+}
+
+#books_branch_table_wrapper .dataTables_length, #books_student_table_wrapper .dataTables_length {
+  float: right !important;
+  margin-right: 25px;
+}
+
+#books_branch_table_wrapper .dataTables_filter, #books_student_table_wrapper .dataTables_filter {
+  float: right !important;
+}
+
+.dataTables_processing{
+  z-index: 105
+}
+
+.box-profile{
+  height: 80vh;
+  overflow: auto;
+  overflow-y: scroll;
+}
+
+li.branch_pick, li.status_pick, 
+li.result_pick, li.language_pick, 
+li.all_pick, li.ssv_pick,
+li.ssv_backout_pick, li.tab_pick,
+li.invoice_pick, li.books_pick{
+  cursor: not-allowed;
+}
+
+a.branch_pick, a.status_pick, 
+a.result_pick, a.language_pick, 
+a.all_pick, a.ssv_pick,
+a.ssv_backout_pick, a.tab_pick,
+a.invoice_pick, a.books_pick{
+  pointer-events: none;
+}
+
+.makati_approved, .makati_denied, .makati_cancelled, .makati_final, .makati_active, .makati_backout, .makati_total,
+.cebu_approved, .cebu_denied, .cebu_cancelled, .cebu_final, .cebu_active, .cebu_backout, .cebu_total,
+.davao_approved, .davao_denied, .davao_cancelled, .davao_final, .davao_active, .davao_backout, .davao_total{
+  cursor: help;
+}
+
+.progress {
+  background-color: #e0e0e0;
 }
