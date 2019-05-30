@@ -45,7 +45,7 @@
 				<div class="box-tools pull-right">
 					<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
 					</button>
-					<div class="btn-group">
+					<!--<div class="btn-group">
 						<button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown">
 							<i class="fa fa-wrench"></i></button>
 						<ul class="dropdown-menu" role="menu">
@@ -55,27 +55,51 @@
 							<li class="divider"></li>
 							<li><a href="#">Separated link</a></li>
 						</ul>
-					</div>
-					<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-              	</div>
+					</div>-->
+				</div>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
+                <div class="row">
+                    <div class="col-md-3 col-md-offset-1" style="border-right: solid 1px grey;">
+                        <p class="text-center" style="margin-bottom: 0px;">
+                            <strong>Sign Up Year:</strong>
+                            <select class="form-control" id="sign_ups_year" style="display: inline-block; width: 90px;">
+                            @foreach(departure_year() as $y)
+                            <option value="{{ $y->id }}">{{ $y->name }}</option>
+                            @endforeach
+                            </select>
+                        </p>
+                    </div>
+                    <div class="col-md-4" style="border-right: solid 1px grey;">
+                        <p class="text-center" style="margin-bottom: 0px;">
+                            <strong>Departure: </strong>
+                            <select class="form-control" id="sign_ups_year" style="display: inline-block; width: 90px;">
+                                @foreach(departure_year() as $y)
+                                <option value="{{ $y->id }}">{{ $y->name }}</option>
+                                @endforeach
+                            </select>
+                            <select class="form-control" id="sign_ups_year" style="display: inline-block; width: 120px;">
+                                @foreach(departure_month() as $m)
+                                <option value="{{ $y->id }}">{{ $m->name }}</option>
+                                @endforeach
+                            </select>
+                        </p>
+                    </div>
+                    <div class="col-md-4 custom-checkbox" style="visibility: hidden;">
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" checked data-toggle="toggle" data-on="Yes" data-off="No">
+                        Based on Sign Up Date
+                    </div>
+                </div>
+                <br>
 				<div class="row">
 					<div class="col-md-8">
-					<p class="text-center">
-						<strong>Sign Ups:</strong>
-						<select class="form-control" id="sign_ups_year" style="display: inline-block; width: 90px;">
-						@foreach(departure_year() as $y)
-						<option value="{{ $y->id }}">{{ $y->name }}</option>
-						@endforeach
-						</select>
-					</p>
 
-					<div class="chart">
-						<!-- Sales Chart Canvas -->
-						<canvas id="salesChart" style="height: 180px;"></canvas>
-					</div>
+                        <div class="chart">
+                            <!-- Sales Chart Canvas -->
+                            <canvas id="salesChart" style="height: 250px;"></canvas>
+                        </div>
 					<!-- /.chart-responsive -->
 					</div>
                 <!-- /.col -->
@@ -155,7 +179,7 @@
                         </div>
                     </div>
 
-                    <div style="width: 100%;text-align: center;">
+                    <div style="width: 100%; text-align: center;">
                         <span class="label label-success">Approved</span>
                         <span class="label label-danger">Denied</span>
                         <span class="label label-warning">Cancelled</span><br>

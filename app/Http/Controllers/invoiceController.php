@@ -196,6 +196,10 @@ class invoiceController extends Controller
         $month = Carbon::now()->format('m');
         $day = Carbon::now()->format('d');
         $get_invoice_id = reference_no::orderBy('id','desc')->first();
+        $check_duplicate = reference_no::where('invoice_ref_no', $request->invoice_ref_no)->first();
+        if(isset($check_duplicate)){
+            return 'false';
+        }
 
         $ref_no = new reference_no;
         if($get_invoice_id != null){

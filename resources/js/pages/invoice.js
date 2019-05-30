@@ -418,6 +418,12 @@ $(document).ready(function(){
             method: 'POST',
             data: $(this).serialize(),
             success: function(data){
+                if(data == 'false'){
+                    swal("Duplicate!", "Invoice reference no. already existing", "error");
+                    button.disabled = false;
+                    input.html('SAVE CHANGES');
+                    return;
+                }
                 notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
                 $('#invoice_modal').modal('hide');
                 button.disabled = false;

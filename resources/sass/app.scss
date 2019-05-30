@@ -90,7 +90,8 @@ a.invoice_pick, a.books_pick{
 
 .makati_approved, .makati_denied, .makati_cancelled, .makati_final, .makati_active, .makati_backout, .makati_total,
 .cebu_approved, .cebu_denied, .cebu_cancelled, .cebu_final, .cebu_active, .cebu_backout, .cebu_total,
-.davao_approved, .davao_denied, .davao_cancelled, .davao_final, .davao_active, .davao_backout, .davao_total{
+.davao_approved, .davao_denied, .davao_cancelled, .davao_final, .davao_active, .davao_backout, .davao_total,
+.all_approved, .all_denied, .all_cancelled, .all_final, .all_active, .all_backout, .all_total{
   cursor: help;
 }
 

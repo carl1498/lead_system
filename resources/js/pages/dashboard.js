@@ -2,6 +2,9 @@ $(document).ready(function(){
     var year;
     var monthly_signup, monthly_signup_chart; //monthly signup chart
 
+    $('.custom-checkbox').css({'visibility': 'visible', opacity: 0.0}).animate({opacity: 1.0}, 400);
+
+
     //INITIALIZE -- START
     $('body').tooltip({
         selector: '[data-toggle="tooltip"]',
@@ -41,7 +44,7 @@ $(document).ready(function(){
                     type: 'line',
                     data: {
                     labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
-                    datasets: [{ 
+                    datasets: [{
                         data: data.makati,
                         label: "Makati",
                         borderColor: "#DD4B39",
@@ -129,10 +132,10 @@ $(document).ready(function(){
         });
     }
     
-    var interval = setInterval(function(){
+    /*var interval = setInterval(function(){
         update_signup_count();
         update_monthly_signup();
-    }, 10000);
+    }, 10000);*/
     
     function branch_signups(){
         $.ajax({
