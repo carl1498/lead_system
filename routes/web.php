@@ -27,8 +27,8 @@ Route::post('/confirm_user', 'employeeController@confirm_user');
 //DASHBOARD ROUTES -- START
 
 Route::get('/dashboard', 'dashboardController@index');
-Route::get('/monthly_referral/{year}', 'dashboardController@monthly_referral');
-Route::get('/branch_signups/{year}', 'dashboardController@branch_signups');
+Route::get('/monthly_referral', 'dashboardController@monthly_referral');
+Route::get('/branch_signups', 'dashboardController@branch_signups');
 Route::get('/get_current_year', 'dashboardController@get_current_year');
 Route::get('/update_signup_count', 'dashboardController@update_signup_count');
 
@@ -94,7 +94,7 @@ Route::group(['middleware' => ['auth', 'student_settings']], function(){
 
 Route::group(['middleware' => ['auth', 'employee']], function(){
     Route::get('/employees', 'employeeController@index');
-    Route::get('/employee_branch/{current_branch}', 'employeeController@branch');
+    Route::get('/employee_branch', 'employeeController@branch');
     Route::get('/employee_all/{employee_status}', 'employeeController@all');
     
     Route::get('/get_employee/{id}', 'employeeController@get_employee');

@@ -47,15 +47,16 @@ class employeeController extends Controller
 
     public function branch(Request $request){
         $current_branch = $_GET['current_branch'];
-        $employee_status = $_GET['employee_status'];
+        $employee_status = $request->employee_status;
         
-        $branch = employee::with('role', 'branch', 'current_employment_status')->get();
-
-        $branch = $branch->where('branch.name', $current_branch);
-
-        if($employee_status != 'All'){
-            $branch = $branch->where('branch.name', $current_branch)->where('employment_status', $employee_status);
-        }
+        $branch = employee::with('role', 'branch', 'current_employment_status')
+        ->whereHas('branch', function($query) use($current_branch){
+            $query->where('name', $current_branch);
+        })
+        ->when($employee_status != 'All', function($query) use($employee_status){
+            $query->where('employment_status', $employee_status);
+        })
+        ->get();
 
         return $this->refreshDatatable($branch);
     }
@@ -63,11 +64,10 @@ class employeeController extends Controller
     public function all(Request $request){
         $employee_status = $request->employee_status;
 
-        $all = employee::with('role', 'branch', 'current_employment_status')->get();
-
-        if($employee_status != 'All'){
-            $all = $all->where('employment_status', $employee_status);
-        }
+        $all = employee::with('role', 'branch', 'current_employment_status')
+        ->when($employee_status != 'All', function($query) use($employee_status){
+            $query->where('employment_status', $employee_status);
+        })->get();
 
         return $this->refreshDatatable($all);
     }

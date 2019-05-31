@@ -133,7 +133,7 @@ $(document).ready(function(){
             scrollCollapse: true,
             fixedColumns: true,
             ajax: {
-                url: '/employee_branch/{current_branch}',
+                url: '/employee_branch',
                 data: {
                     current_branch: current_branch,
                     employee_status: employee_status

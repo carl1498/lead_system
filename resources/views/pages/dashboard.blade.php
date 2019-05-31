@@ -74,22 +74,24 @@
                     <div class="col-md-4" style="border-right: solid 1px grey;">
                         <p class="text-center" style="margin-bottom: 0px;">
                             <strong>Departure: </strong>
-                            <select class="form-control" id="sign_ups_year" style="display: inline-block; width: 90px;">
+                            <select class="form-control" id="departure_year_select" style="display: inline-block; width: 90px;">
+                                <option value="All">All</option>
                                 @foreach(departure_year() as $y)
                                 <option value="{{ $y->id }}">{{ $y->name }}</option>
                                 @endforeach
                             </select>
-                            <select class="form-control" id="sign_ups_year" style="display: inline-block; width: 120px;">
+                            <select class="form-control" id="departure_month_select" style="display: inline-block; width: 120px;">
+                                <option value="All">All</option>
                                 @foreach(departure_month() as $m)
-                                <option value="{{ $y->id }}">{{ $m->name }}</option>
+                                <option value="{{ $m->id }}">{{ $m->name }}</option>
                                 @endforeach
                             </select>
                         </p>
                     </div>
-                    <div class="col-md-4 custom-checkbox" style="visibility: hidden;">
+                    <div id="year_counter" class="col-md-4 custom-checkbox" style="visibility: hidden;">
                         &nbsp;&nbsp;&nbsp;&nbsp;
                         <input type="checkbox" checked data-toggle="toggle" data-on="Yes" data-off="No">
-                        Based on Sign Up Date
+                        Based on Sign Up Year
                     </div>
                 </div>
                 <br>

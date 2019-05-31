@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    var year;
+    var year, departure_month, departure_year, year_counter;
     var monthly_signup, monthly_signup_chart; //monthly signup chart
 
     $('.custom-checkbox').css({'visibility': 'visible', opacity: 0.0}).animate({opacity: 1.0}, 400);
@@ -25,8 +25,11 @@ $(document).ready(function(){
         success: function(data){
             $('#sign_ups_year').val(data);
             year = $('#sign_ups_year option:selected').text();
+            departure_year = $('#departure_year_select option:selected').val();
+            departure_month = $('#departure_month_select option:selected').val();
+            year_counter = ($('#year_counter .toggle').hasClass('off')) ? 0 : 1;
             monthly_signup();
-            branch_signups();
+            branch_signups();   
         }
     });
 
@@ -35,7 +38,13 @@ $(document).ready(function(){
             headers: {
                 'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
             },
-            url: '/monthly_referral/'+year,
+            url: '/monthly_referral',
+            data: {
+                year: year,
+                departure_year: departure_year,
+                departure_month: departure_month,
+                year_counter: year_counter,
+            },
             method: 'get',
             dataType: 'json',
             success: function(data){
@@ -103,7 +112,13 @@ $(document).ready(function(){
             headers: {
                 'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
             },
-            url: '/monthly_referral/'+year,
+            url: '/monthly_referral/',
+            data: {
+                year: year,
+                departure_year: departure_year,
+                departure_month: departure_month,
+                year_counter: year_counter,
+            },
             method: 'get',
             dataType: 'json',
             success: function(data){
@@ -142,7 +157,13 @@ $(document).ready(function(){
             headers: {
                 'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
             },
-            url: '/branch_signups/'+year,
+            url: '/branch_signups',
+            data: {
+                year: year,
+                departure_year: departure_year,
+                departure_month: departure_month,
+                year_counter: year_counter
+            },
             method: 'get',
             dataType: 'json',
             success: function(data){
@@ -190,10 +211,12 @@ $(document).ready(function(){
 
     //FUNCTIONS -- START
 
-    $(document).on('change', '#sign_ups_year', function(){
+    $(document).on('change', '#sign_ups_year, #departure_year_select, #departure_month_select, #year_counter .toggle', function(){
         year = $('#sign_ups_year option:selected').text();
+        departure_year = $('#departure_year_select option:selected').val();
+        departure_month = $('#departure_month_select option:selected').val();
+        year_counter = ($('#year_counter .toggle').hasClass('off')) ? 0 : 1;
         update_monthly_signup();
-        branch_signups();
     });
 
     //FUNCTIONS -- END
