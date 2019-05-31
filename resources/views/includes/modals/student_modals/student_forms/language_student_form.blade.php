@@ -129,6 +129,17 @@
 
             <div class="row clearfix">
                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
+                        <label for="l_sign_up" class="pull-right">Sign Up</label>
+                </div>
+                <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
+                    <div class="form-group">
+                        <input type="text" id="l_sign_up" name="l_sign_up" class="form-control datepicker required" placeholder="YYYY-MM-DD Date of Sign Up" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row clearfix">
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
                         <label for="l_gender" class="pull-right">Gender</label>
                 </div>
                 <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">

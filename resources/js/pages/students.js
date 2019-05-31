@@ -241,6 +241,7 @@ $(document).ready(function(){
         {data: 'age', name: 'age'},
         {data: 'course.name', name: 'course'},
         {data: 'email', name: 'email'},
+        {data: 'date_of_signup', name: 'date_of_signup'},
         {data: 'referral.fname', name: 'referral'},
         {data: 'remarks', name: 'remarks'},
         {data: "action", orderable:false,searchable:false}
@@ -254,9 +255,10 @@ $(document).ready(function(){
         { width: 45, targets: 4 }, //age
         { width: 200, targets: 5 }, //course
         { width: 200, targets: 6 }, //email
-        { width: 120, targets: 7 }, //referral
-        { width: 250, targets: 8 }, //remarks
-        { width: 150, targets: 9 }, //action
+        { width: 120, targets: 7 }, //sign up date
+        { width: 120, targets: 8 }, //referral
+        { width: 250, targets: 9 }, //remarks
+        { width: 150, targets: 10 }, //action
         {defaultContent: "", targets: "_all"}
     ]
 
@@ -272,6 +274,7 @@ $(document).ready(function(){
         {data: 'benefactor.name', name: 'benefactor'},
         {data: 'course.name', name: 'course'},
         {data: 'email', name: 'email'},
+        {data: 'date_of_signup', name: 'date_of_signup'},
         {data: 'referral.fname', name: 'referral'},
         {data: 'remarks', name: 'remarks'},
         {data: "action", orderable:false,searchable:false}
@@ -286,9 +289,10 @@ $(document).ready(function(){
         { width: 130, targets: 5 }, //benefactor
         { width: 200, targets: 6 }, //course
         { width: 200, targets: 7 }, //email
-        { width: 120, targets: 8 }, //referral
-        { width: 250, targets: 9 }, //remarks
-        { width: 150, targets: 10 }, //action
+        { width: 120, targets: 8 }, //sign up date
+        { width: 120, targets: 9 }, //referral
+        { width: 250, targets: 10 }, //remarks
+        { width: 150, targets: 11 }, //action
         {defaultContent: "", targets: "_all"}
     ]
 
@@ -855,6 +859,7 @@ $(document).ready(function(){
                 $('#l_contact').val(data.contact);                    
                 $('#l_address').val(data.address);
                 $('#l_email').val(data.email);
+                $('#l_sign_up').val(data.date_of_signup);
                 $('#l_referral').val(data.referral.id).trigger('change');
                 $('#l_gender').val(data.gender).trigger('change');
                 $('#l_branch').val(data.branch.id).trigger('change');
@@ -895,6 +900,7 @@ $(document).ready(function(){
                 }           
                 $('#s_address').val(data.address);
                 $('#s_email').val(data.email);
+                $('#s_sign_up').val(data.date_of_signup);
                 $('#s_referral').val(data.referral.id).trigger('change');
                 $('#s_gender').val(data.gender).trigger('change');
                 $('#s_branch').val(data.branch.id).trigger('change');
