@@ -192,9 +192,9 @@ class dashboardController extends Controller
         $departure_year = $request->departure_year;
         $departure_month = $request->departure_month;
         $year_counter = ($request->year_counter == 1) ? 'true' : null;
-        $all_total = 0; $total = [0, 0, 0]; //Makati, Cebu, Davao
-        $approved = []; $denied = []; $cancelled = []; 
-        $final = []; $active = []; $backout = [];
+        $all_total = 0; $all_active = 0; $all_backout = 0; $total = [0, 0, 0]; //Makati, Cebu, Davao
+        $approved = [0, 0, 0]; $denied = [0, 0, 0]; $cancelled = [0, 0, 0]; 
+        $final = [0, 0, 0]; $active = [0, 0, 0]; $backout = [0, 0, 0];
 
         //Total
         for($x = 0; $x < 3; $x++){
@@ -356,7 +356,18 @@ class dashboardController extends Controller
 
         //IF ACTIVE
         for($x = 0; $x < 3; $x++){
-            $active[$x] = student::with('program')->where('branch_id', $x+1)->where('status', 'Active')
+            $active[$x] += student::where('branch_id', $x+1)->where('status', 'Active')->whereNull('program_id')
+            ->when($departure_year != 'All', function($query) use($departure_year){
+                $query->where('departure_year_id', $departure_year);
+            })
+            ->when($departure_month != 'All', function($query) use($departure_month){
+                $query->where('departure_month_id', $departure_month);
+            })
+            ->when($year_counter, function($query) use($year){
+                $query->whereYear('date_of_signup', $year);
+            })->count();
+
+            $active[$x] += student::with('program')->where('branch_id', $x+1)->where('status', 'Active')
             ->whereHas('program', function($query){
                 $query->where('name', '<>', 'SSV (Careworker)');
                 $query->where('name', '<>', 'SSV (Hospitality)');
@@ -372,7 +383,18 @@ class dashboardController extends Controller
             })->count();
         }
 
-        $all_active = student::with('program')->where('status', 'Active')
+        $all_active += student::where('status', 'Active')->whereNull('program_id')
+        ->when($departure_year != 'All', function($query) use($departure_year){
+            $query->where('departure_year_id', $departure_year);
+        })
+        ->when($departure_month != 'All', function($query) use($departure_month){
+            $query->where('departure_month_id', $departure_month);
+        })
+        ->when($year_counter, function($query) use($year){
+            $query->whereYear('date_of_signup', $year);
+        })->count();
+
+        $all_active += student::with('program')->where('status', 'Active')
         ->whereHas('program', function($query){
             $query->where('name', '<>', 'SSV (Careworker)');
             $query->where('name', '<>', 'SSV (Hospitality)');
@@ -390,7 +412,18 @@ class dashboardController extends Controller
 
         //IF BACK OUT
         for($x = 0; $x < 3; $x++){
-            $backout[$x] = student::with('program')->where('branch_id', $x+1)->where('status', 'Back Out')
+            $backout[$x] += student::where('branch_id', $x+1)->where('status', 'Back Out')->whereNull('program_id')
+            ->when($departure_year != 'All', function($query) use($departure_year){
+                $query->where('departure_year_id', $departure_year);
+            })
+            ->when($departure_month != 'All', function($query) use($departure_month){
+                $query->where('departure_month_id', $departure_month);
+            })
+            ->when($year_counter, function($query) use($year){
+                $query->whereYear('date_of_signup', $year);
+            })->count();
+
+            $backout[$x] += student::with('program')->where('branch_id', $x+1)->where('status', 'Back Out')
             ->whereHas('program', function($query){
                 $query->where('name', '<>', 'SSV (Careworker)');
                 $query->where('name', '<>', 'SSV (Hospitality)');
@@ -405,8 +438,19 @@ class dashboardController extends Controller
                 $query->whereYear('date_of_signup', $year);
             })->count();
         }
+        
+        $all_backout += student::where('status', 'Back Out')->whereNull('program_id')
+        ->when($departure_year != 'All', function($query) use($departure_year){
+            $query->where('departure_year_id', $departure_year);
+        })
+        ->when($departure_month != 'All', function($query) use($departure_month){
+            $query->where('departure_month_id', $departure_month);
+        })
+        ->when($year_counter, function($query) use($year){
+            $query->whereYear('date_of_signup', $year);
+        })->count();
 
-        $all_backout = student::with('program')->where('status', 'Back Out')
+        $all_backout += student::with('program')->where('status', 'Back Out')
         ->whereHas('program', function($query){
             $query->where('name', '<>', 'SSV (Careworker)');
             $query->where('name', '<>', 'SSV (Hospitality)');
