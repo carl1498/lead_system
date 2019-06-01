@@ -356,7 +356,11 @@ class dashboardController extends Controller
 
         //IF ACTIVE
         for($x = 0; $x < 3; $x++){
-            $active[$x] = student::where('branch_id', $x+1)->where('status', 'Active')
+            $active[$x] = student::with('program')->where('branch_id', $x+1)->where('status', 'Active')
+            ->whereHas('program', function($query){
+                $query->where('name', '<>', 'SSV (Careworker)');
+                $query->where('name', '<>', 'SSV (Hospitality)');
+            })
             ->when($departure_year != 'All', function($query) use($departure_year){
                 $query->where('departure_year_id', $departure_year);
             })
@@ -368,7 +372,11 @@ class dashboardController extends Controller
             })->count();
         }
 
-        $all_active = student::where('status', 'Active')
+        $all_active = student::with('program')->where('status', 'Active')
+        ->whereHas('program', function($query){
+            $query->where('name', '<>', 'SSV (Careworker)');
+            $query->where('name', '<>', 'SSV (Hospitality)');
+        })
         ->when($departure_year != 'All', function($query) use($departure_year){
             $query->where('departure_year_id', $departure_year);
         })
@@ -382,7 +390,11 @@ class dashboardController extends Controller
 
         //IF BACK OUT
         for($x = 0; $x < 3; $x++){
-            $backout[$x] = student::where('branch_id', $x+1)->where('status', 'Back Out')
+            $backout[$x] = student::with('program')->where('branch_id', $x+1)->where('status', 'Back Out')
+            ->whereHas('program', function($query){
+                $query->where('name', '<>', 'SSV (Careworker)');
+                $query->where('name', '<>', 'SSV (Hospitality)');
+            })
             ->when($departure_year != 'All', function($query) use($departure_year){
                 $query->where('departure_year_id', $departure_year);
             })
@@ -394,7 +406,11 @@ class dashboardController extends Controller
             })->count();
         }
 
-        $all_backout = student::where('status', 'Back Out')
+        $all_backout = student::with('program')->where('status', 'Back Out')
+        ->whereHas('program', function($query){
+            $query->where('name', '<>', 'SSV (Careworker)');
+            $query->where('name', '<>', 'SSV (Hospitality)');
+        })
         ->when($departure_year != 'All', function($query) use($departure_year){
             $query->where('departure_year_id', $departure_year);
         })
