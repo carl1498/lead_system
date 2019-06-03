@@ -53,17 +53,6 @@
 
             <div class="row clearfix">
                 <div class="col-lg-4 col-md-4 col-sm-3 col-xs-3 form-control-label">
-                        <label for="l_age" class="pull-right">Age</label>
-                </div>
-                <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
-                    <div class="form-group">
-                        <input type="number" id="l_age" name="l_age" class="form-control required" placeholder="Enter Age" required>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row clearfix">
-                <div class="col-lg-4 col-md-4 col-sm-3 col-xs-3 form-control-label">
                         <label for="l_contact" class="pull-right">Contact #</label>
                 </div>
                 <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
@@ -86,6 +75,17 @@
 
             <div class="row clearfix">
                 <div class="col-lg-4 col-md-4 col-sm-3 col-xs-3 form-control-label">
+                        <label for="l_email" class="pull-right">Email</label>
+                </div>
+                <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
+                    <div class="form-group">
+                        <input type="email" id="l_email" name="l_email" class="form-control required" placeholder="Enter Valid Email" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row clearfix">
+                <div class="col-lg-4 col-md-4 col-sm-3 col-xs-3 form-control-label">
                         <label for="l_picture" class="pull-right">Picture</label>
                 </div>
                 <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
@@ -99,17 +99,6 @@
 
         <!-- RIGHT COLUMN -->
         <div class="col-md-6">
-
-            <div class="row clearfix">
-                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
-                        <label for="l_email" class="pull-right">Email</label>
-                </div>
-                <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
-                    <div class="form-group">
-                        <input type="email" id="l_email" name="l_email" class="form-control required" placeholder="Enter Valid Email" required>
-                    </div>
-                </div>
-            </div>
 
             <div class="row clearfix">
                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">

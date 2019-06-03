@@ -141,7 +141,7 @@ $(document).ready(function(){
         {data: 'school.name', name: 'school'},
         {data: 'benefactor.name', name: 'benefactor'},
         {data: 'gender', name: 'gender'},
-        {data: 'age', name: 'age'},
+        {data: 'birthdate', name: 'birthdate'},
         {data: 'course.name', name: 'course'},
         {data: 'email', name: 'email'},
         {data: 'date_of_signup', name: 'date_of_signup'},
@@ -159,7 +159,7 @@ $(document).ready(function(){
         { width: 130, targets: 3 }, //school
         { width: 130, targets: 4 }, //benefactor
         { width: 60, targets: 5 }, //gender
-        { width: 45, targets: 6 }, //age
+        { width: 100, targets: 6 }, //birthdate
         { width: 200, targets: 7 }, //course
         { width: 200, targets: 8 }, //email
         { width: 120, targets: 9 }, //signup
@@ -179,7 +179,7 @@ $(document).ready(function(){
         {data: 'school.name', name: 'school'},
         {data: 'benefactor.name', name: 'benefactor'},
         {data: 'gender', name: 'gender'},
-        {data: 'age', name: 'age'},
+        {data: 'birthdate', name: 'birthdate'},
         {data: 'course.name', name: 'course'},
         {data: 'email', name: 'email'},
         {data: 'date_of_signup', name: 'date_of_signup'},
@@ -198,7 +198,7 @@ $(document).ready(function(){
         { width: 130, targets: 4 },
         { width: 130, targets: 5 },
         { width: 60, targets: 6 },
-        { width: 45, targets: 7 },
+        { width: 100, targets: 7 },
         { width: 200, targets: 8 },
         { width: 200, targets: 9 },
         { width: 120, targets: 10 },
@@ -238,7 +238,7 @@ $(document).ready(function(){
         {data: 'branch.name', name: 'branch'},
         {data: 'contact', name: 'contact'},
         {data: 'gender', name: 'gender'},
-        {data: 'age', name: 'age'},
+        {data: 'birthdate', name: 'birthdate'},
         {data: 'course.name', name: 'course'},
         {data: 'email', name: 'email'},
         {data: 'date_of_signup', name: 'date_of_signup'},
@@ -252,7 +252,7 @@ $(document).ready(function(){
         { width: 70, targets: 1 }, //branch
         { width: 90, targets: 2 }, //contact
         { width: 60, targets: 3 }, //gender
-        { width: 45, targets: 4 }, //age
+        { width: 100, targets: 4 }, //birthdate
         { width: 200, targets: 5 }, //course
         { width: 200, targets: 6 }, //email
         { width: 120, targets: 7 }, //sign up date
@@ -269,7 +269,7 @@ $(document).ready(function(){
         {data: 'name', name: 'name'},
         {data: 'contact', name: 'contact'},
         {data: 'gender', name: 'gender'},
-        {data: 'age', name: 'age'},
+        {data: 'birthdate', name: 'birthdate'},
         {data: 'program.name', name: 'program'},
         {data: 'benefactor.name', name: 'benefactor'},
         {data: 'course.name', name: 'course'},
@@ -284,7 +284,7 @@ $(document).ready(function(){
         { width: 230, targets: 0 }, //name
         { width: 90, targets: 1 }, //contact
         { width: 60, targets: 2 }, //gender
-        { width: 45, targets: 3 }, //age
+        { width: 100, targets: 3 }, //birthdate
         { width: 130, targets: 4 }, //program
         { width: 130, targets: 5 }, //benefactor
         { width: 200, targets: 6 }, //course
@@ -561,21 +561,6 @@ $(document).ready(function(){
     //Open Add Students Modal
     $('.add_student').on('click', function(){
     });
-
-    $('#birthdate').on('change', function(){
-        var tempAge = getAge($(this).val());
-        $('#age').val(tempAge);
-    })
-
-    $('#l_birthdate').on('change', function(){
-        var tempAge = getAge($(this).val());
-        $('#l_age').val(tempAge);
-    })
-
-    $('#s_birthdate').on('change', function(){
-        var tempAge = getAge($(this).val());
-        $('#s_age').val(tempAge);
-    })
     
     $('.switch').on('click', function(){
         if($('#switch_name').text() == 'SSV'){
@@ -806,7 +791,6 @@ $(document).ready(function(){
                 $('#mname').val(data.mname);
                 $('#lname').val(data.lname);
                 $('#birthdate').val(data.birthdate);
-                $('#age').val(data.age);
                 $('#contact').val(data.contact);
 
                 if(data.program){
@@ -855,7 +839,6 @@ $(document).ready(function(){
                 $('#l_mname').val(data.mname);
                 $('#l_lname').val(data.lname);
                 $('#l_birthdate').val(data.birthdate);
-                $('#l_age').val(data.age);
                 $('#l_contact').val(data.contact);                    
                 $('#l_address').val(data.address);
                 $('#l_email').val(data.email);
@@ -890,14 +873,13 @@ $(document).ready(function(){
                 $('#s_mname').val(data.mname);
                 $('#s_lname').val(data.lname);
                 $('#s_birthdate').val(data.birthdate);
-                $('#s_age').val(data.age);
                 $('#s_contact').val(data.contact);      
                 if(data.program){
                     $('#s_program').val(data.program.id).trigger('change'); 
-                }   
+                }
                 if(data.benefactor){
                     $('#s_benefactor').val(data.benefactor.id).trigger('change');   
-                }           
+                }
                 $('#s_address').val(data.address);
                 $('#s_email').val(data.email);
                 $('#s_sign_up').val(data.date_of_signup);
@@ -1248,29 +1230,6 @@ $(document).ready(function(){
             }
         },
     });
-    
-    function getAge(birthdate){
-        var today = new Date();
-        var dd = today.getDate();
-        var mm = today.getMonth() + 1;
-        var yyyy = today.getFullYear();
-        
-        today = yyyy + '-' + mm + '-' + dd;
-        birth_array = birthdate.split('-');
-
-        var age = yyyy - parseInt(birth_array[0]);
-
-        if(mm == parseInt(birth_array[1])){
-            if(dd < birth_array[2]){
-                age--;
-            }
-        }
-        else if(mm < parseInt(birth_array[1])){
-            age--;
-        }
-
-        return age;
-    }
 
     function view_profile(id){
         $.ajax({

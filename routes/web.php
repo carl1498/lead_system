@@ -10,13 +10,14 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Auth::routes();
+
 Route::get('/', function () {
     return redirect('/login');
 });
 
 Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 
-Auth::routes();
 
 //GENERAL ROUTES -- START
 

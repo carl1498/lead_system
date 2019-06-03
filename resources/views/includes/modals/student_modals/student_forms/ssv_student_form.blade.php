@@ -53,17 +53,6 @@
 
             <div class="row clearfix">
                 <div class="col-lg-4 col-md-4 col-sm-3 col-xs-3 form-control-label">
-                        <label for="s_age" class="pull-right">Age</label>
-                </div>
-                <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
-                    <div class="form-group">
-                        <input type="number" id="s_age" name="s_age" class="form-control required" placeholder="Enter Age" required>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row clearfix">
-                <div class="col-lg-4 col-md-4 col-sm-3 col-xs-3 form-control-label">
                         <label for="s_contact" class="pull-right">Contact #</label>
                 </div>
                 <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
@@ -109,6 +98,17 @@
 
             <div class="row clearfix">
                 <div class="col-lg-4 col-md-4 col-sm-3 col-xs-3 form-control-label">
+                        <label for="s_address" class="pull-right">Address</label>
+                </div>
+                <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
+                    <div class="form-group">
+                        <input type="text" id="s_address" name="s_address" class="form-control required" placeholder="Blg No., Street, City, Province, Zip" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row clearfix">
+                <div class="col-lg-4 col-md-4 col-sm-3 col-xs-3 form-control-label">
                         <label for="s_picture" class="pull-right">Picture</label>
                 </div>
                 <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
@@ -122,17 +122,6 @@
 
         <!-- RIGHT COLUMN -->
         <div class="col-md-6">
-
-            <div class="row clearfix">
-                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
-                        <label for="s_address" class="pull-right">Address</label>
-                </div>
-                <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
-                    <div class="form-group">
-                        <input type="text" id="s_address" name="s_address" class="form-control required" placeholder="Blg No., Street, City, Province, Zip" required>
-                    </div>
-                </div>
-            </div>
 
             <div class="row clearfix">
                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">

@@ -7,7 +7,7 @@
         <th>School</th>
         <th>Benefactor</th>
         <th>Gender</th>
-        <th>Age</th>
+        <th>Birthdate</th>
         <th>Course</th>
         <th>Email</th>
         <th>Sign Up Date</th>

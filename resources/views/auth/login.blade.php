@@ -29,9 +29,9 @@
                 </div>
                 <!-- /.col -->
             </div>
-            @if ($errors->has('email'))
+            @if ($errors->has('username'))
                 <span class="invalid-feedback" role="alert">
-                    <strong>{{ $errors->first('email') }}</strong>
+                    <strong>{{ $errors->first('username') }}</strong>
                 </span>
             @endif
         </form>
