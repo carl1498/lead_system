@@ -107,7 +107,7 @@ $(document).ready(function(){
         var id = $(this).attr('id');
 
         $.ajax({
-            url: '/get_student_settings/{id}/{current_settings}',
+            url: '/get_student_settings',
             method: 'get',
             data: {
                 id: id,

@@ -60,11 +60,11 @@ $(document).ready(function(){
 
     function disableTabs(){
         $(`li.branch_pick, li.status_pick, li.result_pick, 
-        li.language_pick, li.all_pick, li.ssv_pick, li.ssv_backout_pick`
+        li.language_pick, li.all_pick, li.ssv_pick`
         ).addClass('disabled').css('cursor', 'not-allowed');
 
         $(`a.branch_pick, a.status_pick, a.result_pick,
-        a.language_pick, a.all_pick, a.ssv_pick, a.ssv_backout_pick`
+        a.language_pick, a.all_pick, a.ssv_pick`
         ).addClass('disabled').css('pointer-events', 'none');
 
         $('.switch, .refresh_table').attr('disabled', true);
@@ -72,11 +72,11 @@ $(document).ready(function(){
 
     function enableTabs(){
         $(`li.branch_pick, li.status_pick, li.result_pick, 
-        li.language_pick, li.all_pick, li.ssv_pick, li.ssv_backout_pick`
+        li.language_pick, li.all_pick, li.ssv_pick, li.trainee_pick`
         ).removeClass('disabled').css('cursor', 'pointer');
         
         $(`a.branch_pick, a.status_pick, a.result_pick,
-        a.language_pick, a.all_pick, a.ssv_pick, a.ssv_backout_pick`
+        a.language_pick, a.all_pick, a.ssv_pick, li.trainee_pick`
         ).removeClass('disabled').css('pointer-events', 'auto');
 
         $('.switch, .refresh_table').attr('disabled', false);
@@ -99,7 +99,7 @@ $(document).ready(function(){
             $('.month_select').hide();
             $('#month_select').next(".select2-container").hide();
             $('.select_description').text('');
-        }else if(current_tab == 'SSV' || current_tab == 'SSV Backout'){
+        }else if(current_tab == 'SSV'){
             showYearSelect();
             $('.month_select').hide();
             $('#month_select').next(".select2-container").hide();
@@ -112,7 +112,6 @@ $(document).ready(function(){
             case 'Result'       : refresh_student_result(); break;
             case 'Language'     : refresh_language_student(); break;
             case 'SSV'          : refresh_ssv_student(); break;
-            case 'SSV Backout'  : refresh_ssv_backout(); break;
             case 'All'          : refresh_all_student(); break;
         }
     }
@@ -295,9 +294,6 @@ $(document).ready(function(){
         { width: 150, targets: 11 }, //action
         {defaultContent: "", targets: "_all"}
     ]
-
-    var columns_ssv_backout = columns_ssv_students;
-    var columnDefs_ssv_backout = columnDefs_ssv_students;
 
     function refresh_student_branch(){
         departure_year = $('#year_select').val();
@@ -517,63 +513,25 @@ $(document).ready(function(){
         });
     }
 
-    function refresh_ssv_backout(){
-        
-        departure_year = $('#year_select').val();
-
-        ssv_backout = $('#ssv_backout').DataTable({
-            stateSave: true,
-            stateSaveCallback: function(settings,data) {
-                localStorage.setItem( 'DataTables_' + settings.sInstance, JSON.stringify(data) )
-            },
-            stateLoadCallback: function(settings) {
-                return JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ) )
-            },
-            stateLoadParams: function( settings, data ) {
-                if (data.order) delete data.order;
-            },
-            initComplete: function(settings, json) {
-                enableTabs();  
-            },
-            processing: true,
-            destroy: true,
-            scrollX: true,
-            scrollCollapse: true,
-            fixedColumns: true,
-            responsive: true,
-            ajax: {
-                url: '/ssv_student',
-                data: {
-                    departure_year: departure_year,
-                    current_ssv: current_ssv
-                }
-            },
-            columnDefs: columnDefs_ssv_backout,
-            columns: columns_ssv_backout,
-            order: [[4,'asc']]
-        });
-    }
-
     //DATATABLES -- END
 
     //FUNCTIONS -- START
     
-    //Open Add Students Modal
-    $('.add_student').on('click', function(){
-    });
-    
-    $('.switch').on('click', function(){
-        if($('#switch_name').text() == 'SSV'){
-            $('#switch_name').text('Student');
-            $('.branch_pick, .status_pick, .result_pick, .language_pick').hide();
-            $('.ssv_pick, .ssv_backout_pick').show();
+    $('.switch_name').on('click', function(){
+        if($(this).text() == 'SSV'){
+            $('.branch_pick, .status_pick, .result_pick, .language_pick, .trainee_pick').hide();
+            $('.ssv_pick').show();
             $('#student_list_tab #ssv_first').click();
         }
-        else if($('#switch_name').text() == 'Student'){
-            $('#switch_name').text('SSV');
-            $('.branch_pick, .status_pick, .result_pick, .language_pick').show();
-            $('.ssv_pick, .ssv_backout_pick').hide();
+        else if($(this).text() == 'Student'){
+            $('.ssv_pick, .trainee_pick').hide();
+            $('.branch_pick, .status_pick, .result_pick, .language_pick', '.trainee_pick').show();
             $('#student_list_tab #student_first').click();
+        }
+        else if($(this).text() == 'Student'){
+            $('.branch_pick, .status_pick, .result_pick, .language_pick', '.ssv_pick').hide();
+            $('.trainee_pick').show();
+            $('#student_list_tab #trainee_first').click();
         }
         disableTabs();
     });
@@ -620,15 +578,9 @@ $(document).ready(function(){
 
     $('.ssv_pick').on('click', function(){
         if(!$(this).hasClass('disabled')){
-            current_tab = 'SSV';
             current_ssv = $(this).text();
-        }
-    });
 
-    $('.ssv_backout_pick').on('click', function(){
-        if(!$(this).hasClass('disabled')){
-            current_tab = 'SSV Backout';
-            current_ssv = $(this).text();
+            current_tab = 'SSV';
         }
     });
 
@@ -762,12 +714,55 @@ $(document).ready(function(){
         });
     });
 
+    $(document).on('submit', '#trainee_student_form', function(e){
+        e.preventDefault();
+
+        var input = $('.save_trainee_student');
+        var button = document.getElementsByClassName("save_trainee_student")[0];
+
+        button.disabled = true;
+        input.html('SAVING...');
+
+        var formData = new FormData($(this)[0]);
+
+        $.ajax({
+            headers: {
+                'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: '/save_trainee_student',
+            method: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(data){
+                if(data == false){
+                    swal('Error!', 'File/Image format must only be .jpg | .png | .jpeg', 'error');
+                    button.disabled = false;
+                    input.html('SAVE CHANGES');
+                    return;
+                }
+                $('#student_modal').modal('hide');
+                notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
+                button.disabled = false;
+                input.html('SAVE CHANGES');
+                refresh();
+                view_profile(data);
+            },
+            error: function(data){
+                swal("Error!", "Something went wrong, try again.", "error");
+                button.disabled = false;
+                input.html('SAVE CHANGES');
+            }
+        });
+    });
+
     //Open Student Modal (ADD)
     $('.add_student').on('click', function(){
         modal_close = false;
         $('#add_edit').val('add');
         $('#l_add_edit').val('add');
         $('#s_add_edit').val('add');
+        $('#t_add_edit').val('add');
         $('#student_type_tab a:first').tab('show');
         $('#student_modal').modal('toggle');
         $('#student_modal').modal('show');
@@ -889,6 +884,41 @@ $(document).ready(function(){
                 $('#s_course').val(data.course.id).trigger('change');
                 $('#s_year').val(data.departure_year.id).trigger('change');
                 $('#s_remarks').val(data.remarks);
+                $('#student_modal').modal('toggle');
+                $('#student_modal').modal('show');
+            }
+        });
+    });
+
+    //Open Trainee Student Modal (EDIT)
+    $(document).on('click', '.edit_trainee_student', function(){
+        modal_close = false;
+        $('#student_type_tab a[href="#trainee_student_form"]').tab('show');
+        var id = $(this).attr('id');
+
+        $.ajax({
+            url: '/get_student',
+            method: 'get',
+            data: {id: id},
+            dataType: 'json',
+            success:function(data){
+                $('#t_add_edit').val('edit');
+                $('#t_id').val(data.id);
+                $('#t_fname').val(data.fname);
+                $('#t_mname').val(data.mname);
+                $('#t_lname').val(data.lname);
+                if(data.company){
+                    $('#t_company').val(data.company.id).trigger('change');   
+                }
+                $('#t_contact').val(data.contact);
+                $('#t_gender').val(data.gender).trigger('change');
+                $('#t_birthdate').val(data.birthdate);
+                $('#t_course').val(data.course.id).trigger('change');
+                $('#t_email').val(data.email);
+                $('#t_address').val(data.address);
+                $('#t_year').val(data.departure_year.id).trigger('change');
+                $('#t_month').val(data.departure_month.id).trigger('change');
+                $('#t_remarks').val(data.remarks);
                 $('#student_modal').modal('toggle');
                 $('#student_modal').modal('show');
             }
@@ -1119,7 +1149,7 @@ $(document).ready(function(){
     });        
 
     //Course Select 2
-    $('#course, #l_course, #s_course').select2({
+    $('#course, #l_course, #s_course, #t_course').select2({
         placeholder: 'Select Course',
         ajax: {
             url: "/courseAll",
@@ -1214,6 +1244,29 @@ $(document).ready(function(){
         placeholder: 'Select Benefactor',
         ajax: {
             url: "/benefactorAll",
+            dataType: 'json',
+
+            data: function (params){
+                return {
+                    name: params.term,
+                    page:params.page
+                }
+            },
+            
+            processResults: function (data){
+                return {
+                    results:data.results      
+                }
+            }
+        },
+    });
+
+    //Company Select 2
+    $('#t_company').select2({
+        allowClear: true,
+        placeholder: 'Select Company',
+        ajax: {
+            url: "/companyAll",
             dataType: 'json',
 
             data: function (params){

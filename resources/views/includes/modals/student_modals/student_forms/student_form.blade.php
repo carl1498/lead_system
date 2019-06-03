@@ -42,22 +42,16 @@
 
             <div class="row clearfix">
                 <div class="col-lg-4 col-md-4 col-sm-3 col-xs-3 form-control-label">
-                        <label for="birthdate" class="pull-right">Birth Date</label>
+                        <label for="branch" class="pull-right">Branch</label>
                 </div>
                 <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
-                    <div class="form-group">
-                        <input type="text" id="birthdate" name="birthdate" class="form-control datepicker required" placeholder="YYYY-MM-DD" required>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="row clearfix">
-                <div class="col-lg-4 col-md-4 col-sm-3 col-xs-3 form-control-label">
-                        <label for="contact" class="pull-right">Contact #</label>
-                </div>
-                <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
-                    <div class="form-group">
-                        <input type="text" id="contact" name="contact" class="form-control required" placeholder="0912-345-6789" required>
+                    <div class="form-group required">
+                        <select type="text" id="branch" name="branch" class="form-control select2 required" style="width: 100%;" required>
+                            <option value="">Select Branch</option>
+                            @foreach($branch as $b)
+                                <option value="{{ $b->id }}">{{ $b->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
             </div>
@@ -109,36 +103,56 @@
                     </div>
                 </div>
             </div>
-
+            
             <div class="row clearfix">
                 <div class="col-lg-4 col-md-4 col-sm-3 col-xs-3 form-control-label">
-                        <label for="address" class="pull-right">Address</label>
+                        <label for="contact" class="pull-right">Contact #</label>
                 </div>
                 <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
                     <div class="form-group">
-                        <input type="text" id="address" name="address" class="form-control required" placeholder="Blg No., Street, City, Province, Zip" required>
+                        <input type="text" id="contact" name="contact" class="form-control required" placeholder="0912-345-6789" required>
                     </div>
                 </div>
             </div>
 
             <div class="row clearfix">
                 <div class="col-lg-4 col-md-4 col-sm-3 col-xs-3 form-control-label">
-                        <label for="email" class="pull-right">Email</label>
+                        <label for="gender" class="pull-right">Gender</label>
                 </div>
                 <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
-                    <div class="form-group">
-                        <input type="email" id="email" name="email" class="form-control required" placeholder="Enter Valid Email" required>
+                    <div class="form-group required">
+                        <select type="text" id="gender" name="gender" class="form-control select2 required" style="width: 100%;" required>
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
                     </div>
                 </div>
             </div>
 
             <div class="row clearfix">
                 <div class="col-lg-4 col-md-4 col-sm-3 col-xs-3 form-control-label">
-                        <label for="picture" class="pull-right">Picture</label>
+                        <label for="birthdate" class="pull-right">Birth Date</label>
                 </div>
                 <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
                     <div class="form-group">
-                        <input type="file" id="picture" name="picture" class="form-control inputFile">
+                        <input type="text" id="birthdate" name="birthdate" class="form-control datepicker required" placeholder="YYYY-MM-DD" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row clearfix">
+                <div class="col-lg-4 col-md-4 col-sm-3 col-xs-3 form-control-label">
+                        <label for="course" class="pull-right">Course</label>
+                </div>
+                <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
+                    <div class="form-group required">
+                        <select type="text" id="course" name="course" class="form-control select2 required" style="width: 100%;" required>
+                            <option value="" disabled selected>Select Course</option>
+                            @foreach($course as $c)
+                                <option value="{{ $c->id }}">{{ $c->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
             </div>
@@ -147,6 +161,28 @@
 
         <!-- RIGHT COLUMN -->
         <div class="col-md-6">
+
+            <div class="row clearfix">
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
+                        <label for="email" class="pull-right">Email</label>
+                </div>
+                <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
+                    <div class="form-group">
+                        <input type="email" id="email" name="email" class="form-control required" placeholder="Enter Valid Email" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row clearfix">
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
+                        <label for="address" class="pull-right">Address</label>
+                </div>
+                <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
+                    <div class="form-group">
+                        <input type="text" id="address" name="address" class="form-control required" placeholder="Blg No., Street, City, Province, Zip" required>
+                    </div>
+                </div>
+            </div>
 
             <div class="row clearfix">
                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
@@ -199,53 +235,6 @@
 
             <div class="row clearfix">
                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
-                        <label for="gender" class="pull-right">Gender</label>
-                </div>
-                <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
-                    <div class="form-group required">
-                        <select type="text" id="gender" name="gender" class="form-control select2 required" style="width: 100%;" required>
-                            <option value="">Select Gender</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row clearfix">
-                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
-                        <label for="branch" class="pull-right">Branch</label>
-                </div>
-                <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
-                    <div class="form-group required">
-                        <select type="text" id="branch" name="branch" class="form-control select2 required" style="width: 100%;" required>
-                            <option value="">Select Branch</option>
-                            @foreach($branch as $b)
-                                <option value="{{ $b->id }}">{{ $b->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row clearfix">
-                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
-                        <label for="course" class="pull-right">Course</label>
-                </div>
-                <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
-                    <div class="form-group required">
-                        <select type="text" id="course" name="course" class="form-control select2 required" style="width: 100%;" required>
-                            <option value="" disabled selected>Select Course</option>
-                            @foreach($course as $c)
-                                <option value="{{ $c->id }}">{{ $c->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row clearfix">
-                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
                         <label for="year" class="pull-right">Year</label>
                 </div>
                 <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
@@ -276,6 +265,16 @@
                 </div>
             </div>
 
+            <div class="row clearfix">
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
+                        <label for="picture" class="pull-right">Picture</label>
+                </div>
+                <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
+                    <div class="form-group">
+                        <input type="file" id="picture" name="picture" class="form-control inputFile">
+                    </div>
+                </div>
+            </div>
             
             <div class="row clearfix">
                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">

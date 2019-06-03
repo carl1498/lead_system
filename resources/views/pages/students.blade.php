@@ -9,9 +9,18 @@
     <ol class="breadcrumb">
         <li>
             @if(canAccessAll() || canAccessStudentList())
-            <button data-container="body" data-toggle="tooltip" data-placement="left" title="Switch Tabs" class="btn btn-secondary bg-red switch" disabled>
-                <b id="switch_name">SSV</b> <i class="fa fa-exchange-alt"></i>
+            <div class="btn-group" role="group" aria-labe="switch">
+            <button data-container="body" data-toggle="tooltip" data-placement="bottom" title="Switch Tabs" class="btn btn-secondary bg-red switch" disabled>
+                <b class="switch_name">Student</b>
             </button>
+            <button data-container="body" data-toggle="tooltip" data-placement="bottom" title="Switch Tabs" class="btn btn-secondary bg-red switch" disabled>
+                <b class="switch_name">SSV</b>
+            </button>
+            <button data-container="body" data-toggle="tooltip" data-placement="bottom" title="Switch Tabs" class="btn btn-secondary bg-red switch" disabled>
+                <b class="switch_name">Trainee</b>
+            </button>
+
+            </div>
             <button data-container="body" data-toggle="tooltip" data-placement="left" title="Refresh Table" class="btn btn-secondary bg-red refresh_table" disabled>
                 <i class="fa fa-sync"></i>
             </button>
@@ -126,8 +135,15 @@
         <div class="col-md-9 col-xl-10">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs" id="student_list_tab">
+                    <!-- Trainees -->
+                    <li class="disabled trainee_pick" style="display: none;"><a style="display: none;" id="trainee_first" class="trainee_pick" href="#trainee_student_tab" data-toggle="tab">Trainee</a></li>
+                    <li class="disabled trainee_pick" style="display: none;"><a style="display: none;" class="trainee_student_pick" href="#trainee_student_tab" data-toggle="tab">Back Out</a></li>
+                    
+                    <!-- SSV -->
                     <li class="disabled ssv_pick" style="display: none;"><a style="display: none;" id="ssv_first" class="ssv_pick" href="#ssv_student_tab" data-toggle="tab">SSV</a></li>
-                    <li class="disabled ssv_backout_pick" style="display: none;"><a style="display: none;" class="ssv_backout_pick" href="#ssv_backout_tab" data-toggle="tab">Back Out</a></li>
+                    <li class="disabled ssv_pick" style="display: none;"><a style="display: none;" class="ssv_pick" href="#ssv_student_tab" data-toggle="tab">Back Out</a></li>
+                    
+                    <!-- Student/Language -->
                     <li class="disabled branch_pick active"><a id="student_first" class="branch_pick" href="#students_branch_tab" data-toggle="tab">Makati</a></li>
                     <li class="disabled branch_pick"><a class="branch_pick" href="#students_branch_tab" data-toggle="tab">Cebu</a></li>
                     <li class="disabled branch_pick"><a class="branch_pick" href="#students_branch_tab" data-toggle="tab">Davao</a></li>
@@ -135,6 +151,8 @@
                     <li class="disabled status_pick"><a class="status_pick" href="#students_status_tab" data-toggle="tab">Back Out / Cancelled</a></li>
                     <li class="disabled result_pick"><a class="result_pick" href="#students_result_tab" data-toggle="tab">Result Monitoring</a></li>
                     <li class="disabled language_pick"><a class="language_pick" href="#language_student_tab" data-toggle="tab">Language</a></li>
+
+
                     <li class="disabled all_pick"><a class="all_pick" href="#all_student_tab" data-toggle="tab">All</a></li>
                 </ul>
 

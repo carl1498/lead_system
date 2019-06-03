@@ -70,14 +70,14 @@
 
 <!-- SSV STUDENTS -- END -->
 
-<!-- SSV BACKOUT -- START -->
+<!-- TRAINEE STUDENTS -- START -->
 
-<div class="tab-pane fade in" id="ssv_backout_tab">
+<div class="tab-pane fade in" id="trainee_student_tab">
     
-    <table id="ssv_backout" class="table table-hover table-striped table-bordered" cellspacing="0">
-        @include('includes.tables.students.student_table_ssv')
+    <table id="trainee_students" class="table table-hover table-striped table-bordered" cellspacing="0">
+        @include('includes.tables.students.student_table_trainee')
     </table>
     
 </div>
 
-<!-- SSV BACKOUT -- END -->
+<!-- TRAINEE STUDENTS -- END -->

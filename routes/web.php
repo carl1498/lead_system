@@ -55,6 +55,7 @@ Route::group(['middleware' => ['auth', 'student_list']], function(){
     Route::get('/programAll', 'studentController@program_all');
     Route::get('/schoolAll', 'studentController@school_all');
     Route::get('/benefactorAll', 'studentController@benefactor_all');
+    Route::get('/companyAll', 'studentController@company_all');
     Route::get('/programSSV', 'studentController@program_ssv');
 
     //Result Monitoring
@@ -65,6 +66,7 @@ Route::group(['middleware' => ['auth', 'student_list']], function(){
     Route::post('/save_student', 'studentController@save_student');
     Route::post('/save_language_student', 'studentController@save_language_student');
     Route::post('/save_ssv_student', 'studentController@save_ssv_student');
+    Route::post('/save_trainee_student', 'studentController@save_trainee_student');
     Route::get('/get_student', 'studentController@get_student');
     Route::get('/delete_student', 'studentController@delete_student')->middleware('student_high');
 
@@ -84,7 +86,7 @@ Route::group(['middleware' => ['auth', 'student_settings']], function(){
     Route::get('/student_settings', 'studentSettingsController@index');
     Route::get('/view_student_settings/{current_settings}', 'studentSettingsController@view');
     Route::post('/save_student_settings', 'studentSettingsController@store');
-    Route::get('/get_student_settings/{id}/{current_settings}', 'studentSettingsController@get_student_settings');
+    Route::get('/get_student_settings', 'studentSettingsController@get_student_settings');
     Route::get('/delete_student_settings', 'studentSettingsController@delete_student_settings');
 });
 

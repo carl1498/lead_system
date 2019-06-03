@@ -15,6 +15,7 @@ use App\departure_month;
 use App\student_add_history;
 use App\student_edit_history;
 use App\student_delete_history;
+use App\company;
 use Carbon\Carbon;
 use Auth;
 use Yajra\Datatables\Datatables;
@@ -36,9 +37,10 @@ class studentController extends Controller
         $course = course::all();
         $departure_year = departure_year::all();
         $departure_month = departure_month::all();
+        $company = company::all();
 
         return view('pages.students', compact('program', 'school', 'benefactor', 
-        'employee', 'branch', 'course', 'departure_year', 'departure_month'));
+        'employee', 'branch', 'course', 'departure_year', 'departure_month', 'company'));
     }
 
     public function branch(Request $request){
@@ -223,7 +225,7 @@ class studentController extends Controller
     }
 
     public function all(){
-        $all = student::with('branch', 'program', 'school', 'benefactor', 'course', 'referral')->get();
+        $all = student::with('branch', 'program', 'school', 'benefactor', 'company', 'course', 'referral')->get();
 
         return $this->refreshDatatableAll($all);
     }
@@ -279,7 +281,7 @@ class studentController extends Controller
         if($current_ssv == 'SSV'){
             $s = $s->where('status', 'Active');
         }
-        else if($current_ssv = 'Backout'){
+        else if($current_ssv = 'Back Out'){
             $s = $s->where('status', 'Back Out');
         }
         
@@ -522,7 +524,6 @@ class studentController extends Controller
         }
 
         $add_edit = $request->l_add_edit;
-        $type = $request->l_student_type;
 
         if($add_edit == 'add'){
             $student = new student;
@@ -673,7 +674,6 @@ class studentController extends Controller
         }
 
         $add_edit = $request->s_add_edit;
-        $type = $request->s_student_type;
 
         if($add_edit == 'add'){
             $student = new student;
@@ -690,18 +690,18 @@ class studentController extends Controller
         if(isset($edited_by)){
             $edit_fields = ['First Name', 'Middle Name', 'Last Name', 'Birth Date',
                 'Contact #', 'Program', 'Benefactor', 'Address', 'Email', 'Referred By', 
-                'Sign Up Date', 'Gender', 'Branch', 'Course', 'Year', 'Remarks'];
+                'Sign Up Date', 'Gender', 'Course', 'Year', 'Remarks'];
 
             $student_fields = [$student->fname, $student->mname, $student->lname,
                 $student->birthdate, $student->contact, $student->program_id,
                 $student->benefactor_id, $student->address, $student->email,
-                $student->referral_id, $student->date_of_signup, $student->gender, $student->branch_id,
+                $student->referral_id, $student->date_of_signup, $student->gender,
                 $student->course_id, $student->departure_year_id, $student->remarks];
 
             $request_fields = [$request->s_fname, $request->s_mname, $request->s_lname,
                 $request->s_birthdate, $request->s_contact, $request->s_program,
                 $request->s_benefactor, $request->s_address, $request->s_email,
-                $request->s_referral, $request->s_sign_up, $request->s_gender, $request->s_branch,
+                $request->s_referral, $request->s_sign_up, $request->s_gender,
                 $request->s_course, $request->s_year, $request->s_remarks];
         }
 
@@ -717,7 +717,7 @@ class studentController extends Controller
         $student->referral_id = $request->s_referral;
         $student->date_of_signup = Carbon::parse($request->s_sign_up);
         $student->gender = $request->s_gender;
-        $student->branch_id = $request->s_branch;
+        $student->branch_id = 1; // Makati ID
         $student->course_id = $request->s_course;
         $student->departure_year_id = $request->s_year;
         $student->remarks = $request->s_remarks;
@@ -759,9 +759,6 @@ class studentController extends Controller
                             else if($edit_fields[$x] == 'Referred By'){
                                 $prev = employee::where('id', $student_fields[$x])->pluck('fname');
                             }
-                            else if($edit_fields[$x] == 'Branch'){
-                                $prev = branch::where('id', $student_fields[$x])->pluck('name');
-                            }
                             else if($edit_fields[$x] == 'Course'){
                                 $prev = course::where('id', $student_fields[$x])->pluck('name');
                             }
@@ -783,9 +780,6 @@ class studentController extends Controller
                             }
                             else if($edit_fields[$x] == 'Referred By'){
                                 $new = employee::where('id', $request_fields[$x])->pluck('fname');
-                            }
-                            else if($edit_fields[$x] == 'Branch'){
-                                $new = branch::where('id', $request_fields[$x])->pluck('name');
                             }
                             else if($edit_fields[$x] == 'Course'){
                                 $new = course::where('id', $request_fields[$x])->pluck('name');
@@ -825,9 +819,156 @@ class studentController extends Controller
         return $student->id;
     }
 
+    public function save_trainee_student(Request $request){
+        if($request->hasFile('t_picture')){
+            $fileextension = $request->t_picture->getClientOriginalExtension();
+
+            if($fileextension != 'jpg' && $fileextension != 'png' && $fileextension != 'jpeg'){
+                return false;
+            }
+        }
+
+        $add_edit = $request->t_add_edit;
+
+        if($add_edit == 'add'){
+            $student = new student;
+            $student->status = 'Active';
+            $student->coe_status = 'TBA';
+            $added_by = Auth::user()->emp_id;
+        }
+        else{
+            $id = $request->s_id;
+            $student = student::find($id);
+            $edited_by = Auth::user()->emp_id;
+        }
+
+        if(isset($edited_by)){
+            $edit_fields = ['First Name', 'Middle Name', 'Last Name', 'Company',
+                'Contact #', 'Gender', 'Birth Date', 'Course', 'Email', 'Address',
+                'Year', 'Month', 'Remarks'];
+
+            $student_fields = [$student->fname, $student->mname, $student->lname,
+                $student->company_id, $student->contact, $student->gender, $student->birthdate,
+                $student->course_id, $student->email, $student->address, $student->departure_year_id,
+                $student->departure_month_id, $student->remarks];
+
+            $request_fields = [$request->t_fname, $request->t_mname, $request->t_lname,
+                $request->t_company, $request->t_contact, $request->t_gender, $request->t_birthdate,
+                $request->t_course, $request->t_email, $request->t_address, $request->t_year,
+                $request->t_month, $request->t_remarks];
+        }
+
+        $student->fname = $request->t_fname;
+        $student->mname = $request->t_mname;
+        $student->lname = $request->t_lname;
+        $student->company_id = $request->t_company;
+        $student->contact = $request->t_contact;
+        $student->gender = $request->t_gender;
+        $student->birthdate = Carbon::parse($request->t_birthdate);
+        $student->course_id = $request->t_course;
+        $student->email = $request->t_email;
+        $student->address = $request->t_address;
+        $student->departure_year_id = $request->t_year;
+        $student->departure_month_id = $request->t_month;
+        $student->remarks = $request->t_remarks;
+        
+        $student->referral_id = 2; // sir Aris' ID
+        $student->branch_id = 1; // Makati ID
+        $student->date_of_signup = Carbon::now();
+        $student->save();
+
+        // ADD HISTORY -- START
+
+        if(isset($added_by)){
+            $add_history = new student_add_history;
+            $add_history->stud_id = $student->id;
+            $add_history->type = 'Trainee';
+            $add_history->added_by = $added_by;
+            $add_history->save();
+        }
+
+        // ADD HISTORY -- END
+
+        // EDIT HISTORY PT. 2 -- START
+
+        if(isset($edited_by)){
+            for($x = 0; $x<count($edit_fields); $x++){
+                if($student_fields[$x] != $request_fields[$x]){
+    
+                    $edit_history = new student_edit_history;
+                    $edit_history->stud_id = $student->id;
+                    $edit_history->field = $edit_fields[$x];
+                    if($edit_fields[$x] == 'Company' || $edit_fields[$x] == 'Course' || 
+                        $edit_fields[$x] == 'Year' || $edit_fields[$x] == 'Month'){
+                        if($student_fields[$x] == null){
+                            $prev = 'N/A';
+                        }else{
+                            if($edit_fields[$x] == 'Company'){
+                                $prev = company::where('id', $student_fields[$x])->pluck('name');
+                            }
+                            else if($edit_fields[$x] == 'Course'){
+                                $prev = course::where('id', $student_fields[$x])->pluck('name');
+                            }
+                            else if($edit_fields[$x] == 'Year'){
+                                $prev = departure_year::where('id', $student_fields[$x])->pluck('name');
+                            }
+                            else if($edit_fields[$x] == 'Month'){
+                                $prev = departure_month::where('id', $student_fields[$x])->pluck('name');
+                            }
+                            $prev = $prev[0];
+                        }
+                        $edit_history->previous = $prev;
+    
+                        if($request_fields[$x] == null){
+                            $new = 'N/A';
+                        }else{
+                            if($edit_fields[$x] == 'Company'){
+                                $new = company::where('id', $request_fields[$x])->pluck('name');
+                            }
+                            else if($edit_fields[$x] == 'Referred By'){
+                                $new = employee::where('id', $request_fields[$x])->pluck('fname');
+                            }
+                            else if($edit_fields[$x] == 'Course'){
+                                $new = course::where('id', $request_fields[$x])->pluck('name');
+                            }
+                            else if($edit_fields[$x] == 'Year'){
+                                $new = departure_year::where('id', $request_fields[$x])->pluck('name');
+                            }
+                            $new = $new[0];
+                        }
+    
+                        $edit_history->new = $new;                  
+                    }
+                    else{
+                        $edit_history->previous = (isset($student_fields[$x])) ? (string) $student_fields[$x] : 'N/A';
+                        $edit_history->new = (isset($request_fields[$x])) ? (string) $request_fields[$x] : 'N/A';
+                    }
+                    $edit_history->edited_by = $edited_by;
+                    $edit_history->save();
+                }
+            }
+        }
+        
+        // EDIT HISTORY PT. 2 -- END
+
+        if($request->hasFile('t_picture')){
+            $fileextension = $request->s_picture->getClientOriginalExtension();
+            $encryption = sha1(time().$request->t_picture->getClientOriginalName());
+            $filename = $encryption.'.'.$fileextension;
+
+            $request->t_picture->storeAs('public/img/student', $filename);
+
+            $student->picture = $filename;
+
+            $student->save();
+        }
+
+        return $student->id;
+    }
+
     public function get_student(Request $request){
         $id = $request->id;
-        $student = student::with('program', 'school', 'benefactor', 'referral', 'branch', 'course', 'departure_year', 'departure_month')->find($id);
+        $student = student::with('program', 'school', 'benefactor', 'company', 'referral', 'branch', 'course', 'departure_year', 'departure_month')->find($id);
         
         return $student;
     }
@@ -962,7 +1103,7 @@ class studentController extends Controller
 
     public function view_profile(Request $request){
         $id = $request->id;
-        $student = student::with('program', 'school', 'benefactor', 'referral', 'branch', 'course', 'departure_year', 'departure_month')->find($id);
+        $student = student::with('program', 'school', 'benefactor', 'company', 'referral', 'branch', 'course', 'departure_year', 'departure_month')->find($id);
         
         $birth = new Carbon($student->birthdate);
         $student->age = $birth->diffInYears(Carbon::now());
@@ -1030,6 +1171,19 @@ class studentController extends Controller
 
         $array = [];
         foreach ($benefactor as $key => $value){
+            $array[] = [
+                'id' => $value['id'],
+                'text' => $value['name']
+            ];
+        }
+        return json_encode(['results' => $array]);
+    }
+
+    public function company_all(Request $request){
+        $company = company::where('name', 'LIKE', '%'.$request->name.'%')->get()->toArray();
+
+        $array = [];
+        foreach ($company as $key => $value){
             $array[] = [
                 'id' => $value['id'],
                 'text' => $value['name']

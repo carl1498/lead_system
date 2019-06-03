@@ -26,6 +26,7 @@
                     <li class="active"><a class="settings_pick" href="#student_settings_tab" data-toggle="tab">Program</a></li>
                     <li><a class="settings_pick" href="#student_settings_tab" data-toggle="tab">School</a></li>
                     <li><a class="settings_pick" href="#student_settings_tab" data-toggle="tab">Benefactor</a></li>
+                    <li><a class="settings_pick" href="#student_settings_tab" data-toggle="tab">Company</a></li>
                     <li><a class="settings_pick" href="#student_settings_tab" data-toggle="tab">Year</a></li>
                     <li><a class="settings_pick" href="#student_settings_tab" data-toggle="tab">Month</a></li>
                     <li><a class="settings_pick" href="#student_settings_tab" data-toggle="tab">Course</a></li>

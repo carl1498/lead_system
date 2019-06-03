@@ -47,6 +47,10 @@ class student extends Model
         return $this->hasOne('App\benefactor', 'id', 'benefactor_id');
     }
 
+    public function company(){
+        return $this->hasOne('App\company', 'id', 'company_id');
+    }
+
     public function referral(){
         return $this->hasOne('App\employee', 'id', 'referral_id')->withTrashed();
     }
