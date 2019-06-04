@@ -11,7 +11,7 @@
                 <li><a class="student_type" href="#student_form" data-toggle="tab">Student</a></li>
                 <li><a class="student_type" href="#language_student_form" data-toggle="tab">Language Only</a></li>
                 <li><a class="student_type" href="#ssv_student_form" data-toggle="tab">SSV</a></li>
-                <li><a class="student_type" href="#trainee_student_form" data-toggle="tab">Trainee</a></li>
+                @if(canAccessAll())<li><a class="student_type" href="#trainee_student_form" data-toggle="tab">Trainee</a></li>@endif
             </ul>
 
             <div class="tab-content">

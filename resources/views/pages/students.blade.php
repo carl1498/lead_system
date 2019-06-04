@@ -10,13 +10,13 @@
         <li>
             @if(canAccessAll() || canAccessStudentList())
             <div class="btn-group" role="group" aria-labe="switch">
-            <button data-container="body" data-toggle="tooltip" data-placement="bottom" title="Switch Tabs" class="btn btn-secondary bg-red switch" disabled>
+            <button title="Switch Tabs" class="btn btn-secondary bg-red switch switch_student" disabled>
                 <b class="switch_name">Student</b>
             </button>
-            <button data-container="body" data-toggle="tooltip" data-placement="bottom" title="Switch Tabs" class="btn btn-secondary bg-red switch" disabled>
+            <button class="btn btn-secondary bg-red switch switch_ssv" disabled>
                 <b class="switch_name">SSV</b>
             </button>
-            <button data-container="body" data-toggle="tooltip" data-placement="bottom" title="Switch Tabs" class="btn btn-secondary bg-red switch" disabled>
+            <button class="btn btn-secondary bg-red switch switch_trainee" disabled>
                 <b class="switch_name">Trainee</b>
             </button>
 
@@ -68,6 +68,12 @@
                         <li class="list-group-item">
                             <strong>Benefactor</strong>
                             <p id="p_benefactor" class="text-muted">
+                            -
+                            </p>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Company (For Trainees Only)</strong>
+                            <p id="p_company" class="text-muted">
                             -
                             </p>
                         </li>
@@ -137,7 +143,7 @@
                 <ul class="nav nav-tabs" id="student_list_tab">
                     <!-- Trainees -->
                     <li class="disabled trainee_pick" style="display: none;"><a style="display: none;" id="trainee_first" class="trainee_pick" href="#trainee_student_tab" data-toggle="tab">Trainee</a></li>
-                    <li class="disabled trainee_pick" style="display: none;"><a style="display: none;" class="trainee_student_pick" href="#trainee_student_tab" data-toggle="tab">Back Out</a></li>
+                    <li class="disabled trainee_pick" style="display: none;"><a style="display: none;" class="trainee_pick" href="#trainee_student_tab" data-toggle="tab">Back Out</a></li>
                     
                     <!-- SSV -->
                     <li class="disabled ssv_pick" style="display: none;"><a style="display: none;" id="ssv_first" class="ssv_pick" href="#ssv_student_tab" data-toggle="tab">SSV</a></li>

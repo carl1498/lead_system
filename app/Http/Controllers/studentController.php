@@ -51,7 +51,8 @@ class studentController extends Controller
         $b = student::with('program', 'school', 'benefactor', 'referral', 
         'branch', 'course', 'departure_year', 'departure_month')->orderBy('school_id')->get();
 
-        $branch = $b->where('branch.name', $current_branch)->where('program.name', '<>', 'Language Only')->where('departure_year_id', $departure_year)->where('departure_month_id', $departure_month)->whereIn('status', ['Active', 'Final School']);
+        $branch = $b->where('branch.name', $current_branch)->where('program.name', '<>', 'Language Only')->where('program.name', '<>', 'Trainee')
+        ->where('departure_year_id', $departure_year)->where('departure_month_id', $departure_month)->whereIn('status', ['Active', 'Final School']);
 
         return $this->refreshDatatable($branch);
     }
@@ -100,7 +101,7 @@ class studentController extends Controller
         'branch', 'course', 'departure_year', 'departure_month')->orderBy('school_id')->get();
 
         if($current_status == 'Back Out / Cancelled'){
-            $status = $s->whereIn('status', ['Back Out', 'Cancelled'])->where('program.name', '<>', 'Language Only')->where('departure_year_id', $departure_year)->where('departure_month_id', $departure_month);
+            $status = $s->whereIn('status', ['Back Out', 'Cancelled'])->where('program.name', '<>', 'Language Only')->where('program.name', '<>', 'Trainee')->where('departure_year_id', $departure_year)->where('departure_month_id', $departure_month);
         }else{
             $status = $s->where('status', $current_status)->where('departure_year_id', $departure_year)->where('departure_month_id', $departure_month);
         }
@@ -150,7 +151,7 @@ class studentController extends Controller
         $r = student::with('program', 'school', 'referral', 
         'branch', 'course', 'departure_year', 'departure_month')->orderBy('school_id')->get();
 
-        $result = $r->whereIn('status', ['Final School', 'Cancelled'])->where('program.name', '<>', 'Language Only')->where('departure_year_id', $departure_year)->where('departure_month_id', $departure_month);
+        $result = $r->whereIn('status', ['Final School', 'Cancelled'])->where('program.name', '<>', 'Language Only')->where('program.name', '<>', 'Trainee')->where('departure_year_id', $departure_year)->where('departure_month_id', $departure_month);
 
         return $this->refreshDatatableResult($result);
     }
@@ -319,6 +320,65 @@ class studentController extends Controller
             return  $html;
         })
         ->make(true);
+    }
+
+    public function trainee(Request $request){
+        $departure_year = $request->departure_year;
+        $departure_month = $request->departure_month;
+        $current_trainee = $request->current_trainee;
+
+        $trainee = student::with('company', 'course')
+            ->whereHas('program', function($query){
+                $query->where('name', 'Trainee');
+            })->when($current_trainee == 'Trainee', function($query){
+                $query->where('status', 'Active');
+            })->when($current_trainee == 'Back Out', function($query){
+                $query->where('status', 'Back Out');
+            })->where('departure_year_id', $departure_year)
+            ->where('departure_month_id', $departure_month)->get();
+
+        return Datatables::of($trainee)
+            ->editColumn('name', function($data){
+                return $data->lname.', '.$data->fname.' '.$data->mname;
+            })
+            ->editColumn('birthdate', function($data){
+                $birth = new Carbon($data->birthdate);
+                
+                $age = $birth->diffInYears(Carbon::now());
+                return $data->birthdate . ' (' . $age .')';
+            })
+            ->editColumn('coe_status', function($data){
+                if($data->coe_status == 'Approved'){
+                    return 'Passed';
+                }else if($data->coe_status == 'Denied'){
+                    return 'Failed';
+                }
+                return $data->coe_status;
+            })
+            ->addColumn('action', function($data){
+                $html = '';
+
+                if(canAccessAll()){
+                    $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-primary btn-xs view_profile" id="'.$data->id.'"><i class="fa fa-eye"></i></button>&nbsp;';
+                    $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_trainee_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';   
+    
+                    if($data->coe_status == 'Approved' || $data->coe_status == 'Denied' || $data->status == 'Back Out'){
+                        $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Re Apply" class="btn btn-default btn-xs continue_student" id="'.$data->id.'"><i class="fa fa-step-backward"></i></button>&nbsp;';
+                    }
+                    if($data->coe_status != 'Approved'){
+                        $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Passed" class="btn btn-success btn-xs approve_student" id="'.$data->id.'"><i class="fa fa-check"></i></button>&nbsp;';
+                    }
+                    if($data->coe_status != 'Denied'){
+                        $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Failed" class="btn btn-danger btn-xs deny_student" id="'.$data->id.'"><i class="fa fa-times"></i></button>&nbsp;';
+                    }
+                    if($data->status != 'Back Out'){
+                        $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Back Out" class="btn btn-warning btn-xs backout_student" id="'.$data->id.'"><i class="fa fa-sign-out-alt"></i></button>&nbsp;';
+                    }
+                }
+
+                return $html;
+            })
+            ->make(true);
     }
 
     public function save_student(Request $request){
@@ -829,6 +889,7 @@ class studentController extends Controller
         }
 
         $add_edit = $request->t_add_edit;
+        $trainee_program = program::where('name', 'Trainee')->first();
 
         if($add_edit == 'add'){
             $student = new student;
@@ -837,7 +898,7 @@ class studentController extends Controller
             $added_by = Auth::user()->emp_id;
         }
         else{
-            $id = $request->s_id;
+            $id = $request->t_id;
             $student = student::find($id);
             $edited_by = Auth::user()->emp_id;
         }
@@ -861,6 +922,7 @@ class studentController extends Controller
         $student->fname = $request->t_fname;
         $student->mname = $request->t_mname;
         $student->lname = $request->t_lname;
+        $student->program_id = $trainee_program->id;
         $student->company_id = $request->t_company;
         $student->contact = $request->t_contact;
         $student->gender = $request->t_gender;

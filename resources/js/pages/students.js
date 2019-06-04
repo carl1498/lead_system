@@ -9,6 +9,7 @@ $(document).ready(function(){
     var departure_year;
     var departure_month = $('#month_select').val();
     var current_tab = 'Branch';
+    var current_switch = 'Student';
     var modal_close = true;
 
     $.ajax({
@@ -79,7 +80,13 @@ $(document).ready(function(){
         a.language_pick, a.all_pick, a.ssv_pick, li.trainee_pick`
         ).removeClass('disabled').css('pointer-events', 'auto');
 
-        $('.switch, .refresh_table').attr('disabled', false);
+        $('.refresh_table').attr('disabled', false);
+        
+        switch(current_switch){
+            case 'SSV'  : $('.switch_student, .switch_trainee').attr('disabled', false); break;
+            case 'Student'  : $('.switch_ssv, .switch_trainee').attr('disabled', false); break;
+            case 'Trainee'  : $('.switch_student, .switch_ssv').attr('disabled', false); break;
+        }
     }
 
     function refresh(){
@@ -104,6 +111,10 @@ $(document).ready(function(){
             $('.month_select').hide();
             $('#month_select').next(".select2-container").hide();
             $('.select_description').text('Year:');
+        }else if(current_tab == 'Trainee'){
+            showYearSelect();
+            showMonthSelect();
+            $('.select_description').text('Departure:');
         }
         
         switch(current_tab){
@@ -112,6 +123,7 @@ $(document).ready(function(){
             case 'Result'       : refresh_student_result(); break;
             case 'Language'     : refresh_language_student(); break;
             case 'SSV'          : refresh_ssv_student(); break;
+            case 'Trainee'      : refresh_trainee_student(); break;
             case 'All'          : refresh_all_student(); break;
         }
     }
@@ -292,6 +304,33 @@ $(document).ready(function(){
         { width: 120, targets: 9 }, //referral
         { width: 250, targets: 10 }, //remarks
         { width: 150, targets: 11 }, //action
+        {defaultContent: "", targets: "_all"}
+    ]
+
+    var columns_trainee_students = [
+        {data: 'name', name: 'name'},
+        {data: 'company.name', name: 'company'},
+        {data: 'contact', name: 'contact'},
+        {data: 'gender', name: 'gender'},
+        {data: 'birthdate', name: 'birthdate'},
+        {data: 'course.name', name: 'course'},
+        {data: 'email', name: 'email'},
+        {data: 'coe_status', name: 'coe_status'},
+        {data: 'remarks', name: 'remarks'},
+        {data: "action", orderable:false,searchable:false}
+    ]
+
+    var columnDefs_trainee_students = [
+        { width: 230, targets: 0 }, //name
+        { width: 130, targets: 1 }, //company
+        { width: 90, targets: 2 }, //contact
+        { width: 60, targets: 3 }, //gender
+        { width: 100, targets: 4 }, //birthdate
+        { width: 200, targets: 5 }, //course
+        { width: 200, targets: 6 }, //email
+        { width: 120, targets: 7 }, //company status
+        { width: 250, targets: 8 }, //remarks
+        { width: 150, targets: 9 }, //action
         {defaultContent: "", targets: "_all"}
     ]
 
@@ -513,25 +552,67 @@ $(document).ready(function(){
         });
     }
 
+    function refresh_trainee_student(){
+        
+        departure_year = $('#year_select').val();
+        departure_month = $('#month_select').val();
+
+        trainee_students = $('#trainee_students').DataTable({
+            stateSave: true,
+            stateSaveCallback: function(settings,data) {
+                localStorage.setItem( 'DataTables_' + settings.sInstance, JSON.stringify(data) )
+            },
+            stateLoadCallback: function(settings) {
+                return JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ) )
+            },
+            stateLoadParams: function( settings, data ) {
+                if (data.order) delete data.order;
+            },
+            initComplete: function(settings, json) {
+                enableTabs();  
+            },
+            processing: true,
+            destroy: true,
+            scrollX: true,
+            scrollCollapse: true,
+            fixedColumns: true,
+            responsive: true,
+            ajax: {
+                url: '/trainee_student',
+                data: {
+                    departure_year: departure_year,
+                    departure_month: departure_month,
+                    current_trainee: current_trainee
+                }
+            },
+            columnDefs: columnDefs_trainee_students,
+            columns: columns_trainee_students,
+            order: [[1,'asc']]
+        });
+    }
+
     //DATATABLES -- END
 
     //FUNCTIONS -- START
     
-    $('.switch_name').on('click', function(){
-        if($(this).text() == 'SSV'){
+    $('.switch').on('click', function(){
+        if($(this).find('.switch_name').text() == 'Student'){
+            $('.ssv_pick, .trainee_pick').hide();
+            $('.branch_pick, .status_pick, .result_pick, .language_pick').show();
+            $('#student_list_tab #student_first').click();
+            current_switch = 'Student';
+        }
+        else if($(this).find('.switch_name').text() == 'SSV'){
             $('.branch_pick, .status_pick, .result_pick, .language_pick, .trainee_pick').hide();
             $('.ssv_pick').show();
             $('#student_list_tab #ssv_first').click();
+            current_switch = 'SSV';
         }
-        else if($(this).text() == 'Student'){
-            $('.ssv_pick, .trainee_pick').hide();
-            $('.branch_pick, .status_pick, .result_pick, .language_pick', '.trainee_pick').show();
-            $('#student_list_tab #student_first').click();
-        }
-        else if($(this).text() == 'Student'){
-            $('.branch_pick, .status_pick, .result_pick, .language_pick', '.ssv_pick').hide();
+        else if($(this).find('.switch_name').text() == 'Trainee'){
+            $('.branch_pick, .status_pick, .result_pick, .language_pick, .ssv_pick').hide();
             $('.trainee_pick').show();
             $('#student_list_tab #trainee_first').click();
+            current_switch = 'Trainee';
         }
         disableTabs();
     });
@@ -583,6 +664,14 @@ $(document).ready(function(){
             current_tab = 'SSV';
         }
     });
+
+    $('.trainee_pick').on('click', function(){
+        if(!$(this).hasClass('disabled')){
+            current_trainee = $(this).text();
+
+            current_tab = 'Trainee';
+        }
+    })
 
     $(document).on('change', '#year_select, #month_select', function(){
         refresh();
@@ -1056,9 +1145,17 @@ $(document).ready(function(){
     $(document).on('click', '.approve_student', function(){
         var id = $(this).attr('id');
 
+        title = 'Student COE Approved?';
+        text = 'Confirm that this student\'s COE is approved?';
+
+        if(current_tab == 'Trainee'){
+            title = 'Student has Passed?';
+            text = 'Confirm that this trainee has passed?';
+        }
+
         swal({
-            title: 'Student COE Approved?',
-            text: 'Confirm that this student\'s COE is approved?',
+            title: title,
+            text: text,
             type: 'info',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -1086,9 +1183,17 @@ $(document).ready(function(){
     $(document).on('click', '.deny_student', function(){
         var id = $(this).attr('id');
 
+        title = 'Student COE Denied?';
+        text = 'Confirm that this student\'s COE is denied?';
+        
+        if(current_tab == 'Trainee'){
+            title = 'Student has Failed?';
+            text = 'Confirm that this trainee has failed?';
+        }
+
         swal({
-            title: 'Student COE Denied?',
-            text: 'Confirm that this student\'s COE is denied?',
+            title: title,
+            text: text,
             type: 'info',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -1315,6 +1420,7 @@ $(document).ready(function(){
                 $('#p_program').text(data.program ? data.program.name : '-');
                 $('#p_school').text(data.school ? data.school.name : '-');
                 $('#p_benefactor').text(data.benefactor ? data.benefactor.name : '-');
+                $('#p_company').text(data.company ? data.company.name : '-');
                 $('#p_birthdate').text(data.birthdate + ' (' + data.age + ')');
                 $('#p_gender').text(data.gender);
                 $('#p_referral').text(data.referral.fname);
