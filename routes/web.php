@@ -114,10 +114,20 @@ Route::group(['middleware' => ['auth', 'employee']], function(){
         Route::get('/get_account/{id}', 'employeeController@get_account');
         Route::post('/save_account', 'employeeController@save_account');
 
-        //Employment History
+        //LEAD Employment History
         Route::get('/view_employment_history/{id}', 'employeeController@view_employment_history');
         Route::get('/get_employment_history/{id}', 'employeeController@get_employment_history');
         Route::post('/save_employment_history', 'employeeController@save_employment_history');
+
+        //Previous Employment History
+        Route::get('/view_prev_employment_history/{id}', 'employeeController@view_prev_employment_history');
+        Route::get('/get_prev_employment_history/{id}', 'employeeController@get_prev_employment_history');
+        Route::post('/save_prev_employment_history', 'employeeController@save_prev_employment_history');
+
+        //Educational Background
+        Route::get('/view_prev_employment_history/{id}', 'employeeController@view_prev_employment_history');
+        Route::get('/get_prev_employment_history/{id}', 'employeeController@get_prev_employment_history');
+        Route::post('/save_prev_employment_history', 'employeeController@save_prev_employment_history');
 
         //Employee Family
         Route::get('/view_employee_emergency/{id}', 'employeeController@view_employee_emergency');

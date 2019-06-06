@@ -44,6 +44,11 @@ $(document).ready(function(){
         $(this).find("input,textarea,select").val('').end();
         setTimeout(function(){$('#employee_family_modal').modal('show')}, 500);
     });
+    
+    $("#prev_employment_modal").on("hidden.bs.modal", function(e){
+        $(this).find("input,textarea,select").val('').end();
+        setTimeout(function(){$('#employee_history_modal').modal('show')}, 500);
+    });
 
     $("#employee_history_modal, #employee_family_modal").on("hidden.bs.modal", function(e){
         modal_close = true;
@@ -174,6 +179,26 @@ $(document).ready(function(){
                 {data: "action", orderable:false,searchable:false}
             ]
         });
+
+        var prev_employment_history_table = $('#prev_employment_history_table').DataTable({
+            paging: false,
+            ordering: false,
+            info: false,
+            searching: false,
+            destroy: true,
+            ajax: '/view_prev_employment_history/'+id,
+            columns: [
+                {data: 'company', name: 'company'},
+                {data: 'address', name: 'address'},
+                {data: 'hired_date', name: 'hired_date'},
+                {data: 'until', name: 'until'},
+                {data: 'months', name: 'months'},
+                {data: 'salary', name: 'salary'},
+                {data: 'designation', name: 'designation'},
+                {data: 'employment_type', name: 'employment_type'},
+                {data: "action", orderable:false,searchable:false}
+            ]
+        })
     }
 
     function refresh_employee_family(id){
@@ -586,7 +611,7 @@ $(document).ready(function(){
             success:function(data){
                 $('#employee_history_modal .title_name').text(data.employee.fname + ' ' + data.employee.lname);
                 $('#employee_history_modal .title_status').text(data.employee.employment_status);
-                $('#employee_history_modal .title_probationary').text(data.employee.probationary);
+                $('#employee_history_modal .title_probationary').text(data.employee.probationary + ' - Lead Employment History');
 
                 if(data.employee.employment_status == 'Active'){
                     $('.resign_rehire').attr({'data-original-title': 'Resign', 'id': id})
@@ -597,6 +622,8 @@ $(document).ready(function(){
                     .removeClass('resign_employee').addClass('rehire_employee');
                     $('.resign_rehire i').removeClass('fa-sign-out-alt').addClass('fa-sign-in-alt');
                 }
+
+                $('.add_employment_history, .add_educational').attr({'id': id});
 
                 refresh_employment_history(id);
             }
@@ -645,6 +672,92 @@ $(document).ready(function(){
             }
         });
     });
+    
+    $(document).on('click', '.edit_employment_history', function(){
+        var id = $(this).attr('id');
+
+        $.ajax({
+            url: '/get_employment_history/'+id,
+            method: 'get',
+            dataType: 'json',
+            success:function(data){
+                $('#eh_id').val(data.id);
+                $('#edit_hired_date').val(data.hired_date);
+                $('#edit_until').val(data.until);
+            }
+        });
+        
+        $('#edit_employee_history_modal').modal('show');
+    });
+
+    //Employee Background
+
+    $(document).on('click', '.add_employment_history', function(){
+        var id = $(this).attr('id');
+
+        $('#pe_emp_id').val(id);
+        $('#pe_add_edit').val('add');
+        $('#employee_history_modal').modal('hide');
+        setTimeout(function(){$('#prev_employment_modal').modal('show')}, 500);
+    });
+
+    $(document).on('submit', '#prev_employment_form', function(e){
+        e.preventDefault();
+
+        var input = $('.save_prev_employment');
+        var button = document.getElementsByClassName("save_prev_employment")[0];
+
+        button.disabled = true;
+        input.html('SAVING...');
+
+        $.ajax({
+            headers: {
+                'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: '/save_prev_employment_history',
+            method: 'POST',
+            data: $(this).serialize(),
+            success:function(data){
+                $('#prev_employment_modal').modal('hide');
+                setTimeout(function(){$('#employee_history_modal').modal('show')}, 500);
+                button.disabled = false;
+                input.html('SAVE CHANGES');
+                refresh_employment_history(data);
+                notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
+            },
+            error: function(data){
+                swal("Error!", "Something went wrong, try again.", "error");
+                button.disabled = false;
+                input.html('SAVE CHANGES');
+            }
+        });
+    });
+
+    $(document).on('click', '.edit_prev_employment_history', function(){
+        var id = $(this).attr('id');
+
+        $.ajax({
+            url: '/get_prev_employment_history/'+id,
+            method: 'get',
+            dataType: 'json',
+            success:function(data){
+                $('#pe_add_edit').val('edit');
+                $('#pe_id').val(data.id);
+                $('#pe_emp_id').val(data.emp_id);
+                $('#pe_company').val(data.company);
+                $('#pe_address').val(data.address);
+                $('#pe_hired_date').val(data.hired_date);
+                $('#pe_until').val(data.until);
+                $('#pe_salary').val(data.salary);
+                $('#pe_designation').val(data.designation);
+                $('#pe_employment_type').val(data.employment_type);
+                $('#employee_history_modal').modal('hide');
+                setTimeout(function(){$('#prev_employment_modal').modal('show')}, 500);
+            }
+        });
+    });
+
+    //Educational Background
 
     //EMPLOYEE HISTORY -- END
 
@@ -968,7 +1081,6 @@ $(document).ready(function(){
             method: 'get',
             dataType: 'json',
             success: function(data){
-                console.log(data);
                 $('#p_picture').attr('src', './storage/img/employee/'+data.picture);
                 if(data.mname){
                     $('#p_emp_name').text(data.lname + ', ' + data.fname + ' ' + data.mname);

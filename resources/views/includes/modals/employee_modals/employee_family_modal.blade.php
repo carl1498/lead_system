@@ -10,7 +10,7 @@
                     <button data-container="body" data-toggle="tooltip" data-placement="left" title="Add Spouse" class="btn btn-success btn-s add_spouse"><i class="fa fa-ring"></i></button>
                     <button data-container="body" data-toggle="tooltip" data-placement="left" title="Add Child" class="btn btn-primary btn-s add_child" style="margin-right: 20px;"><i class="fa fa-child"></i></button>
                 </div>
-                </div>
+            </div>
             <div class="modal-body">
 
                 <h4 class="title_probationary">In case of Emergency</h4>

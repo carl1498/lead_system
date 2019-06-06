@@ -9,6 +9,7 @@ use App\branch;
 use App\role;
 use App\employee_benefits;
 use App\employment_history;
+use App\prev_employment_history;
 use App\employee_child;
 use App\employee_emergency;
 use App\employee_spouse;
@@ -131,6 +132,38 @@ class employeeController extends Controller
             $html = '';
             if($data->until){
                 $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-primary btn-xs edit_employment_history" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
+            }
+            return $html;
+        })
+        ->make(true);
+    }
+
+    public function view_prev_employment_history(Request $request){
+        $id = $request->id;
+        
+        $prev_employment_history = prev_employment_history::where('emp_id', $id)->orderBy('id', 'desc')->get();
+
+        return Datatables::of($prev_employment_history)
+        ->addColumn('months', function($data){
+            $from = new Carbon($data->hired_date);
+            $to = ($data) ? new Carbon($data->until) : new Carbon(Carbon::now());
+            $months = $from->diffInMonths($to);
+
+            $word = ($months>1) ? 'months' : 'month';
+
+            return $months . ' ' . $word;
+        })
+        ->editColumn('until', function($data){
+            if($data->until){
+                return $data->until;
+            }else{
+                return 'Present';
+            }
+        })
+        ->addColumn('action', function($data){
+            $html = '';
+            if($data->until){
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-primary btn-xs edit_prev_employment_history" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
             }
             return $html;
         })
@@ -309,6 +342,24 @@ class employeeController extends Controller
         return $employment_history->emp_id;
     }
 
+    public function save_prev_employment_history(Request $request){
+        $id = $request->pe_id;
+        $add_edit = $request->pe_add_edit;
+
+        $prev_employment_history = ($add_edit  == 'add') ? new prev_employment_history: prev_employment_history::find($id);
+        $prev_employment_history->emp_id = $request->pe_emp_id;
+        $prev_employment_history->company = $request->pe_company;
+        $prev_employment_history->address = $request->pe_address;
+        $prev_employment_history->hired_date = $request->pe_hired_date;
+        $prev_employment_history->until = $request->pe_until;
+        $prev_employment_history->salary = $request->pe_salary;
+        $prev_employment_history->designation = $request->pe_designation;
+        $prev_employment_history->employment_type = $request->pe_employment_type;
+        $prev_employment_history->save();
+
+        return $prev_employment_history->emp_id;
+    }
+
     public function save_employee_emergency(Request $request){
         $id = $request->e_id;
         $add_edit = $request->e_add_edit;
@@ -391,33 +442,31 @@ class employeeController extends Controller
     public function get_employment_history(Request $request){
         $id = $request->id;
 
-        $employment_history = employment_history::find($id);
+        return employment_history::find($id);
+    }
 
-        return $employment_history;
+    public function get_prev_employment_history(Request $request){
+        $id = $request->id;
+
+        return prev_employment_history::find($id);
     }
 
     public function get_employee_emergency(Request $request){
         $id = $request->id;
 
-        $employee_emergency = employee_emergency::find($id);
-
-        return $employee_emergency;
+        return employee_emergency::find($id);
     }
 
     public function get_employee_spouse(Request $request){
         $id = $request->id;
 
-        $employee_spouse = employee_spouse::find($id);
-
-        return $employee_spouse;
+        return employee_spouse::find($id);
     }
 
     public function get_employee_child(Request $request){
         $id = $request->id;
 
-        $employee_child = employee_child::find($id);
-
-        return $employee_child;
+        return employee_child::find($id);
     }
 
     public function delete_employee(Request $request){

@@ -98,3 +98,19 @@ a.invoice_pick, a.books_pick{
 .progress {
   background-color: #e0e0e0;
 }
+
+.table tbody tr:nth-child(even):hover td{
+  background-color: #FEFAD4 !important;
+}
+  
+.table tbody tr:nth-child(odd):hover td {
+  background-color: #FEFAD4 !important;
+}
+
+.table td{
+  border: grey solid 1px !important;
+}
+
+.table th{
+  border: grey solid 1px !important;
+}

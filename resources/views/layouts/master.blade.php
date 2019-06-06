@@ -89,8 +89,8 @@
 <script src="/js/bootstrap.min.js"></script>
 <script src="/js/sweetalert2-all.min.js"></script>
 <script src="/js/jquery-datatables.min.js"></script>
-<script src="/js/datatables-fixedColumns.min.js"></script>
 <script src="/js/datatables-bootstrap.min.js"></script>
+<script src="/js/datatables-fixedColumns.min.js"></script>
 <script src="/js/bootstrap-datepicker.min.js"></script>
 <script src="/js/bootstrap-notify.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
