@@ -151,6 +151,7 @@
     @include('includes.modals.employee_modals.resign_modal')
     @include('includes.modals.employee_modals.rehire_modal')
     @include('includes.modals.employee_modals.employee_prev_employment_modal')
+    @include('includes.modals.employee_modals.employee_educational_background_modal')
 
     <!-- MODALS -- END -->
 

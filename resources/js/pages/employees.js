@@ -198,7 +198,27 @@ $(document).ready(function(){
                 {data: 'employment_type', name: 'employment_type'},
                 {data: "action", orderable:false,searchable:false}
             ]
-        })
+        });
+
+        var prev_employment_history_table = $('#prev_employment_history_table').DataTable({
+            paging: false,
+            ordering: false,
+            info: false,
+            searching: false,
+            destroy: true,
+            ajax: '/view_prev_employment_history/'+id,
+            columns: [
+                {data: 'company', name: 'company'},
+                {data: 'address', name: 'address'},
+                {data: 'hired_date', name: 'hired_date'},
+                {data: 'until', name: 'until'},
+                {data: 'months', name: 'months'},
+                {data: 'salary', name: 'salary'},
+                {data: 'designation', name: 'designation'},
+                {data: 'employment_type', name: 'employment_type'},
+                {data: "action", orderable:false,searchable:false}
+            ]
+        });
     }
 
     function refresh_employee_family(id){
@@ -758,6 +778,47 @@ $(document).ready(function(){
     });
 
     //Educational Background
+
+    $(document).on('click', '.add_educational', function(){
+        var id = $(this).attr('id');
+
+        $('#eb_emp_id').val(id);
+        $('#eb_add_edit').val('add');
+        $('#employee_history_modal').modal('hide');
+        setTimeout(function(){$('#educational_background_modal').modal('show')}, 500);
+    });
+
+    $(document).on('submit', '#educational_background_form', function(e){
+        e.preventDefault();
+
+        var input = $('.save_educational_background');
+        var button = document.getElementsByClassName("save_educational_background")[0];
+
+        button.disabled = true;
+        input.html('SAVING...');
+
+        $.ajax({
+            headers: {
+                'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: '/save_educational_background',
+            method: 'POST',
+            data: $(this).serialize(),
+            success:function(data){
+                $('#educational_background_modal').modal('hide');
+                setTimeout(function(){$('#employee_history_modal').modal('show')}, 500);
+                button.disabled = false;
+                input.html('SAVE CHANGES');
+                refresh_employment_history(data);
+                notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
+            },
+            error: function(data){
+                swal("Error!", "Something went wrong, try again.", "error");
+                button.disabled = false;
+                input.html('SAVE CHANGES');
+            }
+        });
+    });
 
     //EMPLOYEE HISTORY -- END
 

@@ -42,8 +42,9 @@ class employeeController extends Controller
         $branch = branch::all();
         $role = role::all();
         $employee = employee::all();
+        $course = course::all();
         
-        return view('pages.employees', compact('branch', 'role'));
+        return view('pages.employees', compact('branch', 'role', 'course'));
     }
 
     public function branch(Request $request){

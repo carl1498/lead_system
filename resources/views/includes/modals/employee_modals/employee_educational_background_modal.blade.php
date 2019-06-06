@@ -17,77 +17,71 @@
 
                         <div class="row clearfix">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 form-control-label">
-                                <label for="pe_company" class="pull-right">Company</label>
+                                <label for="eb_school" class="pull-right">School</label>
                             </div>
                             <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                 <div class="form-group">
-                                    <input type="text" id="pe_company" name="pe_company" class="form-control required" placeholder="Company Name" required>
+                                    <input type="text" id="eb_school" name="eb_school" class="form-control required" placeholder="School Name" required>
                                 </div>
                             </div>
                         </div>
 
                         <div class="row clearfix">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 form-control-label">
-                                <label for="pe_address" class="pull-right">Address</label>
+                                <label for="eb_start" class="pull-right">Start</label>
                             </div>
                             <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                 <div class="form-group">
-                                    <input type="text" id="pe_address" name="pe_address" class="form-control required" placeholder="Blg No., Street, City, Province, Zip" required>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="row clearfix">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 form-control-label">
-                                <label for="pe_hired_date" class="pull-right">Hired Date</label>
-                            </div>
-                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
-                                <div class="form-group">
-                                    <input type="text" id="pe_hired_date" name="pe_hired_date" class="form-control datepicker required" placeholder="YYYY-MM-DD" required>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="row clearfix">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 form-control-label">
-                                <label for="pe_until" class="pull-right">Until</label>
-                            </div>
-                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
-                                <div class="form-group">
-                                    <input type="text" id="pe_until" name="pe_until" class="form-control datepicker required" placeholder="YYYY-MM-DD" required>
+                                    <input type="text" id="eb_start" name="eb_start" class="form-control required" placeholder="Year" required>
                                 </div>
                             </div>
                         </div>
 
                         <div class="row clearfix">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 form-control-label">
-                                <label for="pe_salary" class="pull-right">Salary</label>
+                                <label for="eb_end" class="pull-right">End</label>
                             </div>
                             <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                 <div class="form-group">
-                                    <input type="number" id="pe_salary" name="pe_salary" class="form-control" placeholder="Monthly Wage">
+                                    <input type="text" id="eb_end" name="eb_end" class="form-control required" placeholder="Year" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row clearfix">
+                            <div class="col-lg-4 col-md-4 col-sm-3 col-xs-3 form-control-label">
+                                    <label for="eb_course" class="pull-right">Course</label>
+                            </div>
+                            <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
+                                <div class="form-group required">
+                                    <select type="text" id="eb_course" name="eb_course" class="form-control select2" style="width: 100%;">
+                                        <option value="" disabled selected>Select Course</option>
+                                        @foreach($course as $c)
+                                            <option value="{{ $c->id }}">{{ $c->name }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                         </div>
 
                         <div class="row clearfix">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 form-control-label">
-                                <label for="pe_designation" class="pull-right">Desgination</label>
+                                <label for="eb_level" class="pull-right">Level</label>
                             </div>
                             <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                 <div class="form-group">
-                                    <input type="text" id="pe_designation" name="pe_designation" class="form-control required" placeholder="Designation/Position" required>
+                                    <input type="text" id="eb_level" name="eb_level" class="form-control" placeholder="Level Achieved">
                                 </div>
                             </div>
                         </div>
 
                         <div class="row clearfix">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 form-control-label">
-                                <label for="pe_employment_type" class="pull-right">Employment Type</label>
+                                <label for="eb_awards" class="pull-right">Awards</label>
                             </div>
                             <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                 <div class="form-group">
-                                    <input type="text" id="pe_employment_type" name="pe_employment_type" class="form-control required" placeholder="Regular/Contractual/etc." required>
+                                    <input type="text" id="eb_awards" name="eb_awards" class="form-control required" placeholder="separate with ','" required>
                                 </div>
                             </div>
                         </div>
@@ -99,7 +93,7 @@
                 <div class="modal-footer">
                     <div class="col-md-12">
                         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary save_prev_employment">Save changes</button>
+                        <button type="submit" class="btn btn-primary save_educational_background">Save changes</button>
                     </div>
                 </div>
             </form>

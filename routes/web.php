@@ -125,9 +125,9 @@ Route::group(['middleware' => ['auth', 'employee']], function(){
         Route::post('/save_prev_employment_history', 'employeeController@save_prev_employment_history');
 
         //Educational Background
-        Route::get('/view_prev_employment_history/{id}', 'employeeController@view_prev_employment_history');
-        Route::get('/get_prev_employment_history/{id}', 'employeeController@get_prev_employment_history');
-        Route::post('/save_prev_employment_history', 'employeeController@save_prev_employment_history');
+        Route::get('/view_educational_background/{id}', 'employeeController@view_educational_background');
+        Route::get('/get_educational_background/{id}', 'employeeController@get_educational_background');
+        Route::post('/save_educational_background', 'employeeController@save_educational_background');
 
         //Employee Family
         Route::get('/view_employee_emergency/{id}', 'employeeController@view_employee_emergency');
