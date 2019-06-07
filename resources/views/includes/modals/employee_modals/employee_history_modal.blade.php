@@ -37,9 +37,9 @@
                             <th width="150px">Address</th>
                             <th width="50px">Hired Date</th>
                             <th width="50px">Until</th>
-                            <th width="50px">Months</th>
+                            <th width="40px">Months</th>
                             <th width="50px">Salary</th>
-                            <th width="50px">Designation</th>
+                            <th width="30px">Designation</th>
                             <th width="100px">Employment Type</th>
                             <th width="10px">Action</th>
                         </tr>

@@ -10,9 +10,11 @@ use App\role;
 use App\employee_benefits;
 use App\employment_history;
 use App\prev_employment_history;
+use App\educational_background;
 use App\employee_child;
 use App\employee_emergency;
 use App\employee_spouse;
+use App\course;
 use App\User;
 use Carbon\Carbon;
 use Auth;
@@ -163,12 +165,24 @@ class employeeController extends Controller
         })
         ->addColumn('action', function($data){
             $html = '';
-            if($data->until){
-                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-primary btn-xs edit_prev_employment_history" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
-            }
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-primary btn-xs edit_prev_employment_history" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
             return $html;
         })
         ->make(true);
+    }
+
+    public function view_educational_background(Request $request){
+        $id = $request->id;
+        
+        $educational_background = educational_background::with('course')->where('emp_id', $id)->orderBy('id', 'desc')->get();
+
+        return Datatables::of($educational_background)
+        ->addColumn('action', function($data){
+            $html = '';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-primary btn-xs edit_educational_background" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
+            return $html;
+        })->make(true);
+
     }
 
     public function view_employee_emergency(Request $request){
@@ -361,6 +375,24 @@ class employeeController extends Controller
         return $prev_employment_history->emp_id;
     }
 
+    public function save_educational_background(Request $request){
+        $id = $request->eb_id;
+        $add_edit = $request->eb_add_edit;
+
+        $educational_background = ($add_edit  == 'add') ? new educational_background: educational_background::find($id);
+        $educational_background->emp_id = $request->eb_emp_id;
+        $educational_background->school = $request->eb_school;
+        $educational_background->start = $request->eb_start;
+        $educational_background->end = $request->eb_end;
+        $educational_background->course_id = $request->eb_course;
+        $educational_background->level = $request->eb_level;
+        $educational_background->level = $request->eb_level;
+        $educational_background->awards = $request->eb_awards;
+        $educational_background->save();
+
+        return $educational_background->emp_id;
+    }
+
     public function save_employee_emergency(Request $request){
         $id = $request->e_id;
         $add_edit = $request->e_add_edit;
@@ -450,6 +482,12 @@ class employeeController extends Controller
         $id = $request->id;
 
         return prev_employment_history::find($id);
+    }
+
+    public function get_educational_background(Request $request){
+        $id = $request->id;
+
+        return educational_background::find($id);
     }
 
     public function get_employee_emergency(Request $request){

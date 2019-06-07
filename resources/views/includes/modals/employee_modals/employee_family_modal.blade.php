@@ -15,7 +15,7 @@
 
                 <h4 class="title_probationary">In case of Emergency</h4>
 
-                <table id="employment_emergency_table" class="table table-hover table-striped table-bordered" cellspacing="0" width="100%">
+                <table id="employee_emergency_table" class="table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                     <thead>
                         <tr>
                             <th width="200px">Name</th>
@@ -30,7 +30,7 @@
 
                 <h4 class="title_probationary">Spouse</h4>
 
-                <table id="employment_spouse_table" class="table table-hover table-striped table-bordered" cellspacing="0" width="100%">
+                <table id="employee_spouse_table" class="table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                     <thead>
                         <tr>
                             <th width="200px">Name</th>
@@ -45,7 +45,7 @@
 
                 <h4 class="title_probationary">Children</h4>
 
-                <table id="employment_child_table" class="table table-hover table-striped table-bordered" cellspacing="0" width="100%">
+                <table id="employee_child_table" class="table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                     <thead>
                         <tr>
                             <th width="200px">Name</th>

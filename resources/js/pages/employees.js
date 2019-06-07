@@ -45,8 +45,9 @@ $(document).ready(function(){
         setTimeout(function(){$('#employee_family_modal').modal('show')}, 500);
     });
     
-    $("#prev_employment_modal").on("hidden.bs.modal", function(e){
+    $("#prev_employment_modal, #educational_background_modal").on("hidden.bs.modal", function(e){
         $(this).find("input,textarea,select").val('').end();
+        $('.select2').trigger('change.select2');
         setTimeout(function(){$('#employee_history_modal').modal('show')}, 500);
     });
 
@@ -200,29 +201,27 @@ $(document).ready(function(){
             ]
         });
 
-        var prev_employment_history_table = $('#prev_employment_history_table').DataTable({
+        var educational_background_table = $('#educational_background_table').DataTable({
             paging: false,
             ordering: false,
             info: false,
             searching: false,
             destroy: true,
-            ajax: '/view_prev_employment_history/'+id,
+            ajax: '/view_educational_background/'+id,
             columns: [
-                {data: 'company', name: 'company'},
-                {data: 'address', name: 'address'},
-                {data: 'hired_date', name: 'hired_date'},
-                {data: 'until', name: 'until'},
-                {data: 'months', name: 'months'},
-                {data: 'salary', name: 'salary'},
-                {data: 'designation', name: 'designation'},
-                {data: 'employment_type', name: 'employment_type'},
+                {data: 'school', name: 'school'},
+                {data: 'start', name: 'start'},
+                {data: 'end', name: 'end'},
+                {data: 'course.name', name: 'course'},
+                {data: 'level', name: 'level'},
+                {data: 'awards', name: 'awards'},
                 {data: "action", orderable:false,searchable:false}
             ]
         });
     }
 
     function refresh_employee_family(id){
-        var employment_emergency_table = $('#employment_emergency_table').DataTable({
+        var employee_emergency_table = $('#employee_emergency_table').DataTable({
             paging: false,
             ordering: false,
             info: false,
@@ -238,7 +237,7 @@ $(document).ready(function(){
             ]
         });
         
-        var employment_spouse_table = $('#employment_spouse_table').DataTable({
+        var employee_spouse_table = $('#employee_spouse_table').DataTable({
             paging: false,
             ordering: false,
             info: false,
@@ -254,7 +253,7 @@ $(document).ready(function(){
             ]
         });
         
-        var employment_child_table = $('#employment_child_table').DataTable({
+        var employee_child_table = $('#employee_child_table').DataTable({
             paging: false,
             ordering: false,
             info: false,
@@ -820,6 +819,30 @@ $(document).ready(function(){
         });
     });
 
+    $(document).on('click', '.edit_educational_background', function(){
+        var id = $(this).attr('id');
+
+        $.ajax({
+            url: '/get_educational_background/'+id,
+            method: 'get',
+            dataType: 'json',
+            success:function(data){
+                console.log(data);
+                $('#eb_add_edit').val('edit');
+                $('#eb_id').val(data.id);
+                $('#eb_emp_id').val(data.emp_id);
+                $('#eb_school').val(data.school);
+                $('#eb_start').val(data.start);
+                $('#eb_end').val(data.end);
+                $('#eb_course').val(data.course_id).trigger('change');
+                $('#eb_level').val(data.level);
+                $('#eb_awards').val(data.awards);
+                $('#employee_history_modal').modal('hide');
+                setTimeout(function(){$('#educational_background_modal').modal('show')}, 500);
+            }
+        });
+    });
+
     //EMPLOYEE HISTORY -- END
 
     //EMPLOYEE FAMILY -- START
@@ -1177,6 +1200,28 @@ $(document).ready(function(){
             }
         });
     }
+
+    //Course Select 2
+    $('#eb_course').select2({
+        placeholder: 'Select Course',
+        ajax: {
+            url: "/courseAll",
+            dataType: 'json',
+
+            data: function (params){
+                return {
+                    name: params.term,
+                    page:params.page
+                }
+            },
+            
+            processResults: function (data){
+                return {
+                    results:data.results      
+                }
+            }
+        },
+    });
 
     //FUNCTIONS -- END
 });

@@ -49,11 +49,11 @@
                         </div>
 
                         <div class="row clearfix">
-                            <div class="col-lg-4 col-md-4 col-sm-3 col-xs-3 form-control-label">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 form-control-label">
                                     <label for="eb_course" class="pull-right">Course</label>
                             </div>
-                            <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
-                                <div class="form-group required">
+                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                                <div class="form-group">
                                     <select type="text" id="eb_course" name="eb_course" class="form-control select2" style="width: 100%;">
                                         <option value="" disabled selected>Select Course</option>
                                         @foreach($course as $c)
@@ -70,7 +70,7 @@
                             </div>
                             <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                 <div class="form-group">
-                                    <input type="text" id="eb_level" name="eb_level" class="form-control" placeholder="Level Achieved">
+                                    <input type="text" id="eb_level" name="eb_level" class="form-control required" placeholder="Graduate | Grade # | HS Grad" required>
                                 </div>
                             </div>
                         </div>
@@ -81,7 +81,7 @@
                             </div>
                             <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                 <div class="form-group">
-                                    <input type="text" id="eb_awards" name="eb_awards" class="form-control required" placeholder="separate with ','" required>
+                                    <input type="text" id="eb_awards" name="eb_awards" class="form-control required" placeholder="honor, cum laude, etc." required>
                                 </div>
                             </div>
                         </div>
