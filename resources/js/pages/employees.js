@@ -527,7 +527,7 @@ $(document).ready(function(){
                                     $('#resign_modal').modal('hide');
                                     notif('Employee now resigned.', '', 'info', 'glyphicon-info-sign');
 
-                                    $('.modal_title_status').text('Resigned');
+                                    $('.title_status').text('Resigned');
                                     $('.resign_rehire').attr('data-original-title', 'Rehire').attr('id', data)
                                     .removeClass('resign_employee').addClass('rehire_employee');
                                     $('.resign_rehire i').removeClass('fa-sign-out-alt').addClass('fa-sign-in-alt');
@@ -590,7 +590,7 @@ $(document).ready(function(){
                                     $('#rehire_modal').modal('hide');
                                     notif('Success!', 'Employee now rehired', 'success', 'glyphicon-ok');
 
-                                    $('.modal_title_status').text('Active');
+                                    $('.title_status').text('Active');
                                     $('.resign_rehire').attr('data-original-title', 'Resign').attr('id', data)
                                     .removeClass('rehire_employee').addClass('resign_employee');
                                     $('.resign_rehire i').removeClass('fa-sign-in-alt').addClass('fa-sign-out-alt');
