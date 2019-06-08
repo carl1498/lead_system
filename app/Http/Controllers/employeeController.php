@@ -81,6 +81,9 @@ class employeeController extends Controller
         ->editColumn('name', function($data){
             return $data->lname.', '.$data->fname.' '.$data->mname; 
         })
+        ->editColumn('birthdate', function($data){
+            return getAge($data->birthdate);
+        })
         ->addColumn('action', function($data){
             $html = '';
 
@@ -213,9 +216,7 @@ class employeeController extends Controller
             return $data->lname.', '.$data->fname.' '.$data->mname; 
         })
         ->editColumn('birthdate', function($data){
-            $birth = new Carbon($data->birthdate);
-            $age = $birth->diffInYears(Carbon::now());
-            return $data->birthdate . ' (' . $age . ')';
+            return getAge($data->birthdate);
         })
         ->addColumn('action', function($data){
             $html = '';
@@ -236,9 +237,7 @@ class employeeController extends Controller
             return $data->lname.', '.$data->fname.' '.$data->mname; 
         })
         ->editColumn('birthdate', function($data){
-            $birth = new Carbon($data->birthdate);
-            $age = $birth->diffInYears(Carbon::now());
-            return $data->birthdate . ' (' . $age . ')';
+            return getAge($data->birthdate);
         })
         ->addColumn('action', function($data){
             $html = '';

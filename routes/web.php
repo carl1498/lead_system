@@ -88,7 +88,7 @@ Route::group(['middleware' => ['auth', 'student_settings']], function(){
     Route::get('/view_student_settings/{current_settings}', 'studentSettingsController@view');
     Route::post('/save_student_settings', 'studentSettingsController@store');
     Route::get('/get_student_settings', 'studentSettingsController@get_student_settings');
-    Route::get('/delete_student_settings', 'studentSettingsController@delete_student_settings');
+    //Route::get('/delete_student_settings', 'studentSettingsController@delete_student_settings');
 });
 
 //STUDENT ROUTES -- END

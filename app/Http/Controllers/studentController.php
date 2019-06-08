@@ -47,12 +47,21 @@ class studentController extends Controller
         $current_branch = $request->current_branch;
         $departure_year = $request->departure_year;
         $departure_month = $request->departure_month;
+        $except = ['Language Only', 'Trainee', 'SSV (Careworker)', 'SSV (Hospitality)'];
 
-        $b = student::with('program', 'school', 'benefactor', 'referral', 
-        'branch', 'course', 'departure_year', 'departure_month')->orderBy('school_id')->get();
+        $branch = student::with('program', 'school', 'benefactor', 'referral', 
+        'branch', 'course', 'departure_year', 'departure_month')
+        ->whereHas('program', function($query) use($except){
+            $query->whereNotIn('name', $except);
+        })
+        ->when($departure_year != 'All', function($query) use($departure_year){
+            $query->where('departure_year_id', $departure_year);
+        })
+        ->when($departure_month != 'All', function($query) use($departure_month){
+            $query->where('departure_month_id', $departure_month);
+        })->orderBy('school_id')->get();
 
-        $branch = $b->where('branch.name', $current_branch)->where('program.name', '<>', 'Language Only')->where('program.name', '<>', 'Trainee')
-        ->where('departure_year_id', $departure_year)->where('departure_month_id', $departure_month)->whereIn('status', ['Active', 'Final School']);
+        $branch = $branch->where('branch.name', $current_branch)->whereIn('status', ['Active', 'Final School']);
 
         return $this->refreshDatatable($branch);
     }
@@ -63,10 +72,7 @@ class studentController extends Controller
             return $data->lname.', '.$data->fname.' '.$data->mname;
         })
         ->editColumn('birthdate', function($data){
-            $birth = new Carbon($data->birthdate);
-            
-            $age = $birth->diffInYears(Carbon::now());
-            return $data->birthdate . ' (' . $age .')';
+            return getAge($data->birthdate);
         })
         ->addColumn('action', function($data){
             $html = '';
@@ -96,15 +102,24 @@ class studentController extends Controller
         $current_status = $request->current_status;
         $departure_year = $request->departure_year;
         $departure_month = $request->departure_month;
+        $except = ['Language Only', 'Trainee', 'SSV (Careworker)', 'SSV (Hospitality)'];
 
-        $s = student::with('program', 'school', 'benefactor', 'referral', 
-        'branch', 'course', 'departure_year', 'departure_month')->orderBy('school_id')->get();
-
-        if($current_status == 'Back Out / Cancelled'){
-            $status = $s->whereIn('status', ['Back Out', 'Cancelled'])->where('program.name', '<>', 'Language Only')->where('program.name', '<>', 'Trainee')->where('departure_year_id', $departure_year)->where('departure_month_id', $departure_month);
-        }else{
-            $status = $s->where('status', $current_status)->where('departure_year_id', $departure_year)->where('departure_month_id', $departure_month);
-        }
+        $status = student::with('program', 'school', 'benefactor', 'referral', 
+        'branch', 'course', 'departure_year', 'departure_month')
+        ->whereHas('program', function($query) use($except){
+            $query->whereNotIn('name', $except);
+        })
+        ->when($departure_year != 'All', function($query) use($departure_year){
+            $query->where('departure_year_id', $departure_year);
+        })
+        ->when($departure_month != 'All', function($query) use($departure_month){
+            $query->where('departure_month_id', $departure_month);
+        })
+        ->when($current_status == 'Back Out / Cancelled', function($query) use($current_status){
+            $query->whereIn('status', ['Back Out', 'Cancelled']);
+        }, function($query) use($current_status){
+            $query->where('status', $current_status);
+        })->orderBy('school_id')->get();
         
         return $this->refreshDatatableStatus($status);
     }
@@ -115,10 +130,7 @@ class studentController extends Controller
             return $data->lname.', '.$data->fname.' '.$data->mname;
         })
         ->editColumn('birthdate', function($data){
-            $birth = new Carbon($data->birthdate);
-            
-            $age = $birth->diffInYears(Carbon::now());
-            return $data->birthdate . ' (' . $age .')';
+            return getAge($data->birthdate);
         })
         ->addColumn('action', function($data){
             $html = '';
@@ -147,11 +159,16 @@ class studentController extends Controller
     public function result(Request $request){
         $departure_year = $request->departure_year;
         $departure_month = $request->departure_month;
+        $except = ['Language Only', 'Trainee', 'SSV (Careworker)', 'SSV (Hospitality)'];
 
-        $r = student::with('program', 'school', 'referral', 
-        'branch', 'course', 'departure_year', 'departure_month')->orderBy('school_id')->get();
-
-        $result = $r->whereIn('status', ['Final School', 'Cancelled'])->where('program.name', '<>', 'Language Only')->where('program.name', '<>', 'Trainee')->where('departure_year_id', $departure_year)->where('departure_month_id', $departure_month);
+        $result = student::with('program', 'school', 'referral', 
+        'branch', 'course', 'departure_year', 'departure_month')
+        ->when($departure_year != 'All', function($query) use($departure_year){
+            $query->where('departure_year_id', $departure_year);
+        })
+        ->when($departure_month != 'All', function($query) use($departure_month){
+            $query->where('departure_month_id', $departure_month);
+        })->whereIn('status', ['Final School', 'Cancelled'])->orderBy('school_id')->get();
 
         return $this->refreshDatatableResult($result);
     }
@@ -162,10 +179,7 @@ class studentController extends Controller
             return $data->lname.', '.$data->fname.' '.$data->mname;
         })
         ->editColumn('birthdate', function($data){
-            $birth = new Carbon($data->birthdate);
-            
-            $age = $birth->diffInYears(Carbon::now());
-            return $data->birthdate . ' (' . $age .')';
+            return getAge($data->birthdate);
         })
         ->addColumn('action', function($data){
             $html = '';
@@ -194,9 +208,14 @@ class studentController extends Controller
     public function language(Request $request){
         $departure_year = $request->departure_year;
 
-        $l = student::with('program', 'referral', 'branch', 'course', 'departure_year')->get();
-
-        $language = $l->where('program.name', 'Language Only')->where('departure_year_id', $departure_year);
+        $language = student::with('program', 'referral', 'branch', 'course', 'departure_year')
+        ->whereHas('program', function($query){
+            $query->where('name', 'Language Only');
+        })
+        ->when($departure_year != 'All', function($query) use($departure_year){
+            $query->where('departure_year_id', $departure_year);
+        })
+        ->get();
 
         return $this->refreshDatatableLanguage($language);
     }
@@ -207,10 +226,7 @@ class studentController extends Controller
             return $data->lname.', '.$data->fname.' '.$data->mname;
         })
         ->editColumn('birthdate', function($data){
-            $birth = new Carbon($data->birthdate);
-            
-            $age = $birth->diffInYears(Carbon::now());
-            return $data->birthdate . ' (' . $age .')';
+            return getAge($data->birthdate);
         })->addColumn('action', function($data){
             $html = '';
 
@@ -237,10 +253,7 @@ class studentController extends Controller
             return $data->lname.', '.$data->fname.' '.$data->mname;
         })
         ->editColumn('birthdate', function($data){
-            $birth = new Carbon($data->birthdate);
-            
-            $age = $birth->diffInYears(Carbon::now());
-            return $data->birthdate . ' (' . $age .')';
+            return getAge($data->birthdate);
         })->addColumn('action', function($data){
             $html = '';
 
@@ -297,10 +310,7 @@ class studentController extends Controller
             return $data->lname.', '.$data->fname.' '.$data->mname;
         })
         ->editColumn('birthdate', function($data){
-            $birth = new Carbon($data->birthdate);
-            
-            $age = $birth->diffInYears(Carbon::now());
-            return $data->birthdate . ' (' . $age .')';
+            return getAge($data->birthdate);
         })->addColumn('action', function($data){
             $html = '';
 
@@ -342,10 +352,7 @@ class studentController extends Controller
                 return $data->lname.', '.$data->fname.' '.$data->mname;
             })
             ->editColumn('birthdate', function($data){
-                $birth = new Carbon($data->birthdate);
-                
-                $age = $birth->diffInYears(Carbon::now());
-                return $data->birthdate . ' (' . $age .')';
+                return getAge($data->birthdate);
             })
             ->editColumn('coe_status', function($data){
                 if($data->coe_status == 'Approved'){

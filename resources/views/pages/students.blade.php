@@ -164,7 +164,7 @@
 
                 <div class="tab-content">
                     
-                    @include('includes.departures')
+                    @include('includes.student_select')
                     @include('includes.tabs.student_tabs')
 
                 </div>

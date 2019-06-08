@@ -198,3 +198,10 @@ function getCurrentMonthName(){
 
     return $month;
 }
+
+function getAge($birthdate){
+    $birth = new Carbon($birthdate);
+        
+    $age = $birth->diffInYears(Carbon::now());
+    return $birthdate . ' (' . $age .')';
+}
