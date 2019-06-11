@@ -334,6 +334,31 @@ $(document).ready(function(){
         {defaultContent: "", targets: "_all"}
     ]
 
+    var buttons_format = [
+        {extend: 'print', title: 'LEAD System', orientation: 'landscape', pageSize: 'FOLIO',
+        exportOptions: {
+            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 13 ]
+        },
+        customize: function (win){
+            $(win.document.body)
+                .css( 'font-size', '8pt' );
+
+            $(win.document.body).find( 'table' )
+                .addClass( 'compact' )
+                .css( 'font-size', 'inherit' );
+        }},
+        'excelHtml5',
+        {extend: 'pdfHtml5', title: 'LEAD System', orientation: 'landscape', pageSize: 'FOLIO',
+        exportOptions: {
+            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 13 ],
+            fontSize: 8
+        },
+        customize: function (doc) {
+            doc.content[1].table.widths = 
+                Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+        }},
+    ]
+
     function refresh_student_branch(){
         departure_year = $('#year_select').val();
         departure_month = $('#month_select').val();
@@ -352,11 +377,13 @@ $(document).ready(function(){
             initComplete: function(settings, json) {
                 enableTabs();  
             },
+            dom: 'Bflrtip',
             processing: true,
             destroy: true,
             scrollX: true,
             scrollCollapse: true,
             fixedColumns: true,
+            buttons: buttons_format,
             ajax: {
                 url: '/student_branch',
                 data: {

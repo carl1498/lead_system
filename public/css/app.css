@@ -16486,12 +16486,16 @@ readers do not read off random characters that represent icons */
 }
 
 #books_branch_table_wrapper .dataTables_length,
+#books_student_table_wrapper .dataTables_length,
+#students_branch_wrapper .dataTables_length,
 #books_student_table_wrapper .dataTables_length {
   float: right !important;
   margin-right: 25px;
 }
 
 #books_branch_table_wrapper .dataTables_filter,
+#books_student_table_wrapper .dataTables_filter,
+#students_branch_wrapper .dataTables_filter,
 #books_student_table_wrapper .dataTables_filter {
   float: right !important;
 }

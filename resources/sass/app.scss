@@ -312,12 +312,14 @@ $fa-font-path: "../webfonts";
   max-width: 100% !important;
 }
 
-#books_branch_table_wrapper .dataTables_length, #books_student_table_wrapper .dataTables_length {
+#books_branch_table_wrapper .dataTables_length, #books_student_table_wrapper .dataTables_length,
+#students_branch_wrapper .dataTables_length, #books_student_table_wrapper .dataTables_length {
   float: right !important;
   margin-right: 25px;
 }
 
-#books_branch_table_wrapper .dataTables_filter, #books_student_table_wrapper .dataTables_filter {
+#books_branch_table_wrapper .dataTables_filter, #books_student_table_wrapper .dataTables_filter,
+#students_branch_wrapper .dataTables_filter, #books_student_table_wrapper .dataTables_filter {
   float: right !important;
 }
 
