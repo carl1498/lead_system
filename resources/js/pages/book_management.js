@@ -459,7 +459,6 @@ $(document).ready(function(){
             initComplete: function(settings, json) {
                 enableTabs();  
             },
-            dom: 'Bflrtip',
             processing: true,
             destroy: true,
             scrollX: true,
@@ -467,10 +466,6 @@ $(document).ready(function(){
             fixedColumns: {
                 leftColumns: 1
             },
-            buttons: [
-                {extend: 'print', title: 'LEAD System', orientation: 'landscape', pageSize: 'FOLIO'},
-                {extend: 'pdfHtml5', title: 'LEAD System', orientation: 'portrait', pageSize: 'FOLIO'},
-            ],
             responsive: true,
             ajax: {
                 url: '/view_ssv_student_books',
@@ -527,7 +522,6 @@ $(document).ready(function(){
             initComplete: function(settings, json) {
                 enableTabs();  
             },
-            dom: 'Bflrtip',
             processing: true,
             destroy: true,
             scrollX: true,
@@ -535,10 +529,6 @@ $(document).ready(function(){
             fixedColumns: {
                 leftColumns: 1
             },
-            buttons: [
-                {extend: 'print', title: 'LEAD System - '+book_status+' Books' },
-                {extend: 'pdfHtml5', title: 'LEAD System - '+book_status+' Books' },
-            ],
             responsive: true,
             ajax: {
                 url: '/view_branch_books',

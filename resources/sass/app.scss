@@ -312,19 +312,28 @@ $fa-font-path: "../webfonts";
   max-width: 100% !important;
 }
 
-#books_branch_table_wrapper .dataTables_length, #books_student_table_wrapper .dataTables_length,
-#students_branch_wrapper .dataTables_length, #books_student_table_wrapper .dataTables_length {
+#students_branch_wrapper .dataTables_length, #students_status_wrapper .dataTables_length,
+#students_result_wrapper .dataTables_length, #language_students_wrapper .dataTables_length,
+#all_students_wrapper .dataTables_length, #ssv_students_wrapper .dataTables_length,
+#trainee_students_wrapper .dataTables_length{
   float: right !important;
   margin-right: 25px;
 }
 
-#books_branch_table_wrapper .dataTables_filter, #books_student_table_wrapper .dataTables_filter,
-#students_branch_wrapper .dataTables_filter, #books_student_table_wrapper .dataTables_filter {
+#students_branch_wrapper .dataTables_filter, #students_status_wrapper .dataTables_filter,
+#students_result_wrapper .dataTables_filter, #language_students_wrapper .dataTables_filter,
+#all_students_wrapper .dataTables_filter, #ssv_students_wrapper .dataTables_filter,
+#trainee_students_wrapper .dataTables_filter{
   float: right !important;
 }
 
+.dt-button-collection{
+    max-height: 200px;
+    overflow-y: scroll;
+}
+
 .dataTables_processing{
-  z-index: 105
+  z-index: 105;
 }
 
 .box-profile{
@@ -374,4 +383,12 @@ a.invoice_pick, a.books_pick{
 
 .table th{
   border: grey solid 1px !important;
+}
+
+@media print {
+
+    html, body {
+        border: 1px solid transparent;
+    }
+
 }

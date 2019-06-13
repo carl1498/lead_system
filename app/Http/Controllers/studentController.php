@@ -344,8 +344,12 @@ class studentController extends Controller
                 $query->where('status', 'Active');
             })->when($current_trainee == 'Back Out', function($query){
                 $query->where('status', 'Back Out');
-            })->where('departure_year_id', $departure_year)
-            ->where('departure_month_id', $departure_month)->get();
+            })->when($departure_year != 'All', function($query) use($departure_year){
+                $query->where('departure_year_id', $departure_year);
+            })
+            ->when($departure_month != 'All', function($query) use($departure_month){
+                $query->where('departure_month_id', $departure_month);
+            })->get();
 
         return Datatables::of($trainee)
             ->editColumn('name', function($data){

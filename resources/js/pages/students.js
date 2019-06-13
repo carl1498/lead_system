@@ -3,14 +3,14 @@ $(document).ready(function(){
     //INITIALIZE -- START
 
     var current_branch = 'Makati';
-    var current_status = '';
-    var current_result = '';
-    var current_ssv = '';
-    var departure_year;
-    var departure_month = $('#month_select').val();
+    var current_status = '', current_result = '',
+    current_ssv = '', current_trainee = '';
+    var departure_year, departure_month = $('#month_select').val();
+    var get_year, get_month, get_departure;
     var current_tab = 'Branch';
     var current_switch = 'Student';
     var modal_close = true;
+    var title;
 
     $.ajax({
         headers: {
@@ -91,6 +91,9 @@ $(document).ready(function(){
 
     function refresh(){
         disableTabs();
+        get_year = $("#year_select option:selected").text();
+        get_month = $("#month_select option:selected").text();
+        update_buttons();
 
         if(current_tab == 'Branch' || current_tab == 'Status' || current_tab == 'Result'){
             showYearSelect();
@@ -118,13 +121,13 @@ $(document).ready(function(){
         }
         
         switch(current_tab){
-            case 'Branch'       : refresh_student_branch(); break;
-            case 'Status'       : refresh_student_status(); break;
-            case 'Result'       : refresh_student_result(); break;
-            case 'Language'     : refresh_language_student(); break;
-            case 'SSV'          : refresh_ssv_student(); break;
-            case 'Trainee'      : refresh_trainee_student(); break;
-            case 'All'          : refresh_all_student(); break;
+            case 'Branch'   : refresh_student_branch(); break;
+            case 'Status'   : refresh_student_status(); break;
+            case 'Result'   : refresh_student_result(); break;
+            case 'Language' : refresh_language_student(); break;
+            case 'SSV'      : refresh_ssv_student(); break;
+            case 'Trainee'  : refresh_trainee_student(); break;
+            case 'All'      : refresh_all_student(); break;
         }
     }
     
@@ -133,7 +136,6 @@ $(document).ready(function(){
     });
 
     //INITIALIZE -- END
-
 
     //DATATABLES -- START
 
@@ -145,6 +147,7 @@ $(document).ready(function(){
         }
     });
 
+    //COLUMNS & COLUMNDEFS
     var columns_students = [
         {data: 'name', name: 'name'},
         {data: 'contact', name: 'contact'},
@@ -161,25 +164,6 @@ $(document).ready(function(){
         {data: 'coe_status', name: 'coe_status'},
         {data: 'remarks', name: 'remarks'},
         {data: "action", orderable:false,searchable:false}
-    ]
-
-    var columnDefs_students = [
-        { width: 230, targets: 0 }, //name
-        { width: 90, targets: 1 }, //contact
-        { width: 130, targets: 2 }, //program
-        { width: 130, targets: 3 }, //school
-        { width: 130, targets: 4 }, //benefactor
-        { width: 60, targets: 5 }, //gender
-        { width: 100, targets: 6 }, //birthdate
-        { width: 200, targets: 7 }, //course
-        { width: 200, targets: 8 }, //email
-        { width: 120, targets: 9 }, //signup
-        { width: 120, targets: 10 }, //referral
-        { width: 100, targets: 11 }, //status
-        { width: 100, targets: 12 }, //coe status
-        { width: 250, targets: 13 }, //remarks
-        { width: 150, targets: 14 }, //action
-        {defaultContent: "", targets: "_all"}
     ]
 
     var columns_students_status = [
@@ -200,26 +184,6 @@ $(document).ready(function(){
         {data: 'remarks', name: 'remarks'},
         {data: "action", orderable:false,searchable:false}
     ]
-    
-    var columnDefs_students_status = [
-        { width: 230, targets: 0 },
-        { width: 70, targets: 1 },
-        { width: 90, targets: 2 },
-        { width: 130, targets: 3 },
-        { width: 130, targets: 4 },
-        { width: 130, targets: 5 },
-        { width: 60, targets: 6 },
-        { width: 100, targets: 7 },
-        { width: 200, targets: 8 },
-        { width: 200, targets: 9 },
-        { width: 120, targets: 10 },
-        { width: 120, targets: 11 },
-        { width: 100, targets: 12 },
-        { width: 100, targets: 13 },
-        { width: 250, targets: 14 },
-        { width: 150, targets: 15 },
-        {defaultContent: "", targets: "_all"}
-    ]
 
     var columns_students_result = [
         {data: 'name', name: 'name'},
@@ -230,18 +194,6 @@ $(document).ready(function(){
         {data: 'coe_status', name: 'coe_status'},
         {data: 'referral.fname', name: 'referral'},
         {data: "action", orderable:false,searchable:false}
-    ]
-    
-    var columnDefs_students_result = [
-        { width: 230, targets: 0 },
-        { width: 70, targets: 1 },
-        { width: 90, targets: 2 },
-        { width: 130, targets: 3 },
-        { width: 100, targets: 4 },
-        { width: 100, targets: 5 },
-        { width: 120, targets: 6 },
-        { width: 150, targets: 7 },
-        {defaultContent: "", targets: "_all"}
     ]
 
     var columns_language_students = [
@@ -257,24 +209,7 @@ $(document).ready(function(){
         {data: 'remarks', name: 'remarks'},
         {data: "action", orderable:false,searchable:false}
     ]
-
-    var columnDefs_language_students = [
-        { width: 230, targets: 0 }, //name
-        { width: 70, targets: 1 }, //branch
-        { width: 90, targets: 2 }, //contact
-        { width: 60, targets: 3 }, //gender
-        { width: 100, targets: 4 }, //birthdate
-        { width: 200, targets: 5 }, //course
-        { width: 200, targets: 6 }, //email
-        { width: 120, targets: 7 }, //sign up date
-        { width: 120, targets: 8 }, //referral
-        { width: 250, targets: 9 }, //remarks
-        { width: 150, targets: 10 }, //action
-        {defaultContent: "", targets: "_all"}
-    ]
-
     var columns_all_students = columns_students_status;
-    var columnDefs_all_students = columnDefs_students_status;
 
     var columns_ssv_students = [
         {data: 'name', name: 'name'},
@@ -291,22 +226,6 @@ $(document).ready(function(){
         {data: "action", orderable:false,searchable:false}
     ]
 
-    var columnDefs_ssv_students = [
-        { width: 230, targets: 0 }, //name
-        { width: 90, targets: 1 }, //contact
-        { width: 60, targets: 2 }, //gender
-        { width: 100, targets: 3 }, //birthdate
-        { width: 130, targets: 4 }, //program
-        { width: 130, targets: 5 }, //benefactor
-        { width: 200, targets: 6 }, //course
-        { width: 200, targets: 7 }, //email
-        { width: 120, targets: 8 }, //sign up date
-        { width: 120, targets: 9 }, //referral
-        { width: 250, targets: 10 }, //remarks
-        { width: 150, targets: 11 }, //action
-        {defaultContent: "", targets: "_all"}
-    ]
-
     var columns_trainee_students = [
         {data: 'name', name: 'name'},
         {data: 'company.name', name: 'company'},
@@ -320,44 +239,53 @@ $(document).ready(function(){
         {data: "action", orderable:false,searchable:false}
     ]
 
-    var columnDefs_trainee_students = [
-        { width: 230, targets: 0 }, //name
-        { width: 130, targets: 1 }, //company
-        { width: 90, targets: 2 }, //contact
-        { width: 60, targets: 3 }, //gender
-        { width: 100, targets: 4 }, //birthdate
-        { width: 200, targets: 5 }, //course
-        { width: 200, targets: 6 }, //email
-        { width: 120, targets: 7 }, //company status
-        { width: 250, targets: 8 }, //remarks
-        { width: 150, targets: 9 }, //action
-        {defaultContent: "", targets: "_all"}
-    ]
+    //DATATABLES EXCEL
 
-    var buttons_format = [
-        {extend: 'print', title: 'LEAD System', orientation: 'landscape', pageSize: 'FOLIO',
-        exportOptions: {
-            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 13 ]
-        },
-        customize: function (win){
-            $(win.document.body)
-                .css( 'font-size', '8pt' );
+    function update_buttons(){
+        
+        switch(current_tab){
+            case 'Branch'   : title = current_branch; break;
+            case 'Status'   : title = current_status; break;
+            case 'Result'   : title = current_result; break;
+            case 'Language' : title = current_tab; break;
+            case 'SSV'      : 
+                switch(current_ssv){
+                    case 'SSV'      : title = current_ssv; break;
+                    case 'Back Out' : title = 'SSV ' + current_ssv; break;
+                }
+            case 'Trainee'  : 
+                switch(current_ssv){
+                    case 'Trainee'  : title = current_ssv; break;
+                    case 'Back Out' : title = 'SSV ' + current_ssv; break;
+                }
+        }
 
-            $(win.document.body).find( 'table' )
-                .addClass( 'compact' )
-                .css( 'font-size', 'inherit' );
-        }},
-        'excelHtml5',
-        {extend: 'pdfHtml5', title: 'LEAD System', orientation: 'landscape', pageSize: 'FOLIO',
-        exportOptions: {
-            columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 13 ],
-            fontSize: 8
-        },
-        customize: function (doc) {
-            doc.content[1].table.widths = 
-                Array(doc.content[1].table.body[0].length + 1).join('*').split('');
-        }},
-    ]
+        get_departure = (get_year == 'All' && get_month == 'All') ? 'All' : get_year + ' ' + get_month;
+
+        buttons_format = [//for branches, final school, back out, result monitoring, trainee
+            {extend: 'excelHtml5', title: title + ' - ' + get_departure,
+            exportOptions: {
+                columns: ':visible'
+            }},
+            'colvis'
+        ];
+        
+        year_buttons_format = [//for language, ssv
+            {extend: 'excelHtml5', title: title + ' - ' + get_year,
+            exportOptions: {
+                columns: ':visible'
+            }},
+            'colvis'
+        ];
+
+        all_buttons_format = [
+            {extend: 'excelHtml5', title: 'All',
+            exportOptions: {
+                columns: ':visible'
+            }},
+            'colvis'
+        ];
+    }
 
     function refresh_student_branch(){
         departure_year = $('#year_select').val();
@@ -371,9 +299,6 @@ $(document).ready(function(){
             stateLoadCallback: function(settings) {
                 return JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ) )
             },
-            stateLoadParams: function( settings, data ) {
-                if (data.order) delete data.order;
-            },
             initComplete: function(settings, json) {
                 enableTabs();  
             },
@@ -384,6 +309,7 @@ $(document).ready(function(){
             scrollCollapse: true,
             fixedColumns: true,
             buttons: buttons_format,
+            responsive: true,
             ajax: {
                 url: '/student_branch',
                 data: {
@@ -392,7 +318,7 @@ $(document).ready(function(){
                     departure_month: departure_month
                 }
             },
-            columnDefs: columnDefs_students,
+            columnDefs: [{defaultContent: "", targets: "_all"}],
             columns: columns_students,
             order: [[3,'asc']]
         });
@@ -411,17 +337,16 @@ $(document).ready(function(){
             stateLoadCallback: function(settings) {
                 return JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ) )
             },
-            stateLoadParams: function( settings, data ) {
-                if (data.order) delete data.order;
-            },
             initComplete: function(settings, json) {
                 enableTabs();  
             },
+            dom: 'Bflrtip',
             processing: true,
             destroy: true,
             scrollX: true,
             scrollCollapse: true,
             fixedColumns: true,
+            buttons: buttons_format,
             responsive: true,
             ajax: {
                 url: '/student_status',
@@ -431,7 +356,7 @@ $(document).ready(function(){
                     departure_month: departure_month
                 }
             },
-            columnDefs: columnDefs_students_status,
+            columnDefs: [{defaultContent: "", targets: "_all"}],
             columns: columns_students_status,
             order: [[4,'asc']]
         });
@@ -450,17 +375,16 @@ $(document).ready(function(){
             stateLoadCallback: function(settings) {
                 return JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ) )
             },
-            stateLoadParams: function( settings, data ) {
-                if (data.order) delete data.order;
-            },
             initComplete: function(settings, json) {
                 enableTabs();  
             },
+            dom: 'Bflrtip',
             processing: true,
             destroy: true,
             scrollX: true,
             scrollCollapse: true,
             fixedColumns: true,
+            buttons: buttons_format,
             responsive: true,
             ajax: {
                 url: '/student_result',
@@ -470,7 +394,7 @@ $(document).ready(function(){
                     departure_month: departure_month
                 }
             },
-            columnDefs: columnDefs_students_result,
+            columnDefs: [{defaultContent: "", targets: "_all"}],
             columns: columns_students_result,
             order: [[3,'asc']]
         });
@@ -488,17 +412,16 @@ $(document).ready(function(){
             stateLoadCallback: function(settings) {
                 return JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ) )
             },
-            stateLoadParams: function( settings, data ) {
-                if (data.order) delete data.order;
-            },
             initComplete: function(settings, json) {
                 enableTabs();  
             },
+            dom: 'Bflrtip',
             processing: true,
             destroy: true,
             scrollX: true,
             scrollCollapse: true,
             fixedColumns: true,
+            buttons: year_buttons_format,
             responsive: true,
             ajax: {
                 url: '/language_student',
@@ -506,7 +429,7 @@ $(document).ready(function(){
                     departure_year: departure_year
                 }
             },
-            columnDefs: columnDefs_language_students,
+            columnDefs: [{defaultContent: "", targets: "_all"}],
             columns: columns_language_students,
         });
     }
@@ -521,23 +444,22 @@ $(document).ready(function(){
             stateLoadCallback: function(settings) {
                 return JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ) )
             },
-            stateLoadParams: function( settings, data ) {
-                if (data.order) delete data.order;
-            },
             initComplete: function(settings, json) {
                 enableTabs();  
             },
+            dom: 'Bflrtip',
             processing: true,
             destroy: true,
             scrollX: true,
             scrollCollapse: true,
             fixedColumns: true,
+            buttons: all_buttons_format,
             responsive: true,
             ajax: {
                 url: '/all_student',
                 data: {}
             },
-            columnDefs: columnDefs_all_students,
+            columnDefs: [{defaultContent: "", targets: "_all"}],
             columns: columns_all_students,
         });
     }
@@ -554,17 +476,16 @@ $(document).ready(function(){
             stateLoadCallback: function(settings) {
                 return JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ) )
             },
-            stateLoadParams: function( settings, data ) {
-                if (data.order) delete data.order;
-            },
             initComplete: function(settings, json) {
                 enableTabs();  
             },
+            dom: 'Bflrtip',
             processing: true,
             destroy: true,
             scrollX: true,
             scrollCollapse: true,
             fixedColumns: true,
+            buttons: year_buttons_format,
             responsive: true,
             ajax: {
                 url: '/ssv_student',
@@ -573,7 +494,7 @@ $(document).ready(function(){
                     current_ssv: current_ssv
                 }
             },
-            columnDefs: columnDefs_ssv_students,
+            columnDefs: [{defaultContent: "", targets: "_all"}],
             columns: columns_ssv_students,
             order: [[4,'asc']]
         });
@@ -592,17 +513,16 @@ $(document).ready(function(){
             stateLoadCallback: function(settings) {
                 return JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ) )
             },
-            stateLoadParams: function( settings, data ) {
-                if (data.order) delete data.order;
-            },
             initComplete: function(settings, json) {
                 enableTabs();  
             },
+            dom: 'Bflrtip',
             processing: true,
             destroy: true,
             scrollX: true,
             scrollCollapse: true,
             fixedColumns: true,
+            buttons: buttons_format,
             responsive: true,
             ajax: {
                 url: '/trainee_student',
@@ -612,7 +532,7 @@ $(document).ready(function(){
                     current_trainee: current_trainee
                 }
             },
-            columnDefs: columnDefs_trainee_students,
+            columnDefs: [{defaultContent: "", targets: "_all"}],
             columns: columns_trainee_students,
             order: [[1,'asc']]
         });
