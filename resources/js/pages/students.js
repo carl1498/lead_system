@@ -24,6 +24,35 @@ $(document).ready(function(){
             departure_year = $('#year_select').val();
         }
     });
+
+    //Copied from stackoverflow
+    function moveScroller() {
+        var $anchor = $("#scroller-anchor");
+        var $scroller = $('#box-primary-fixed');
+    
+        var move = function() {
+            var st = $(window).scrollTop();
+            var ot = $anchor.offset().top;
+            if(st > ot) {
+                $scroller.css({
+                    position: "fixed",
+                    top: "10px"
+                });
+            } else {
+                $scroller.css({
+                    position: "relative",
+                    top: ""
+                });
+            }
+        };
+        $(window).scroll(move);
+        move();
+    }
+
+    $(function() {
+        moveScroller();
+    });
+    //Copied from stackoverflow
     
     $(".datepicker").datepicker({
         format: 'yyyy-mm-dd',
@@ -1386,4 +1415,5 @@ $(document).ready(function(){
     }
 
     //FUNCTIONS -- END
+
 });

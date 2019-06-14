@@ -27,7 +27,8 @@
         <div class="col-md-3 col-xl-2">
 
             <!-- Profile Image -->
-            <div class="box box-primary">
+            <div id="scroller-anchor"></div> 
+            <div class="box box-primary" id="box-primary-fixed" style="width: 230px; max-width: 230px;">
                 <div class="box-body box-profile">
                     <div style="width: auto; height: 200px;">
                         <img id="p_picture" class="profile-user-img img-responsive img-rounded" src="./img/avatar5.png" alt="User Profile Picture" style="max-width: 97px; max-height: 97px;">

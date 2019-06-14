@@ -6,6 +6,35 @@ $(document).ready(function(){
     var employee_status = $('#status_select').val();
     var modal_close = true;
 
+    //Copied from stackoverflow
+    function moveScroller() {
+        var $anchor = $("#scroller-anchor");
+        var $scroller = $('#box-primary-fixed');
+    
+        var move = function() {
+            var st = $(window).scrollTop();
+            var ot = $anchor.offset().top;
+            if(st > ot) {
+                $scroller.css({
+                    position: "fixed",
+                    top: "10px"
+                });
+            } else {
+                $scroller.css({
+                    position: "relative",
+                    top: ""
+                });
+            }
+        };
+        $(window).scroll(move);
+        move();
+    }
+
+    $(function() {
+        moveScroller();
+    });
+    //Copied from stackoverflow
+
     $(".datepicker").datepicker({
         format: 'yyyy-mm-dd',
         forceParse: false
@@ -78,6 +107,7 @@ $(document).ready(function(){
 
     function refresh(){
         disableTabs();
+        update_buttons();
 
         if(current_branch == 'All'){
             refresh_employee_all();
@@ -129,15 +159,28 @@ $(document).ready(function(){
         {data: "action", orderable:false,searchable:false}
     ]
 
+    function update_buttons(){
+        buttons_format = [
+            {extend: 'excelHtml5', title: 'Employee - Branch(' + current_branch + ') Status(' + employee_status+')',
+            exportOptions: {
+                columns: ':visible'
+            }},
+            'colvis'
+        ];
+    }
+
     function refresh_employee_branch(){
         $('#employees_branch').DataTable({
             initComplete: function(settings, json) {
                 enableTabs();  
             },
+            dom: 'Bflrtip',
             destroy: true,
             scrollX: true,
             scrollCollapse: true,
             fixedColumns: true,
+            buttons: buttons_format,
+            responsive: true,
             ajax: {
                 url: '/employee_branch',
                 data: {
@@ -154,10 +197,13 @@ $(document).ready(function(){
             initComplete: function(settings, json) {
                 enableTabs();  
             },
+            dom: 'Bflrtip',
             destroy: true,
             scrollX: true,
             scrollCollapse: true,
             fixedColumns: true,
+            buttons: buttons_format,
+            responsive: true,
             ajax: '/employee_all/'+employee_status,
             columns: columns_employees_all,
         });
