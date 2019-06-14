@@ -316,7 +316,7 @@ $(document).ready(function(){
         ];
     }
 
-    function refresh_student_branch(){
+    function refresh_student_branch(){ 
         departure_year = $('#year_select').val();
         departure_month = $('#month_select').val();
 
@@ -1415,5 +1415,7 @@ $(document).ready(function(){
     }
 
     //FUNCTIONS -- END
+    
 
+    //testing purposes
 });

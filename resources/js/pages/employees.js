@@ -169,7 +169,7 @@ $(document).ready(function(){
         ];
     }
 
-    function refresh_employee_branch(){
+    function refresh_employee_branch(){ 
         $('#employees_branch').DataTable({
             initComplete: function(settings, json) {
                 enableTabs();  
@@ -1270,4 +1270,6 @@ $(document).ready(function(){
     });
 
     //FUNCTIONS -- END
+
+    //testing purposes
 });

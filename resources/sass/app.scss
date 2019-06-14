@@ -325,7 +325,7 @@ $fa-font-path: "../webfonts";
 #students_result_wrapper .dataTables_filter, #language_students_wrapper .dataTables_filter,
 #all_students_wrapper .dataTables_filter, #ssv_students_wrapper .dataTables_filter,
 #trainee_students_wrapper .dataTables_filter, #employees_all_wrapper .dataTables_filter,
-#employees_branch_wrapper .dataTables_filter{
+#employees_branch_wrapper .dataTables_filter{ 
   float: right !important;
 }
 
@@ -394,3 +394,5 @@ a.invoice_pick, a.books_pick{
     }
 
 }
+
+//testing purposes
