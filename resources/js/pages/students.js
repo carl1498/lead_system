@@ -33,16 +33,18 @@ $(document).ready(function(){
         var move = function() {
             var st = $(window).scrollTop();
             var ot = $anchor.offset().top;
-            if(st > ot) {
-                $scroller.css({
-                    position: "fixed",
-                    top: "10px"
-                });
-            } else {
-                $scroller.css({
-                    position: "relative",
-                    top: ""
-                });
+            if($(window).width() > 991){
+                if(st > ot) {
+                    $scroller.css({
+                        position: "fixed",
+                        top: "10px"
+                    });
+                } else {
+                    $scroller.css({
+                        position: "relative",
+                        top: ""
+                    });
+                }
             }
         };
         $(window).scroll(move);
@@ -1415,7 +1417,4 @@ $(document).ready(function(){
     }
 
     //FUNCTIONS -- END
-    
-
-    //testing purposes
 });

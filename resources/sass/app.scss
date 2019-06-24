@@ -344,6 +344,34 @@ $fa-font-path: "../webfonts";
   overflow-y: scroll;
 }
 
+#box-primary-fixed{
+    width: 220px;
+}
+
+@media (max-width: 1599px) {
+    #box-primary-fixed {
+      width: 270px;
+    }
+}
+
+@media (max-width: 1329px) {
+    #box-primary-fixed {
+      width: 240px;
+    }
+}
+
+@media (max-width: 1160px) {
+    #box-primary-fixed {
+      width: 200px;
+    }
+}
+
+@media (max-width: 991px) {
+    #box-primary-fixed {
+      width: 100%;
+    }
+}
+
 li.branch_pick, li.status_pick, 
 li.result_pick, li.language_pick, 
 li.all_pick, li.ssv_pick,
@@ -395,4 +423,3 @@ a.invoice_pick, a.books_pick{
 
 }
 
-//testing purposes
