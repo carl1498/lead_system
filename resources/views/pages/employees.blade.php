@@ -123,7 +123,7 @@
         <div class="col-md-9 col-xl-10">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
-                    <li class="disabled tab_pick active"><a class="tab_pick" href="#employees_branch_tab" data-toggle="tab">All</a></li>
+                    <li class="disabled tab_pick active"><a class="tab_pick" href="#employees_all_tab" data-toggle="tab">All</a></li>
                     <li class="disabled tab_pick"><a class="tab_pick" href="#employees_branch_tab" data-toggle="tab">Makati</a></li>
                     <li class="disabled tab_pick"><a class="tab_pick" href="#employees_branch_tab" data-toggle="tab">Cebu</a></li>
                     <li class="disabled tab_pick"><a class="tab_pick" href="#employees_branch_tab" data-toggle="tab">Davao</a></li>

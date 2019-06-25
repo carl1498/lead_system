@@ -86,7 +86,10 @@ class dashboardController extends Controller
         $merged_birthdays = $student_birthdays->merge($employee_birthdays)->sortBy('birth_day');
 
         //leaderboard
-        $leaderboard = student::with('referral')->groupBy('referral_id')->get();
+        $leaderboard = student::with('referral')
+            ->whereHas('referral', function($query) {
+                $query->where('employment_status', 'Active');
+            })->groupBy('referral_id')->get();
         foreach($leaderboard as $l){
             $ref_count = student::where('referral_id', $l->referral_id)->count();
             $l = array_add($l, 'referral_count', $ref_count);

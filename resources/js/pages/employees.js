@@ -8,8 +8,6 @@ $(document).ready(function(){
 
     //Copied from stackoverflow
     function moveScroller() {
-        console.log('mao ni');
-        console.log($(window).width());
         var $anchor = $("#scroller-anchor");
         var $scroller = $('#box-primary-fixed');
     
@@ -78,7 +76,7 @@ $(document).ready(function(){
         setTimeout(function(){$('#employee_family_modal').modal('show')}, 500);
     });
     
-    $("#prev_employment_modal, #educational_background_modal").on("hidden.bs.modal", function(e){
+    $("#prev_employment_modal, #educational_background_modal, #resign_modal, #rehire_modal").on("hidden.bs.modal", function(e){
         $(this).find("input,textarea,select").val('').end();
         $('.select2').trigger('change.select2');
         setTimeout(function(){$('#employee_history_modal').modal('show')}, 500);
@@ -538,7 +536,8 @@ $(document).ready(function(){
         var id = $(this).attr('id');
 
         $('#r_id').val(id);
-        $('#resign_modal').modal('show');
+        $('#employee_history_modal').modal('hide');
+        setTimeout(function(){$('#resign_modal').modal('show')}, 500);
     });
 
     $(document).on('submit', '#resign_form', function(e){
@@ -601,7 +600,8 @@ $(document).ready(function(){
         var id = $(this).attr('id');
 
         $('#rh_id').val(id);
-        $('#rehire_modal').modal('show');
+        $('#employee_history_modal').modal('hide');
+        setTimeout(function(){$('#rehire_modal').modal('show')}, 500);
     });
 
     $(document).on('submit', '#rehire_form', function(e){
@@ -877,7 +877,6 @@ $(document).ready(function(){
             method: 'get',
             dataType: 'json',
             success:function(data){
-                console.log(data);
                 $('#eb_add_edit').val('edit');
                 $('#eb_id').val(data.id);
                 $('#eb_emp_id').val(data.emp_id);

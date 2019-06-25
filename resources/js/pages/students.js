@@ -259,8 +259,8 @@ $(document).ready(function(){
 
     var columns_trainee_students = [
         {data: 'name', name: 'name'},
-        {data: 'company.name', name: 'company'},
         {data: 'contact', name: 'contact'},
+        {data: 'company.name', name: 'company'},
         {data: 'gender', name: 'gender'},
         {data: 'birthdate', name: 'birthdate'},
         {data: 'course.name', name: 'course'},
