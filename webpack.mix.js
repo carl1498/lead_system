@@ -21,5 +21,6 @@ mix.js('resources/js/app.js', 'public/js')
    .js('resources/js/pages/student_edit_history.js', 'public/js/pages')
    .js('resources/js/pages/student_settings.js', 'public/js/pages')
    .js('resources/js/pages/students.js', 'public/js/pages')
+   .js('resources/js/pages/student_class.js', 'public/js/pages')
    .sass('resources/sass/app.scss', 'public/css')
    .version();

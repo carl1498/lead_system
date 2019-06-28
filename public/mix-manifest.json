@@ -1,13 +1,14 @@
 {
-    "/js/app.js": "/js/app.js?id=8c5e5d5425fcac26d372",
-    "/css/app.css": "/css/app.css?id=85e06e25ac609c0a7cd6",
-    "/js/pages/students.js": "/js/pages/students.js?id=68889f14ada25a219af7",
-    "/js/pages/student_settings.js": "/js/pages/student_settings.js?id=add1a871cd521bff3699",
-    "/js/pages/student_edit_history.js": "/js/pages/student_edit_history.js?id=0acfb592565fd631737f",
-    "/js/pages/student_delete_history.js": "/js/pages/student_delete_history.js?id=158b9100ce6eac5bdeb2",
-    "/js/pages/student_add_history.js": "/js/pages/student_add_history.js?id=29c80fc82bc56168143f",
-    "/js/pages/invoice.js": "/js/pages/invoice.js?id=5ebd529eac1af4e0beef",
-    "/js/pages/employees.js": "/js/pages/employees.js?id=cce3dc14f57d1ad8b84b",
-    "/js/pages/dashboard.js": "/js/pages/dashboard.js?id=7d9c9a7a12ea520d40fc",
-    "/js/pages/book_management.js": "/js/pages/book_management.js?id=d18e175c86ae4a267fb8"
+    "/js/app.js": "/js/app.js?id=c97afdb1dcec5a02f3c5",
+    "/css/app.css": "/css/app.css?id=1f1bc90ae6d1291bf217",
+    "/js/pages/students.js": "/js/pages/students.js?id=f6523efebfc30b6657fa",
+    "/js/pages/student_settings.js": "/js/pages/student_settings.js?id=65bf66caa17e1fc32852",
+    "/js/pages/student_edit_history.js": "/js/pages/student_edit_history.js?id=b10a65ff7b921f1ffd22",
+    "/js/pages/student_delete_history.js": "/js/pages/student_delete_history.js?id=2e72977c36693aea0a02",
+    "/js/pages/student_class.js": "/js/pages/student_class.js?id=6845bf339bc21fcfc64d",
+    "/js/pages/student_add_history.js": "/js/pages/student_add_history.js?id=061624095f41ec1f126d",
+    "/js/pages/invoice.js": "/js/pages/invoice.js?id=07a8809408bd409201f8",
+    "/js/pages/employees.js": "/js/pages/employees.js?id=c75aff51a524fed8c32a",
+    "/js/pages/dashboard.js": "/js/pages/dashboard.js?id=301048d0662bfd7994fb",
+    "/js/pages/book_management.js": "/js/pages/book_management.js?id=ef35a9a5389c71e95812"
 }

@@ -9,7 +9,7 @@
     <ol class="breadcrumb">
         <li>
             @if(canAccessAll() || canAccessStudentList())
-            <div class="btn-group" role="group" aria-labe="switch">
+            <div class="btn-group" role="group" aria-label="switch">
             <button title="Switch Tabs" class="btn btn-secondary bg-red switch switch_student" disabled>
                 <b class="switch_name">Student</b>
             </button>

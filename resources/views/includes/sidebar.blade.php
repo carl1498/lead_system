@@ -25,9 +25,9 @@
 				</li>
 
 				@if(canAccessAll() || canAccessStudents())
-                <li class="{{ (Request::path() == 'students' || Request::path() == 'student_settings' || 
-					Request::path() == 'student_add_history' || Request::path() == 'student_edit_history' || 
-					Request::path() == 'student_delete_history') ? 'active' : '' }} treeview">
+                <li class="{{ (Request::path() == 'students' || Request::path() == 'classes' || 
+					Request::path() == 'student_settings' || Request::path() == 'student_add_history' || 
+					Request::path() == 'student_edit_history' || Request::path() == 'student_delete_history') ? 'active' : '' }} treeview">
 					<a href="">
 						<i class="fa fa-user-graduate"></i> <span>Students</span>
 						<span class="pull-right-container">
@@ -37,6 +37,9 @@
 					<ul class="treeview-menu">
 						@if(canAccessAll() || canAccessStudentList())
 						<li class="{{ (Request::path() == 'students') ? 'active' : '' }}"><a href="/students"><i class="fa fa-list-ul"></i> Student List</a></li>
+						@endif
+						@if(canAccessAll() || canAccessStudentList())
+						<li class="{{ (Request::path() == 'classes') ? 'active' : '' }}"><a href="/classes"><i class="fa fa-chalkboard-teacher"></i> Student Class</a></li>
 						@endif
 						@if(canAccessAll() || canAccessStudentSettings())
 						<li class="{{ (Request::path() == 'student_settings') ? 'active' : '' }}"><a href="/student_settings"><i class="fa fa-cog"></i> Settings</a></li>
@@ -60,6 +63,20 @@
 					</ul>
 				</li>
 				@endif
+
+                <li class="treeview">
+					<a href="">
+						<i class="fa fa-calculator"></i> <span>Finance</span>
+						<span class="pull-right-container">
+							<i class="fa fa-angle-left pull-right"></i>
+						</span>
+					</a>
+					<ul class="treeview-menu">
+						<li class=""><a href="/students"><i class="fa fa-cash-register"></i> Tuition Fee</a></li>
+						<li class=""><a href="/student_settings"><i class="fa fa-network-wired"></i> Referral Monitoring</a></li>
+						<li class=""><a href="/student_settings"><i class="fa fa-wallet"></i> Allowance Monitoring</a></li>
+					</ul>
+				</li>
 
 				@if(canAccessAll() || canAccessEmployees())
 				<li class="{{ (Request::path() == 'employees') ? 'active' : '' }}">
