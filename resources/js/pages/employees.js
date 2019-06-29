@@ -191,6 +191,7 @@ $(document).ready(function(){
                 }
             },
             columns: columns_employees,
+            columnDefs: [{defaultContent: "", targets: "_all"}],
         });
     }
 
@@ -208,6 +209,7 @@ $(document).ready(function(){
             responsive: true,
             ajax: '/employee_all/'+employee_status,
             columns: columns_employees_all,
+            columnDefs: [{defaultContent: "", targets: "_all"}],
         });
     }
 
@@ -226,7 +228,8 @@ $(document).ready(function(){
                 {data: 'until', name: 'until'},
                 {data: 'months', name: 'months'},
                 {data: "action", orderable:false,searchable:false}
-            ]
+            ],
+            columnDefs: [{defaultContent: "", targets: "_all"}],
         });
 
         var prev_employment_history_table = $('#prev_employment_history_table').DataTable({
@@ -246,7 +249,8 @@ $(document).ready(function(){
                 {data: 'designation', name: 'designation'},
                 {data: 'employment_type', name: 'employment_type'},
                 {data: "action", orderable:false,searchable:false}
-            ]
+            ],
+            columnDefs: [{defaultContent: "", targets: "_all"}],
         });
 
         var educational_background_table = $('#educational_background_table').DataTable({
@@ -264,7 +268,8 @@ $(document).ready(function(){
                 {data: 'level', name: 'level'},
                 {data: 'awards', name: 'awards'},
                 {data: "action", orderable:false,searchable:false}
-            ]
+            ],
+            columnDefs: [{defaultContent: "", targets: "_all"}],
         });
     }
 
@@ -282,7 +287,8 @@ $(document).ready(function(){
                 {data: 'contact', name: 'contact'},
                 {data: 'relationship', name: 'relationship'},
                 {data: "action", orderable:false,searchable:false}
-            ]
+            ],
+            columnDefs: [{defaultContent: "", targets: "_all"}],
         });
         
         var employee_spouse_table = $('#employee_spouse_table').DataTable({
@@ -298,7 +304,8 @@ $(document).ready(function(){
                 {data: 'contact', name: 'contact'},
                 {data: 'birthdate', name: 'birthdate'},
                 {data: "action", orderable:false,searchable:false}
-            ]
+            ],
+            columnDefs: [{defaultContent: "", targets: "_all"}]
         });
         
         var employee_child_table = $('#employee_child_table').DataTable({
@@ -314,7 +321,8 @@ $(document).ready(function(){
                 {data: 'gender', name: 'gender'},
                 {data: 'birthdate', name: 'birthdate'},
                 {data: "action", orderable:false,searchable:false}
-            ]
+            ],
+            columnDefs: [{defaultContent: "", targets: "_all"}]
         });
     }
 

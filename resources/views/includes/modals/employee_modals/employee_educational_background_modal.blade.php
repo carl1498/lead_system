@@ -81,7 +81,7 @@
                             </div>
                             <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                 <div class="form-group">
-                                    <input type="text" id="eb_awards" name="eb_awards" class="form-control required" placeholder="honor, cum laude, etc." required>
+                                    <input type="text" id="eb_awards" name="eb_awards" class="form-control" placeholder="honor, cum laude, etc.">
                                 </div>
                             </div>
                         </div>
