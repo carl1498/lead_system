@@ -275,9 +275,26 @@ $fa-font-path: "../webfonts";
   }
 }
 
+.btn span.glyphicon {    			
+	opacity: 0 !important;				
+}
+.btn.active span.glyphicon {				
+	opacity: 1 !important;				
+}
+
 .navbar-laravel {
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.no-gutter {
+    margin-right: 0;
+    margin-left: 0;
+}
+  
+.no-gutter > [class*="col-"] {
+    padding-right: 0;
+    padding-left: 0;
 }
 
 #makati_paginate, #makati_filter,

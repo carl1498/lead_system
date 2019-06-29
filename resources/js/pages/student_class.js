@@ -2,6 +2,8 @@ $(document).ready(function(){
     
     //INITIALIZE -- START
 
+    $('.clockpicker').clockpicker();
+
     $(".datepicker").datepicker({
         format: 'yyyy-mm-dd',
         forceParse: false
@@ -33,7 +35,6 @@ $(document).ready(function(){
             return JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ) )
         },
         initComplete: function(settings, json) {
-            enableTabs();  
         },
         processing: true,
         destroy: true,
@@ -46,6 +47,12 @@ $(document).ready(function(){
     //DATATABLES -- END
     
     //FUNCTIONS -- START
+    
+    //Open Student Modal (ADD)
+    $('.add_class').on('click', function(){
+        $('#add_class_modal').modal('toggle');
+        $('#add_class_modal').modal('show');
+    });
 
     //FUNCTIONS -- END
 });

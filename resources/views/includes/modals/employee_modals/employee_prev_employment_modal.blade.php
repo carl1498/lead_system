@@ -72,7 +72,7 @@
 
                         <div class="row clearfix">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 form-control-label">
-                                <label for="pe_designation" class="pull-right">Desgination</label>
+                                <label for="pe_designation" class="pull-right">Designation</label>
                             </div>
                             <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
                                 <div class="form-group">

@@ -73,21 +73,6 @@
                     </ul>
 
                 </div>
-                <div class="box-body box-profile" id="test2">
-                        <li class="list-group-item">
-                            <p style="word-wrap: break-word;">
-                                2019-1-1 ~ 2019-2-2<br>
-                                <b>Edmon</b><br>
-                                <span>M • Tu • W • Th • F • Sa</span><br>
-                                <span class="label label-success">0</span>
-                                <span class="label label-danger">0</span>
-                                <span class="label label-primary">0</span>
-                                <span class="label label-warning">0</span>
-                            </p>
-                        </li>
-                    </ul>
-
-                </div>
                 <!-- /.box-body -->
             </div>
             <!-- /.box -->
@@ -96,10 +81,10 @@
         <div class="col-md-8 col-xl-9">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
-                    <li class="disabled tab_pick active"><a class="tab_pick" href="#student_class_tab" data-toggle="tab">Students</a></li>
-                    <li class="disabled tab_pick"><a class="tab_pick" href="#employees_branch_tab" data-toggle="tab">No Classes</a></li>
-                    <li class="disabled tab_pick"><a class="tab_pick" href="#employees_branch_tab" data-toggle="tab">All</a></li>
-                    <li class="disabled tab_pick"><a class="tab_pick" href="#employees_branch_tab" data-toggle="tab">Settings</a></li>
+                    <li class="tab_pick active"><a href="#student_class_tab" data-toggle="tab">Students</a></li>
+                    <li class="tab_pick"><a href="#student_no_class_tab" data-toggle="tab">No Classes</a></li>
+                    <li class="tab_pick"><a href="#student_all_class_tab" data-toggle="tab">All</a></li>
+                    <li class="tab_pick"><a href="#employees_branch_tab" data-toggle="tab">Settings</a></li>
                 </ul>
 
                 <div class="tab-content">
@@ -112,6 +97,8 @@
     </div>
 
     <!-- MODALS -- START -->
+
+    @include('includes.modals.student_class_modals.add_class_modal')
 
     <!-- MODALS -- END -->
 
