@@ -73,6 +73,7 @@ Route::group(['middleware' => ['auth', 'student_list']], function(){
 
     //Student Class
     Route::get('/classes', 'studentClassController@index');
+    Route::post('/add_class', 'studentClassController@add_class');
 
     //Student Logs
     Route::get('/student_add_history', 'studentLogsController@add_history_page');

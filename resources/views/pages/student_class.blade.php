@@ -50,7 +50,7 @@
                 <div class="box-body box-profile" id="test1">
                         <li class="list-group-item">
                             <p style="word-wrap: break-word;">
-                                2019-1-1 ~ TBA<br>
+                                2019-1-1 ~ TBD<br>
                                 <b>Angel Anterola</b><br>
                                 <span>M • Tu • W • Th • F • Sa</span><br>
                                 <span class="label label-success">0</span>
@@ -59,17 +59,25 @@
                                 <span class="label label-warning">0</span>
                             </p>
                         </li>
+
+                        @foreach($class_settings as $cs)
                         <li class="list-group-item">
                             <p style="word-wrap: break-word;">
-                                2019-1-1 ~ TBA<br>
-                                <b>Angel Anterola</b><br>
-                                <span>M • Tu • W • Th • F • Sa</span><br>
-                                <span class="label label-success">0</span>
-                                <span class="label label-danger">0</span>
-                                <span class="label label-primary">0</span>
-                                <span class="label label-warning">0</span>
+                                {{ $cs->start_date }} ~ {{ (isset($cs->end_date) ? $cs->end_date : 'TBD') }}<br>
+                                <b>{{ $cs->sensei->fname }} {{ $cs->sensei->lname }}</b><br>
+                                <span>
+                                    @foreach($cs->class_day as $cd)
+                                        @if(isset($cd->start_time))
+                                        <span data-container="body" data-toggle="tooltip" 
+                                        data-placement="top" 
+                                        title="{{ $cd->start_time->name }} ~ {{ (isset($cd->end_time->name) ? $cd->end_time->name : 'TBD') }}" 
+                                        >{{ $cd->day_name->abbrev }} • </span>
+                                        @endif
+                                    @endforeach
+                                </span>
                             </p>
                         </li>
+                        @endforeach
                     </ul>
 
                 </div>

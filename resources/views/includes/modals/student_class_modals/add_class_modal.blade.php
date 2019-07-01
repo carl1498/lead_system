@@ -4,7 +4,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Add Employee</h4>
+                <h4 class="modal-title">Add Class</h4>
             </div>
             <form class="form-horizontal" id="add_class_form">
                 @csrf
@@ -16,11 +16,11 @@
 
                         <div class="row clearfix">
                             <div class="col-lg-4 col-md-4 col-sm-3 col-xs-3 form-control-label">
-                                    <label for="branch" class="pull-right">Sensei</label>
+                                    <label for="sensei" class="pull-right">Sensei</label>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                 <div class="form-group required">
-                                    <select type="text" id="branch" name="branch" class="form-control select2 required" style="width: 100%;" required>
+                                    <select type="text" id="sensei" name="sensei" class="form-control select2 required" style="width: 100%;" required>
                                         <option value="">Select Sensei</option>
                                         @foreach($sensei as $key => $s)
                                             <option value="{{ $s->id }}">{{ $s->lname }}, {{ $s->fname }}</option>
@@ -51,6 +51,17 @@
                         </div>
 
                         @include('includes.modals.student_class_modals.add_class_time')
+
+                        <div class="row clearfix">
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
+                                    <label for="remarks" class="pull-right">Remarks</label>
+                            </div>
+                            <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
+                                <div class="form-group required">
+                                <input type="text" id="remarks" name="remarks" class="form-control" placeholder="Enter Remarks">
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
 
