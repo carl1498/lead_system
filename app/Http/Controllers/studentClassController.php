@@ -21,15 +21,13 @@ class studentClassController extends Controller
 
     public function index()
     {
-        $class_settings = class_settings::with('sensei', 'class_day.day_name', 
-            'class_day.start_time', 'class_day.end_time')->get();
 
         $sensei = employee::withTrashed()->with('role')
             ->whereHas('role', function($query){
                 $query->where('name', 'Language Head')->orWhere('name', 'Language Teacher');
             })->get();
 
-        return view('pages.student_class', compact('sensei', 'class_settings'));
+        return view('pages.student_class', compact('sensei'));
     }
 
     public function add_class(Request $request){
@@ -89,5 +87,29 @@ class studentClassController extends Controller
 
             $class_day->save();
         }
+    }
+
+    public function get_class(){
+        $class_settings = class_settings::with('sensei', 'class_day.day_name', 
+            'class_day.start_time', 'class_day.end_time')->get();
+
+        return $class_settings;
+    }
+
+    public function sensei_all(Request $request){
+        info($request->completeCheck);
+        $class_settings = class_settings::with('sensei')
+            ->whereHas('sensei', function ($query) use ($request){
+                $query->where('fname', 'LIKE', '%'.$request->name.'%')->orWhere('lname', 'LIKE', '%'.$request->name.'%');
+            })->get();
+
+        $array = [];
+        foreach ($class_settings as $key => $value){
+            $array[] = [
+                'id' => $value['id'],
+                'text' => $value['sensei']['fname'].' '.$value['sensei']['lname']
+            ];
+        }
+        return json_encode(['results' => $array]);
     }
 }

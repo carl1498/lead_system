@@ -13,31 +13,31 @@ class DayNameTableSeeder extends Seeder
     {
         $data = array(
             array(
-                'abbrev' => 'M',
+                'abbrev' => 'Mon',
                 'name' => 'Monday',
             ),
             array(
-                'abbrev' => 'Tu',
+                'abbrev' => 'Tue',
                 'name' => 'Tuesday',
             ),
             array(
-                'abbrev' => 'W',
+                'abbrev' => 'Wed',
                 'name' => 'Wednesday',
             ),
             array(
-                'abbrev' => 'Th',
+                'abbrev' => 'Thu',
                 'name' => 'Thursday',
             ),
             array(
-                'abbrev' => 'F',
+                'abbrev' => 'Fri',
                 'name' => 'Friday',
             ),
             array(
-                'abbrev' => 'Sa',
+                'abbrev' => 'Sat',
                 'name' => 'Saturday',
             ),
             array(
-                'abbrev' => 'Su',
+                'abbrev' => 'Sun',
                 'name' => 'Sunday',
             )
         );

@@ -16,7 +16,11 @@ Route::get('/', function () {
     return redirect('/login');
 });
 
-Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
+Route::get('/logout', function(){
+    Auth::logout();
+    Session::flush();
+    return Redirect::to('/');
+})->name('logout');
 
 
 //GENERAL ROUTES -- START
@@ -74,6 +78,8 @@ Route::group(['middleware' => ['auth', 'student_list']], function(){
     //Student Class
     Route::get('/classes', 'studentClassController@index');
     Route::post('/add_class', 'studentClassController@add_class');
+    Route::get('/get_class', 'studentClassController@get_class');
+    Route::get('/senseiClassAll/{completeCheck}', 'studentClassController@sensei_all');
 
     //Student Logs
     Route::get('/student_add_history', 'studentLogsController@add_history_page');

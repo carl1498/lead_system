@@ -35,51 +35,19 @@
                     <div class="btn-group" role="group" aria-label="switch">
                         <button class="btn btn-md btn-info">
                             <b>On-Going</b>
-                            <span class="label label-default">0</span>
+                            <span class="label label-default" id="on-going_class">100</span>
                         </button>
                         <button class="btn btn-md btn-info">
                             <b>Complete</b>
-                            <span class="label label-default">100</span>
+                            <span class="label label-default" id="complete_class">900</span>
                         </button>
                         <button class="btn btn-md btn-info">
                             <b>All</b>
-                            <span class="label label-default">1000</span>
+                            <span class="label label-default" id="all_class">1000</span>
                         </button>
                     </div>
                 </div>
-                <div class="box-body box-profile" id="test1">
-                        <li class="list-group-item">
-                            <p style="word-wrap: break-word;">
-                                2019-1-1 ~ TBD<br>
-                                <b>Angel Anterola</b><br>
-                                <span>M • Tu • W • Th • F • Sa</span><br>
-                                <span class="label label-success">0</span>
-                                <span class="label label-danger">0</span>
-                                <span class="label label-primary">0</span>
-                                <span class="label label-warning">0</span>
-                            </p>
-                        </li>
-
-                        @foreach($class_settings as $cs)
-                        <li class="list-group-item">
-                            <p style="word-wrap: break-word;">
-                                {{ $cs->start_date }} ~ {{ (isset($cs->end_date) ? $cs->end_date : 'TBD') }}<br>
-                                <b>{{ $cs->sensei->fname }} {{ $cs->sensei->lname }}</b><br>
-                                <span>
-                                    @foreach($cs->class_day as $cd)
-                                        @if(isset($cd->start_time))
-                                        <span data-container="body" data-toggle="tooltip" 
-                                        data-placement="top" 
-                                        title="{{ $cd->start_time->name }} ~ {{ (isset($cd->end_time->name) ? $cd->end_time->name : 'TBD') }}" 
-                                        >{{ $cd->day_name->abbrev }} • </span>
-                                        @endif
-                                    @endforeach
-                                </span>
-                            </p>
-                        </li>
-                        @endforeach
-                    </ul>
-
+                <div class="box-body box-profile" id="on-going_box">
                 </div>
                 <!-- /.box-body -->
             </div>
@@ -107,6 +75,7 @@
     <!-- MODALS -- START -->
 
     @include('includes.modals.student_class_modals.add_class_modal')
+    @include('includes.modals.student_class_modals.assign_student_class_modal')
 
     <!-- MODALS -- END -->
 

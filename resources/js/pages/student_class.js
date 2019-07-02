@@ -16,7 +16,7 @@ $(document).ready(function(){
         template: false,
     });
 
-    var dayCheck;
+    var dayCheck, completeCheck = false;
 
     $('.addCheck').change(function(){
         dayCheck = $(this).next().val();
@@ -29,6 +29,19 @@ $(document).ready(function(){
             $([startTimeInput, endTimeInput]).val('');
         }
     });
+
+    $('.completeCheck').change(function(){
+        $('#sensei_class').val('').trigger('change');
+        $('#date_class').val('').trigger('change');
+
+        if($(this).is(':checked')){
+            completeCheck = true;
+            getClassSelect();
+        }else{
+            completeCheck = false;
+            getClassSelect();
+        }
+    })
 
     $('.select2').select2();
 
@@ -78,7 +91,7 @@ $(document).ready(function(){
     
     //FUNCTIONS -- START
     
-    //Open Student Modal (ADD)
+    //Open Add Class Modal
     $('.add_class').on('click', function(){
         $('#add_class_modal').modal('toggle');
         $('#add_class_modal').modal('show');
@@ -113,6 +126,89 @@ $(document).ready(function(){
             }
         });
     });
+
+    //Open Assign Student Class Modal
+    $('.assign_student_class').on('click', function(){
+        $('#assign_student_class_modal').modal('toggle');
+        $('#assign_student_class_modal').modal('show');
+    });
+
+    function load_classes(){
+        $.ajax({
+            headers: {
+                'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: '/get_class',
+            method: 'get',
+            success: function(data){
+                //$('#on-going_box').html('');
+
+                let html = '';
+
+                html += '<ul class="list-group list-group-unbordered">';
+
+                for(let x = 0; x < data.length; x++){
+                    let counter = true;
+                    let days = '';
+                    for(let y = 0; y < 6; y++){
+                        if(data[x].class_day[y].start_time){
+                            if(counter == false){
+                                days += ' • ';
+                            }
+                            days += `<span data-container="body" data-toggle="tooltip" 
+                            data-placement="top"
+                            title="` + data[x].class_day[y].start_time.name + ' ~ ' + 
+                            ((data[x].class_day[y].end_time) ? data[x].class_day[y].end_time.name : 'TBD') + `">` +
+                            data[x].class_day[y].day_name.abbrev + `</span>`;
+
+                            /*+ data[x].class_day[y].start_time + ` ~ ` +
+                            (data[x].class_day[y].end_time) ? data[x].class_day[y].end_time : 'TBD' + `*/
+
+                            counter = false;
+                        }
+                    }
+                    html += `
+                    <li class="list-group-item">
+                        <p style="word-wrap: break-word;">`+
+                            data[x].start_date + ' ~ ' + ((data[x].end_date) ? data[x].end_date : 'TBD') + '<br>'+
+                            '<b>' + data[x].sensei.fname + ' ' + data[x].sensei.lname + '</b><br>'+
+                            '<span style="cursor:help;">' + days +
+                        `</p>
+                    </li>`
+                }
+
+                html += '</ul>';
+
+                $('#on-going_box').append(html);
+            }
+        });
+    }
+
+    load_classes();
+
+    function getClassSelect(){
+        $('#sensei_class').select2({
+            placeholder: 'Select Sensei',
+            ajax: {
+                url: '/senseiClassAll/'+completeCheck,
+                dataType: 'json',
+
+                data: function (params){
+                    return {
+                        name: params.term,
+                        page: params.page
+                    }
+                },
+                processResults: function (data){
+                    return {
+                        results:data.results
+                    }
+                }
+            },
+        });
+    }
+
+    getClassSelect();
 
     //FUNCTIONS -- END
 });
