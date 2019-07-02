@@ -98,6 +98,11 @@ class studentClassController extends Controller
 
     public function sensei_all(Request $request){
         info($request->completeCheck);
+
+        if($request->completeCheck == false){
+            
+        }
+
         $class_settings = class_settings::with('sensei')
             ->whereHas('sensei', function ($query) use ($request){
                 $query->where('fname', 'LIKE', '%'.$request->name.'%')->orWhere('lname', 'LIKE', '%'.$request->name.'%');
