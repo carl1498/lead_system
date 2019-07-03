@@ -2,6 +2,8 @@ $(document).ready(function(){
     
     //INITIALIZE -- START
 
+    var dayCheck, completeCheck = false, sensei;
+
     $(".datepicker").datepicker({
         format: 'yyyy-mm-dd',
         forceParse: false
@@ -15,33 +17,6 @@ $(document).ready(function(){
         pickTime: false,
         template: false,
     });
-
-    var dayCheck, completeCheck = false;
-
-    $('.addCheck').change(function(){
-        dayCheck = $(this).next().val();
-        startTimeInput = document.getElementsByClassName('add_start_time')[dayCheck-1];
-        endTimeInput = document.getElementsByClassName('add_end_time')[dayCheck-1];
-        if($(this).is(':checked')){
-            $([startTimeInput, endTimeInput]).prop('readonly', false);
-        }else{
-            $([startTimeInput, endTimeInput]).prop('readonly', true);
-            $([startTimeInput, endTimeInput]).val('');
-        }
-    });
-
-    $('.completeCheck').change(function(){
-        $('#sensei_class').val('').trigger('change');
-        $('#date_class').val('').trigger('change');
-
-        if($(this).is(':checked')){
-            completeCheck = true;
-            getClassSelect();
-        }else{
-            completeCheck = false;
-            getClassSelect();
-        }
-    })
 
     $('.select2').select2();
 
@@ -63,6 +38,17 @@ $(document).ready(function(){
         $(this).find(".add_start_time, .add_end_time, #start_date, #end_date, #remarks, select").val('').end();
         $(this).find(".add_start_time, .add_end_time").prop('readonly', true);
         $('.addCheck').prop('checked', false);
+        $('.select2').trigger('change.select2');
+    });
+    
+    $("#assign_student_class_modal").on("hidden.bs.modal", function(e){
+        $('#assign_student_class_form :input.required').each(function (){
+            this.style.setProperty('border-color', 'green', 'important');
+        }); 
+        $(this).find(".select2").val('').end();
+        $(this).find("#date_class").prop('disabled', true);
+        $('.completeCheck').prop('checked', false);
+        completeCheck = false;
         $('.select2').trigger('change.select2');
     });
 
@@ -90,6 +76,18 @@ $(document).ready(function(){
     //DATATABLES -- END
     
     //FUNCTIONS -- START
+
+    $('.addCheck').change(function(){
+        dayCheck = $(this).next().val();
+        startTimeInput = document.getElementsByClassName('add_start_time')[dayCheck-1];
+        endTimeInput = document.getElementsByClassName('add_end_time')[dayCheck-1];
+        if($(this).is(':checked')){
+            $([startTimeInput, endTimeInput]).prop('readonly', false);
+        }else{
+            $([startTimeInput, endTimeInput]).prop('readonly', true);
+            $([startTimeInput, endTimeInput]).val('');
+        }
+    });
     
     //Open Add Class Modal
     $('.add_class').on('click', function(){
@@ -185,12 +183,33 @@ $(document).ready(function(){
     }
 
     load_classes();
+    
+    $('.completeCheck').change(function(){
+        $('#sensei_class').val('').trigger('change');
+        $('#date_class').val('').trigger('change');
+        $("#date_class").prop('disabled', true);
 
-    function getClassSelect(){
+        if($(this).is(':checked')){
+            completeCheck = true;
+            getSenseiClass();
+        }else{
+            completeCheck = false;
+            getSenseiClass();
+        }
+    });
+
+    $('#sensei_class').change(function(){
+        $("#date_class").prop('disabled', false);
+        sensei = $(this).val();
+
+        getDateClass();
+    })
+
+    function getSenseiClass(){
         $('#sensei_class').select2({
             placeholder: 'Select Sensei',
             ajax: {
-                url: '/senseiClassAll/'+completeCheck,
+                url: '/senseiClass/'+completeCheck,
                 dataType: 'json',
 
                 data: function (params){
@@ -208,7 +227,31 @@ $(document).ready(function(){
         });
     }
 
-    getClassSelect();
+    function getDateClass(){
+        $('#date_class').select2({
+            placeholder: 'Select Class',
+            ajax: {
+                url: '/dateClass',
+                dataType: 'json',
+
+                data: function (params){
+                    return {
+                        completeCheck: completeCheck,
+                        sensei: sensei,
+                        name: params.term,
+                        page: params.page
+                    }
+                },
+                processResults: function (data){
+                    return {
+                        results:data.results
+                    }
+                }
+            },
+        });
+    }
+
+    getSenseiClass();
 
     //FUNCTIONS -- END
 });

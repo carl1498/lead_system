@@ -33,7 +33,7 @@
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                                 <div class="form-group required">
                                     <select type="text" id="sensei_class" name="sensei_class" class="form-control select2 required" style="width: 100%;" required>
-                                        <!-- Controller: studentClassController@sensei_all -->
+                                        <!-- Controller: studentClassController@sensei_class -->
                                     </select>
                                 </div>
                             </div>
@@ -45,8 +45,8 @@
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                                 <div class="form-group required">
-                                    <select type="text" id="date_class" name="date_class" class="form-control select2 required" style="width: 100%;" required>
-                                        <!-- Controller: studentClassController@get_student -->
+                                    <select type="text" id="date_class" name="date_class" class="form-control select2 required" style="width: 100%;" disabled required>
+                                        <!-- Controller: studentClassController@date_class -->
                                     </select>
                                 </div>
                             </div>

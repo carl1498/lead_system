@@ -96,25 +96,61 @@ class studentClassController extends Controller
         return $class_settings;
     }
 
-    public function sensei_all(Request $request){
-        info($request->completeCheck);
+    public function sensei_class(Request $request){
+        $completeCheck = $request->completeCheck;
 
-        if($request->completeCheck == false){
-            
-        }
+        $class_settings_id = class_students::groupBy('class_settings_id')->pluck('class_settings_id');
 
-        $class_settings = class_settings::with('sensei')
+        $class_settings = class_settings::with('sensei')->groupBy('sensei_id')
             ->whereHas('sensei', function ($query) use ($request){
                 $query->where('fname', 'LIKE', '%'.$request->name.'%')->orWhere('lname', 'LIKE', '%'.$request->name.'%');
+            })->when($completeCheck == false, function($query){
+                $query->whereNotIn('id', $class_settings_id);
             })->get();
 
         $array = [];
         foreach ($class_settings as $key => $value){
             $array[] = [
-                'id' => $value['id'],
+                'id' => $value['sensei_id'],
                 'text' => $value['sensei']['fname'].' '.$value['sensei']['lname']
             ];
         }
         return json_encode(['results' => $array]);
     }
+
+    public function date_class(Request $request){
+        $completeCheck = $request->completeCheck;
+        $sensei = $request->sensei;
+        info($request);
+
+        $class_settings_id = class_students::groupBy('class_settings_id')->pluck('class_settings_id');
+
+        $class_settings_test = class_settings::orderBy('start_date')->where('sensei_id', $sensei)->get();
+        info($class_settings_test);
+
+        $class_settings = class_settings::orderBy('start_date')->where('sensei_id', $sensei)
+            ->where('start_date', 'LIKE', '%'.$request->name.'%')
+            ->orWhere('end_date', 'LIKE', '%'.$request->name.'%')
+            ->when($completeCheck == false, function($query) use ($class_settings_id){
+                $query->whereNotIn('id', $class_settings_id);
+            })->get();
+
+        info($class_settings);
+
+        foreach($class_settings as $cs){
+            if($cs->end_date == null){
+                $cs->end_date = 'TBD';
+            }
+        }
+
+        $array = [];
+        foreach ($class_settings as $key => $value){
+            $array[] = [
+                'id' => $value['id'],
+                'text' => $value['start_date'].' ~ '.$value['end_date']
+            ];
+        }
+        return json_encode(['results' => $array]);
+    }
+    
 }
