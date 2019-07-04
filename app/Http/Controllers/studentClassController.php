@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\student;
 use App\employee;
 use App\class_settings;
 use App\class_students;
@@ -100,6 +101,7 @@ class studentClassController extends Controller
         $completeCheck = $request->completeCheck;
 
         $class_settings_id = class_students::groupBy('class_settings_id')->pluck('class_settings_id');
+        info($class_settings_id);
 
         $class_settings = class_settings::with('sensei')->groupBy('sensei_id')
             ->whereHas('sensei', function ($query) use ($request){
@@ -121,21 +123,13 @@ class studentClassController extends Controller
     public function date_class(Request $request){
         $completeCheck = $request->completeCheck;
         $sensei = $request->sensei;
-        info($request);
 
         $class_settings_id = class_students::groupBy('class_settings_id')->pluck('class_settings_id');
 
-        $class_settings_test = class_settings::orderBy('start_date')->where('sensei_id', $sensei)->get();
-        info($class_settings_test);
-
-        $class_settings = class_settings::orderBy('start_date')->where('sensei_id', $sensei)
-            ->where('start_date', 'LIKE', '%'.$request->name.'%')
-            ->orWhere('end_date', 'LIKE', '%'.$request->name.'%')
+        $class_settings = class_settings::where('sensei_id', $sensei)->where('start_date', 'LIKE', '%'.$request->name.'%')
             ->when($completeCheck == false, function($query) use ($class_settings_id){
                 $query->whereNotIn('id', $class_settings_id);
-            })->get();
-
-        info($class_settings);
+            })->orderBy('start_date')->get();
 
         foreach($class_settings as $cs){
             if($cs->end_date == null){
@@ -151,6 +145,50 @@ class studentClassController extends Controller
             ];
         }
         return json_encode(['results' => $array]);
+    }
+
+    public function student_class(Request $request){
+        $student = student::where('fname', 'LIKE', '%'.$request->name.'%')
+            ->orWhere('lname', 'LIKE', '%'.$request->name.'%')->get();
+
+        $array = [];
+        foreach ($student as $key => $value){
+            $array[] = [
+                'id' => $value['id'],
+                'text' => $value['lname'].', '.$value['fname']
+            ];
+        }
+        return json_encode(['results' => $array]);
+    }
+
+    public function check_student_class(Request $request){
+        $student_id = $request->student;
+        
+        $class_students = class_students::with('current_class.sensei')
+            ->where('stud_id', $student_id)->whereNull('end_date')
+            ->orderBy('id', 'desc')->first();
+
+        if(empty($class_students)){
+            return 'false';
+        }else{
+            return $class_students;
+        }
+    }
+
+    public function assign_student_class(Request $request){
+        $start_date = class_settings::find($request->date_class);
+
+        if(isset($request->current_end_date)){
+            $end_date = class_students::find($request->class_students_id);
+            $end_date->end_date = Carbon::parse($request->current_end_date);
+            $end_date->save();
+        }
+
+        $class_students = new class_students;
+        $class_students->class_settings_id = $request->date_class;
+        $class_students->stud_id = $request->student_class;
+        $class_students->start_date = $start_date->start_date;
+        $class_students->save();
     }
     
 }

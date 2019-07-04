@@ -12,5 +12,9 @@ class class_students extends Model
         'class_settings_id', 'stud_id', 'start_date', 'end_date'
     ];
 
+    public function current_class(){
+        return $this->hasOne('App\class_settings', 'id', 'class_settings_id');
+    }
+
     public $timestamps = true;
 }

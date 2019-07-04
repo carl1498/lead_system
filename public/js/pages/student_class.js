@@ -74,7 +74,9 @@ $(document).ready(function () {
 
     var dayCheck,
         completeCheck = false,
-        sensei;
+        sensei,
+        class_select,
+        student;
 
     $(".datepicker").datepicker({
         format: 'yyyy-mm-dd',
@@ -91,6 +93,14 @@ $(document).ready(function () {
     });
 
     $('.select2').select2();
+
+    $('#date_class').select2({
+        placeholder: 'Select Class'
+    });
+
+    $('#student_class').select2({
+        placeholder: 'Select Student'
+    });
 
     $('body').tooltip({
         selector: '[data-toggle="tooltip"]',
@@ -117,8 +127,8 @@ $(document).ready(function () {
         $('#assign_student_class_form :input.required').each(function () {
             this.style.setProperty('border-color', 'green', 'important');
         });
-        $(this).find(".select2").val('').end();
-        $(this).find("#date_class").prop('disabled', true);
+        $(this).find(".select2, input").val('').end();
+        $(this).find("#date_class, #student_class").prop('disabled', true);
         $('.completeCheck').prop('checked', false);
         completeCheck = false;
         $('.select2').trigger('change.select2');
@@ -245,9 +255,8 @@ $(document).ready(function () {
     load_classes();
 
     $('.completeCheck').change(function () {
-        $('#sensei_class').val('').trigger('change');
-        $('#date_class').val('').trigger('change');
-        $("#date_class").prop('disabled', true);
+        $('#sensei_class, #date_class, #current_student_class, #class_students_id, #current_end_date').val('').trigger('change');
+        $("#date_class, #student_class, #current_end_date").prop('disabled', true);
 
         if ($(this).is(':checked')) {
             completeCheck = true;
@@ -259,10 +268,73 @@ $(document).ready(function () {
     });
 
     $('#sensei_class').change(function () {
+        $('#date_class, #student_class, #current_student_class, #class_students_id, #current_end_date').val('').trigger('change');
         $("#date_class").prop('disabled', false);
+        $("#student_class, #current_end_date").prop('disabled', true);
         sensei = $(this).val();
 
         getDateClass();
+    });
+
+    $('#date_class').change(function () {
+        class_select = $(this).val();
+        if ($(this).val()) {
+            $('#student_class, #current_student_class, #class_students_id, #current_end_date').val('').trigger('change');
+            $('#student_class').val('').prop('disabled', false);
+            $("#current_end_date").prop('disabled', true);
+        }
+
+        getStudentClass();
+    });
+
+    $('#student_class').change(function () {
+        if ($(this).val()) {
+            student = $(this).val();
+
+            $.ajax({
+                url: '/check_student_class/' + student,
+                method: 'get',
+                dataType: 'json',
+                success: function success(data) {
+                    if (data != false) {
+                        $('#current_student_class').val(data.current_class.start_date + ' ~ ' + (data.current_class.end_date ? data.current_class.end_date : 'TBD') + ' (' + data.current_class.sensei.fname + ' ' + data.current_class.sensei.lname + ')');
+                        $('#current_end_date').val('').prop('disabled', false);
+                        $('#class_students_id').val(data.id);
+                    } else {
+                        $('#current_student_class').val('No Current Class');
+                        $('#current_end_date').val('').prop('disabled', true);
+                        $('#class_students_id').val('');
+                    }
+                }
+            });
+        }
+    });
+
+    $(document).on('submit', '#assign_student_class_form', function (e) {
+        e.preventDefault();
+
+        var input = $('.save_assign');
+        var button = document.getElementsByClassName("save_assign")[0];
+
+        $.ajax({
+            headers: {
+                'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: '/assign_student_class',
+            data: $(this).serialize(),
+            dataType: 'text',
+            success: function success(data) {
+                $('#assign_student_class_modal').modal('hide');
+                notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
+                button.disabled = false;
+                input.html('SAVE CHANGES');
+            },
+            error: function error(data) {
+                swal("Error!", "Something went wrong, try again.", "error");
+                button.disabled = false;
+                input.html('SAVE CHANGES');
+            }
+        });
     });
 
     function getSenseiClass() {
@@ -298,6 +370,28 @@ $(document).ready(function () {
                     return {
                         completeCheck: completeCheck,
                         sensei: sensei,
+                        name: params.term,
+                        page: params.page
+                    };
+                },
+                processResults: function processResults(data) {
+                    return {
+                        results: data.results
+                    };
+                }
+            }
+        });
+    }
+
+    function getStudentClass() {
+        $('#student_class').select2({
+            placeholder: 'Select Student',
+            ajax: {
+                url: '/studentClass',
+                dataType: 'json',
+
+                data: function data(params) {
+                    return {
                         name: params.term,
                         page: params.page
                     };

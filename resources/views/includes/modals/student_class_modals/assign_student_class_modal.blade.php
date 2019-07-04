@@ -52,6 +52,46 @@
                             </div>
                         </div>
 
+                        <div class="row clearfix">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 form-control-label">
+                                    <label for="student_class" class="pull-right">Student</label>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                <div class="form-group required">
+                                    <select type="text" id="student_class" name="student_class" class="form-control select2 required" style="width: 100%;" disabled required>
+                                        <!-- Controller: studentClassController@student_class -->
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row clearfix">
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
+                                    <label for="current_student_class" class="pull-right">Student Class</label>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                <div class="form-group required">
+                                    <input type="text" id="current_student_class" name="current_student_class" class="form-control" placeholder="Student's Current Class" 
+                                    data-container="body" data-toggle="tooltip" data-placement="top" title="If student is currently assigned to an on-going class"
+                                    style="width: 100%;" readonly>
+                                    <input type="hidden" name="class_students_id" id="class_students_id">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row clearfix">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 form-control-label">
+                                    <label for="current_end_date" class="pull-right">End Date</label>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                <div class="form-group required">
+                                    <input type="text" id="current_end_date" name="current_end_date" class="form-control datepicker required" placeholder="End Date: YYYY-MM-DD" 
+                                    data-container="body" data-toggle="tooltip" data-placement="top" title="End the student's on-going class(if any)"
+                                    style="width: 100%;" disabled required>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
 
                 </div>
@@ -59,7 +99,7 @@
                 <div class="modal-footer">
                     <div class="col-md-12">
                         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary save_class">Save changes</button>
+                        <button type="submit" class="btn btn-primary save_assign">Save changes</button>
                     </div>
                 </div>
             </form>
