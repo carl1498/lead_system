@@ -77,6 +77,8 @@ $(document).ready(function () {
         sensei,
         class_select,
         student;
+    var current_class_tab = 'Ongoing'; //Ongoing, Complete, all
+    var current_class_select;
 
     $(".datepicker").datepicker({
         format: 'yyyy-mm-dd',
@@ -217,37 +219,39 @@ $(document).ready(function () {
             headers: {
                 'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
             },
-            url: '/get_class',
+            url: '/get_class/' + current_class_tab,
             method: 'get',
+            dataType: 'json',
             success: function success(data) {
-                //$('#on-going_box').html('');
+
+                $('#class_box').empty();
 
                 var html = '';
 
                 html += '<ul class="list-group list-group-unbordered">';
 
-                for (var x = 0; x < data.length; x++) {
+                for (var x = 0; x < data.class_settings.length; x++) {
                     var counter = true;
                     var days = '';
                     for (var y = 0; y < 6; y++) {
-                        if (data[x].class_day[y].start_time) {
+                        if (data.class_settings[x].class_day[y].start_time) {
                             if (counter == false) {
                                 days += ' • ';
                             }
-                            days += '<span data-container="body" data-toggle="tooltip" \n                            data-placement="top"\n                            title="' + data[x].class_day[y].start_time.name + ' ~ ' + (data[x].class_day[y].end_time ? data[x].class_day[y].end_time.name : 'TBD') + '">' + data[x].class_day[y].day_name.abbrev + '</span>';
-
-                            /*+ data[x].class_day[y].start_time + ` ~ ` +
-                            (data[x].class_day[y].end_time) ? data[x].class_day[y].end_time : 'TBD' + `*/
+                            days += '<span data-container="body" data-toggle="tooltip" \n                            data-placement="top"\n                            title="' + data.class_settings[x].class_day[y].start_time.name + ' ~ ' + (data.class_settings[x].class_day[y].end_time ? data.class_settings[x].class_day[y].end_time.name : 'TBD') + '">' + data.class_settings[x].class_day[y].day_name.abbrev + '</span>';
 
                             counter = false;
                         }
                     }
-                    html += '\n                    <li class="list-group-item">\n                        <p style="word-wrap: break-word;">' + data[x].start_date + ' ~ ' + (data[x].end_date ? data[x].end_date : 'TBD') + '<br>' + '<b>' + data[x].sensei.fname + ' ' + data[x].sensei.lname + '</b><br>' + '<span style="cursor:help;">' + days + '</p>\n                    </li>';
+                    html += '\n                    <li class="list-group-item class_pick" id="' + data.class_settings[x].id + '">\n                        <p class="class_get_id" style="word-wrap: break-word;">' + data.class_settings[x].start_date + ' ~ ' + (data.class_settings[x].end_date ? data.class_settings[x].end_date : 'TBD') + '<br>' + '<b>' + data.class_settings[x].sensei.fname + ' ' + data.class_settings[x].sensei.lname + '</b><br>' + '<span style="cursor:help;">' + days + '</p>\n                    </li>';
                 }
 
                 html += '</ul>';
 
-                $('#on-going_box').append(html);
+                $('#on_going_class_box span').text(data.on_going);
+                $('#complete_class_box span').text(data.completed);
+                $('#all_class_box span').text(data.all);
+                $('#class_box').append(html);
             }
         });
     }
@@ -406,6 +410,35 @@ $(document).ready(function () {
     }
 
     getSenseiClass();
+
+    //CLASS BOX -- START
+
+    $(document).on('click', '.class_pick', function () {
+        if (current_class_select) {
+            $('.class_pick' + '#' + current_class_select).css('background-color', '');
+        }
+
+        $(this).css('background-color', '#4AB19D');
+        current_class_select = $(this).attr('id');
+    });
+
+    $(document).on('click', '#on_going_class_box', function () {
+        if (!$(this).hasClass('disabled')) {
+            current_class_tab = 'ongoing';
+            load_classes();
+        }
+    });
+
+    $(document).on('click', '.class_nav_box', function () {
+        if (!$(this).hasClass('disabled')) {
+            $('.class_nav_box').attr('disabled', false);
+            $(this).attr('disabled', true);
+            current_class_tab = $(this).find('b').text();
+            load_classes();
+        }
+    });
+
+    //CLASS BOX -- END
 
     //FUNCTIONS -- END
 });

@@ -33,21 +33,21 @@
             <div class="box box-primary">
                 <div class="text-center">
                     <div class="btn-group" role="group" aria-label="switch">
-                        <button class="btn btn-md btn-info">
-                            <b>On-Going</b>
-                            <span class="label label-default" id="on-going_class">100</span>
+                        <button class="btn btn-md btn-info class_nav_box" id="on_going_class_box" disabled>
+                            <b>Ongoing</b>
+                            <span class="label label-default">0</span>
                         </button>
-                        <button class="btn btn-md btn-info">
+                        <button class="btn btn-md btn-info class_nav_box" id="complete_class_box">
                             <b>Complete</b>
-                            <span class="label label-default" id="complete_class">900</span>
+                            <span class="label label-default">0</span>
                         </button>
-                        <button class="btn btn-md btn-info">
+                        <button class="btn btn-md btn-info class_nav_box" id="all_class_box">
                             <b>All</b>
-                            <span class="label label-default" id="all_class">1000</span>
+                            <span class="label label-default">0</span>
                         </button>
                     </div>
                 </div>
-                <div class="box-body box-profile" id="on-going_box">
+                <div class="box-body box-profile" id="class_box">
                 </div>
                 <!-- /.box-body -->
             </div>

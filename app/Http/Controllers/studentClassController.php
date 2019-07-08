@@ -90,24 +90,63 @@ class studentClassController extends Controller
         }
     }
 
-    public function get_class(){
+    public function get_class(Request $request){
+        $current_tab = $request->current_class_tab;
+
         $class_settings = class_settings::with('sensei', 'class_day.day_name', 
             'class_day.start_time', 'class_day.end_time')->get();
 
-        return $class_settings;
+        $check_on_going = class_students::whereNull('end_date')->groupBy('class_settings_id')->pluck('class_settings_id')->toArray();
+        $check_no_students = class_students::groupBy('class_settings_id')->pluck('class_settings_id');
+        $check_no_students = class_settings::whereNotIn('id', $check_no_students)->pluck('id')->toArray();
+        
+        $on_going = array_unique(array_merge($check_on_going, $check_no_students));
+
+        $completed = class_settings::whereNotIn('id', $on_going)->pluck('id');
+        $completed_count = class_settings::whereNotIn('id', $on_going)->count();
+        $on_going_count = count($on_going);
+        $all = $completed_count + $on_going_count;
+        
+        switch($current_tab){
+            case 'Ongoing':
+                $class_settings = class_settings::with('sensei', 'class_day.day_name', 
+                'class_day.start_time', 'class_day.end_time')->whereIn('id', $on_going)->get();
+                break;
+            case 'Complete':
+                $class_settings = class_settings::with('sensei', 'class_day.day_name', 
+                'class_day.start_time', 'class_day.end_time')->whereIn('id', $completed)->get();
+                break;
+            case 'All':
+                break;
+            default:
+                break;
+        }
+
+
+        $output = array(
+            'completed' => $completed_count,
+            'on_going' => $on_going_count,
+            'all' => $all,
+            'class_settings' => $class_settings
+        );
+
+        return json_encode($output);
     }
 
     public function sensei_class(Request $request){
         $completeCheck = $request->completeCheck;
 
-        $class_settings_id = class_students::groupBy('class_settings_id')->pluck('class_settings_id');
-        info($class_settings_id);
+        $check_on_going = class_students::whereNull('end_date')->groupBy('class_settings_id')->pluck('class_settings_id')->toArray();
+        $check_no_students = class_students::groupBy('class_settings_id')->pluck('class_settings_id');
+        $check_no_students = class_settings::whereNotIn('id', $check_no_students)->pluck('id')->toArray();
+        
+        $on_going = array_unique(array_merge($check_on_going, $check_no_students));
 
         $class_settings = class_settings::with('sensei')->groupBy('sensei_id')
             ->whereHas('sensei', function ($query) use ($request){
                 $query->where('fname', 'LIKE', '%'.$request->name.'%')->orWhere('lname', 'LIKE', '%'.$request->name.'%');
-            })->when($completeCheck == false, function($query){
-                $query->whereNotIn('id', $class_settings_id);
+            })->when($completeCheck == 'false', function($query) use($on_going){
+                $query->whereIn('id', $on_going);
             })->get();
 
         $array = [];
@@ -124,11 +163,15 @@ class studentClassController extends Controller
         $completeCheck = $request->completeCheck;
         $sensei = $request->sensei;
 
-        $class_settings_id = class_students::groupBy('class_settings_id')->pluck('class_settings_id');
+        $check_on_going = class_students::whereNull('end_date')->groupBy('class_settings_id')->pluck('class_settings_id')->toArray();
+        $check_no_students = class_students::groupBy('class_settings_id')->pluck('class_settings_id');
+        $check_no_students = class_settings::whereNotIn('id', $check_no_students)->pluck('id')->toArray();
+        
+        $on_going = array_unique(array_merge($check_on_going, $check_no_students));
 
         $class_settings = class_settings::where('sensei_id', $sensei)->where('start_date', 'LIKE', '%'.$request->name.'%')
-            ->when($completeCheck == false, function($query) use ($class_settings_id){
-                $query->whereNotIn('id', $class_settings_id);
+            ->when($completeCheck == 'false', function($query) use ($on_going){
+                $query->whereIn('id', $on_going);
             })->orderBy('start_date')->get();
 
         foreach($class_settings as $cs){
@@ -190,5 +233,4 @@ class studentClassController extends Controller
         $class_students->start_date = $start_date->start_date;
         $class_students->save();
     }
-    
 }
