@@ -84,6 +84,7 @@ Route::group(['middleware' => ['auth', 'student_list']], function(){
     Route::get('/studentClass', 'studentClassController@student_class');
     Route::get('/check_student_class/{student}', 'studentClassController@check_student_class');
     Route::get('/assign_student_class', 'studentClassController@assign_student_class');
+    Route::get('/class_students', 'studentClassController@class_students');
 
     //Student Logs
     Route::get('/student_add_history', 'studentLogsController@add_history_page');

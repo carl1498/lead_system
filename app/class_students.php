@@ -16,5 +16,9 @@ class class_students extends Model
         return $this->hasOne('App\class_settings', 'id', 'class_settings_id');
     }
 
+    public function student(){
+        return $this->hasOne('App\student', 'id', 'stud_id');
+    }
+
     public $timestamps = true;
 }

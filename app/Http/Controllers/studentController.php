@@ -290,6 +290,9 @@ class studentController extends Controller
         $s = student::with('program', 'benefactor', 'referral', 'course', 'departure_year')
             ->whereHas('program', function($query) use ($request) {
                 $query->where('name', 'SSV (Careworker)')->orWhere('name', 'SSV (Hospitality)');
+            })
+            ->when($departure_year != 'All', function($query) use($departure_year){
+                $query->where('departure_year_id', $departure_year);
             })->get();
 
         if($current_ssv == 'SSV'){

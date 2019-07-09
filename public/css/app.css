@@ -16655,3 +16655,11 @@ a.books_pick {
   }
 }
 
+.class_pick {
+  cursor: pointer;
+}
+
+.class_pick:hover {
+  background-color: #d3d3d3;
+}
+

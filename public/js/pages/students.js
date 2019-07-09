@@ -164,9 +164,9 @@ $(document).ready(function () {
     $('input, select').attr('autocomplete', 'off');
 
     function disableTabs() {
-        $('li.branch_pick, li.status_pick, li.result_pick, \n        li.language_pick, li.all_pick, li.ssv_pick').addClass('disabled').css('cursor', 'not-allowed');
+        $('li.branch_pick, li.status_pick, li.result_pick, \n        li.language_pick, li.all_pick, li.ssv_pick, li.trainee_pick').addClass('disabled').css('cursor', 'not-allowed');
 
-        $('a.branch_pick, a.status_pick, a.result_pick,\n        a.language_pick, a.all_pick, a.ssv_pick').addClass('disabled').css('pointer-events', 'none');
+        $('a.branch_pick, a.status_pick, a.result_pick,\n        a.language_pick, a.all_pick, a.ssv_pick, a.trainee_pick').addClass('disabled').css('pointer-events', 'none');
 
         $('.switch, .refresh_table').attr('disabled', true);
     }
@@ -174,7 +174,7 @@ $(document).ready(function () {
     function enableTabs() {
         $('li.branch_pick, li.status_pick, li.result_pick, \n        li.language_pick, li.all_pick, li.ssv_pick, li.trainee_pick').removeClass('disabled').css('cursor', 'pointer');
 
-        $('a.branch_pick, a.status_pick, a.result_pick,\n        a.language_pick, a.all_pick, a.ssv_pick, li.trainee_pick').removeClass('disabled').css('pointer-events', 'auto');
+        $('a.branch_pick, a.status_pick, a.result_pick,\n        a.language_pick, a.all_pick, a.ssv_pick, a.trainee_pick').removeClass('disabled').css('pointer-events', 'auto');
 
         $('.refresh_table').attr('disabled', false);
 

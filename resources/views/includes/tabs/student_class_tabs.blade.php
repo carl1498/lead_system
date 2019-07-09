@@ -5,6 +5,7 @@
     <table id="student_class_table" class="table table-hover table-striped table-bordered responsive nowrap" width="100%">
         <thead>
             <tr>
+                <th>Complete</th>
                 <th>Name</th>
                 <th>Contact</th>
                 <th>Program</th>
@@ -66,3 +67,11 @@
 </div>
 
 <!-- ALL -- END -->
+
+<!-- SETTINGS -- START -->
+
+<div class="tab-pane fade in" id="class_settings_tab">
+    @include('includes.tabs.class_settings_tab')
+</div>
+
+<!-- SETTINGS -- END -->

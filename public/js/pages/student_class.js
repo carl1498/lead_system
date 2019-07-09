@@ -78,7 +78,7 @@ $(document).ready(function () {
         class_select,
         student;
     var current_class_tab = 'Ongoing'; //Ongoing, Complete, all
-    var current_class_select;
+    var current_class_select = 0;
 
     $(".datepicker").datepicker({
         format: 'yyyy-mm-dd',
@@ -136,11 +136,89 @@ $(document).ready(function () {
         $('.select2').trigger('change.select2');
     });
 
+    function disableTabs() {
+        $('li.tab_pick').addClass('disabled').css('cursor', 'not-allowed');
+
+        $('a.tab_pick').addClass('disabled').css('pointer-events', 'none');
+
+        $('.refresh_table').attr('disabled', true);
+    }
+
+    disableTabs();
+
+    function enableTabs() {
+        $('li.tab_pick').removeClass('disabled').css('cursor', 'pointer');
+
+        $('a.tab_pick').removeClass('disabled').css('pointer-events', 'auto');
+
+        $('.refresh_table').attr('disabled', true);
+    }
+
+    function refresh() {
+        disableTabs();
+    }
+
     //INITIALIZE -- END
 
     //DATATABLES -- START
 
-    $('#student_class_table').DataTable({ stateSave: true,
+    $(document).on('shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
+        $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
+    });
+
+    //COLUMNS & COLUMNDEFS
+
+    var columns_students_class = [{ data: 'complete', name: 'complete' }, { data: 'name', name: 'name' }, { data: 'student.contact', name: 'contact' }, { data: 'student.program.name', name: 'program' }, { data: 'departure', name: 'departure' }, { data: 'student.status', name: 'status' }, { data: 'class_status', name: 'class_status' }, { data: 'start_date', name: 'start_date' }, { data: 'end_date', name: 'end_date' }, { data: "action", orderable: false, searchable: false }];
+
+    function refresh_student_class_table() {
+        student_class_table = $('#student_class_table').DataTable({
+            stateSave: true,
+            stateSaveCallback: function stateSaveCallback(settings, data) {
+                localStorage.setItem('DataTables_' + settings.sInstance, JSON.stringify(data));
+            },
+            stateLoadCallback: function stateLoadCallback(settings) {
+                return JSON.parse(localStorage.getItem('DataTables_' + settings.sInstance));
+            },
+            initComplete: function initComplete(settings, json) {},
+            processing: true,
+            destroy: true,
+            scrollX: true,
+            scrollCollapse: true,
+            fixedColumns: {
+                leftColumns: 2
+            },
+            responsive: true,
+            ajax: {
+                url: '/class_students',
+                data: {
+                    current_class_select: current_class_select
+                }
+            },
+            columnDefs: [{ defaultContent: "", targets: "_all" }],
+            columns: columns_students_class
+        });
+    }
+    refresh_student_class_table();
+
+    $('#student_no_class_table').DataTable({
+        stateSave: true,
+        stateSaveCallback: function stateSaveCallback(settings, data) {
+            localStorage.setItem('DataTables_' + settings.sInstance, JSON.stringify(data));
+        },
+        stateLoadCallback: function stateLoadCallback(settings) {
+            return JSON.parse(localStorage.getItem('DataTables_' + settings.sInstance));
+        },
+        initComplete: function initComplete(settings, json) {},
+        processing: true,
+        destroy: true,
+        scrollX: true,
+        scrollCollapse: true,
+        fixedColumns: true,
+        responsive: true
+    });
+
+    $('#student_all_class_table').DataTable({
+        stateSave: true,
         stateSaveCallback: function stateSaveCallback(settings, data) {
             localStorage.setItem('DataTables_' + settings.sInstance, JSON.stringify(data));
         },
@@ -197,8 +275,10 @@ $(document).ready(function () {
             success: function success(data) {
                 $('#add_class_modal').modal('hide');
                 notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
+                load_classes();
                 button.disabled = false;
                 input.html('SAVE CHANGES');
+                load_classes();
             },
             error: function error(data) {
                 swal("Error!", "Something went wrong, try again.", "error");
@@ -243,7 +323,7 @@ $(document).ready(function () {
                             counter = false;
                         }
                     }
-                    html += '\n                    <li class="list-group-item class_pick" id="' + data.class_settings[x].id + '">\n                        <p class="class_get_id" style="word-wrap: break-word;">' + data.class_settings[x].start_date + ' ~ ' + (data.class_settings[x].end_date ? data.class_settings[x].end_date : 'TBD') + '<br>' + '<b>' + data.class_settings[x].sensei.fname + ' ' + data.class_settings[x].sensei.lname + '</b><br>' + '<span style="cursor:help;">' + days + '</p>\n                    </li>';
+                    html += '\n                    <li class="list-group-item class_pick" id="' + data.class_settings[x].id + '">\n                        <p class="class_get_id" style="word-wrap: break-word;">' + data.class_settings[x].start_date + ' ~ ' + (data.class_settings[x].end_date ? data.class_settings[x].end_date : 'TBD') + '<br>' + '<b>' + data.class_settings[x].sensei.fname + ' ' + data.class_settings[x].sensei.lname + '</b><br>' + '<span style="cursor:help;">' + days + '<br>' + '<span class="label label-success" data-container="body" data-toggle="tooltip" data-placement="top" title="Complete">' + data.class_settings[x].complete + '</span>&nbsp;' + '<span class="label label-danger" data-container="body" data-toggle="tooltip" data-placement="top" title="Back Out">' + data.class_settings[x].backout + '</span>&nbsp;' + '<span class="label label-info" data-container="body" data-toggle="tooltip" data-placement="top" title="Active">' + data.class_settings[x].active + '</span>&nbsp;' + '<span class="label label-warning" data-container="body" data-toggle="tooltip" data-placement="top" title="No. of Students">' + data.class_settings[x].all + '</span>' + '</p>\n                    </li>';
                 }
 
                 html += '</ul>';
@@ -328,8 +408,16 @@ $(document).ready(function () {
             data: $(this).serialize(),
             dataType: 'text',
             success: function success(data) {
+                if (data == 'assigned') {
+                    swal("Error!", "Student already assigned to this class.", "error");
+                    button.disabled = false;
+                    input.html('SAVE CHANGES');
+                    return;
+                }
+
                 $('#assign_student_class_modal').modal('hide');
                 notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
+                load_classes();
                 button.disabled = false;
                 input.html('SAVE CHANGES');
             },
@@ -418,24 +506,18 @@ $(document).ready(function () {
             $('.class_pick' + '#' + current_class_select).css('background-color', '');
         }
 
-        $(this).css('background-color', '#4AB19D');
+        $(this).css('background-color', '#FEFAD4');
         current_class_select = $(this).attr('id');
-    });
 
-    $(document).on('click', '#on_going_class_box', function () {
-        if (!$(this).hasClass('disabled')) {
-            current_class_tab = 'ongoing';
-            load_classes();
-        }
+        enableTabs();
+        refresh_student_class_table();
     });
 
     $(document).on('click', '.class_nav_box', function () {
-        if (!$(this).hasClass('disabled')) {
-            $('.class_nav_box').attr('disabled', false);
-            $(this).attr('disabled', true);
-            current_class_tab = $(this).find('b').text();
-            load_classes();
-        }
+        $('.class_nav_box').attr('disabled', false);
+        $(this).attr('disabled', true);
+        current_class_tab = $(this).find('b').text();
+        load_classes();
     });
 
     //CLASS BOX -- END

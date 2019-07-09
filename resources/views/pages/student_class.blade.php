@@ -48,6 +48,7 @@
                     </div>
                 </div>
                 <div class="box-body box-profile" id="class_box">
+
                 </div>
                 <!-- /.box-body -->
             </div>
@@ -57,15 +58,15 @@
         <div class="col-md-8 col-xl-9">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
-                    <li class="tab_pick active"><a href="#student_class_tab" data-toggle="tab">Students</a></li>
-                    <li class="tab_pick"><a href="#student_no_class_tab" data-toggle="tab">No Classes</a></li>
-                    <li class="tab_pick"><a href="#student_all_class_tab" data-toggle="tab">All</a></li>
-                    <li class="tab_pick"><a href="#employees_branch_tab" data-toggle="tab">Settings</a></li>
+                    <li class="disabled tab_pick active"><a class="tab_pick" href="#student_class_tab" data-toggle="tab">Students</a></li>
+                    <li class="disabled tab_pick"><a class="tab_pick" href="#student_no_class_tab" data-toggle="tab">No Classes</a></li>
+                    <li class="disabled tab_pick"><a class="tab_pick" href="#student_all_class_tab" data-toggle="tab">All</a></li>
+                    <li class="disabled tab_pick"><a class="tab_pick" href="#class_settings_tab" data-toggle="tab">Settings</a></li>
                 </ul>
 
                 <div class="tab-content">
                 
-                    @include('includes.tabs.student_class_tabs')
+                @include('includes.tabs.student_class_tabs')
 
                 </div>
             </div>

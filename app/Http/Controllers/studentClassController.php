@@ -22,13 +22,48 @@ class studentClassController extends Controller
 
     public function index()
     {
-
         $sensei = employee::withTrashed()->with('role')
             ->whereHas('role', function($query){
                 $query->where('name', 'Language Head')->orWhere('name', 'Language Teacher');
             })->get();
 
         return view('pages.student_class', compact('sensei'));
+    }
+
+    public function class_students(Request $request){
+        $current_class = $request->current_class_select;
+
+        $class_settings = class_settings::find($current_class);
+
+        $class_students = class_students::with('student', 'student.program', 'student.departure_year',
+            'student.departure_month')->where('class_settings_id', $current_class)->get();
+
+        return Datatables::of($class_students)
+        ->addColumn('complete', function($data){
+            return '';
+        })
+        ->addColumn('name', function($data){
+            return $data->student->lname.', '.$data->student->fname.' '.$data->student->mname;
+        })
+        ->addColumn('departure', function($data){
+            if($data->student->departure_month){
+                return $data->student->departure_year->name . ' ' . $data->student->departure_month->name;
+            }else{
+                return 'N/A';
+            }
+        })
+        ->addColumn('class_status', function($data){
+            if($data->end_date && $data->student->status != 'Back Out'){
+                return 'Complete';
+            }
+            else if($data->end_date && $data->student->status == 'Back Out'){
+                return 'Back Out';
+            }
+            else{
+                return 'Active';
+            }
+        })
+        ->make(true);
     }
 
     public function add_class(Request $request){
@@ -94,7 +129,7 @@ class studentClassController extends Controller
         $current_tab = $request->current_class_tab;
 
         $class_settings = class_settings::with('sensei', 'class_day.day_name', 
-            'class_day.start_time', 'class_day.end_time')->get();
+            'class_day.start_time', 'class_day.end_time')->orderBy('start_date')->get();
 
         $check_on_going = class_students::whereNull('end_date')->groupBy('class_settings_id')->pluck('class_settings_id')->toArray();
         $check_no_students = class_students::groupBy('class_settings_id')->pluck('class_settings_id');
@@ -110,11 +145,13 @@ class studentClassController extends Controller
         switch($current_tab){
             case 'Ongoing':
                 $class_settings = class_settings::with('sensei', 'class_day.day_name', 
-                'class_day.start_time', 'class_day.end_time')->whereIn('id', $on_going)->get();
+                'class_day.start_time', 'class_day.end_time')->whereIn('id', $on_going)
+                ->orderBy('start_date')->get();
                 break;
             case 'Complete':
                 $class_settings = class_settings::with('sensei', 'class_day.day_name', 
-                'class_day.start_time', 'class_day.end_time')->whereIn('id', $completed)->get();
+                'class_day.start_time', 'class_day.end_time')->whereIn('id', $completed)
+                ->orderBy('start_date')->get();
                 break;
             case 'All':
                 break;
@@ -122,6 +159,21 @@ class studentClassController extends Controller
                 break;
         }
 
+        foreach($class_settings as $cs){
+            $cs->complete = class_students::with('student')->where('class_settings_id', $cs->id)
+                ->whereHas('student', function($query){
+                    $query->where('status', '<>', 'Back Out');
+                })->whereNotNull('end_date')->count();
+
+            $cs->backout = class_students::with('student')->where('class_settings_id', $cs->id)
+                ->whereHas('student', function($query){
+                    $query->where('status', 'Back Out');
+                })->whereNotNull('end_date')->count();
+
+            $cs->active = class_students::where('class_settings_id', $cs->id)->whereNull('end_date')->count();
+
+            $cs->all = class_students::where('class_settings_id', $cs->id)->count();
+        }
 
         $output = array(
             'completed' => $completed_count,
@@ -220,8 +272,18 @@ class studentClassController extends Controller
 
     public function assign_student_class(Request $request){
         $start_date = class_settings::find($request->date_class);
+        $sensei_class = $request->sensei_class;
 
         if(isset($request->current_end_date)){
+            $student_exist = class_students::with('current_class')->where('id', $request->class_students_id)
+                ->whereHas('current_class', function($query) use($sensei_class){
+                    $query->where('sensei_id', $sensei_class);
+                })->whereNull('end_date')->first();
+
+            if(!empty($student_exist)){
+                return 'assigned';
+            }
+
             $end_date = class_students::find($request->class_students_id);
             $end_date->end_date = Carbon::parse($request->current_end_date);
             $end_date->save();
