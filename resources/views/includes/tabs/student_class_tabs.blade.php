@@ -5,7 +5,6 @@
     <table id="student_class_table" class="table table-hover table-striped table-bordered responsive nowrap" width="100%">
         <thead>
             <tr>
-                <th>Complete</th>
                 <th>Name</th>
                 <th>Contact</th>
                 <th>Program</th>
@@ -35,10 +34,6 @@
                 <th>Program</th>
                 <th>Departure</th>
                 <th>Status</th>
-                <th>Class Status</th>
-                <th>Start</th>
-                <th>End</th>
-                <th>Action</th>
             </tr>
         </thead>
     </table>
@@ -71,7 +66,7 @@
 <!-- SETTINGS -- START -->
 
 <div class="tab-pane fade in" id="class_settings_tab">
-    @include('includes.tabs.class_settings_tab')
+    @include('includes.tabs.student_class_includes.class_settings_tab')
 </div>
 
 <!-- SETTINGS -- END -->

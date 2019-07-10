@@ -20,8 +20,8 @@
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                 <div class="form-group required">
-                                    <select type="text" id="sensei" name="sensei" class="form-control select2 required" style="width: 100%;" required>
-                                        <option value="">Select Sensei</option>
+                                    <select type="text" id="sensei" name="sensei" class="form-control select2 required" style="width: 100%;" placeholder="Select Sensei" required>
+                                        <option value="" disabled selected>Select Sensei</option>
                                         @foreach($sensei as $key => $s)
                                             <option value="{{ $s->id }}">{{ $s->lname }}, {{ $s->fname }}</option>
                                         @endforeach

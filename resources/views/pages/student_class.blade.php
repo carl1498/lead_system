@@ -58,9 +58,9 @@
         <div class="col-md-8 col-xl-9">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
-                    <li class="disabled tab_pick active"><a class="tab_pick" href="#student_class_tab" data-toggle="tab">Students</a></li>
-                    <li class="disabled tab_pick"><a class="tab_pick" href="#student_no_class_tab" data-toggle="tab">No Classes</a></li>
-                    <li class="disabled tab_pick"><a class="tab_pick" href="#student_all_class_tab" data-toggle="tab">All</a></li>
+                    <li class="disabled tab_pick stud_pick active"><a class="tab_pick stud_pick" href="#student_class_tab" data-toggle="tab">Students</a></li>
+                    <li class="disabled tab_pick stud_pick"><a class="tab_pick stud_pick" href="#student_no_class_tab" data-toggle="tab">No Classes</a></li>
+                    <li class="disabled tab_pick stud_pick"><a class="tab_pick stud_pick" href="#student_all_class_tab" data-toggle="tab">All</a></li>
                     <li class="disabled tab_pick"><a class="tab_pick" href="#class_settings_tab" data-toggle="tab">Settings</a></li>
                 </ul>
 

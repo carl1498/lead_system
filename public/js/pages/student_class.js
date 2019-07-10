@@ -137,25 +137,32 @@ $(document).ready(function () {
     });
 
     function disableTabs() {
-        $('li.tab_pick').addClass('disabled').css('cursor', 'not-allowed');
+        $('li.tab_pick, .class_pick').addClass('disabled').css('cursor', 'not-allowed');
 
-        $('a.tab_pick').addClass('disabled').css('pointer-events', 'none');
+        $('a.tab_pick, .class_pick').addClass('disabled').css('pointer-events', 'none');
 
         $('.refresh_table').attr('disabled', true);
-    }
 
-    disableTabs();
+        $('#edit_class_form').find(".edit_start_time, .edit_end_time, #e_start_date, #e_end_date, #e_remarks, select").val('').end();
+        $('#edit_class_form').find(".edit_start_time, .edit_end_time").prop('readonly', true);
+        $('.editCheck').prop('checked', false);
+        $('.select2').trigger('change.select2');
+    }
 
     function enableTabs() {
-        $('li.tab_pick').removeClass('disabled').css('cursor', 'pointer');
+        if (current_class_select != 0) {
+            $('li.tab_pick, .class_pick').removeClass('disabled').css('cursor', 'pointer');
 
-        $('a.tab_pick').removeClass('disabled').css('pointer-events', 'auto');
+            $('a.tab_pick, .class_pick').removeClass('disabled').css('pointer-events', 'auto');
 
-        $('.refresh_table').attr('disabled', true);
-    }
+            get_settings();
+        } else {
+            $('li.stud_pick, .class_pick').removeClass('disabled').css('cursor', 'pointer');
 
-    function refresh() {
-        disableTabs();
+            $('a.stud_pick, .class_pick').removeClass('disabled').css('pointer-events', 'auto');
+        }
+
+        $('.refresh_table').attr('disabled', false);
     }
 
     //INITIALIZE -- END
@@ -168,7 +175,13 @@ $(document).ready(function () {
 
     //COLUMNS & COLUMNDEFS
 
-    var columns_students_class = [{ data: 'complete', name: 'complete' }, { data: 'name', name: 'name' }, { data: 'student.contact', name: 'contact' }, { data: 'student.program.name', name: 'program' }, { data: 'departure', name: 'departure' }, { data: 'student.status', name: 'status' }, { data: 'class_status', name: 'class_status' }, { data: 'start_date', name: 'start_date' }, { data: 'end_date', name: 'end_date' }, { data: "action", orderable: false, searchable: false }];
+    var columns_students_class = [
+    //{data: 'complete', name: 'complete'},
+    { data: 'name', name: 'name' }, { data: 'student.contact', name: 'contact' }, { data: 'student.program.name', name: 'program' }, { data: 'departure', name: 'departure' }, { data: 'student.status', name: 'status' }, { data: 'class_status', name: 'class_status' }, { data: 'start_date', name: 'start_date' }, { data: 'end_date', name: 'end_date' }, { data: "action", orderable: false, searchable: false }];
+
+    var columns_no_class = [{ data: 'name', name: 'name' }, { data: 'contact', name: 'contact' }, { data: 'program.name', name: 'program' }, { data: 'departure', name: 'departure' }, { data: 'status', name: 'status' }];
+
+    var columns_all_class = [{ data: 'name', name: 'name' }, { data: 'contact', name: 'contact' }, { data: 'program.name', name: 'program' }, { data: 'departure', name: 'departure' }, { data: 'status', name: 'status' }, { data: 'class_status', name: 'class_status' }];
 
     function refresh_student_class_table() {
         student_class_table = $('#student_class_table').DataTable({
@@ -179,14 +192,14 @@ $(document).ready(function () {
             stateLoadCallback: function stateLoadCallback(settings) {
                 return JSON.parse(localStorage.getItem('DataTables_' + settings.sInstance));
             },
-            initComplete: function initComplete(settings, json) {},
+            initComplete: function initComplete(settings, json) {
+                enableTabs();
+            },
             processing: true,
             destroy: true,
             scrollX: true,
             scrollCollapse: true,
-            fixedColumns: {
-                leftColumns: 2
-            },
+            fixedColumns: true,
             responsive: true,
             ajax: {
                 url: '/class_students',
@@ -198,7 +211,6 @@ $(document).ready(function () {
             columns: columns_students_class
         });
     }
-    refresh_student_class_table();
 
     $('#student_no_class_table').DataTable({
         stateSave: true,
@@ -214,7 +226,12 @@ $(document).ready(function () {
         scrollX: true,
         scrollCollapse: true,
         fixedColumns: true,
-        responsive: true
+        responsive: true,
+        ajax: {
+            url: '/no_class_students'
+        },
+        columnDefs: [{ defaultContent: "", targets: "_all" }],
+        columns: columns_no_class
     });
 
     $('#student_all_class_table').DataTable({
@@ -231,7 +248,12 @@ $(document).ready(function () {
         scrollX: true,
         scrollCollapse: true,
         fixedColumns: true,
-        responsive: true
+        responsive: true,
+        ajax: {
+            url: '/all_class_students'
+        },
+        columnDefs: [{ defaultContent: "", targets: "_all" }],
+        columns: columns_all_class
     });
 
     //DATATABLES -- END
@@ -242,6 +264,18 @@ $(document).ready(function () {
         dayCheck = $(this).next().val();
         startTimeInput = document.getElementsByClassName('add_start_time')[dayCheck - 1];
         endTimeInput = document.getElementsByClassName('add_end_time')[dayCheck - 1];
+        if ($(this).is(':checked')) {
+            $([startTimeInput, endTimeInput]).prop('readonly', false);
+        } else {
+            $([startTimeInput, endTimeInput]).prop('readonly', true);
+            $([startTimeInput, endTimeInput]).val('');
+        }
+    });
+
+    $('.editCheck').change(function () {
+        dayCheck = $(this).next().val();
+        startTimeInput = document.getElementsByClassName('edit_start_time')[dayCheck - 1];
+        endTimeInput = document.getElementsByClassName('edit_end_time')[dayCheck - 1];
         if ($(this).is(':checked')) {
             $([startTimeInput, endTimeInput]).prop('readonly', false);
         } else {
@@ -271,11 +305,40 @@ $(document).ready(function () {
             },
             url: '/add_class',
             method: 'POST',
-            data: $('#add_class_form').serialize(),
+            data: $(this).serialize(),
             success: function success(data) {
                 $('#add_class_modal').modal('hide');
                 notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
+                button.disabled = false;
+                input.html('SAVE CHANGES');
                 load_classes();
+            },
+            error: function error(data) {
+                swal("Error!", "Something went wrong, try again.", "error");
+                button.disabled = false;
+                input.html('SAVE CHANGES');
+            }
+        });
+    });
+
+    $(document).on('submit', '#edit_class_form', function (e) {
+        e.preventDefault();
+
+        var input = $('.e_save_class');
+        var button = document.getElementsByClassName("e_save_class")[0];
+
+        button.disabled = true;
+        input.html('SAVING...');
+
+        $.ajax({
+            headers: {
+                'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: '/edit_class',
+            method: 'POST',
+            data: $(this).serialize(),
+            success: function success(data) {
+                notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
                 button.disabled = false;
                 input.html('SAVE CHANGES');
                 load_classes();
@@ -332,11 +395,43 @@ $(document).ready(function () {
                 $('#complete_class_box span').text(data.completed);
                 $('#all_class_box span').text(data.all);
                 $('#class_box').append(html);
+
+                if (current_class_select != 0) {
+                    $('.class_pick' + '#' + current_class_select).css('background-color', '#FEFAD4');
+                }
             }
         });
     }
 
     load_classes();
+
+    function get_settings() {
+        $.ajax({
+            url: '/get_class_settings/' + current_class_select,
+            method: 'get',
+            dataType: 'json',
+            success: function success(data) {
+                $('#e_sensei').val(data.sensei_id).trigger('change');
+                $('#e_start_date').val(data.start_date);
+                $('#e_end_date').val(data.end_date);
+                $('#edit_class_id').val(data.id);
+
+                for (var x = 0; x < 6; x++) {
+                    if (data.class_day[x].start_time_id) {
+                        $($('.editCheck')[x]).prop('checked', true);
+                        $($('.edit_start_time')[x]).prop('readonly', false);
+                        $($('.edit_end_time')[x]).prop('readonly', false);
+                        $($('.edit_start_time')[x]).val(data.class_day[x].start_time.name);
+                        if (data.class_day[x].end_time) {
+                            $($('.edit_end_time')[x]).val(data.class_day[x].end_time.name);
+                        }
+                    }
+                }
+
+                $('#e_remarks').val(data.remarks);
+            }
+        });
+    }
 
     $('.completeCheck').change(function () {
         $('#sensei_class, #date_class, #current_student_class, #class_students_id, #current_end_date').val('').trigger('change');
@@ -509,8 +604,7 @@ $(document).ready(function () {
         $(this).css('background-color', '#FEFAD4');
         current_class_select = $(this).attr('id');
 
-        enableTabs();
-        refresh_student_class_table();
+        refresh();
     });
 
     $(document).on('click', '.class_nav_box', function () {
@@ -521,6 +615,23 @@ $(document).ready(function () {
     });
 
     //CLASS BOX -- END
+
+    function refresh() {
+        disableTabs();
+        refresh_student_class_table();
+    }
+
+    $(document).on('click', '.refresh_table', function () {
+        refresh();
+    });
+
+    refresh();
+
+    $(document).on('click', '.tab_pick', function () {
+        if (!$(this).hasClass('disabled')) {
+            refresh();
+        }
+    });
 
     //FUNCTIONS -- END
 });

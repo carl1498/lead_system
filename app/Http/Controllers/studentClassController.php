@@ -39,9 +39,9 @@ class studentClassController extends Controller
             'student.departure_month')->where('class_settings_id', $current_class)->get();
 
         return Datatables::of($class_students)
-        ->addColumn('complete', function($data){
+        /*->addColumn('complete', function($data){
             return '';
-        })
+        })*/
         ->addColumn('name', function($data){
             return $data->student->lname.', '.$data->student->fname.' '.$data->student->mname;
         })
@@ -61,6 +61,25 @@ class studentClassController extends Controller
             }
             else{
                 return 'Active';
+            }
+        })
+        ->make(true);
+    }
+
+    public function no_class_students(){
+        $class_students = class_students::groupBy('stud_id')->pluck('stud_id');
+
+        $student = student::with('program')->whereNotIn('id', $class_students)->get();
+
+        return Datatables::of($student)
+        ->editColumn('name', function($data){
+            return $data->lname.', '.$data->fname.' '.$data->mname;
+        })
+        ->addColumn('departure', function($data){
+            if($data->departure_month){
+                return $data->departure_year->name . ' ' . $data->departure_month->name;
+            }else{
+                return 'N/A';
             }
         })
         ->make(true);
@@ -123,6 +142,63 @@ class studentClassController extends Controller
 
             $class_day->save();
         }
+    }
+
+    public function edit_class(Request $request){
+        $edit_start_time = $request->edit_start_time;
+        $edit_end_time = $request->edit_end_time;
+
+        $class_settings = class_settings::with('class_day')->find($request->edit_class_id);
+        $class_settings->sensei_id = $request->e_sensei;
+        $class_settings->start_date = $request->e_start_date;
+        $class_settings->end_date = $request->e_end_date;
+        $class_settings->remarks = $request->e_remarks;
+        
+        foreach($edit_start_time as $s){
+            if($s != null){
+                $get_time = time::where('name', $s);
+                if(empty($get_time)){
+                    $time = new time;
+                    $time->name = $s;
+                    $time->save();
+                }
+            }
+        }
+
+        for($x = 0; $x < 6; $x++){
+            $class_day = class_day::find($class_settings->class_day[$x]->id);
+            $get_time = time::where('name', $edit_start_time[$x])->first();
+            if(empty($get_time)){
+                if($edit_start_time[$x] != null){
+                    $time = new time;
+                    $time->name = $edit_start_time[$x];
+                    $time->save();
+                    $class_day->start_time_id = $time->id;
+                }else{
+                    $class_day->start_time_id = null;
+                }
+            }else{
+                $class_day->start_time_id = $get_time->id;
+            }
+
+            $get_time = time::where('name', $edit_end_time[$x])->first();
+            if(empty($get_time)){
+                if($edit_end_time[$x] != null){
+                    $time = new time;
+                    $time->name = $edit_end_time[$x];
+                    $time->save();
+                    $class_day->end_time_id = $time->id;
+                }else{
+                    $class_day->end_time_id = null;
+                }
+            }else{
+                $class_day->end_time_id = $get_time->id;
+            }
+
+            $class_day->save();
+        }
+
+        $class_settings->save();
     }
 
     public function get_class(Request $request){
@@ -294,5 +370,12 @@ class studentClassController extends Controller
         $class_students->stud_id = $request->student_class;
         $class_students->start_date = $start_date->start_date;
         $class_students->save();
+    }
+
+    public function get_class_settings(Request $request){
+        $class_settings = class_settings::with('class_day', 'class_day.start_time', 'class_day.end_time')
+            ->find($request->current_class_select);
+
+        return $class_settings;
     }
 }
