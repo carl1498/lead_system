@@ -63,6 +63,21 @@ class studentClassController extends Controller
                 return 'Active';
             }
         })
+        ->editColumn('end_date', function($data){
+            if($data->end_date){
+                return $data->end_date;
+            }else{
+                return 'TBD';
+            }
+        })
+        ->addColumn('action', function($data){
+            $html = '';
+            
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_student_date" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Remove" class="btn btn-danger btn-xs remove_student_class" id="'.$data->id.'"><i class="fa fa-user-minus"></i></button>&nbsp;';
+        
+            return $html;
+        })
         ->make(true);
     }
 
@@ -78,6 +93,41 @@ class studentClassController extends Controller
         ->addColumn('departure', function($data){
             if($data->departure_month){
                 return $data->departure_year->name . ' ' . $data->departure_month->name;
+            }else{
+                return 'N/A';
+            }
+        })
+        ->make(true);
+    }
+
+    public function all_class_students(){
+        $student = student::with('program')->get();
+
+        return Datatables::of($student)
+        ->editColumn('name', function($data){
+            return $data->lname.', '.$data->fname.' '.$data->mname;
+        })
+        ->addColumn('departure', function($data){
+            if($data->departure_month){
+                return $data->departure_year->name . ' ' . $data->departure_month->name;
+            }else{
+                return 'N/A';
+            }
+        })
+        ->addColumn('class_status', function($data){
+            $class_students = class_students::with('student')->where('stud_id', $data->id)
+                ->orderBy('id', 'desc')->first();
+
+            if($class_students){
+                if($class_students->end_date && $class_students->student->status != 'Back Out'){
+                    return 'Complete';
+                }
+                else if($class_students->end_date && $class_students->student->status == 'Back Out'){
+                    return 'Back Out';
+                }
+                else{
+                    return 'Active';
+                }
             }else{
                 return 'N/A';
             }
@@ -201,6 +251,20 @@ class studentClassController extends Controller
         $class_settings->save();
     }
 
+    public function delete_class(Request $request){
+        $class_settings = class_settings::find($request->current_class_select);
+        $class_settings->delete();
+    }
+
+    public function edit_student_date(Request $request){
+        $id = $request->edit_student_class_id;
+        $class_students = class_students::find($id);
+
+        $class_students->start_date = $request->e_student_start_date;
+        $class_students->end_date = $request->e_student_end_date;
+        $class_students->save();
+    }
+
     public function get_class(Request $request){
         $current_tab = $request->current_class_tab;
 
@@ -259,6 +323,10 @@ class studentClassController extends Controller
         );
 
         return json_encode($output);
+    }
+
+    public function get_student_date(Request $request){
+        return class_students::with('student')->find($request->id);
     }
 
     public function sensei_class(Request $request){

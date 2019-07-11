@@ -5,6 +5,7 @@ $(document).ready(function(){
     var dayCheck, completeCheck = false, sensei, class_select, student;
     var current_class_tab = 'Ongoing';//Ongoing, Complete, all
     var current_class_select = 0;
+    var current_tab = 'Students';
 
     $(".datepicker").datepicker({
         format: 'yyyy-mm-dd',
@@ -132,7 +133,7 @@ $(document).ready(function(){
     ]
 
     function refresh_student_class_table(){
-        student_class_table = $('#student_class_table').DataTable({
+        $('#student_class_table').DataTable({
             stateSave: true,
             stateSaveCallback: function(settings,data) {
                 localStorage.setItem( 'DataTables_' + settings.sInstance, JSON.stringify(data) )
@@ -160,51 +161,57 @@ $(document).ready(function(){
         });
     }
 
-    $('#student_no_class_table').DataTable({
-        stateSave: true,
-        stateSaveCallback: function(settings,data) {
-            localStorage.setItem( 'DataTables_' + settings.sInstance, JSON.stringify(data) )
-        },
-        stateLoadCallback: function(settings) {
-            return JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ) )
-        },
-        initComplete: function(settings, json) {
-        },
-        processing: true,
-        destroy: true,
-        scrollX: true,
-        scrollCollapse: true,
-        fixedColumns: true,
-        responsive: true,
-        ajax: {
-            url: '/no_class_students'
-        },
-        columnDefs: [{defaultContent: "", targets: "_all"}],
-        columns: columns_no_class
-    });
+    function refresh_student_no_class_table(){
+        $('#student_no_class_table').DataTable({
+            stateSave: true,
+            stateSaveCallback: function(settings,data) {
+                localStorage.setItem( 'DataTables_' + settings.sInstance, JSON.stringify(data) )
+            },
+            stateLoadCallback: function(settings) {
+                return JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ) )
+            },
+            initComplete: function(settings, json) {
+                enableTabs();
+            },
+            processing: true,
+            destroy: true,
+            scrollX: true,
+            scrollCollapse: true,
+            fixedColumns: true,
+            responsive: true,
+            ajax: {
+                url: '/no_class_students'
+            },
+            columnDefs: [{defaultContent: "", targets: "_all"}],
+            columns: columns_no_class
+        });
+    }
 
-    $('#student_all_class_table').DataTable({
-        stateSave: true,
-        stateSaveCallback: function(settings,data) {
-            localStorage.setItem( 'DataTables_' + settings.sInstance, JSON.stringify(data) )
-        },
-        stateLoadCallback: function(settings) {
-            return JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ) )
-        },
-        initComplete: function(settings, json) {
-        },
-        processing: true,
-        destroy: true,
-        scrollX: true,
-        scrollCollapse: true,
-        fixedColumns: true,
-        responsive: true,
-        ajax: {
-            url: '/all_class_students'
-        },
-        columnDefs: [{defaultContent: "", targets: "_all"}],
-        columns: columns_all_class
-    });
+    function student_all_class_table(){
+        $('#student_all_class_table').DataTable({
+            stateSave: true,
+            stateSaveCallback: function(settings,data) {
+                localStorage.setItem( 'DataTables_' + settings.sInstance, JSON.stringify(data) )
+            },
+            stateLoadCallback: function(settings) {
+                return JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ) )
+            },
+            initComplete: function(settings, json) {
+                enableTabs();
+            },
+            processing: true,
+            destroy: true,
+            scrollX: true,
+            scrollCollapse: true,
+            fixedColumns: true,
+            responsive: true,
+            ajax: {
+                url: '/all_class_students',
+            },
+            columnDefs: [{defaultContent: "", targets: "_all"}],
+            columns: columns_all_class
+        });
+    }
 
     //DATATABLES -- END
     
@@ -241,6 +248,25 @@ $(document).ready(function(){
         $('#add_class_modal').modal('show');
     });
 
+    $(document).on('click', '.edit_student_date', function(){
+        let id = $(this).attr('id');
+
+        $.ajax({
+            url: '/get_student_date/'+id,
+            method: 'get',
+            dataType: 'json',
+            success:function(data){
+                $('#edit_student_class_id').val(data.id);
+                $('#student_name_temp').val(data.student.lname + ', ' + data.student.fname);
+                $('#e_student_start_date').val(data.start_date);
+                $('#e_student_end_date').val(data.end_date);
+
+                $('#edit_student_date_modal').modal('toggle');
+                $('#edit_student_date_modal').modal('show');
+            }
+        });
+    });
+
     $(document).on('submit', '#add_class_form', function(e){
         e.preventDefault();
 
@@ -262,7 +288,7 @@ $(document).ready(function(){
                 notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
                 button.disabled = false;
                 input.html('SAVE CHANGES');
-                load_classes();
+                refresh();
             },
             error: function(data){
                 swal("Error!", "Something went wrong, try again.", "error");
@@ -292,7 +318,7 @@ $(document).ready(function(){
                 notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
                 button.disabled = false;
                 input.html('SAVE CHANGES');
-                load_classes();
+                refresh();
             },
             error: function(data){
                 swal("Error!", "Something went wrong, try again.", "error");
@@ -301,6 +327,37 @@ $(document).ready(function(){
             }
         });
     });
+
+    $(document).on('submit', '#edit_student_date_form', function(e){
+        e.preventDefault();
+
+        var input = $('.save_edit_student_date');
+        var button = document.getElementsByClassName("save_edit_student_date")[0];
+
+        button.disabled = true;
+        input.html('SAVING...');
+
+        $.ajax({
+            headers: {
+                'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: '/edit_student_date',
+            method: 'POST',
+            data: $(this).serialize(),
+            success: function(data){
+                $('#edit_student_date_modal').modal('hide');
+                notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
+                button.disabled = false;
+                input.html('SAVE CHANGES');
+                refresh();
+            },
+            error: function(data){
+                swal("Error!", "Something went wrong, try again.", "error");
+                button.disabled = false;
+                input.html('SAVE CHANGES');
+            }
+        });
+    })
 
     //Open Assign Student Class Modal
     $('.assign_student_class').on('click', function(){
@@ -368,8 +425,6 @@ $(document).ready(function(){
             }
         });
     }
-
-    load_classes();
 
     function get_settings(){
         $.ajax({
@@ -480,7 +535,7 @@ $(document).ready(function(){
 
                 $('#assign_student_class_modal').modal('hide');
                 notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
-                load_classes();
+                refresh();
                 button.disabled = false;
                 input.html('SAVE CHANGES');
             },
@@ -489,6 +544,68 @@ $(document).ready(function(){
                 button.disabled = false;
                 input.html('SAVE CHANGES');
             }
+        });
+    });
+
+    $(document).on('click', '.delete_class', function(){
+        swal.fire({
+            title: 'Confirm User',
+            text: 'For security purposes, input your password again.',
+            input: 'password',
+            inputAttributes: {
+                autocapitalize: 'off'
+            },
+            showCancelButton: true,
+            confirmButtonText: 'Confirm',
+            showLoaderOnConfirm: true,
+            preConfirm: (password) => {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: '/confirm_user',
+                    data: { password:password },
+                    method: 'POST',
+                    success: function(data){
+                        if(data == 0){
+                            swal('Password Incorrect!', 'Please try again', 'error');
+                            return;
+                        }
+                        else{
+                            swal({
+                                title: 'Warning',
+                                text: 'Deleting this class will clear all data for this class.',
+                                type: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Yes, delete it!'
+                            }).then((result) => {
+                                if(result.value){
+                                    $.ajax({
+                                        headers: {
+                                            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                                        },
+                                        url: '/delete_class',
+                                        data: {
+                                            current_class_select: current_class_select
+                                        },
+                                        method: 'get',
+                                        type: 'json',
+                                        success:function(data){
+                                            $('.tab_pick a:first').tab('show');
+                                            current_tab = 'Students';
+                                            current_class_select = 0;
+                                            notif('Success!', 'This class has been Deleted', 'success', 'glyphicon-ok');
+                                            refresh();
+                                        }
+                                    })
+                                }
+                            });
+                        }
+                    }
+                });
+            },
         });
     });
 
@@ -586,7 +703,21 @@ $(document).ready(function(){
 
     function refresh(){
         disableTabs();
-        refresh_student_class_table();
+        load_classes();
+        switch(current_tab){
+            case 'Students':
+                refresh_student_class_table();
+                break;
+            case 'No Classes':
+                refresh_student_no_class_table();
+                break;
+            case 'All':
+                student_all_class_table();
+                break;
+            default:
+                enableTabs();
+                break;
+        }
     }
 
     $(document).on('click', '.refresh_table', function(){
@@ -597,6 +728,7 @@ $(document).ready(function(){
 
     $(document).on('click', '.tab_pick', function(){
         if(!$(this).hasClass('disabled')){
+            current_tab = $(this).text();
             refresh();
         }
     })

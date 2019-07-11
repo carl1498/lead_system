@@ -88,6 +88,10 @@ Route::group(['middleware' => ['auth', 'student_list']], function(){
     Route::get('/no_class_students', 'studentClassController@no_class_students');
     Route::get('/get_class_settings/{current_class_select}', 'studentClassController@get_class_settings');
     Route::post('/edit_class', 'studentClassController@edit_class');
+    Route::get('/all_class_students', 'studentClassController@all_class_students');
+    Route::get('/delete_class', 'studentClassController@delete_class');
+    Route::get('/get_student_date/{id}', 'studentClassController@get_student_date');
+    Route::post('/edit_student_date', 'studentClassController@edit_student_date');
 
     //Student Logs
     Route::get('/student_add_history', 'studentLogsController@add_history_page');
