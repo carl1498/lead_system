@@ -22,7 +22,7 @@ class studentClassController extends Controller
 
     public function index()
     {
-        $sensei = employee::withTrashed()->with('role')
+        $sensei = employee::with('role')
             ->whereHas('role', function($query){
                 $query->where('name', 'Language Head')->orWhere('name', 'Language Teacher');
             })->get();

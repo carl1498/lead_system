@@ -23,7 +23,9 @@
                                     <select type="text" id="sensei" name="sensei" class="form-control select2 required" style="width: 100%;" placeholder="Select Sensei" required>
                                         <option value="" disabled selected>Select Sensei</option>
                                         @foreach($sensei as $key => $s)
+                                            @if($s->employment_status != 'Resigned')
                                             <option value="{{ $s->id }}">{{ $s->lname }}, {{ $s->fname }}</option>
+                                            @endif
                                         @endforeach
                                     </select>
                                 </div>

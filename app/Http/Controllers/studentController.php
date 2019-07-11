@@ -284,10 +284,11 @@ class studentController extends Controller
     }
 
     public function ssv(Request $request){
+        info($request   );
         $departure_year = $request->departure_year;
         $current_ssv = $request->current_ssv;
 
-        $s = student::with('program', 'benefactor', 'referral', 'course', 'departure_year')
+        $ssv = student::with('program', 'benefactor', 'referral', 'course', 'departure_year')
             ->whereHas('program', function($query) use ($request) {
                 $query->where('name', 'SSV (Careworker)')->orWhere('name', 'SSV (Hospitality)');
             })
@@ -296,13 +297,11 @@ class studentController extends Controller
             })->get();
 
         if($current_ssv == 'SSV'){
-            $s = $s->where('status', 'Active');
+            $ssv = $ssv->where('status', 'Active');
         }
         else if($current_ssv = 'Back Out'){
-            $s = $s->where('status', 'Back Out');
+            $ssv = $ssv->where('status', 'Back Out');
         }
-        
-        $ssv = $s->where('departure_year_id', $departure_year);
 
         return $this->refreshDatatableSSV($ssv);
     }
