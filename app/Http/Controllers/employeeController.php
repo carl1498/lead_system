@@ -554,7 +554,7 @@ class employeeController extends Controller
     }
 
     public function save_account(Request $request){
-        if(!Hash::check($request->password, Auth::user()->password)){
+        if(!Hash::check($request->confirm_password, Auth::user()->password)){
             Auth::logout();
             return Redirect::to('/');
         }
