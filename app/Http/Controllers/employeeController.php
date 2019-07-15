@@ -16,6 +16,7 @@ use App\employee_emergency;
 use App\employee_spouse;
 use App\course;
 use App\User;
+use App\Http\Controllers\Redirect;
 use Carbon\Carbon;
 use Auth;
 use Yajra\Datatables\Datatables;
@@ -553,6 +554,10 @@ class employeeController extends Controller
     }
 
     public function save_account(Request $request){
+        if(!Hash::check($request->password, Auth::user()->password)){
+            Auth::logout();
+            return Redirect::to('/');
+        }
         $id = $request->a_id;
         $user = User::find($id);
 
@@ -564,6 +569,10 @@ class employeeController extends Controller
     }
 
     public function resign_employee(Request $request){
+        if(!Hash::check($request->password, Auth::user()->password)){
+            Auth::logout();
+            return Redirect::to('/');
+        }
         $id = $request->r_id;
         
         $employee = employee::find($id);
@@ -577,6 +586,10 @@ class employeeController extends Controller
     }
 
     public function rehire_employee(Request $request){
+        if(!Hash::check($request->password, Auth::user()->password)){
+            Auth::logout();
+            return Redirect::to('/');
+        }
         $id = $request->rh_id;
 
         $employee = employee::find($id);

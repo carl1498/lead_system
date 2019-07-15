@@ -10,7 +10,9 @@ use App\add_books;
 use App\books;
 use App\branch;
 use Carbon\Carbon;
+use Auth;
 use Yajra\Datatables\Datatables;
+use Illuminate\Support\Facades\Hash;
 
 class invoiceController extends Controller
 {
@@ -330,12 +332,20 @@ class invoiceController extends Controller
     }
 
     public function delete_invoice(Request $request){
+        if(!Hash::check($request->password, Auth::user()->password)){
+            Auth::logout();
+            return Redirect::to('/');
+        }
         $id = $request->id;
         $invoice = invoice::where('ref_no_id', $id)->delete();
         $reference_no = reference_no::find($id)->delete();
     }
     
     public function delete_add_book(Request $request){
+        if(!Hash::check($request->password, Auth::user()->password)){
+            Auth::logout();
+            return Redirect::to('/');
+        }
         $id = $request->id;
         
         $add_book = add_books::find($id);

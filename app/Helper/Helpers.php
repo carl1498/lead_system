@@ -62,7 +62,7 @@ function canAccessStudents(){
     $user = \App\User::with('employee.role')->find($id);
     $authorized = ['President', 'Finance Director', 'Admin', 'Branch Manager', 'OIC', 'HR/Finance Head',
         'HR/Finance Officer', 'IT Officer', 'Marketing Manager', 'Marketing Head', 'Marketing Officer',
-        'Documentation Head', 'Documentation Officer', 'Language Head', 'Intern',
+        'Documentation Head', 'Documentation Officer', 'Language Head', 'Intern', 'Liaison Officer',
         'Assistant Finance Officer'];
 
     foreach($authorized as $auth){
@@ -77,7 +77,7 @@ function canAccessStudentList(){
     $id = Auth::user()->id;
     $user = \App\User::with('employee.role')->find($id);
     $authorized = ['Admin', 'Branch Manager', 'OIC', 'HR/Finance Officer', 'Marketing Manager', 'Marketing Head', 
-        'Marketing Officer', 'Documentation Head', 'Documentation Officer', 'Language Head',
+        'Marketing Officer', 'Documentation Head', 'Documentation Officer', 'Language Head', 'Liaison Officer',
         'Intern', 'Assistant Finance Officer'];
 
     foreach($authorized as $auth){

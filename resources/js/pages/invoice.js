@@ -480,6 +480,7 @@ $(document).ready(function(){
                                             'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
                                         },
                                         url: '/delete_invoice/'+id,
+                                        data: { password: password },
                                         method: 'get',
                                         type: 'json',
                                         success:function(data){
@@ -550,6 +551,7 @@ $(document).ready(function(){
                                             'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
                                         },
                                         url: '/delete_add_book/'+id,
+                                        data: { password: password },
                                         method: 'get',
                                         type: 'json',
                                         success:function(data){

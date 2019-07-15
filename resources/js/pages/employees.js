@@ -520,7 +520,7 @@ $(document).ready(function(){
                                     'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
                                 },
                                 url: '/save_account',
-                                data: $('#account_form').serialize(),
+                                data: $('#account_form').serialize() + '&password=' + password,
                                 method: 'POST',
                                 dataType: 'text',
                                 success: function(data){
@@ -579,7 +579,7 @@ $(document).ready(function(){
                                 url: '/save_resign_employee',
                                 method: 'POST',
                                 dataType: 'text',
-                                data: $('#resign_form').serialize(),
+                                data: $('#resign_form').serialize() + '&password=' + password,
                                 success: function (data){
                                     $('#resign_modal').modal('hide');
                                     notif('Employee now resigned.', '', 'info', 'glyphicon-info-sign');
@@ -643,7 +643,7 @@ $(document).ready(function(){
                                 url: '/save_rehire_employee',
                                 method: 'POST',
                                 dataType: 'text',
-                                data: $('#rehire_form').serialize(),
+                                data: $('#rehire_form').serialize() + '&password=' + password,
                                 success: function (data){
                                     $('#rehire_modal').modal('hide');
                                     notif('Success!', 'Employee now rehired', 'success', 'glyphicon-ok');

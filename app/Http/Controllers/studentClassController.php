@@ -12,6 +12,7 @@ use App\class_day;
 use Carbon\Carbon;
 use Auth;
 use Yajra\Datatables\Datatables;
+use Illuminate\Support\Facades\Hash;
 
 class studentClassController extends Controller
 {
@@ -252,6 +253,10 @@ class studentClassController extends Controller
     }
 
     public function delete_class(Request $request){
+        if(!Hash::check($request->password, Auth::user()->password)){
+            Auth::logout();
+            return Redirect::to('/');
+        }
         $class_settings = class_settings::find($request->current_class_select);
         $class_settings->delete();
     }
