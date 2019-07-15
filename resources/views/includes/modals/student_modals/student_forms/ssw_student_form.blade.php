@@ -1,4 +1,4 @@
-<form class="form-horizontal tab-pane fade in" id="ssv_student_form">
+<form class="form-horizontal tab-pane fade in" id="ssw_student_form">
     @csrf
     <div class="modal-body">
         <input type="hidden" name="s_id" id="s_id">
@@ -49,7 +49,7 @@
                         <select type="text" id="s_program" name="s_program" class="form-control select2" style="width: 100%;" required>
                         <option value="" disabled selected>Select Program</option>
                         @foreach($program as $p)
-                            @if($p->name == 'SSV (Careworker)' || $p->name == 'SSV (Hospitality)')
+                            @if($p->name == 'SSW (Careworker)' || $p->name == 'SSW (Hospitality)')
                             <option value="{{ $p->id }}">{{ $p->name }}</option>
                             @endif
                         @endforeach
@@ -242,7 +242,7 @@
     <div class="modal-footer">
         <div class="col-md-12">
             <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary save_ssv_student">Save changes</button>
+            <button type="submit" class="btn btn-primary save_ssw_student">Save changes</button>
         </div>
     </div>
 </form>

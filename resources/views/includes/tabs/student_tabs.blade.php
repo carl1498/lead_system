@@ -58,17 +58,17 @@
 
 <!-- ALL STUDENTS -- END -->
 
-<!-- SSV STUDENTS -- START -->
+<!-- SSW STUDENTS -- START -->
 
-<div class="tab-pane fade in" id="ssv_student_tab">
+<div class="tab-pane fade in" id="ssw_student_tab">
     
-    <table id="ssv_students" class="table table-hover table-striped table-bordered responsive nowrap" width="100%">
-        @include('includes.tables.students.student_table_ssv')
+    <table id="ssw_students" class="table table-hover table-striped table-bordered responsive nowrap" width="100%">
+        @include('includes.tables.students.student_table_ssw')
     </table>
     
 </div>
 
-<!-- SSV STUDENTS -- END -->
+<!-- SSW STUDENTS -- END -->
 
 <!-- TRAINEE STUDENTS -- START -->
 

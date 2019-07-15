@@ -46,15 +46,15 @@ class dashboardController extends Controller
         $referral_count += student::where('referral_id', $employee->id)->whereNull('program_id')->count();
         $referral_count += student::with('program')->where('referral_id', $employee->id)
             ->whereHas('program', function($query){
-                $query->where('name', '<>', 'SSV (Careworker)');
-                $query->where('name', '<>', 'SSV (Hospitality)');
+                $query->where('name', '<>', 'SSW (Careworker)');
+                $query->where('name', '<>', 'SSW (Hospitality)');
             })->count();
 
         $student_count += student::whereNull('program_id')->count();
         $student_count += student::with('program')
             ->whereHas('program', function($query){
-                $query->where('name', '<>', 'SSV (Careworker)');
-                $query->where('name', '<>', 'SSV (Hospitality)');
+                $query->where('name', '<>', 'SSW (Careworker)');
+                $query->where('name', '<>', 'SSW (Hospitality)');
             })->count();
 
         //Birthdays
@@ -107,15 +107,15 @@ class dashboardController extends Controller
         $referral_count += student::where('referral_id', $employee->id)->whereNull('program_id')->count();
         $referral_count += student::with('program')->where('referral_id', $employee->id)
             ->whereHas('program', function($query){
-                $query->where('name', '<>', 'SSV (Careworker)');
-                $query->where('name', '<>', 'SSV (Hospitality)');
+                $query->where('name', '<>', 'SSW (Careworker)');
+                $query->where('name', '<>', 'SSW (Hospitality)');
             })->count();
 
         $student_count += student::whereNull('program_id')->count();
         $student_count += student::with('program')
             ->whereHas('program', function($query){
-                $query->where('name', '<>', 'SSV (Careworker)');
-                $query->where('name', '<>', 'SSV (Hospitality)');
+                $query->where('name', '<>', 'SSW (Careworker)');
+                $query->where('name', '<>', 'SSW (Hospitality)');
             })->count();
 
         $output = array(
@@ -146,8 +146,8 @@ class dashboardController extends Controller
         
                 $branch_array[$y][$x] += student::with('program')->where('branch_id', $y+1)
                 ->whereHas('program', function($query){
-                    $query->where('name', '<>', 'SSV (Careworker)');
-                    $query->where('name', '<>', 'SSV (Hospitality)');
+                    $query->where('name', '<>', 'SSW (Careworker)');
+                    $query->where('name', '<>', 'SSW (Hospitality)');
                 })
                 ->when($departure_year != 'All', function($query) use($departure_year){
                     $query->where('departure_year_id', $departure_year);
@@ -169,8 +169,8 @@ class dashboardController extends Controller
 
             $all[$x] += student::with('program')
             ->whereHas('program', function($query){
-                $query->where('name', '<>', 'SSV (Careworker)');
-                $query->where('name', '<>', 'SSV (Hospitality)');
+                $query->where('name', '<>', 'SSW (Careworker)');
+                $query->where('name', '<>', 'SSW (Hospitality)');
             })
             ->when($departure_year != 'All', function($query) use($departure_year){
                 $query->where('departure_year_id', $departure_year);
@@ -214,8 +214,8 @@ class dashboardController extends Controller
             
             $total[$x] += student::with('program')->where('branch_id', $x+1)
             ->whereHas('program', function($query){
-                $query->where('name', '<>', 'SSV (Careworker)');
-                $query->where('name', '<>', 'SSV (Hospitality)');
+                $query->where('name', '<>', 'SSW (Careworker)');
+                $query->where('name', '<>', 'SSW (Hospitality)');
             })
             ->when($departure_year != 'All', function($query) use($departure_year){
                 $query->where('departure_year_id', $departure_year);
@@ -241,8 +241,8 @@ class dashboardController extends Controller
 
         $all_total += student::with('program')
         ->whereHas('program', function($query){
-            $query->where('name', '<>', 'SSV (Careworker)');
-            $query->where('name', '<>', 'SSV (Hospitality)');
+            $query->where('name', '<>', 'SSW (Careworker)');
+            $query->where('name', '<>', 'SSW (Hospitality)');
         })
         ->when($departure_year != 'All', function($query) use($departure_year){
             $query->where('departure_year_id', $departure_year);
@@ -372,8 +372,8 @@ class dashboardController extends Controller
 
             $active[$x] += student::with('program')->where('branch_id', $x+1)->where('status', 'Active')
             ->whereHas('program', function($query){
-                $query->where('name', '<>', 'SSV (Careworker)');
-                $query->where('name', '<>', 'SSV (Hospitality)');
+                $query->where('name', '<>', 'SSW (Careworker)');
+                $query->where('name', '<>', 'SSW (Hospitality)');
             })
             ->when($departure_year != 'All', function($query) use($departure_year){
                 $query->where('departure_year_id', $departure_year);
@@ -399,8 +399,8 @@ class dashboardController extends Controller
 
         $all_active += student::with('program')->where('status', 'Active')
         ->whereHas('program', function($query){
-            $query->where('name', '<>', 'SSV (Careworker)');
-            $query->where('name', '<>', 'SSV (Hospitality)');
+            $query->where('name', '<>', 'SSW (Careworker)');
+            $query->where('name', '<>', 'SSW (Hospitality)');
         })
         ->when($departure_year != 'All', function($query) use($departure_year){
             $query->where('departure_year_id', $departure_year);
@@ -428,8 +428,8 @@ class dashboardController extends Controller
 
             $backout[$x] += student::with('program')->where('branch_id', $x+1)->where('status', 'Back Out')
             ->whereHas('program', function($query){
-                $query->where('name', '<>', 'SSV (Careworker)');
-                $query->where('name', '<>', 'SSV (Hospitality)');
+                $query->where('name', '<>', 'SSW (Careworker)');
+                $query->where('name', '<>', 'SSW (Hospitality)');
             })
             ->when($departure_year != 'All', function($query) use($departure_year){
                 $query->where('departure_year_id', $departure_year);
@@ -455,8 +455,8 @@ class dashboardController extends Controller
 
         $all_backout += student::with('program')->where('status', 'Back Out')
         ->whereHas('program', function($query){
-            $query->where('name', '<>', 'SSV (Careworker)');
-            $query->where('name', '<>', 'SSV (Hospitality)');
+            $query->where('name', '<>', 'SSW (Careworker)');
+            $query->where('name', '<>', 'SSW (Hospitality)');
         })
         ->when($departure_year != 'All', function($query) use($departure_year){
             $query->where('departure_year_id', $departure_year);

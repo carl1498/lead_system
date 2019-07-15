@@ -270,6 +270,13 @@ class studentClassController extends Controller
         $class_students->save();
     }
 
+    public function remove_student_class(Request $request){
+        $id = $request->id;
+        $class_students = class_students::find($id);
+
+        $class_students->delete();
+    }
+
     public function get_class(Request $request){
         $current_tab = $request->current_class_tab;
 

@@ -47,7 +47,7 @@ class studentController extends Controller
         $current_branch = $request->current_branch;
         $departure_year = $request->departure_year;
         $departure_month = $request->departure_month;
-        $except = ['Language Only', 'Trainee', 'SSV (Careworker)', 'SSV (Hospitality)'];
+        $except = ['Language Only', 'Trainee', 'SSW (Careworker)', 'SSW (Hospitality)'];
 
         $branch = student::with('program', 'school', 'benefactor', 'referral', 
         'branch', 'course', 'departure_year', 'departure_month')
@@ -102,7 +102,7 @@ class studentController extends Controller
         $current_status = $request->current_status;
         $departure_year = $request->departure_year;
         $departure_month = $request->departure_month;
-        $except = ['Language Only', 'Trainee', 'SSV (Careworker)', 'SSV (Hospitality)'];
+        $except = ['Language Only', 'Trainee', 'SSW (Careworker)', 'SSW (Hospitality)'];
 
         $status = student::with('program', 'school', 'benefactor', 'referral', 
         'branch', 'course', 'departure_year', 'departure_month')
@@ -159,7 +159,7 @@ class studentController extends Controller
     public function result(Request $request){
         $departure_year = $request->departure_year;
         $departure_month = $request->departure_month;
-        $except = ['Language Only', 'Trainee', 'SSV (Careworker)', 'SSV (Hospitality)'];
+        $except = ['Language Only', 'Trainee', 'SSW (Careworker)', 'SSW (Hospitality)'];
 
         $result = student::with('program', 'school', 'referral', 
         'branch', 'course', 'departure_year', 'departure_month')
@@ -260,8 +260,8 @@ class studentController extends Controller
             $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-primary btn-xs view_profile" id="'.$data->id.'"><i class="fa fa-eye"></i></button>&nbsp;';
             
             if(isset($data->program)){
-                if($data->program->name == 'SSV (Careworker)' || $data->program->name == 'SSV (Hospitality)'){
-                    $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_ssv_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
+                if($data->program->name == 'SSW (Careworker)' || $data->program->name == 'SSW (Hospitality)'){
+                    $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_ssw_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
                 }
                 else if($data->program->name == 'Language Only'){
                     $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_language_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
@@ -283,31 +283,31 @@ class studentController extends Controller
         ->make(true);
     }
 
-    public function ssv(Request $request){
+    public function ssw(Request $request){
         info($request   );
         $departure_year = $request->departure_year;
-        $current_ssv = $request->current_ssv;
+        $current_ssw = $request->current_ssw;
 
-        $ssv = student::with('program', 'benefactor', 'referral', 'course', 'departure_year')
+        $ssw = student::with('program', 'benefactor', 'referral', 'course', 'departure_year')
             ->whereHas('program', function($query) use ($request) {
-                $query->where('name', 'SSV (Careworker)')->orWhere('name', 'SSV (Hospitality)');
+                $query->where('name', 'SSW (Careworker)')->orWhere('name', 'SSW (Hospitality)');
             })
             ->when($departure_year != 'All', function($query) use($departure_year){
                 $query->where('departure_year_id', $departure_year);
             })->get();
 
-        if($current_ssv == 'SSV'){
-            $ssv = $ssv->where('status', 'Active');
+        if($current_ssw == 'SSW'){
+            $ssw = $ssw->where('status', 'Active');
         }
-        else if($current_ssv = 'Back Out'){
-            $ssv = $ssv->where('status', 'Back Out');
+        else if($current_ssw = 'Back Out'){
+            $ssw = $ssw->where('status', 'Back Out');
         }
 
-        return $this->refreshDatatableSSV($ssv);
+        return $this->refreshDatatableSSW($ssw);
     }
 
-    public function refreshDatatableSSV($ssv){
-        return Datatables::of($ssv)
+    public function refreshDatatableSSW($ssw){
+        return Datatables::of($ssw)
         ->editColumn('name', function($data){
             return $data->lname.', '.$data->fname.' '.$data->mname;
         })
@@ -317,7 +317,7 @@ class studentController extends Controller
             $html = '';
 
             $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-primary btn-xs view_profile" id="'.$data->id.'"><i class="fa fa-eye"></i></button>&nbsp;';
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_ssv_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_ssw_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
 
             if(canAccessAll()){
                 if($data->status == 'Active'){
@@ -737,7 +737,7 @@ class studentController extends Controller
         return $student->id;
     }
 
-    public function save_ssv_student(Request $request){
+    public function save_ssw_student(Request $request){
         if($request->hasFile('s_picture')){
             $fileextension = $request->s_picture->getClientOriginalExtension();
 
@@ -801,7 +801,7 @@ class studentController extends Controller
         if(isset($added_by)){
             $add_history = new student_add_history;
             $add_history->stud_id = $student->id;
-            $add_history->type = 'SSV';
+            $add_history->type = 'SSW';
             $add_history->added_by = $added_by;
             $add_history->save();
         }
@@ -1201,8 +1201,8 @@ class studentController extends Controller
 
     public function program_all(Request $request){
         $program = program::where('name', 'LIKE', '%'.$request->name.'%')
-            ->where('name', '<>', 'Language Only')->where('name', '<>', 'SSV (Careworker)')
-            ->where('name', '<>', 'SSV (Hospitality)')->get()->toArray();
+            ->where('name', '<>', 'Language Only')->where('name', '<>', 'SSW (Careworker)')
+            ->where('name', '<>', 'SSW (Hospitality)')->get()->toArray();
 
         $array = [];
         foreach ($program as $key => $value){
@@ -1214,9 +1214,9 @@ class studentController extends Controller
         return json_encode(['results' => $array]);
     }
 
-    public function program_ssv(Request $request){
+    public function program_ssw(Request $request){
         $program = program::where('name', 'LIKE', '%'.$request->name.'%')
-            ->where('name', '=', 'SSV (Careworker)')->orWhere('name', '=', 'SSV (Hospitality)')->get()->toArray();
+            ->where('name', '=', 'SSW (Careworker)')->orWhere('name', '=', 'SSW (Hospitality)')->get()->toArray();
 
         $array = [];
         foreach ($program as $key => $value){

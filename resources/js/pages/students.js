@@ -4,7 +4,7 @@ $(document).ready(function(){
 
     var current_branch = 'Makati';
     var current_status = '', current_result = '',
-    current_ssv = '', current_trainee = '';
+    current_ssw = '', current_trainee = '';
     var departure_year, departure_month = $('#month_select').val();
     var get_year, get_month, get_departure;
     var current_tab = 'Branch';
@@ -92,11 +92,11 @@ $(document).ready(function(){
 
     function disableTabs(){
         $(`li.branch_pick, li.status_pick, li.result_pick, 
-        li.language_pick, li.all_pick, li.ssv_pick, li.trainee_pick`
+        li.language_pick, li.all_pick, li.ssw_pick, li.trainee_pick`
         ).addClass('disabled').css('cursor', 'not-allowed');
 
         $(`a.branch_pick, a.status_pick, a.result_pick,
-        a.language_pick, a.all_pick, a.ssv_pick, a.trainee_pick`
+        a.language_pick, a.all_pick, a.ssw_pick, a.trainee_pick`
         ).addClass('disabled').css('pointer-events', 'none');
 
         $('.switch, .refresh_table').attr('disabled', true);
@@ -104,19 +104,19 @@ $(document).ready(function(){
 
     function enableTabs(){
         $(`li.branch_pick, li.status_pick, li.result_pick, 
-        li.language_pick, li.all_pick, li.ssv_pick, li.trainee_pick`
+        li.language_pick, li.all_pick, li.ssw_pick, li.trainee_pick`
         ).removeClass('disabled').css('cursor', 'pointer');
         
         $(`a.branch_pick, a.status_pick, a.result_pick,
-        a.language_pick, a.all_pick, a.ssv_pick, a.trainee_pick`
+        a.language_pick, a.all_pick, a.ssw_pick, a.trainee_pick`
         ).removeClass('disabled').css('pointer-events', 'auto');
 
         $('.refresh_table').attr('disabled', false);
         
         switch(current_switch){
-            case 'SSV'  : $('.switch_student, .switch_trainee').attr('disabled', false); break;
-            case 'Student'  : $('.switch_ssv, .switch_trainee').attr('disabled', false); break;
-            case 'Trainee'  : $('.switch_student, .switch_ssv').attr('disabled', false); break;
+            case 'SSW'  : $('.switch_student, .switch_trainee').attr('disabled', false); break;
+            case 'Student'  : $('.switch_ssw, .switch_trainee').attr('disabled', false); break;
+            case 'Trainee'  : $('.switch_student, .switch_ssw').attr('disabled', false); break;
         }
     }
 
@@ -140,7 +140,7 @@ $(document).ready(function(){
             $('.month_select').hide();
             $('#month_select').next(".select2-container").hide();
             $('.select_description').text('');
-        }else if(current_tab == 'SSV'){
+        }else if(current_tab == 'SSW'){
             showYearSelect();
             $('.month_select').hide();
             $('#month_select').next(".select2-container").hide();
@@ -156,7 +156,7 @@ $(document).ready(function(){
             case 'Status'   : refresh_student_status(); break;
             case 'Result'   : refresh_student_result(); break;
             case 'Language' : refresh_language_student(); break;
-            case 'SSV'      : refresh_ssv_student(); break;
+            case 'SSW'      : refresh_ssw_student(); break;
             case 'Trainee'  : refresh_trainee_student(); break;
             case 'All'      : refresh_all_student(); break;
         }
@@ -242,7 +242,7 @@ $(document).ready(function(){
     ]
     var columns_all_students = columns_students_status;
 
-    var columns_ssv_students = [
+    var columns_ssw_students = [
         {data: 'name', name: 'name'},
         {data: 'contact', name: 'contact'},
         {data: 'gender', name: 'gender'},
@@ -279,15 +279,15 @@ $(document).ready(function(){
             case 'Status'   : title = current_status; break;
             case 'Result'   : title = current_result; break;
             case 'Language' : title = current_tab; break;
-            case 'SSV'      : 
-                switch(current_ssv){
-                    case 'SSV'      : title = current_ssv; break;
-                    case 'Back Out' : title = 'SSV ' + current_ssv; break;
+            case 'SSW'      : 
+                switch(current_ssw){
+                    case 'SSW'      : title = current_ssw; break;
+                    case 'Back Out' : title = 'SSW ' + current_ssw; break;
                 }
             case 'Trainee'  : 
-                switch(current_ssv){
-                    case 'Trainee'  : title = current_ssv; break;
-                    case 'Back Out' : title = 'SSV ' + current_ssv; break;
+                switch(current_ssw){
+                    case 'Trainee'  : title = current_ssw; break;
+                    case 'Back Out' : title = 'SSW ' + current_ssw; break;
                 }
         }
 
@@ -301,7 +301,7 @@ $(document).ready(function(){
             'colvis'
         ];
         
-        year_buttons_format = [//for language, ssv
+        year_buttons_format = [//for language, ssw
             {extend: 'excelHtml5', title: title + ' - ' + get_year,
             exportOptions: {
                 columns: ':visible'
@@ -495,11 +495,11 @@ $(document).ready(function(){
         });
     }
 
-    function refresh_ssv_student(){
+    function refresh_ssw_student(){
         
         departure_year = $('#year_select').val();
 
-        ssv_students = $('#ssv_students').DataTable({
+        ssw_students = $('#ssw_students').DataTable({
             stateSave: true,
             stateSaveCallback: function(settings,data) {
                 localStorage.setItem( 'DataTables_' + settings.sInstance, JSON.stringify(data) )
@@ -519,14 +519,14 @@ $(document).ready(function(){
             buttons: year_buttons_format,
             responsive: true,
             ajax: {
-                url: '/ssv_student',
+                url: '/ssw_student',
                 data: {
                     departure_year: departure_year,
-                    current_ssv: current_ssv
+                    current_ssw: current_ssw
                 }
             },
             columnDefs: [{defaultContent: "", targets: "_all"}],
-            columns: columns_ssv_students,
+            columns: columns_ssw_students,
             order: [[4,'asc']]
         });
     }
@@ -575,19 +575,19 @@ $(document).ready(function(){
     
     $('.switch').on('click', function(){
         if($(this).find('.switch_name').text() == 'Student'){
-            $('.ssv_pick, .trainee_pick').hide();
+            $('.ssw_pick, .trainee_pick').hide();
             $('.branch_pick, .status_pick, .result_pick, .language_pick').show();
             $('#student_list_tab #student_first').click();
             current_switch = 'Student';
         }
-        else if($(this).find('.switch_name').text() == 'SSV'){
+        else if($(this).find('.switch_name').text() == 'SSW'){
             $('.branch_pick, .status_pick, .result_pick, .language_pick, .trainee_pick').hide();
-            $('.ssv_pick').show();
-            $('#student_list_tab #ssv_first').click();
-            current_switch = 'SSV';
+            $('.ssw_pick').show();
+            $('#student_list_tab #ssw_first').click();
+            current_switch = 'SSW';
         }
         else if($(this).find('.switch_name').text() == 'Trainee'){
-            $('.branch_pick, .status_pick, .result_pick, .language_pick, .ssv_pick').hide();
+            $('.branch_pick, .status_pick, .result_pick, .language_pick, .ssw_pick').hide();
             $('.trainee_pick').show();
             $('#student_list_tab #trainee_first').click();
             current_switch = 'Trainee';
@@ -635,11 +635,11 @@ $(document).ready(function(){
         if(!$(this).hasClass('disabled')){current_tab = 'All';}
     });
 
-    $('.ssv_pick').on('click', function(){
+    $('.ssw_pick').on('click', function(){
         if(!$(this).hasClass('disabled')){
-            current_ssv = $(this).text();
+            current_ssw = $(this).text();
 
-            current_tab = 'SSV';
+            current_tab = 'SSW';
         }
     });
 
@@ -739,11 +739,11 @@ $(document).ready(function(){
         });
     });
 
-    $(document).on('submit', '#ssv_student_form', function(e){
+    $(document).on('submit', '#ssw_student_form', function(e){
         e.preventDefault();
 
-        var input = $('.save_ssv_student');
-        var button = document.getElementsByClassName("save_ssv_student")[0];
+        var input = $('.save_ssw_student');
+        var button = document.getElementsByClassName("save_ssw_student")[0];
 
         button.disabled = true;
         input.html('SAVING...');
@@ -754,7 +754,7 @@ $(document).ready(function(){
             headers: {
                 'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
             },
-            url: '/save_ssv_student',
+            url: '/save_ssw_student',
             method: 'POST',
             data: formData,
             processData: false,
@@ -918,9 +918,9 @@ $(document).ready(function(){
     });
 
     //Open Language Student Modal (EDIT)
-    $(document).on('click', '.edit_ssv_student', function(){
+    $(document).on('click', '.edit_ssw_student', function(){
         modal_close = false;
-        $('#student_type_tab a[href="#ssv_student_form"]').tab('show');
+        $('#student_type_tab a[href="#ssw_student_form"]').tab('show');
         var id = $(this).attr('id');
 
         $.ajax({
@@ -1280,7 +1280,7 @@ $(document).ready(function(){
         allowClear: true,
         placeholder: 'Select Program',
         ajax: {
-            url: "/programSSV",
+            url: "/programSSW",
             dataType: 'json',
 
             data: function (params){
@@ -1383,8 +1383,8 @@ $(document).ready(function(){
                 }
                 
                 if(data.program){
-                    if(data.program.name != 'Language Only' && data.program.name != 'SSV (Careworker)' &&
-                            data.program.name != 'SSV (Hospitality)'){
+                    if(data.program.name != 'Language Only' && data.program.name != 'SSW (Careworker)' &&
+                            data.program.name != 'SSW (Hospitality)'){
                         $('#p_departure').text(data.departure_year.name + ' ' + data.departure_month.name);
                     }
                     else{

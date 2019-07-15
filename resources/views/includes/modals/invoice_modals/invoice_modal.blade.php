@@ -38,7 +38,7 @@
                                 <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
                                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
                                     <div class="form-group">
-                                        <input type="number" id="book_1_ssv" name="book_1_ssv" class="form-control" placeholder="SSV">
+                                        <input type="number" id="book_1_ssw" name="book_1_ssw" class="form-control" placeholder="SSW">
                                     </div>
                                 </div>
                             </div>
@@ -55,7 +55,7 @@
                                 <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
                                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
                                     <div class="form-group">
-                                        <input type="number" id="wb_1_ssv" name="wb_1_ssv" class="form-control" placeholder="SSV">
+                                        <input type="number" id="wb_1_ssw" name="wb_1_ssw" class="form-control" placeholder="SSW">
                                     </div>
                                 </div>
                             </div>
@@ -72,7 +72,7 @@
                                 <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
                                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
                                     <div class="form-group">
-                                        <input type="number" id="book_2_ssv" name="book_2_ssv" class="form-control" placeholder="SSV">
+                                        <input type="number" id="book_2_ssw" name="book_2_ssw" class="form-control" placeholder="SSW">
                                     </div>
                                 </div>
                             </div>
@@ -89,7 +89,7 @@
                                 <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
                                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
                                     <div class="form-group">
-                                        <input type="number" id="wb_2_ssv" name="wb_2_ssv" class="form-control" placeholder="SSV">
+                                        <input type="number" id="wb_2_ssw" name="wb_2_ssw" class="form-control" placeholder="SSW">
                                     </div>
                                 </div>
                             </div>
@@ -106,7 +106,7 @@
                                 <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
                                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
                                     <div class="form-group">
-                                        <input type="number" id="kanji_ssv" name="kanji_ssv" class="form-control" placeholder="SSV">
+                                        <input type="number" id="kanji_ssw" name="kanji_ssw" class="form-control" placeholder="SSW">
                                     </div>
                                 </div>
                             </div>

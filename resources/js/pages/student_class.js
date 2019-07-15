@@ -414,7 +414,8 @@ $(document).ready(function(){
                             '<span class="label label-success" data-container="body" data-toggle="tooltip" data-placement="top" title="Complete">'+data.class_settings[x].complete+'</span>&nbsp;'+
                             '<span class="label label-danger" data-container="body" data-toggle="tooltip" data-placement="top" title="Back Out">'+data.class_settings[x].backout+'</span>&nbsp;'+
                             '<span class="label label-info" data-container="body" data-toggle="tooltip" data-placement="top" title="Active">'+data.class_settings[x].active+'</span>&nbsp;'+
-                            '<span class="label label-warning" data-container="body" data-toggle="tooltip" data-placement="top" title="No. of Students">'+data.class_settings[x].all+'</span>'+
+                            '<span class="label label-warning" data-container="body" data-toggle="tooltip" data-placement="top" title="No. of Students">'+data.class_settings[x].all+'</span><br>'+
+                            '<span> Remarks: '+((data.class_settings[x].remarks) ? data.class_settings[x].remarks : '')+'</span>'+
                         `</p>
                     </li>`
                 }
@@ -614,6 +615,35 @@ $(document).ready(function(){
                     }
                 });
             },
+        });
+    });
+
+    $(document).on('click', '.remove_student_class', function(){
+        let id = $(this).attr('id');
+
+        swal({
+            title: 'Are you sure?',
+            text: 'You are about to remove a student from this class.',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if(result.value){
+                $.ajax({
+                    headers: {
+                        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: '/remove_student_class/'+id,
+                    type: 'json',
+                    method: 'get',
+                    success:function(data){
+                        notif('Success!', 'This Student has been removed from this class', 'success', 'glyphicon-ok');
+                        refresh();
+                    }
+                })
+            }
         });
     });
 

@@ -144,11 +144,11 @@ $(document).ready(function(){
                 {data: 'book_2', name: 'book_2'},
                 {data: 'wb_2', name: 'wb_2'},
                 {data: 'kanji', name: 'kanji'},
-                {data: 'book_1_ssv', name: 'book_1_ssv'},
-                {data: 'wb_1_ssv', name: 'wb_1_ssv'},
-                {data: 'book_2_ssv', name: 'book_2_ssv'},
-                {data: 'wb_2_ssv', name: 'wb_2_ssv'},
-                {data: 'kanji_ssv', name: 'kanji_ssv'},
+                {data: 'book_1_ssw', name: 'book_1_ssw'},
+                {data: 'wb_1_ssw', name: 'wb_1_ssw'},
+                {data: 'book_2_ssw', name: 'book_2_ssw'},
+                {data: 'wb_2_ssw', name: 'wb_2_ssw'},
+                {data: 'kanji_ssw', name: 'kanji_ssw'},
                 {data: 'created_at', name: 'date'},
                 {data: 'action', orderable: false, searchable: false}
             ],
@@ -159,10 +159,10 @@ $(document).ready(function(){
                 { width: 60, targets: 3 }, //book 2
                 { width: 60, targets: 4 }, //wb 2
                 { width: 60, targets: 5 }, //kanji
-                { width: 90, targets: 6 }, //book 1 ssv
-                { width: 90, targets: 7 }, //wb 1 ssv
-                { width: 90, targets: 8 }, //book 2 ssv
-                { width: 90, targets: 9 }, //wb 2 ssv
+                { width: 90, targets: 6 }, //book 1 ssw
+                { width: 90, targets: 7 }, //wb 1 ssw
+                { width: 90, targets: 8 }, //book 2 ssw
+                { width: 90, targets: 9 }, //wb 2 ssw
                 { width: 90, targets: 10 }, //kanji
                 { width: 130, targets: 11 }, //date
                 { width: 80, targets: 12 }, //action

@@ -49,7 +49,7 @@ Route::group(['middleware' => ['auth', 'student_list']], function(){
     Route::get('/student_result', 'studentController@result');
     Route::get('/language_student', 'studentController@language');
     Route::get('/all_student', 'studentController@all');
-    Route::get('/ssv_student', 'studentController@ssv');
+    Route::get('/ssw_student', 'studentController@ssw');
     Route::get('/trainee_student', 'studentController@trainee');
     
     Route::get('/continue_student', 'studentController@continue_student');
@@ -61,7 +61,7 @@ Route::group(['middleware' => ['auth', 'student_list']], function(){
     Route::get('/schoolAll', 'studentController@school_all');
     Route::get('/benefactorAll', 'studentController@benefactor_all');
     Route::get('/companyAll', 'studentController@company_all');
-    Route::get('/programSSV', 'studentController@program_ssv');
+    Route::get('/programSSW', 'studentController@program_ssw');
 
     //Result Monitoring
     Route::get('/approve_student', 'studentController@approve_student');
@@ -70,7 +70,7 @@ Route::group(['middleware' => ['auth', 'student_list']], function(){
 
     Route::post('/save_student', 'studentController@save_student');
     Route::post('/save_language_student', 'studentController@save_language_student');
-    Route::post('/save_ssv_student', 'studentController@save_ssv_student');
+    Route::post('/save_ssw_student', 'studentController@save_ssw_student');
     Route::post('/save_trainee_student', 'studentController@save_trainee_student');
     Route::get('/get_student', 'studentController@get_student');
     Route::get('/delete_student', 'studentController@delete_student')->middleware('student_high');
@@ -92,6 +92,7 @@ Route::group(['middleware' => ['auth', 'student_list']], function(){
     Route::get('/delete_class', 'studentClassController@delete_class');
     Route::get('/get_student_date/{id}', 'studentClassController@get_student_date');
     Route::post('/edit_student_date', 'studentClassController@edit_student_date');
+    Route::get('/remove_student_class/{id}', 'studentClassController@remove_student_class');
 
     //Student Logs
     Route::get('/student_add_history', 'studentLogsController@add_history_page');
@@ -201,7 +202,7 @@ Route::group(['middleware' => ['auth', 'book_management']], function(){
     //Book Management
     Route::get('/book_management', 'bookManagementController@index');
     Route::get('/view_student_books', 'bookManagementController@view_student_books');
-    Route::get('/view_ssv_student_books', 'bookManagementController@view_ssv_student_books');
+    Route::get('/view_ssw_student_books', 'bookManagementController@view_ssw_student_books');
     Route::get('/view_books', 'bookManagementController@view_books');
     Route::get('/view_branch_books', 'bookManagementController@view_branch_books');
     

@@ -8,15 +8,15 @@
 
 <!-- BRANCH -- END -->
 
-<!-- SSV STUDENTS -- START -->
+<!-- SSW STUDENTS -- START -->
 
-<div class="tab-pane fade in" id="ssv_student_tab">
-    <table id="books_ssv_student_table" class="table table-hover table-striped table-bordered" cellspacing="0">
-        @include('includes.tables.books.books_ssv_student_table')
+<div class="tab-pane fade in" id="ssw_student_tab">
+    <table id="books_ssw_student_table" class="table table-hover table-striped table-bordered" cellspacing="0">
+        @include('includes.tables.books.books_ssw_student_table')
     </table>
 </div>
 
-<!-- SSV STUDENTS -- END -->
+<!-- SSW STUDENTS -- END -->
 
 <!-- STUDENTS -- START -->
 

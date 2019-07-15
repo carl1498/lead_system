@@ -13,8 +13,8 @@
             <button title="Switch Tabs" class="btn btn-secondary bg-red switch switch_student" disabled>
                 <b class="switch_name">Student</b>
             </button>
-            <button class="btn btn-secondary bg-red switch switch_ssv" disabled>
-                <b class="switch_name">SSV</b>
+            <button class="btn btn-secondary bg-red switch switch_ssw" disabled>
+                <b class="switch_name">SSW</b>
             </button>
             <button class="btn btn-secondary bg-red switch switch_trainee" disabled>
                 <b class="switch_name">Trainee</b>
@@ -149,9 +149,9 @@
                     <li class="disabled trainee_pick" style="display: none;"><a style="display: none;" id="trainee_first" class="trainee_pick" href="#trainee_student_tab" data-toggle="tab">Trainee</a></li>
                     <li class="disabled trainee_pick" style="display: none;"><a style="display: none;" class="trainee_pick" href="#trainee_student_tab" data-toggle="tab">Back Out</a></li>
                     
-                    <!-- SSV -->
-                    <li class="disabled ssv_pick" style="display: none;"><a style="display: none;" id="ssv_first" class="ssv_pick" href="#ssv_student_tab" data-toggle="tab">SSV</a></li>
-                    <li class="disabled ssv_pick" style="display: none;"><a style="display: none;" class="ssv_pick" href="#ssv_student_tab" data-toggle="tab">Back Out</a></li>
+                    <!-- SSW -->
+                    <li class="disabled ssw_pick" style="display: none;"><a style="display: none;" id="ssw_first" class="ssw_pick" href="#ssw_student_tab" data-toggle="tab">SSW</a></li>
+                    <li class="disabled ssw_pick" style="display: none;"><a style="display: none;" class="ssw_pick" href="#ssw_student_tab" data-toggle="tab">Back Out</a></li>
                     
                     <!-- Student/Language -->
                     <li class="disabled branch_pick active"><a id="student_first" class="branch_pick" href="#students_branch_tab" data-toggle="tab">Makati</a></li>

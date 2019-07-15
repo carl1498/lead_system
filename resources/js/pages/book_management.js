@@ -78,7 +78,7 @@ $(document).ready(function(){
     function refresh(){
         disableTabs();
 
-        if(current_tab != 'Branch' && current_tab != 'Student' && current_tab != 'SSV' ){
+        if(current_tab != 'Branch' && current_tab != 'Student' && current_tab != 'SSW' ){
             $('.book_type_select').show();
             $('#book_type_select').next(".select2-container").show();
         }
@@ -95,7 +95,7 @@ $(document).ready(function(){
             $('#status_select').next(".select2-container").hide();
         }
 
-        if(current_tab != 'Student' && current_tab != 'SSV' &&
+        if(current_tab != 'Student' && current_tab != 'SSW' &&
             current_tab != 'Request History' && current_tab != 'Release History'){
             $('.invoice_select').show();
             $('#invoice_select').next(".select2-container").show();
@@ -105,7 +105,7 @@ $(document).ready(function(){
             $('#invoice_select').next(".select2-container").hide();
         }
 
-        if(current_tab != 'Student' && current_tab != current_tab != 'SSV'){
+        if(current_tab != 'Student' && current_tab != current_tab != 'SSW'){
             $('.student_status_select').hide();
             $('#student_status_select').next(".select2-container").hide();
             $('.program_select').hide();
@@ -115,7 +115,7 @@ $(document).ready(function(){
         switch(current_tab){
             case 'Branch'           : refresh_books_branch_table(); break;
             case 'Student'          : refresh_books_student_table(); break;
-            case 'SSV'              : refresh_books_ssv_student_table(); break;
+            case 'SSW'              : refresh_books_ssw_student_table(); break;
             case 'Books'            : refresh_books(); break;
             case 'Request History'  : refresh_request_books(); break;
             case 'Release History'  : refresh_release_books(); break;
@@ -439,13 +439,13 @@ $(document).ready(function(){
         });
     }
 
-    function refresh_books_ssv_student_table(){
+    function refresh_books_ssw_student_table(){
         $('.student_status_select').show();
         $('#student_status_select').next(".select2-container").show();
         $('.program_select').show();
         $('#program_select').next(".select2-container").show();
 
-        var books_ssv_student_table = $('#books_ssv_student_table').DataTable({
+        var books_ssw_student_table = $('#books_ssw_student_table').DataTable({
             stateSave: true,
             stateSaveCallback: function(settings,data) {
                 localStorage.setItem( 'DataTables_' + settings.sInstance, JSON.stringify(data) )
@@ -468,7 +468,7 @@ $(document).ready(function(){
             },
             responsive: true,
             ajax: {
-                url: '/view_ssv_student_books',
+                url: '/view_ssw_student_books',
                 data:{ 
                     student_status_select: student_status_select,
                     program_select: program_select,
@@ -478,22 +478,22 @@ $(document).ready(function(){
             columns: [
                 {data: 'student_name', name: 'student_name'},
                 {data: 'branch.name', name: 'branch'},
-                {data: 'book_1_ssv', name: 'book_1_ssv'},
-                {data: 'wb_1_ssv', name: 'wb_1_ssv'},
-                {data: 'book_2_ssv', name: 'book_2_ssv'},
-                {data: 'wb_2_ssv', name: 'wb_2_ssv'},
-                {data: 'kanji_ssv', name: 'kanji_ssv'},
+                {data: 'book_1_ssw', name: 'book_1_ssw'},
+                {data: 'wb_1_ssw', name: 'wb_1_ssw'},
+                {data: 'book_2_ssw', name: 'book_2_ssw'},
+                {data: 'wb_2_ssw', name: 'wb_2_ssw'},
+                {data: 'kanji_ssw', name: 'kanji_ssw'},
                 {data: 'program.name', name: 'program', defaultContent: ''},
                 {data: 'status', name: 'status'},
             ],
             columnDefs: [
                 { width: 250, targets: 0 }, //student name
                 { width: 100, targets: 1 }, //branch
-                { width: 60, targets: 2 }, //book 1 ssv
-                { width: 60, targets: 3 }, //wb 1 ssv
-                { width: 60, targets: 4 }, //book 2 ssv
-                { width: 60, targets: 5 }, //wb 2 ssv
-                { width: 60, targets: 6 }, //kanji ssv
+                { width: 60, targets: 2 }, //book 1 ssw
+                { width: 60, targets: 3 }, //wb 1 ssw
+                { width: 60, targets: 4 }, //book 2 ssw
+                { width: 60, targets: 5 }, //wb 2 ssw
+                { width: 60, targets: 6 }, //kanji ssw
                 { width: 150, targets: 7 }, //program
                 { width: 110, targets: 8 }, //status
             ]
@@ -544,11 +544,11 @@ $(document).ready(function(){
                 {data: 'book_2', name: 'book_2'},
                 {data: 'wb_2', name: 'wb_2'},
                 {data: 'kanji', name: 'kanji'},
-                {data: 'book_1_ssv', name: 'book_1_ssv'},
-                {data: 'wb_1_ssv', name: 'wb_1_ssv'},
-                {data: 'book_2_ssv', name: 'book_2_ssv'},
-                {data: 'wb_2_ssv', name: 'wb_2_ssv'},
-                {data: 'kanji_ssv', name: 'kanji_ssv'},
+                {data: 'book_1_ssw', name: 'book_1_ssw'},
+                {data: 'wb_1_ssw', name: 'wb_1_ssw'},
+                {data: 'book_2_ssw', name: 'book_2_ssw'},
+                {data: 'wb_2_ssw', name: 'wb_2_ssw'},
+                {data: 'kanji_ssw', name: 'kanji_ssw'},
             ],
             columnDefs: [
                 { width: 70, targets: 0 }, //branch
@@ -557,11 +557,11 @@ $(document).ready(function(){
                 { width: 90, targets: 3 }, //book 2
                 { width: 90, targets: 4 }, //wb 2
                 { width: 90, targets: 5 }, //kanji
-                { width: 90, targets: 6 }, //book 1 ssv
-                { width: 90, targets: 7 }, //wb 1 ssv
-                { width: 90, targets: 8 }, //book 2 ssv
-                { width: 90, targets: 9 }, //wb 2 ssv
-                { width: 90, targets: 10 }, //kanji ssv
+                { width: 90, targets: 6 }, //book 1 ssw
+                { width: 90, targets: 7 }, //wb 1 ssw
+                { width: 90, targets: 8 }, //book 2 ssw
+                { width: 90, targets: 9 }, //wb 2 ssw
+                { width: 90, targets: 10 }, //kanji ssw
             ]
         });
     }

@@ -88,8 +88,8 @@ class bookManagementController extends Controller
         $program = $request->program_select;
         $branch_select = $request->branch_select;
         $student = student::with('branch', 'program', 'departure_year', 'departure_month')->get();
-        $student = $student->where('program.name', '<>', 'SSV (Careworker)')
-            ->where('program.name', '<>', 'SSV (Hospitality)');
+        $student = $student->where('program.name', '<>', 'SSW (Careworker)')
+            ->where('program.name', '<>', 'SSW (Hospitality)');
         if($branch != 'Makati'){
             $student = $student->where('branch.name', $branch);
         }
@@ -170,7 +170,7 @@ class bookManagementController extends Controller
         ->make(true);
     }
 
-    public function view_ssv_student_books(Request $request){
+    public function view_ssw_student_books(Request $request){
         $get_branch = employee::with('branch')->where('id', Auth::user()->emp_id)->first();
         $branch = $get_branch->branch->name;
         $student_status = $request->student_status_select;
@@ -178,7 +178,7 @@ class bookManagementController extends Controller
         $branch_select = $request->branch_select;
         $student = student::with('branch', 'program')
         ->whereHas('program', function($query) use ($request) {
-            $query->where('name', 'SSV (Careworker)')->orWhere('name', 'SSV (Hospitality)');
+            $query->where('name', 'SSW (Careworker)')->orWhere('name', 'SSW (Hospitality)');
         })->get();
         if($branch != 'Makati'){
             $student = $student->where('branch.name', $branch);
@@ -200,8 +200,8 @@ class bookManagementController extends Controller
         ->addColumn('student_name', function($data){
             return $data->lname . ', ' . $data->fname . ' ' . $data->mname;
         })
-        ->addColumn('book_1_ssv', function($data){
-            $get_book = book_type::where('name', 'Minna 1 (SSV)')->first();
+        ->addColumn('book_1_ssw', function($data){
+            $get_book = book_type::where('name', 'Minna 1 (SSW)')->first();
             $get_book_id = $get_book->id;
             $book = books::where('stud_id', $data->id)->where('book_type_id', $get_book_id)->first();
 
@@ -209,8 +209,8 @@ class bookManagementController extends Controller
                 return $book->name;
             }
         })
-        ->addColumn('wb_1_ssv', function($data){
-            $get_book = book_type::where('name', 'WB 1 (SSV)')->first();
+        ->addColumn('wb_1_ssw', function($data){
+            $get_book = book_type::where('name', 'WB 1 (SSW)')->first();
             $get_book_id = $get_book->id;
             $book = books::where('stud_id', $data->id)->where('book_type_id', $get_book_id)->first();
 
@@ -218,8 +218,8 @@ class bookManagementController extends Controller
                 return $book->name;
             }
         })
-        ->addColumn('book_2_ssv', function($data){
-            $get_book = book_type::where('name', 'Minna 2 (SSV)')->first();
+        ->addColumn('book_2_ssw', function($data){
+            $get_book = book_type::where('name', 'Minna 2 (SSW)')->first();
             $get_book_id = $get_book->id;
             $book = books::where('stud_id', $data->id)->where('book_type_id', $get_book_id)->first();
 
@@ -227,8 +227,8 @@ class bookManagementController extends Controller
                 return $book->name;
             }
         })
-        ->addColumn('wb_2_ssv', function($data){
-            $get_book = book_type::where('name', 'WB 2 (SSV)')->first();
+        ->addColumn('wb_2_ssw', function($data){
+            $get_book = book_type::where('name', 'WB 2 (SSW)')->first();
             $get_book_id = $get_book->id;
             $book = books::where('stud_id', $data->id)->where('book_type_id', $get_book_id)->first();
 
@@ -236,8 +236,8 @@ class bookManagementController extends Controller
                 return $book->name;
             }
         })
-        ->addColumn('kanji_ssv', function($data){
-            $get_book = book_type::where('name', 'Kanji (SSV)')->first();
+        ->addColumn('kanji_ssw', function($data){
+            $get_book = book_type::where('name', 'Kanji (SSW)')->first();
             $get_book_id = $get_book->id;
             $book = books::where('stud_id', $data->id)->where('book_type_id', $get_book_id)->first();
 
@@ -494,8 +494,8 @@ class bookManagementController extends Controller
             $book = ($book) ? $book : 0;
             return $book;
         })
-        ->addColumn('book_1_ssv', function($data) use($status, $invoice_select){
-            $get_book = book_type::where('name', 'Minna 1 (SSV)')->first();
+        ->addColumn('book_1_ssw', function($data) use($status, $invoice_select){
+            $get_book = book_type::where('name', 'Minna 1 (SSW)')->first();
             $get_book_id = $get_book->id;
 
             if($status == 'All'){
@@ -540,8 +540,8 @@ class bookManagementController extends Controller
             $book = ($book) ? $book : 0;
             return $book;
         })
-        ->addColumn('wb_1_ssv', function($data) use($status, $invoice_select){
-            $get_book = book_type::where('name', 'WB 1 (SSV)')->first();
+        ->addColumn('wb_1_ssw', function($data) use($status, $invoice_select){
+            $get_book = book_type::where('name', 'WB 1 (SSW)')->first();
             $get_book_id = $get_book->id;
 
             if($status == 'All'){
@@ -586,8 +586,8 @@ class bookManagementController extends Controller
             $book = ($book) ? $book : 0;
             return $book;
         })
-        ->addColumn('book_2_ssv', function($data) use($status, $invoice_select){
-            $get_book = book_type::where('name', 'Minna 2 (SSV)')->first();
+        ->addColumn('book_2_ssw', function($data) use($status, $invoice_select){
+            $get_book = book_type::where('name', 'Minna 2 (SSW)')->first();
             $get_book_id = $get_book->id;
 
             if($status == 'All'){
@@ -632,8 +632,8 @@ class bookManagementController extends Controller
             $book = ($book) ? $book : 0;
             return $book;
         })
-        ->addColumn('wb_2_ssv', function($data) use($status, $invoice_select){
-            $get_book = book_type::where('name', 'WB 2 (SSV)')->first();
+        ->addColumn('wb_2_ssw', function($data) use($status, $invoice_select){
+            $get_book = book_type::where('name', 'WB 2 (SSW)')->first();
             $get_book_id = $get_book->id;
 
             if($status == 'All'){
@@ -678,8 +678,8 @@ class bookManagementController extends Controller
             $book = ($book) ? $book : 0;
             return $book;
         })
-        ->addColumn('kanji_ssv', function($data) use($status, $invoice_select){
-            $get_book = book_type::where('name', 'Kanji (SSV)')->first();
+        ->addColumn('kanji_ssw', function($data) use($status, $invoice_select){
+            $get_book = book_type::where('name', 'Kanji (SSW)')->first();
             $get_book_id = $get_book->id;
 
             if($status == 'All'){
