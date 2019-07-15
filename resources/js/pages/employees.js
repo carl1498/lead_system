@@ -520,7 +520,7 @@ $(document).ready(function(){
                                     'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
                                 },
                                 url: '/save_account',
-                                data: $('#account_form').serialize() + '&password=' + password,
+                                data: $('#account_form').serialize() + '&confirm_password=' + password,
                                 method: 'POST',
                                 dataType: 'text',
                                 success: function(data){
