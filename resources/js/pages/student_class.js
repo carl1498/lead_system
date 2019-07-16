@@ -457,6 +457,12 @@ $(document).ready(function(){
                     }
                 }
 
+                if(!$('#e_end_date').val()){
+                    $('.end_class').prop('disabled', true);
+                }else{
+                    $('.end_class').prop('disabled', false);
+                }
+
                 $('#e_remarks').val(data.remarks);
             }
         });
@@ -615,6 +621,36 @@ $(document).ready(function(){
                     }
                 });
             },
+        });
+    });
+
+    $(document).on('click', '.end_class', function(){
+        swal({
+            title: 'End Class?',
+            text: 'This will put an End Date on all students under this class.',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if(result.value){
+                $.ajax({
+                    headers: {
+                        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: '/end_class',
+                    data: {
+                        current_class_select: current_class_select,
+                    },
+                    method: 'get',
+                    type: 'json',
+                    success:function(data){
+                        notif('Success!', 'This class has ended', 'success', 'glyphicon-ok');
+                        refresh();
+                    }
+                })
+            }
         });
     });
 

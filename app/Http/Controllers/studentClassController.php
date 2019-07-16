@@ -261,6 +261,19 @@ class studentClassController extends Controller
         $class_settings->delete();
     }
 
+    public function end_class(Request $request){
+        $class_settings = class_settings::find($request->current_class_select);
+
+        $class_students = class_students::where('class_settings_id', $class_settings->id)->get();
+        
+        foreach($class_students as $cs){
+            if(empty($cs->end_date)){
+                $cs->end_date = $class_settings->end_date;
+                $cs->save();
+            }
+        }
+    }
+
     public function edit_student_date(Request $request){
         $id = $request->edit_student_class_id;
         $class_students = class_students::find($id);

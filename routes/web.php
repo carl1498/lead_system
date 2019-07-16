@@ -93,6 +93,7 @@ Route::group(['middleware' => ['auth', 'student_list']], function(){
     Route::get('/get_student_date/{id}', 'studentClassController@get_student_date');
     Route::post('/edit_student_date', 'studentClassController@edit_student_date');
     Route::get('/remove_student_class/{id}', 'studentClassController@remove_student_class');
+    Route::get('/end_class', 'studentClassController@end_class');
 
     //Student Logs
     Route::get('/student_add_history', 'studentLogsController@add_history_page');

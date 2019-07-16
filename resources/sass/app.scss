@@ -331,7 +331,7 @@ $fa-font-path: "../webfonts";
 
 #students_branch_wrapper .dataTables_length, #students_status_wrapper .dataTables_length,
 #students_result_wrapper .dataTables_length, #language_students_wrapper .dataTables_length,
-#all_students_wrapper .dataTables_length, #ssv_students_wrapper .dataTables_length,
+#all_students_wrapper .dataTables_length, #ssw_students_wrapper .dataTables_length,
 #trainee_students_wrapper .dataTables_length, #employees_all_wrapper .dataTables_length,
 #employees_branch_wrapper .dataTables_length{
   float: right !important;
@@ -340,7 +340,7 @@ $fa-font-path: "../webfonts";
 
 #students_branch_wrapper .dataTables_filter, #students_status_wrapper .dataTables_filter,
 #students_result_wrapper .dataTables_filter, #language_students_wrapper .dataTables_filter,
-#all_students_wrapper .dataTables_filter, #ssv_students_wrapper .dataTables_filter,
+#all_students_wrapper .dataTables_filter, #ssw_students_wrapper .dataTables_filter,
 #trainee_students_wrapper .dataTables_filter, #employees_all_wrapper .dataTables_filter,
 #employees_branch_wrapper .dataTables_filter{ 
   float: right !important;
@@ -391,16 +391,16 @@ $fa-font-path: "../webfonts";
 
 li.branch_pick, li.status_pick, 
 li.result_pick, li.language_pick, 
-li.all_pick, li.ssv_pick,
-li.ssv_backout_pick, li.tab_pick,
+li.all_pick, li.ssw_pick,
+li.ssw_backout_pick, li.tab_pick,
 li.invoice_pick, li.books_pick{
   cursor: not-allowed;
 }
 
 a.branch_pick, a.status_pick, 
 a.result_pick, a.language_pick, 
-a.all_pick, a.ssv_pick,
-a.ssv_backout_pick, a.tab_pick,
+a.all_pick, a.ssw_pick,
+a.ssw_backout_pick, a.tab_pick,
 a.invoice_pick, a.books_pick{
   pointer-events: none;
 }

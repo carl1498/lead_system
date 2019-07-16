@@ -284,7 +284,6 @@ class studentController extends Controller
     }
 
     public function ssw(Request $request){
-        info($request   );
         $departure_year = $request->departure_year;
         $current_ssw = $request->current_ssw;
 
