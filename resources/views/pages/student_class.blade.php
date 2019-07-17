@@ -75,6 +75,7 @@
 
     <!-- MODALS -- START -->
 
+    @include('includes.modals.student_class_modals.student_class_history_modal')
     @include('includes.modals.student_class_modals.add_class_modal')
     @include('includes.modals.student_class_modals.assign_student_class_modal')
     @include('includes.modals.student_class_modals.edit_student_date_modal')

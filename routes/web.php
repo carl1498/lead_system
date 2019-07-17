@@ -86,6 +86,8 @@ Route::group(['middleware' => ['auth', 'student_list']], function(){
     Route::get('/no_class_students', 'studentClassController@no_class_students');
     Route::get('/get_class_settings/{current_class_select}', 'studentClassController@get_class_settings');
     Route::get('/all_class_students', 'studentClassController@all_class_students');
+    Route::get('/view_student_class_history/{id}', 'studentClassController@view_student_class_history');
+    Route::get('/student_class_name/{id}', 'studentClassController@student_class_name');
 
     //Student Class Higher
     Route::group(['middleware' => ['student_class_high']], function(){

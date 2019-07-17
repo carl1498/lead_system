@@ -74,9 +74,14 @@ class studentClassController extends Controller
         ->addColumn('action', function($data){
             $html = '';
             
+            
             if(canAccessAll() || StudentClassHigherPermission()){
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Class History" class="btn btn-success btn-xs view_class_history" id="'.$data->stud_id.'"><i class="fa fa-eye"></i></button>&nbsp;';
                 $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_student_date" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
                 $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Remove" class="btn btn-danger btn-xs remove_student_class" id="'.$data->id.'"><i class="fa fa-user-minus"></i></button>&nbsp;';    
+            }
+            else if(canAccessStudents()){
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-success btn-xs view_class_history" id="'.$data->id.'"><i class="fa fa-eye"></i></button>&nbsp;';
             }else{
                 $html .= 'Restricted';
             }
@@ -275,6 +280,26 @@ class studentClassController extends Controller
                 $cs->save();
             }
         }
+    }
+
+    public function view_student_class_history(Request $request){
+        $id = $request->id;
+
+        $class_students = class_students::with('current_class.sensei')->where('stud_id', $id)->get();
+
+        return Datatables::of($class_students)
+        ->addColumn('sensei', function($data){
+            return $data->current_class->sensei->fname . ' ' . $data->current_class->sensei->lname;
+        })
+        ->make(true);
+    }
+
+    public function student_class_name(Request $request){
+        $id = $request->id;
+
+        $class_students = class_students::with('student')->where('stud_id', $id)->first();
+
+        return $class_students->student->fname . ' ' . $class_students->student->lname;
     }
 
     public function edit_student_date(Request $request){

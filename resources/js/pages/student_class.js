@@ -132,6 +132,13 @@ $(document).ready(function(){
         {data: 'class_status', name: 'class_status'},
     ]
 
+    var columns_student_class_history = [
+        {data: 'sensei', name: 'sensei'},
+        {data: 'start_date', name: 'start_date'},
+        {data: 'end_date', name: 'end_date'},
+        {data: 'current_class.remarks', name: 'remarks'},
+    ]
+
     function refresh_student_class_table(){
         $('#student_class_table').DataTable({
             stateSave: true,
@@ -210,6 +217,32 @@ $(document).ready(function(){
             },
             columnDefs: [{defaultContent: "", targets: "_all"}],
             columns: columns_all_class
+        });
+    }
+
+    function student_class_history_table(id){
+        $('#student_class_history_table').DataTable({
+            stateSave: true,
+            stateSaveCallback: function(settings,data) {
+                localStorage.setItem( 'DataTables_' + settings.sInstance, JSON.stringify(data) )
+            },
+            stateLoadCallback: function(settings) {
+                return JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ) )
+            },
+            initComplete: function(settings, json) {
+                enableTabs();
+            },
+            processing: true,
+            destroy: true,
+            scrollX: true,
+            scrollCollapse: true,
+            fixedColumns: true,
+            responsive: true,
+            ajax: {
+                url: '/view_student_class_history/'+id,
+            },
+            columnDefs: [{defaultContent: "", targets: "_all"}],
+            columns: columns_student_class_history
         });
     }
 
@@ -680,6 +713,23 @@ $(document).ready(function(){
                     }
                 })
             }
+        });
+    });
+
+    $(document).on('click', '.view_class_history', function(){
+        let id = $(this).attr('id');
+
+        $.ajax({
+            url: '/student_class_name/'+id,
+            method: 'get',
+            type: 'json',
+            success:function(data){
+                $('#student_class_history_modal').modal('toggle');
+                $('#student_class_history_modal').modal('show');
+                $('#student_class_name').html(data);
+                
+                student_class_history_table(id);
+            }   
         });
     });
 
