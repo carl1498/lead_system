@@ -101,6 +101,19 @@ function canEditStudentList(){
     return false;
 }
 
+function StudentClassHigherPermission(){
+    $id = Auth::user()->id;
+    $user = \App\User::with('employee.role')->find($id);
+    $authorized = ['President', 'Finance Director', 'HR/Finance Head', 'Language Head', 'IT Officer'];
+
+    foreach($authorized as $auth){
+        if($user->employee->role->name == $auth){
+            return true;
+        }
+    }
+    return false;
+}
+
 function canAccessStudentSettings(){
     $id = Auth::user()->id;
     $user = \App\User::with('employee.role')->find($id);

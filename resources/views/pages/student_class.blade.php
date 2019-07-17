@@ -8,10 +8,10 @@
     </h1>
     <ol class="breadcrumb">
         <li>
-            @if(canAccessAll() || canEditInvoice())
             <button data-container="body" data-toggle="tooltip" data-placement="left" title="Refresh Table" class="btn btn-secondary bg-red refresh_table" disabled>
                 <i class="fa fa-sync"></i>
             </button>
+            @if(canAccessAll() || StudentClassHigherPermission())
             <button data-container="body" data-toggle="tooltip" data-placement="left" title="Assign Student Class" class="btn btn-secondary bg-red assign_student_class">
                 <i class="fas fa-user-plus"></i>
             </button>

@@ -64,6 +64,7 @@
 
     <div class="modal-footer">
         <div class="col-md-12">
+            @if(canAccessAll() || StudentClassHigherPermission())
             <div class="col-md-2">
                 <button type="button" class="btn btn-danger pull-left delete_class">Delete Class</button>
             </div>
@@ -73,6 +74,7 @@
             <div class="col-md-5">
                 <button type="submit" class="btn btn-primary e_save_class">Save changes</button>
             </div>
+            @endif
         </div>
     </div>
 </form>

@@ -38,7 +38,7 @@
 						@if(canAccessAll() || canAccessStudentList())
 						<li class="{{ (Request::path() == 'students') ? 'active' : '' }}"><a href="/students"><i class="fa fa-list-ul"></i> Student List</a></li>
 						@endif
-						@if(canAccessAll())
+						@if(canAccessAll() || canAccessStudents())
 						<li class="{{ (Request::path() == 'classes') ? 'active' : '' }}"><a href="/classes"><i class="fa fa-chalkboard-teacher"></i> Student Class</a></li>
 						@endif
 						@if(canAccessAll() || canAccessStudentSettings())
