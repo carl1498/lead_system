@@ -101,7 +101,6 @@ Route::group(['middleware' => ['auth', 'student_list']], function(){
         Route::post('/edit_class', 'studentClassController@edit_class')->middleware('student_class_high');
     });
 
-
     //Student Logs
     Route::get('/student_add_history', 'studentLogsController@add_history_page');
     Route::get('/student_add_history_table', 'studentLogsController@add_history_table');
@@ -190,12 +189,10 @@ Route::group(['middleware' => ['auth', 'invoice']], function(){
     Route::get('/view_invoice/{type_select}', 'invoiceController@view');
     Route::post('/save_invoice', 'invoiceController@save_invoice');
 
-    
     Route::group(['middleware' => ['invoice_high']], function(){
         Route::get('/delete_invoice/{id}', 'invoiceController@delete_invoice');
         Route::get('/delete_add_book/{id}', 'invoiceController@delete_add_book');
     });
-
 
     //Add Book
     Route::get('/viewAddBooks', 'invoiceController@view_add_books');

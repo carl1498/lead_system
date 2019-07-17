@@ -124,19 +124,24 @@ class studentClassController extends Controller
             }
         })
         ->addColumn('class_status', function($data){
-            $class_students = class_students::with('student')->where('stud_id', $data->id)
+            $class_students = class_students::with('student', 'current_class.sensei')->where('stud_id', $data->id)
                 ->orderBy('id', 'desc')->first();
+
+            $html = '';
 
             if($class_students){
                 if($class_students->end_date && $class_students->student->status != 'Back Out'){
-                    return 'Complete';
+                    $html .= 'Complete ';
                 }
                 else if($class_students->end_date && $class_students->student->status == 'Back Out'){
-                    return 'Back Out';
+                    $html .= 'Back Out ';
                 }
                 else{
-                    return 'Active';
+                    $html .= 'Active ';
                 }
+
+                $html .= '(' . $class_students->current_class->sensei->fname . ')';
+                return $html;
             }else{
                 return 'N/A';
             }
