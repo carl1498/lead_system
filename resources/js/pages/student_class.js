@@ -565,6 +565,9 @@ $(document).ready(function(){
         var input = $('.save_assign');
         var button = document.getElementsByClassName("save_assign")[0];
 
+        button.disabled = true;
+        input.html('SAVING...');
+
         $.ajax({
             headers: {
                 'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')

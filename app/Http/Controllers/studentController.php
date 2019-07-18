@@ -48,11 +48,12 @@ class studentController extends Controller
         $departure_year = $request->departure_year;
         $departure_month = $request->departure_month;
         $except = ['Language Only', 'Trainee', 'SSW (Careworker)', 'SSW (Hospitality)'];
+        $except = program::whereIn('name', $except)->pluck('id');
 
         $branch = student::with('program', 'school', 'benefactor', 'referral', 
         'branch', 'course', 'departure_year', 'departure_month')
-        ->whereHas('program', function($query) use($except){
-            $query->whereNotIn('name', $except);
+        ->where(function ($query) use($except){
+            $query->whereNotIn('program_id', $except)->orWhereNull('program_id');
         })
         ->when($departure_year != 'All', function($query) use($departure_year){
             $query->where('departure_year_id', $departure_year);
@@ -99,11 +100,12 @@ class studentController extends Controller
         $departure_year = $request->departure_year;
         $departure_month = $request->departure_month;
         $except = ['Language Only', 'Trainee', 'SSW (Careworker)', 'SSW (Hospitality)'];
+        $except = program::whereIn('name', $except)->pluck('id');
 
         $status = student::with('program', 'school', 'benefactor', 'referral', 
         'branch', 'course', 'departure_year', 'departure_month')
-        ->whereHas('program', function($query) use($except){
-            $query->whereNotIn('name', $except);
+        ->where(function ($query) use($except){
+            $query->whereNotIn('program_id', $except)->orWhereNull('program_id');
         })
         ->when($departure_year != 'All', function($query) use($departure_year){
             $query->where('departure_year_id', $departure_year);
@@ -152,9 +154,13 @@ class studentController extends Controller
         $departure_year = $request->departure_year;
         $departure_month = $request->departure_month;
         $except = ['Language Only', 'Trainee', 'SSW (Careworker)', 'SSW (Hospitality)'];
+        $except = program::whereIn('name', $except)->pluck('id');
 
         $result = student::with('program', 'school', 'referral', 
         'branch', 'course', 'departure_year', 'departure_month')
+        ->where(function ($query) use($except){
+            $query->whereNotIn('program_id', $except)->orWhereNull('program_id');
+        })
         ->when($departure_year != 'All', function($query) use($departure_year){
             $query->where('departure_year_id', $departure_year);
         })
