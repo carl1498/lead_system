@@ -10,17 +10,17 @@
         <li>
             @if(canAccessAll() || canAccessStudentList())
             <div class="btn-group" role="group" aria-label="switch">
-            <button title="Switch Tabs" class="btn btn-secondary bg-red switch switch_student" disabled>
-                <b class="switch_name">Student</b>
-            </button>
-            <button class="btn btn-secondary bg-red switch switch_ssw" disabled>
-                <b class="switch_name">SSW</b>
-            </button>
-            <button class="btn btn-secondary bg-red switch switch_trainee" disabled>
-                <b class="switch_name">Trainee</b>
-            </button>
-
+                <button title="Switch Tabs" class="btn btn-secondary bg-red switch switch_student" disabled>
+                    <b class="switch_name">Student</b>
+                </button>
+                <button class="btn btn-secondary bg-red switch switch_ssw" disabled>
+                    <b class="switch_name">SSW</b>
+                </button>
+                <button class="btn btn-secondary bg-red switch switch_trainee" disabled>
+                    <b class="switch_name">Trainee</b>
+                </button>
             </div>
+
             <button data-container="body" data-toggle="tooltip" data-placement="left" title="Refresh Table" class="btn btn-secondary bg-red refresh_table" disabled>
                 <i class="fa fa-sync"></i>
             </button>
@@ -134,14 +134,13 @@
                             </p>
                         </li>
                     </ul>
-
-                    <!--<a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>-->
                 </div>
                 <!-- /.box-body -->
             </div>
             <!-- /.box -->
         </div>
         <!-- /.col -->
+
         <div class="col-md-9 col-xl-10">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs" id="student_list_tab">
@@ -161,7 +160,6 @@
                     <li class="disabled status_pick"><a class="status_pick" href="#students_status_tab" data-toggle="tab">Back Out / Cancelled</a></li>
                     <li class="disabled result_pick"><a class="result_pick" href="#students_result_tab" data-toggle="tab">Result Monitoring</a></li>
                     <li class="disabled language_pick"><a class="language_pick" href="#language_student_tab" data-toggle="tab">Language</a></li>
-
 
                     <li class="disabled all_pick"><a class="all_pick" href="#all_student_tab" data-toggle="tab">All</a></li>
                 </ul>

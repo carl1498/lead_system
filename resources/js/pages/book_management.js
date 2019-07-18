@@ -390,7 +390,6 @@ $(document).ready(function(){
             initComplete: function(settings, json) {
                 enableTabs();  
             },
-            dom: 'Bflrtip',
             processing: true,
             destroy: true,
             scrollX: true,
@@ -398,10 +397,6 @@ $(document).ready(function(){
             fixedColumns: {
                 leftColumns: 1
             },
-            buttons: [
-                {extend: 'print', title: 'LEAD System', orientation: 'landscape', pageSize: 'FOLIO'},
-                {extend: 'pdfHtml5', title: 'LEAD System', orientation: 'portrait', pageSize: 'FOLIO'},
-            ],
             responsive: true,
             ajax: {
                 url: '/view_student_books',

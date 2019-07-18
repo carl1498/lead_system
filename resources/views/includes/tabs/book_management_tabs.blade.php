@@ -1,7 +1,7 @@
 <!-- BRANCH -- START -->
 
 <div class="tab-pane fade in active" id="branch_tab">
-    <table id="books_branch_table" class="table table-hover table-striped table-bordered" cellspacing="0">
+    <table id="books_branch_table" class="table table-hover table-striped table-bordered responsive nowrap" width="100%">
         @include('includes.tables.books.books_branch_table')
     </table>
 </div>
@@ -11,7 +11,7 @@
 <!-- SSW STUDENTS -- START -->
 
 <div class="tab-pane fade in" id="ssw_student_tab">
-    <table id="books_ssw_student_table" class="table table-hover table-striped table-bordered" cellspacing="0">
+    <table id="books_ssw_student_table" class="table table-hover table-striped table-bordered responsive nowrap" width="100%">
         @include('includes.tables.books.books_ssw_student_table')
     </table>
 </div>
@@ -21,7 +21,7 @@
 <!-- STUDENTS -- START -->
 
 <div class="tab-pane fade in" id="student_tab">
-    <table id="books_student_table" class="table table-hover table-striped table-bordered" cellspacing="0">
+    <table id="books_student_table" class="table table-hover table-striped table-bordered responsive nowrap" width="100%">
         @include('includes.tables.books.books_student_table')
     </table>
 </div>
@@ -31,7 +31,7 @@
 <!-- BOOKS -- START -->
 
 <div class="tab-pane fade in" id="books_tab">
-    <table id="books_table" class="table table-hover table-striped table-bordered" cellspacing="0">
+    <table id="books_table" class="table table-hover table-striped table-bordered responsive nowrap" width="100%">
         @include('includes.tables.books.books_table')
     </table>
 </div>
@@ -41,7 +41,7 @@
 <!-- REQUEST HISTORY -- START -->
 
 <div class="tab-pane fade in" id="request_tab">
-    <table id="books_request_table" class="table table-hover table-striped table-bordered" cellspacing="0">
+    <table id="books_request_table" class="table table-hover table-striped table-bordered responsive nowrap" width="100%">
         @include('includes.tables.books.books_request_table')
     </table>
 </div>
@@ -51,7 +51,7 @@
 <!-- RELEASE HISTORY -- START -->
 
 <div class="tab-pane fade in" id="release_tab">
-    <table id="books_release_table" class="table table-hover table-striped table-bordered" cellspacing="0">
+    <table id="books_release_table" class="table table-hover table-striped table-bordered responsive nowrap" width="100%">
         @include('includes.tables.books.books_release_table')
     </table>
 </div>
@@ -61,7 +61,7 @@
 <!-- ASSIGN HISTORY -- START -->
 
 <div class="tab-pane fade in" id="assign_tab">
-    <table id="books_assign_table" class="table table-hover table-striped table-bordered" cellspacing="0">
+    <table id="books_assign_table" class="table table-hover table-striped table-bordered responsive nowrap" width="100%">
         @include('includes.tables.books.books_assign_table')
     </table>
 </div>
@@ -71,7 +71,7 @@
 <!-- RETURN HISTORY-- START -->
 
 <div class="tab-pane fade in" id="return_tab">
-    <table id="books_return_table" class="table table-hover table-striped table-bordered" cellspacing="0">
+    <table id="books_return_table" class="table table-hover table-striped table-bordered responsive nowrap" width="100%">
         @include('includes.tables.books.books_return_table')
     </table>
 </div>
@@ -81,7 +81,7 @@
 <!-- LOST HISTORY -- START -->
 
 <div class="tab-pane fade in" id="lost_tab">
-    <table id="books_lost_table" class="table table-hover table-striped table-bordered" cellspacing="0">
+    <table id="books_lost_table" class="table table-hover table-striped table-bordered responsive nowrap" width="100%">
         @include('includes.tables.books.books_lost_table')
     </table>
 </div>

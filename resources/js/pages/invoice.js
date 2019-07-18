@@ -152,24 +152,8 @@ $(document).ready(function(){
                 {data: 'created_at', name: 'date'},
                 {data: 'action', orderable: false, searchable: false}
             ],
-            columnDefs: [
-                { width: 120, targets: 0 }, //invoice ref no
-                { width: 60, targets: 1 }, //book 1
-                { width: 60, targets: 2 }, //wb 1
-                { width: 60, targets: 3 }, //book 2
-                { width: 60, targets: 4 }, //wb 2
-                { width: 60, targets: 5 }, //kanji
-                { width: 90, targets: 6 }, //book 1 ssw
-                { width: 90, targets: 7 }, //wb 1 ssw
-                { width: 90, targets: 8 }, //book 2 ssw
-                { width: 90, targets: 9 }, //wb 2 ssw
-                { width: 90, targets: 10 }, //kanji
-                { width: 130, targets: 11 }, //date
-                { width: 80, targets: 12 }, //action
-            ],
-            order: [[
-                11, 'desc'
-            ]]
+            columnDefs: [{defaultContent: "", targets: "_all"}],
+            order: [[11, 'desc']]
         });
     }
 
@@ -218,20 +202,8 @@ $(document).ready(function(){
                 {data: 'remarks', name: 'remarks'},
                 {data: 'action', orderable: false, searchable: false}
             ],
-            columnDefs: [
-                { width: 120, targets: 0 }, //invoice ref no
-                { width: 250, targets: 1 }, //book type
-                { width: 60, targets: 2 }, //previous pending
-                { width: 60, targets: 3 }, //quantity
-                { width: 60, targets: 4 }, //pending
-                { width: 120, targets: 5 }, //book no range
-                { width: 130, targets: 6 }, //date
-                { width: 200, targets: 7 }, //remarks
-                { width: 80, targets: 8 }, //action
-            ],
-            order: [[
-                6, 'desc'
-            ]]
+            columnDefs: [{defaultContent: "", targets: "_all"}],
+            order: [[6, 'desc']]
         })
 
     }

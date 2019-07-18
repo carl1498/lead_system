@@ -43,7 +43,7 @@ class studentController extends Controller
         'employee', 'branch', 'course', 'departure_year', 'departure_month', 'company'));
     }
 
-    public function branch(Request $request){
+    public function branch(Request $request){//Makati, Cebu, Davao
         $current_branch = $request->current_branch;
         $departure_year = $request->departure_year;
         $departure_month = $request->departure_month;
@@ -63,10 +63,6 @@ class studentController extends Controller
 
         $branch = $branch->where('branch.name', $current_branch)->whereIn('status', ['Active', 'Final School']);
 
-        return $this->refreshDatatable($branch);
-    }
-
-    public function refreshDatatable($branch){
         return Datatables::of($branch)
         ->editColumn('name', function($data){
             return $data->lname.', '.$data->fname.' '.$data->mname;
@@ -98,7 +94,7 @@ class studentController extends Controller
         ->make(true);
     }
 
-    public function status(Request $request){
+    public function status(Request $request){//Final School, Back Out / Cancelled
         $current_status = $request->current_status;
         $departure_year = $request->departure_year;
         $departure_month = $request->departure_month;
@@ -121,11 +117,7 @@ class studentController extends Controller
             $query->where('status', $current_status);
         })->orderBy('school_id')->get();
         
-        return $this->refreshDatatableStatus($status);
-    }
-
-    public function refreshDatatableStatus($type){
-        return Datatables::of($type)
+        return Datatables::of($status)
         ->editColumn('name', function($data){
             return $data->lname.', '.$data->fname.' '.$data->mname;
         })
@@ -156,7 +148,7 @@ class studentController extends Controller
         ->make(true);
     }
 
-    public function result(Request $request){
+    public function result(Request $request){//Result Monitoring
         $departure_year = $request->departure_year;
         $departure_month = $request->departure_month;
         $except = ['Language Only', 'Trainee', 'SSW (Careworker)', 'SSW (Hospitality)'];
@@ -170,10 +162,6 @@ class studentController extends Controller
             $query->where('departure_month_id', $departure_month);
         })->whereIn('status', ['Final School', 'Cancelled'])->orderBy('school_id')->get();
 
-        return $this->refreshDatatableResult($result);
-    }
-
-    public function refreshDatatableResult($result){
         return Datatables::of($result)
         ->editColumn('name', function($data){
             return $data->lname.', '.$data->fname.' '.$data->mname;
@@ -205,7 +193,7 @@ class studentController extends Controller
         ->make(true);
     }
 
-    public function language(Request $request){
+    public function language(Request $request){//Language Only
         $departure_year = $request->departure_year;
 
         $language = student::with('program', 'referral', 'branch', 'course', 'departure_year')
@@ -217,10 +205,6 @@ class studentController extends Controller
         })
         ->get();
 
-        return $this->refreshDatatableLanguage($language);
-    }
-
-    public function refreshDatatableLanguage($language){
         return Datatables::of($language)
         ->editColumn('name', function($data){
             return $data->lname.', '.$data->fname.' '.$data->mname;
@@ -244,10 +228,7 @@ class studentController extends Controller
     public function all(){
         $all = student::with('branch', 'program', 'school', 'benefactor', 'company', 'course', 'referral')->get();
 
-        return $this->refreshDatatableAll($all);
-    }
-
-    public function refreshDatatableAll($all){
+        
         return Datatables::of($all)
         ->editColumn('name', function($data){
             return $data->lname.', '.$data->fname.' '.$data->mname;
@@ -302,10 +283,6 @@ class studentController extends Controller
             $ssw = $ssw->where('status', 'Back Out');
         }
 
-        return $this->refreshDatatableSSW($ssw);
-    }
-
-    public function refreshDatatableSSW($ssw){
         return Datatables::of($ssw)
         ->editColumn('name', function($data){
             return $data->lname.', '.$data->fname.' '.$data->mname;

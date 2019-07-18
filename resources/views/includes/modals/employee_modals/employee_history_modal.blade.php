@@ -15,7 +15,7 @@
 
                 <h4 class="title_probationary"></h4>
 
-                <table id="employment_history_table" class="table table-hover table-striped table-bordered" cellspacing="0" width="100%">
+                <table id="employment_history_table" class="table table-hover table-striped table-bordered responsive nowrap" width="100%">
                     <thead>
                         <tr>
                             <th>Hired Date</th>
@@ -30,7 +30,7 @@
 
                 <h4>Employment History</h4>
 
-                <table id="prev_employment_history_table" class="table table-hover table-striped table-bordered" cellspacing="0" width="100%">
+                <table id="prev_employment_history_table" class="table table-hover table-striped table-bordered responsive nowrap" width="100%">
                     <thead>
                         <tr>
                             <th width="100px">Company</th>
@@ -50,7 +50,7 @@
 
                 <h4>Educational Background</h4>
 
-                <table id="educational_background_table" class="table table-hover table-striped table-bordered" cellspacing="0" width="100%">
+                <table id="educational_background_table" class="table table-hover table-striped table-bordered responsive nowrap" width="100%">
                     <thead>
                         <tr>
                             <th width="200px">School</th>

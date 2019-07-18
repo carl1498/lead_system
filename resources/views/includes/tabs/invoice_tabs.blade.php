@@ -2,7 +2,7 @@
 
 <div class="tab-pane fade in active" id="invoice_tab">
     
-    <table id="invoice_table" class="table table-hover table-striped table-bordered" cellspacing="0">
+    <table id="invoice_table" class="table table-hover table-striped table-bordered responsive nowrap" width="100%">
         @include('includes.tables.invoice_table')
     </table>
 
@@ -14,7 +14,7 @@
 
 <div class="tab-pane fade in" id="add_books_tab">
     
-    <table id="add_books_table" class="table table-hover table-striped table-bordered" cellspacing="0">
+    <table id="add_books_table" class="table table-hover table-striped table-bordered responsive nowrap" width="100%">
         @include('includes.tables.add_books_table')
     </table>
 

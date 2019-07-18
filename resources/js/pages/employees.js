@@ -218,7 +218,6 @@ $(document).ready(function(){
     function refresh_employment_history(id){
         var employment_history_table = $('#employment_history_table').DataTable({
             paging: false,
-            ordering: false,
             info: false,
             searching: false,
             destroy: true,
@@ -234,10 +233,12 @@ $(document).ready(function(){
 
         var prev_employment_history_table = $('#prev_employment_history_table').DataTable({
             paging: false,
-            ordering: false,
             info: false,
             searching: false,
             destroy: true,
+            responsive: true,
+            scrollX: true,
+            scrollCollapse: true,
             ajax: '/view_prev_employment_history/'+id,
             columns: [
                 {data: 'company', name: 'company'},
@@ -255,10 +256,12 @@ $(document).ready(function(){
 
         var educational_background_table = $('#educational_background_table').DataTable({
             paging: false,
-            ordering: false,
             info: false,
             searching: false,
             destroy: true,
+            responsive: true,
+            scrollX: true,
+            scrollCollapse: true,
             ajax: '/view_educational_background/'+id,
             columns: [
                 {data: 'school', name: 'school'},
@@ -280,7 +283,6 @@ $(document).ready(function(){
             info: false,
             searching: false,
             destroy: true,
-            autoWidth: false,
             ajax: '/view_employee_emergency/'+id,
             columns: [
                 {data: 'name', name: 'name'},
@@ -297,7 +299,6 @@ $(document).ready(function(){
             info: false,
             searching: false,
             destroy: true,
-            autoWidth: false,
             ajax: '/view_employee_spouse/'+id,
             columns: [
                 {data: 'name', name: 'name'},
@@ -314,7 +315,6 @@ $(document).ready(function(){
             info: false,
             searching: false,
             destroy: true,
-            autoWidth: false,
             ajax: '/view_employee_child/'+id,
             columns: [
                 {data: 'name', name: 'name'},
@@ -576,6 +576,9 @@ $(document).ready(function(){
                         }
                         else{
                             $.ajax({
+                                headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                },
                                 url: '/save_resign_employee',
                                 method: 'POST',
                                 dataType: 'text',

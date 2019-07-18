@@ -22,7 +22,7 @@ class StudentClassHigherPermission
         $authorized = ['President', 'Finance Director', 'HR/Finance Head', 'Language Head', 'IT Officer'];
 
         foreach($authorized as $auth){
-            if($user->employee->role->name == $auth){
+            if($user->employee->role->name == $auth && $user->employee->employment_status != 'Resigned'){
                 return $next($request);
             }
         }

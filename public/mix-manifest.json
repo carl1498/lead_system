@@ -1,14 +1,14 @@
 {
-    "/js/app.js": "/js/app.js?id=8c5e5d5425fcac26d372",
-    "/css/app.css": "/css/app.css?id=c0486a10fa41c6433a9d",
-    "/js/pages/students.js": "/js/pages/students.js?id=0f8189e40497daf7b793",
-    "/js/pages/student_settings.js": "/js/pages/student_settings.js?id=add1a871cd521bff3699",
-    "/js/pages/student_edit_history.js": "/js/pages/student_edit_history.js?id=0acfb592565fd631737f",
-    "/js/pages/student_delete_history.js": "/js/pages/student_delete_history.js?id=158b9100ce6eac5bdeb2",
-    "/js/pages/student_class.js": "/js/pages/student_class.js?id=cf634fb2c4bbf1bce3fd",
-    "/js/pages/student_add_history.js": "/js/pages/student_add_history.js?id=29c80fc82bc56168143f",
-    "/js/pages/invoice.js": "/js/pages/invoice.js?id=4ca01edf45e7ac1fe8aa",
-    "/js/pages/employees.js": "/js/pages/employees.js?id=88bc4ada165f847254bf",
-    "/js/pages/dashboard.js": "/js/pages/dashboard.js?id=7d9c9a7a12ea520d40fc",
-    "/js/pages/book_management.js": "/js/pages/book_management.js?id=6587125526c8b812a066"
+    "/js/app.js": "/js/app.js?id=c97afdb1dcec5a02f3c5",
+    "/css/app.css": "/css/app.css?id=f219c70a7716a247d30d",
+    "/js/pages/students.js": "/js/pages/students.js?id=da68961da8b84adaa042",
+    "/js/pages/student_settings.js": "/js/pages/student_settings.js?id=65bf66caa17e1fc32852",
+    "/js/pages/student_edit_history.js": "/js/pages/student_edit_history.js?id=b10a65ff7b921f1ffd22",
+    "/js/pages/student_delete_history.js": "/js/pages/student_delete_history.js?id=2e72977c36693aea0a02",
+    "/js/pages/student_class.js": "/js/pages/student_class.js?id=e83366a56cf34ad23b64",
+    "/js/pages/student_add_history.js": "/js/pages/student_add_history.js?id=061624095f41ec1f126d",
+    "/js/pages/invoice.js": "/js/pages/invoice.js?id=6371bf7c3350762edb8c",
+    "/js/pages/employees.js": "/js/pages/employees.js?id=1a2e8cb58b2496c7a266",
+    "/js/pages/dashboard.js": "/js/pages/dashboard.js?id=301048d0662bfd7994fb",
+    "/js/pages/book_management.js": "/js/pages/book_management.js?id=229d4e8a186b733f1bd5"
 }

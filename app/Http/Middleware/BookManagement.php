@@ -23,7 +23,7 @@ class BookManagement
             'HR/Finance Officer', 'Language Head', 'Assistant Finance Officer'];
 
         foreach($authorized as $auth){
-            if($user->employee->role->name == $auth){
+            if($user->employee->role->name == $auth && $user->employee->employment_status != 'Resigned'){
                 return $next($request);
             }
         }
