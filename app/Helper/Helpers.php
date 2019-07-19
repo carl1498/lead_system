@@ -15,7 +15,7 @@ function onLoadPosition(){
 }
 
 function onLoadBranch(){
-    $id = Auth::user()->id;
+    $id = Auth::user()->emp_id;
     $employee = \App\employee::find($id);
     $branch = \App\branch::where('id', $employee->branch_id)->first();
 
@@ -23,7 +23,7 @@ function onLoadBranch(){
 }
 
 function picture(){
-    $id = Auth::user()->id;
+    $id = Auth::user()->emp_id;
     $employee = \App\employee::find($id);
     $picture = $employee->picture;
 
@@ -62,8 +62,8 @@ function canAccessStudents(){
     $user = \App\User::with('employee.role')->find($id);
     $authorized = ['President', 'Finance Director', 'Admin', 'Branch Manager', 'OIC', 'HR/Finance Head',
         'HR/Finance Officer', 'IT Officer', 'Marketing Manager', 'Marketing Head', 'Marketing Officer',
-        'Documentation Head', 'Documentation Officer', 'Language Head', 'Intern', 'Liaison Officer',
-        'Assistant Finance Officer'];
+        'Documentation Head', 'Documentation Officer', 'Language Head', 'Language Teacher', 'Intern', 
+        'Liaison Officer', 'Assistant Finance Officer'];
 
     foreach($authorized as $auth){
         if($user->employee->role->name == $auth){
@@ -77,8 +77,8 @@ function canAccessStudentList(){
     $id = Auth::user()->id;
     $user = \App\User::with('employee.role')->find($id);
     $authorized = ['Admin', 'Branch Manager', 'OIC', 'HR/Finance Officer', 'Marketing Manager', 'Marketing Head', 
-        'Marketing Officer', 'Documentation Head', 'Documentation Officer', 'Language Head', 'Liaison Officer',
-        'Intern', 'Assistant Finance Officer'];
+        'Marketing Officer', 'Documentation Head', 'Documentation Officer', 'Language Head', 'Language Teacher',
+        'Liaison Officer', 'Intern', 'Assistant Finance Officer'];
 
     foreach($authorized as $auth){
         if($user->employee->role->name == $auth){

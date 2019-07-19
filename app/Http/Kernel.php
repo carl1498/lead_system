@@ -69,6 +69,7 @@ class Kernel extends HttpKernel
         'book_management' => \App\Http\Middleware\BookManagement::class,
         'employee' => \App\Http\Middleware\Employee::class,
         'student_class_high' => \App\Http\Middleware\StudentClassHigherPermission::class,
+        'student_class_add' => \App\Http\Middleware\StudentClassAddPermission::class,
     ];
 
     /**

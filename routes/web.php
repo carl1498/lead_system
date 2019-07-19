@@ -90,15 +90,18 @@ Route::group(['middleware' => ['auth', 'student_list']], function(){
     Route::get('/student_class_name/{id}', 'studentClassController@student_class_name');
 
     //Student Class Higher
-    Route::group(['middleware' => ['student_class_high']], function(){
+    Route::group(['middleware' => ['student_class_add']], function(){
         Route::post('/add_class', 'studentClassController@add_class');
         Route::get('/assign_student_class', 'studentClassController@assign_student_class');
-        Route::get('/delete_class', 'studentClassController@delete_class');
-        Route::get('/get_student_date/{id}', 'studentClassController@get_student_date');
-        Route::post('/edit_student_date', 'studentClassController@edit_student_date');
-        Route::get('/remove_student_class/{id}', 'studentClassController@remove_student_class');
-        Route::get('/end_class', 'studentClassController@end_class');
-        Route::post('/edit_class', 'studentClassController@edit_class')->middleware('student_class_high');
+
+        Route::group(['middleware' => ['student_class_high']], function(){
+            Route::get('/delete_class', 'studentClassController@delete_class');
+            Route::get('/get_student_date/{id}', 'studentClassController@get_student_date');
+            Route::post('/edit_student_date', 'studentClassController@edit_student_date');
+            Route::get('/remove_student_class/{id}', 'studentClassController@remove_student_class');
+            Route::get('/end_class', 'studentClassController@end_class');
+            Route::post('/edit_class', 'studentClassController@edit_class')->middleware('student_class_high');
+        });
     });
 
     //Student Logs

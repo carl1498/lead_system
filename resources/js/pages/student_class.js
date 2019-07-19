@@ -236,7 +236,6 @@ $(document).ready(function(){
             destroy: true,
             scrollX: true,
             scrollCollapse: true,
-            fixedColumns: true,
             responsive: true,
             ajax: {
                 url: '/view_student_class_history/'+id,

@@ -1,12 +1,12 @@
 <?php
 
 namespace App\Http\Middleware;
-
-use Closure;
 use App\User;
 use Auth;
 
-class StudentList
+use Closure;
+
+class StudentClassAddPermission
 {
     /**
      * Handle an incoming request.
@@ -19,17 +19,15 @@ class StudentList
     {
         $id = Auth::user()->id;
         $user = User::with('employee.role')->find($id);
-        $authorized = ['President', 'Finance Director', 'Admin', 'Branch Manager', 'OIC', 'HR/Finance Head',
-            'HR/Finance Officer', 'IT Officer', 'Marketing Manager', 'Marketing Head', 'Marketing Officer',
-            'Documentation Head', 'Documentation Officer', 'Language Head', 'Language Teacher', 'Intern', 
-            'Assistant Finance Officer', 'Liaison Officer'];
+        $authorized = ['President', 'Finance Director', 'HR/Finance Head', 'Language Head', 'IT Officer',
+            'Language Teacher'];
 
         foreach($authorized as $auth){
             if($user->employee->role->name == $auth && $user->employee->employment_status != 'Resigned'){
                 return $next($request);
             }
         }
-        
+
         return redirect('/dashboard');
     }
 }

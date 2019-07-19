@@ -74,17 +74,13 @@ class studentClassController extends Controller
         ->addColumn('action', function($data){
             $html = '';
             
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Class History" class="btn btn-success btn-xs view_class_history" id="'.$data->stud_id.'"><i class="fa fa-eye"></i></button>&nbsp;';
             
             if(canAccessAll() || StudentClassHigherPermission()){
-                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Class History" class="btn btn-success btn-xs view_class_history" id="'.$data->stud_id.'"><i class="fa fa-eye"></i></button>&nbsp;';
                 $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_student_date" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
                 $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Remove" class="btn btn-danger btn-xs remove_student_class" id="'.$data->id.'"><i class="fa fa-user-minus"></i></button>&nbsp;';    
             }
-            else if(canAccessStudents()){
-                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-success btn-xs view_class_history" id="'.$data->id.'"><i class="fa fa-eye"></i></button>&nbsp;';
-            }else{
-                $html .= 'Restricted';
-            }
+            
             return $html;
         })
         ->make(true);
