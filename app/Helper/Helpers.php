@@ -88,10 +88,10 @@ function canAccessStudentList(){
     return false;
 }
 
-function canEditStudentList(){
+function canEditFinalSchool(){
     $id = Auth::user()->id;
     $user = \App\User::with('employee.role')->find($id);
-    $authorized = ['Melba', 'Jovelyn'];
+    $authorized = ['Arjay'];
 
     foreach($authorized as $auth){
         if($user->employee->fname == $auth){
