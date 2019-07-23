@@ -234,7 +234,6 @@ class studentController extends Controller
     public function all(){
         $all = student::with('branch', 'program', 'school', 'benefactor', 'company', 'course', 'referral')->get();
 
-        
         return Datatables::of($all)
         ->editColumn('name', function($data){
             return $data->lname.', '.$data->fname.' '.$data->mname;
@@ -359,16 +358,18 @@ class studentController extends Controller
     
                     if($data->coe_status == 'Approved' || $data->coe_status == 'Denied' || $data->status == 'Back Out'){
                         $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Re Apply" class="btn btn-default btn-xs continue_student" id="'.$data->id.'"><i class="fa fa-step-backward"></i></button>&nbsp;';
+                    }else{
+                        if($data->coe_status != 'Approved'){
+                            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Passed" class="btn btn-success btn-xs approve_student" id="'.$data->id.'"><i class="fa fa-check"></i></button>&nbsp;';
+                        }
+                        if($data->coe_status != 'Denied'){
+                            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Failed" class="btn btn-danger btn-xs deny_student" id="'.$data->id.'"><i class="fa fa-times"></i></button>&nbsp;';
+                        }
+                        if($data->status != 'Back Out'){
+                            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Back Out" class="btn btn-warning btn-xs backout_student" id="'.$data->id.'"><i class="fa fa-sign-out-alt"></i></button>&nbsp;';
+                        }
                     }
-                    if($data->coe_status != 'Approved'){
-                        $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Passed" class="btn btn-success btn-xs approve_student" id="'.$data->id.'"><i class="fa fa-check"></i></button>&nbsp;';
-                    }
-                    if($data->coe_status != 'Denied'){
-                        $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Failed" class="btn btn-danger btn-xs deny_student" id="'.$data->id.'"><i class="fa fa-times"></i></button>&nbsp;';
-                    }
-                    if($data->status != 'Back Out'){
-                        $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Back Out" class="btn btn-warning btn-xs backout_student" id="'.$data->id.'"><i class="fa fa-sign-out-alt"></i></button>&nbsp;';
-                    }
+                    $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_student" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>&nbsp;';
                 }
 
                 return $html;

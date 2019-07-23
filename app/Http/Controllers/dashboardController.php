@@ -48,6 +48,8 @@ class dashboardController extends Controller
             ->whereHas('program', function($query){
                 $query->where('name', '<>', 'SSW (Careworker)');
                 $query->where('name', '<>', 'SSW (Hospitality)');
+                $query->where('name', '<>', 'Language Only');
+                $query->where('name', '<>', 'Trainee');
             })->count();
 
         $student_count += student::whereNull('program_id')->count();
@@ -55,6 +57,8 @@ class dashboardController extends Controller
             ->whereHas('program', function($query){
                 $query->where('name', '<>', 'SSW (Careworker)');
                 $query->where('name', '<>', 'SSW (Hospitality)');
+                $query->where('name', '<>', 'Language Only');
+                $query->where('name', '<>', 'Trainee');
             })->count();
 
         //Birthdays
@@ -109,6 +113,8 @@ class dashboardController extends Controller
             ->whereHas('program', function($query){
                 $query->where('name', '<>', 'SSW (Careworker)');
                 $query->where('name', '<>', 'SSW (Hospitality)');
+                $query->where('name', '<>', 'Language Only');
+                $query->where('name', '<>', 'Trainee');
             })->count();
 
         $student_count += student::whereNull('program_id')->count();
@@ -116,6 +122,8 @@ class dashboardController extends Controller
             ->whereHas('program', function($query){
                 $query->where('name', '<>', 'SSW (Careworker)');
                 $query->where('name', '<>', 'SSW (Hospitality)');
+                $query->where('name', '<>', 'Language Only');
+                $query->where('name', '<>', 'Trainee');
             })->count();
 
         $output = array(
@@ -148,6 +156,8 @@ class dashboardController extends Controller
                 ->whereHas('program', function($query){
                     $query->where('name', '<>', 'SSW (Careworker)');
                     $query->where('name', '<>', 'SSW (Hospitality)');
+                    $query->where('name', '<>', 'Language Only');
+                    $query->where('name', '<>', 'Trainee');
                 })
                 ->when($departure_year != 'All', function($query) use($departure_year){
                     $query->where('departure_year_id', $departure_year);
@@ -171,6 +181,8 @@ class dashboardController extends Controller
             ->whereHas('program', function($query){
                 $query->where('name', '<>', 'SSW (Careworker)');
                 $query->where('name', '<>', 'SSW (Hospitality)');
+                $query->where('name', '<>', 'Language Only');
+                $query->where('name', '<>', 'Trainee');
             })
             ->when($departure_year != 'All', function($query) use($departure_year){
                 $query->where('departure_year_id', $departure_year);
@@ -216,6 +228,8 @@ class dashboardController extends Controller
             ->whereHas('program', function($query){
                 $query->where('name', '<>', 'SSW (Careworker)');
                 $query->where('name', '<>', 'SSW (Hospitality)');
+                $query->where('name', '<>', 'Language Only');
+                $query->where('name', '<>', 'Trainee');
             })
             ->when($departure_year != 'All', function($query) use($departure_year){
                 $query->where('departure_year_id', $departure_year);
@@ -243,6 +257,8 @@ class dashboardController extends Controller
         ->whereHas('program', function($query){
             $query->where('name', '<>', 'SSW (Careworker)');
             $query->where('name', '<>', 'SSW (Hospitality)');
+            $query->where('name', '<>', 'Language Only');
+            $query->where('name', '<>', 'Trainee');
         })
         ->when($departure_year != 'All', function($query) use($departure_year){
             $query->where('departure_year_id', $departure_year);
@@ -374,6 +390,8 @@ class dashboardController extends Controller
             ->whereHas('program', function($query){
                 $query->where('name', '<>', 'SSW (Careworker)');
                 $query->where('name', '<>', 'SSW (Hospitality)');
+                $query->where('name', '<>', 'Language Only');
+                $query->where('name', '<>', 'Trainee');
             })
             ->when($departure_year != 'All', function($query) use($departure_year){
                 $query->where('departure_year_id', $departure_year);
@@ -401,6 +419,8 @@ class dashboardController extends Controller
         ->whereHas('program', function($query){
             $query->where('name', '<>', 'SSW (Careworker)');
             $query->where('name', '<>', 'SSW (Hospitality)');
+            $query->where('name', '<>', 'Language Only');
+            $query->where('name', '<>', 'Trainee');
         })
         ->when($departure_year != 'All', function($query) use($departure_year){
             $query->where('departure_year_id', $departure_year);
@@ -430,6 +450,8 @@ class dashboardController extends Controller
             ->whereHas('program', function($query){
                 $query->where('name', '<>', 'SSW (Careworker)');
                 $query->where('name', '<>', 'SSW (Hospitality)');
+                $query->where('name', '<>', 'Language Only');
+                $query->where('name', '<>', 'Trainee');
             })
             ->when($departure_year != 'All', function($query) use($departure_year){
                 $query->where('departure_year_id', $departure_year);
@@ -457,6 +479,8 @@ class dashboardController extends Controller
         ->whereHas('program', function($query){
             $query->where('name', '<>', 'SSW (Careworker)');
             $query->where('name', '<>', 'SSW (Hospitality)');
+            $query->where('name', '<>', 'Language Only');
+            $query->where('name', '<>', 'Trainee');
         })
         ->when($departure_year != 'All', function($query) use($departure_year){
             $query->where('departure_year_id', $departure_year);
