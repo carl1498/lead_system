@@ -64,7 +64,8 @@
 				</li>
 				@endif
 
-                <li class="treeview">
+				@if(canAccessAll())
+                <li class="{{ (Request::path() == 'expense') ? 'active' : '' }} treeview">
 					<a href="">
 						<i class="fa fa-calculator"></i> <span>Finance</span>
 						<span class="pull-right-container">
@@ -72,11 +73,13 @@
 						</span>
 					</a>
 					<ul class="treeview-menu">
+						<li class="{{ (Request::path() == 'expense') ? 'active' : '' }}"><a href="/expense"><i class="fa fa-money-bill-alt"></i> Expense</a></li>
 						<li class=""><a href="/students"><i class="fa fa-cash-register"></i> Tuition Fee</a></li>
 						<li class=""><a href="/student_settings"><i class="fa fa-network-wired"></i> Referral Monitoring</a></li>
 						<li class=""><a href="/student_settings"><i class="fa fa-wallet"></i> Allowance Monitoring</a></li>
 					</ul>
 				</li>
+				@endif
 
 				@if(canAccessAll() || canAccessEmployees())
 				<li class="{{ (Request::path() == 'employees') ? 'active' : '' }}">

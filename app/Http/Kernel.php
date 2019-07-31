@@ -70,6 +70,7 @@ class Kernel extends HttpKernel
         'employee' => \App\Http\Middleware\Employee::class,
         'student_class_high' => \App\Http\Middleware\StudentClassHigherPermission::class,
         'student_class_add' => \App\Http\Middleware\StudentClassAddPermission::class,
+        'expense' => \App\Http\Middleware\Expense::class,
     ];
 
     /**

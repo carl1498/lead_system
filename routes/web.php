@@ -250,3 +250,14 @@ Route::group(['middleware' => ['auth', 'book_management']], function(){
 });
 
 //BOOK ROUTES -- END
+
+//FINANCE ROUTES -- START
+
+Route::group(['middleware' => ['auth', 'expense']], function(){
+    Route::get('/expense', 'expenseController@index');
+
+    Route::get('/view_expense_type', 'expenseController@view_expense_type');
+    Route::post('/save_expense_type', 'expenseController@save_expense_type');
+});
+
+//FINANCE ROUTES -- END
