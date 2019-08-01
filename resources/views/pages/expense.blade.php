@@ -30,6 +30,7 @@
 
                 <div class="tab-content">
                     
+                    @include('includes.expense_select')
                     @include('includes.tabs.expense_tabs')
 
                 </div>

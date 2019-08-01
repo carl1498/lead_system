@@ -1,5 +1,5 @@
 <div class="modal fade" id="expense_particular_modal">
-    <div class="modal-dialog" style="width: 100%; max-width: 400px;">
+    <div class="modal-dialog" style="width: 100%; max-width: 500px;">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -31,7 +31,7 @@
                             </div>
                             <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                 <div class="form-group">
-                                    <input type="text" id="expense_particular_tin" name="expense_particular_tin" class="form-control required" placeholder="Enter Particular TIN">
+                                    <input type="text" id="expense_particular_tin" name="expense_particular_tin" class="form-control" placeholder="Enter Particular TIN">
                                 </div>
                             </div>
                         </div>
@@ -42,7 +42,7 @@
                             </div>
                             <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                 <div class="form-group">
-                                    <input type="text" id="expense_particular_address" name="expense_particular_address" class="form-control required" placeholder="Enter Particular Address">
+                                    <input type="text" id="expense_particular_address" name="expense_particular_address" class="form-control" placeholder="Enter Particular Address">
                                 </div>
                             </div>
                         </div>

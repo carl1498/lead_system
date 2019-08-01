@@ -21,6 +21,10 @@ class expense extends Model
         return $this->hasOne('App\expense_particular', 'id', 'expense_particular_id');
     }
     
+    public function branch(){
+        return $this->hasOne('App\branch', 'id', 'branch_id');
+    }
+    
     public function company_type(){
         return $this->hasOne('App\lead_company_type', 'id', 'lead_company_type_id');
     }

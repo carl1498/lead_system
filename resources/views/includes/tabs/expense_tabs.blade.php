@@ -13,6 +13,7 @@
                 <th>Amount</th>
                 <th>VAT</th>
                 <th>Input Tax</th>
+                <th>Check Voucher</th>
                 <th>Remarks</th>
                 <th>Action</th>
             </tr>

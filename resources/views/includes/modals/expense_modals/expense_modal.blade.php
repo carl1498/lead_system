@@ -39,7 +39,7 @@
                                     <select type="text" id="expense_particular" name="expense_particular" class="form-control select2" style="width: 100%;" required>
                                         <option value="" disabled selected>Select Expense Particular</option>
                                         @foreach($expense_particular as $ep)
-                                            <option value="{{ $ep->id }}">{{ $ep->name }}</option>
+                                            <option value="{{ $ep->id }}">{{ $ep->name }} @if($ep->address)({{ $ep->address }})@endif</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -108,8 +108,8 @@
                                 <div class="form-group required">
                                     <select type="text" id="vat" name="vat" class="form-control select2" style="width: 100%;" required>
                                         <option value="" disabled selected>Select VAT / NON-VAT</option>
-                                        <option value="non-vat">NON-VAT</option>
-                                        <option value="vat">VAT</option>
+                                        <option value="NON-VAT">NON-VAT</option>
+                                        <option value="VAT">VAT</option>
                                     </select>
                                 </div>
                             </div>
@@ -123,6 +123,16 @@
                                 <div class="form-group"  data-container="body" data-toggle="tooltip" data-placement="top" 
                                     title="Will automatically compute if expense is VAT" >
                                     <input type="number" id="input_tax" name="input_tax" class="form-control required" placeholder="Input Tax" required readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row clearfix">
+                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 form-control-label">
+                                    <label for="check_voucher" class="pull-right">Voucher</label>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                <div class="form-group">
+                                    <input type="text" id="check_voucher" name="check_voucher" class="form-control" placeholder="Enter Check Voucher">
                                 </div>
                             </div>
                         </div>
@@ -145,7 +155,7 @@
                 <div class="modal-footer">
                     <div class="col-md-12">
                         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary save_expense_particular">Save changes</button>
+                        <button type="submit" class="btn btn-primary save_expense">Save changes</button>
                     </div>
                 </div>
             </form>

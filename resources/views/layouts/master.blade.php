@@ -12,6 +12,7 @@
 	<link rel="stylesheet" type="text/css" href="/css/fixedColumns-bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="/css/bootstrap-datepicker.min.css">
 	<link rel="stylesheet" type="text/css" href="/css/bootstrap-timepicker.min.css">
+	<link rel="stylesheet" type="text/css" href="/css/daterangepicker.css">
 	<link rel="stylesheet" type="text/css" href="/css/animate.css">
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
 	<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.6/css/buttons.bootstrap.min.css"><link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
@@ -96,6 +97,8 @@
 <script src="/js/datatables-bootstrap.min.js"></script>
 <script src="/js/datatables-fixedColumns.min.js"></script>
 <script src="/js/bootstrap-datepicker.min.js"></script>
+<script src="/js/moment.min.js"></script>
+<script src="/js/daterangepicker.min.js"></script>
 <script src="/js/bootstrap-notify.min.js"></script>
 <script src="/js/bootstrap-timepicker.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>

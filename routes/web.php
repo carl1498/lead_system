@@ -255,9 +255,17 @@ Route::group(['middleware' => ['auth', 'book_management']], function(){
 
 Route::group(['middleware' => ['auth', 'expense']], function(){
     Route::get('/expense', 'expenseController@index');
-
     Route::get('/view_expense_type', 'expenseController@view_expense_type');
     Route::post('/save_expense_type', 'expenseController@save_expense_type');
+    Route::get('/view_expense_particular', 'expenseController@view_expense_particular');
+    Route::post('/save_expense_particular', 'expenseController@save_expense_particular');
+    Route::get('/view_expense', 'expenseController@view_expense');
+    Route::post('/save_expense', 'expenseController@save_expense');
+    Route::get('/expenseTypeAll', 'expenseController@expenseTypeAll');
+    Route::get('/expenseParticularAll', 'expenseController@expenseParticularAll');
+    Route::get('/get_expense_type/{id}', 'expenseController@get_expense_type');
+    Route::get('/get_expense_particular/{id}', 'expenseController@get_expense_particular');
+    Route::get('/get_expense/{id}', 'expenseController@get_expense');
 });
 
 //FINANCE ROUTES -- END
