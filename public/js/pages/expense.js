@@ -136,9 +136,11 @@ $(document).ready(function () {
             refresh_expense_table();
         } else if (current_tab == 'Type') {
             refresh_type_table();
-        } else {
+        } else if (current_tab == 'Particular') {
             //Particular
             refresh_particular_table();
+        } else {
+            refresh_cash_disbursement_table();
         }
     }
 
@@ -462,6 +464,49 @@ $(document).ready(function () {
             }
         }
     });
+
+    function refresh_cash_disbursement_table() {
+        $.ajax({
+            headers: {
+                'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: '/view_cash_disbursement',
+            method: 'get',
+            dataType: 'json',
+            success: function success(data) {
+                $('#cash_disbursement_table').empty();
+
+                var html = '';
+                var type = '';
+                var type_total = '';
+
+                html += '<thead>';
+
+                for (var x = 0; x < data.expense_type.length; x++) {
+                    type += '<th class="expense_types">' + data.expense_type[x].name + '</th>';
+                    type_total += '<th class="expense_types">' + data.expense_type[x].expense_type_total + '</th>';
+                }
+
+                html += '\n                <tr>\n                    <th rowspan="2" style="width: 100px;">Date</th>\n                    <th rowspan="2" style="width: 130px;">Check Voucher</th>\n                    <th rowspan="2" style="width: 350px;">Particulars</th>\n                    <th rowspan="2" style="width: 130px;">TIN Number</th>\n                    <th rowspan="2" style="width: 350px;">Address</th>\n                    <th style="width: 150px;">Total Invoice</th>\n                    <th style="width: 150px;">Non Vat</th>\n                    <th style="width: 150px;">Vatable Amount</th>\n                    <th style="width: 150px;">Input Tax</th>' + type + '</tr>\n                <tr>\n                    <th>' + data.total + '</th>\n                    <th>' + data.non_vat + '</th>\n                    <th>' + data.vat + '</th>\n                    <th>' + data.input_tax + '</th>' + type_total + '</tr>';
+
+                html += '</thead>';
+
+                html += '<tbody>';
+                console.log(data.expense);
+                for (var _x = 0; _x < data.expense.length; _x++) {
+                    var particular = '';
+                    for (var y = 0; y < data.expense_type.length; y++) {
+                        particular += '<td>' + data.expense_particular_type_total[_x][y] + '</td>';
+                    }
+                    html += '<tr>' + '<td>' + data.expense[_x].date + '</td>' + '<td>' + (data.expense[_x].check_voucher ? data.expense[_x].check_voucher : '') + '</td>' + '<td>' + data.expense[_x].particular.name + '</td>' + '<td>' + (data.expense[_x].particular.tin ? data.expense[_x].particular.tin : '') + '</td>' + '<td>' + (data.expense[_x].particular.address ? data.expense[_x].particular.address : '') + '</td>' + '<td>' + data.expense[_x].total_invoice + '</td>' + '<td>' + data.expense[_x].non_vat_total + '</td>' + '<td>' + data.expense[_x].vat_total + '</td>' + '<td>' + data.expense[_x].input_tax_total + '</td>' + particular + '</tr>';
+                }
+
+                html += '</tbody>';
+
+                $('#cash_disbursement_table').append(html);
+            }
+        });
+    }
 
     //FUNCTIONS -- END
 });

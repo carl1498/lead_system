@@ -266,6 +266,7 @@ Route::group(['middleware' => ['auth', 'expense']], function(){
     Route::get('/get_expense_type/{id}', 'expenseController@get_expense_type');
     Route::get('/get_expense_particular/{id}', 'expenseController@get_expense_particular');
     Route::get('/get_expense/{id}', 'expenseController@get_expense');
+    Route::get('/view_cash_disbursement', 'expenseController@view_cash_disbursement');
 });
 
 //FINANCE ROUTES -- END

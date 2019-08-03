@@ -160,4 +160,53 @@ class expenseController extends Controller
         }
         return json_encode(['results' => $array]);
     }
+
+    public function view_cash_disbursement(){
+        $total = expense::sum('amount');
+        $non_vat = expense::where('vat', 'NON-VAT')->sum('amount');
+        $vat = expense::where('vat', 'VAT')->sum('amount');
+        $input_tax = expense::sum('input_tax');
+        $expense_type = expense_type::all();
+        $expense = expense::with('particular')->groupBy('expense_particular_id')
+            ->orderBy('id', 'asc')->get();
+        $expense_particular_type_total = [];
+
+        foreach($expense_type as $et){
+            $et->expense_type_total = expense::where('expense_type_id', $et->id)->sum('amount');
+        }
+        
+        foreach($expense as $e){
+            $e->total_invoice = expense::where('expense_particular_id', $e->expense_particular_id)->sum('amount');
+            $e->non_vat_total = expense::where('expense_particular_id', $e->expense_particular_id)
+                ->where('vat', 'NON-VAT')->sum('amount');
+            $e->vat_total = expense::where('expense_particular_id', $e->expense_particular_id)
+                ->where('vat', 'VAT')->sum('amount');
+            $e->input_tax_total = expense::where('expense_particular_id', $e->expense_particular_id)->sum('input_tax');
+        }
+
+        $x = 0;
+        foreach($expense as $e){
+            $y = 0;
+            foreach($expense_type as $et){
+                $expense_particular_type_total[$x][$y] = expense::where('expense_type_id', $et->id)
+                    ->where('expense_particular_id', $e->expense_particular_id)->sum('amount');
+                $y++;
+            }
+            $x++;
+        }
+
+        info($expense_particular_type_total);
+
+        $output = array(
+            'total' => $total,
+            'non_vat' => $non_vat,
+            'vat' => $vat,
+            'input_tax' => $input_tax,
+            'expense_type' => $expense_type,
+            'expense' => $expense,
+            'expense_particular_type_total' => $expense_particular_type_total,
+        );
+
+        echo json_encode($output);
+    }
 }

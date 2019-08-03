@@ -16663,3 +16663,16 @@ a.books_pick {
   background-color: #d3d3d3;
 }
 
+#cash_disbursement_table tr th {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.expense_types {
+  width: 200px;
+}
+
+#cash_disbursement_table {
+  table-layout: fixed;
+}
+

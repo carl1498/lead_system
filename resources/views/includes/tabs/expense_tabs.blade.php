@@ -59,3 +59,17 @@
 </div>
 
 <!-- PARTICULAR -- END -->
+
+<!-- CASH DISBURSEMENT -- START -->
+
+<div class="tab-pane fade in" id="cash_disbursement_tab">
+    
+    <div style="overflow: auto; width: 100%;">
+        <table id="cash_disbursement_table" class="table table-hover table-striped table-bordered">
+
+        </table>
+    </div>
+
+</div>
+
+<!-- CASH DISBURSEMENT -- END -->
