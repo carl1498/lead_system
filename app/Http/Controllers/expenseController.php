@@ -161,14 +161,30 @@ class expenseController extends Controller
         return json_encode(['results' => $array]);
     }
 
-    public function view_cash_disbursement(){
-        $total = expense::sum('amount');
-        $non_vat = expense::where('vat', 'NON-VAT')->sum('amount');
-        $vat = expense::where('vat', 'VAT')->sum('amount');
-        $input_tax = expense::sum('input_tax');
-        $expense_type = expense_type::all();
-        $expense = expense::with('particular')->groupBy('expense_particular_id')
-            ->orderBy('id', 'asc')->get();
+    public function view_cash_disbursement(Request $request){
+        $date_counter = $request->date_counter;
+        $start_date = $request->start_date;
+        $end_date = $request->end_date;
+
+        if($date_counter == 'true'){
+            $total = expense::whereBetween('date', [$start_date, $end_date])->sum('amount');
+            $non_vat = expense::whereBetween('date', [$start_date, $end_date])->where('vat', 'NON-VAT')->sum('amount');
+            $vat = expense::whereBetween('date', [$start_date, $end_date])->where('vat', 'VAT')->sum('amount');
+            $input_tax = expense::whereBetween('date', [$start_date, $end_date])->sum('input_tax');
+            $expense_type = expense_type::all();
+            $expense = expense::with('particular')->whereBetween('date', [$start_date, $end_date])
+                ->groupBy('expense_particular_id')->orderBy('id', 'asc')->get();
+        }
+        else{
+            $total = expense::sum('amount');
+            $non_vat = expense::where('vat', 'NON-VAT')->sum('amount');
+            $vat = expense::where('vat', 'VAT')->sum('amount');
+            $input_tax = expense::sum('input_tax');
+            $expense_type = expense_type::all();
+            $expense = expense::with('particular')->groupBy('expense_particular_id')
+                ->orderBy('id', 'asc')->get();
+        }
+
         $expense_particular_type_total = [];
 
         foreach($expense_type as $et){
@@ -194,8 +210,6 @@ class expenseController extends Controller
             }
             $x++;
         }
-
-        info($expense_particular_type_total);
 
         $output = array(
             'total' => $total,

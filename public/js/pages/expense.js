@@ -471,6 +471,11 @@ $(document).ready(function () {
                 'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
             },
             url: '/view_cash_disbursement',
+            data: {
+                start_date: start_date,
+                end_date: end_date,
+                date_counter: date_counter
+            },
             method: 'get',
             dataType: 'json',
             success: function success(data) {
@@ -492,7 +497,6 @@ $(document).ready(function () {
                 html += '</thead>';
 
                 html += '<tbody>';
-                console.log(data.expense);
                 for (var _x = 0; _x < data.expense.length; _x++) {
                     var particular = '';
                     for (var y = 0; y < data.expense_type.length; y++) {
