@@ -7,6 +7,6 @@
         style="visibility: hidden;">
 
     &nbsp;&nbsp;&nbsp;&nbsp;
-    <button id="cash_disbursement_excel" class="btn btn-md btn-info">Cash Disbursement Journal</button>
+    <button id="cash_disbursement_template" class="btn btn-md btn-info">Download Cash Disbursement Template</button>
 </div>
 <br>

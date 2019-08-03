@@ -14,6 +14,7 @@
 	<link rel="stylesheet" type="text/css" href="/css/bootstrap-timepicker.min.css">
 	<link rel="stylesheet" type="text/css" href="/css/daterangepicker.css">
 	<link rel="stylesheet" type="text/css" href="/css/animate.css">
+	<link rel="stylesheet" type="text/css" href="/css/tableexport.min.css">
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
 	<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.6/css/buttons.bootstrap.min.css"><link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css">
@@ -101,6 +102,9 @@
 <script src="/js/daterangepicker.min.js"></script>
 <script src="/js/bootstrap-notify.min.js"></script>
 <script src="/js/bootstrap-timepicker.min.js"></script>
+<script src="/js/xlsx.full.min.js"></script>
+<script src="/js/filesaver.min.js"></script>
+<script src="/js/tableexport.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>

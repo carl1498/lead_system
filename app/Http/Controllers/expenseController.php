@@ -165,6 +165,8 @@ class expenseController extends Controller
         $date_counter = $request->date_counter;
         $start_date = $request->start_date;
         $end_date = $request->end_date;
+        $expense_particular_type_total = [];
+        $x = 0;
 
         if($date_counter == 'true'){
             $total = expense::whereBetween('date', [$start_date, $end_date])->sum('amount');
@@ -174,6 +176,32 @@ class expenseController extends Controller
             $expense_type = expense_type::all();
             $expense = expense::with('particular')->whereBetween('date', [$start_date, $end_date])
                 ->groupBy('expense_particular_id')->orderBy('id', 'asc')->get();
+
+            foreach($expense_type as $et){
+                $et->expense_type_total = expense::where('expense_type_id', $et->id)
+                    ->whereBetween('date', [$start_date, $end_date])->sum('amount');
+            }
+            
+            foreach($expense as $e){
+                $e->total_invoice = expense::where('expense_particular_id', $e->expense_particular_id)
+                    ->whereBetween('date', [$start_date, $end_date])->sum('amount');
+                $e->non_vat_total = expense::where('expense_particular_id', $e->expense_particular_id)
+                    ->where('vat', 'NON-VAT')->whereBetween('date', [$start_date, $end_date])->sum('amount');
+                $e->vat_total = expense::where('expense_particular_id', $e->expense_particular_id)
+                    ->where('vat', 'VAT')->whereBetween('date', [$start_date, $end_date])->sum('amount');
+                $e->input_tax_total = expense::where('expense_particular_id', $e->expense_particular_id)
+                    ->whereBetween('date', [$start_date, $end_date])->sum('input_tax');
+            }
+    
+            foreach($expense as $e){
+                $y = 0;
+                foreach($expense_type as $et){
+                    $expense_particular_type_total[$x][$y] = expense::where('expense_type_id', $et->id)
+                        ->where('expense_particular_id', $e->expense_particular_id)->sum('amount');
+                    $y++;
+                }
+                $x++;
+            }
         }
         else{
             $total = expense::sum('amount');
@@ -183,32 +211,29 @@ class expenseController extends Controller
             $expense_type = expense_type::all();
             $expense = expense::with('particular')->groupBy('expense_particular_id')
                 ->orderBy('id', 'asc')->get();
-        }
-
-        $expense_particular_type_total = [];
-
-        foreach($expense_type as $et){
-            $et->expense_type_total = expense::where('expense_type_id', $et->id)->sum('amount');
-        }
-        
-        foreach($expense as $e){
-            $e->total_invoice = expense::where('expense_particular_id', $e->expense_particular_id)->sum('amount');
-            $e->non_vat_total = expense::where('expense_particular_id', $e->expense_particular_id)
-                ->where('vat', 'NON-VAT')->sum('amount');
-            $e->vat_total = expense::where('expense_particular_id', $e->expense_particular_id)
-                ->where('vat', 'VAT')->sum('amount');
-            $e->input_tax_total = expense::where('expense_particular_id', $e->expense_particular_id)->sum('input_tax');
-        }
-
-        $x = 0;
-        foreach($expense as $e){
-            $y = 0;
+                
             foreach($expense_type as $et){
-                $expense_particular_type_total[$x][$y] = expense::where('expense_type_id', $et->id)
-                    ->where('expense_particular_id', $e->expense_particular_id)->sum('amount');
-                $y++;
+                $et->expense_type_total = expense::where('expense_type_id', $et->id)->sum('amount');
             }
-            $x++;
+            
+            foreach($expense as $e){
+                $e->total_invoice = expense::where('expense_particular_id', $e->expense_particular_id)->sum('amount');
+                $e->non_vat_total = expense::where('expense_particular_id', $e->expense_particular_id)
+                    ->where('vat', 'NON-VAT')->sum('amount');
+                $e->vat_total = expense::where('expense_particular_id', $e->expense_particular_id)
+                    ->where('vat', 'VAT')->sum('amount');
+                $e->input_tax_total = expense::where('expense_particular_id', $e->expense_particular_id)->sum('input_tax');
+            }
+    
+            foreach($expense as $e){
+                $y = 0;
+                foreach($expense_type as $et){
+                    $expense_particular_type_total[$x][$y] = expense::where('expense_type_id', $et->id)
+                        ->where('expense_particular_id', $e->expense_particular_id)->sum('amount');
+                    $y++;
+                }
+                $x++;
+            }
         }
 
         $output = array(

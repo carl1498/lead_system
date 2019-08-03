@@ -508,6 +508,12 @@ $(document).ready(function () {
                 html += '</tbody>';
 
                 $('#cash_disbursement_table').append(html);
+
+                $("#cash_disbursement_table").tableExport({
+                    position: 'top',
+                    formats: ['xlsx'],
+                    bootstrap: true
+                });
             }
         });
     }
