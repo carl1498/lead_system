@@ -10,6 +10,8 @@ use App\lead_company_type;
 use App\branch;
 use Auth;
 use Yajra\Datatables\Datatables;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\Redirect;
 
 class expenseController extends Controller
 {
@@ -28,12 +30,37 @@ class expenseController extends Controller
             'branch'));
     }
 
-    public function view_expense_type(){
+    public function view_expense_type(Request $request){
+        $date_counter = $request->date_counter;
+        $company = $request->company;
+        $branch = $request->branch;
+        $date_counter = $request->date_counter;
+        $start_date = $request->start_date;
+        $end_date = $request->end_date;
+
         $expense_type = expense_type::all();
 
         return Datatables::of($expense_type)
+        ->addColumn('total', function($data) use ($company, $branch, $date_counter, $start_date, $end_date){
+            return expense::where('expense_type_id', $data->id)
+            ->when($company != 'All', function($query) use($company){
+                $query->where('lead_company_type_id', $company);
+            })
+            ->when($branch != 'All', function($query) use($branch){
+                $query->where('branch_id', $branch);
+            })
+            ->when($date_counter == 'true', function($query) use($start_date, $end_date){
+                $query->whereBetween('date', [$start_date, $end_date]);
+            })->sum('amount');
+        })
         ->addColumn('action', function($data){
-            return '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-warning btn-sm edit_expense_type" id="'.$data->id.'"><i class="fa fa-pen"></i></button>';
+            $html = '';
+            
+            if(ExpenseHigherPermission()){
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-warning btn-sm edit_expense_type" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-danger btn-sm delete_expense_type" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>&nbsp;';
+            }
+            return $html;
         })
         ->make(true);
     }
@@ -43,17 +70,32 @@ class expenseController extends Controller
 
         return Datatables::of($expense_particular)
         ->addColumn('action', function($data){
-            return '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-warning btn-sm edit_expense_particular" id="'.$data->id.'"><i class="fa fa-pen"></i></button>';
+            $html = '';
+
+            if(ExpenseHigherPermission()){
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-warning btn-sm edit_expense_particular" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp';
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-sm delete_expense_particular" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
+            }
+            return $html;
         })
         ->make(true);
     }
 
     public function view_expense(Request $request){
         $date_counter = $request->date_counter;
+        $company = $request->company;
+        $branch = $request->branch;
+        $date_counter = $request->date_counter;
         $start_date = $request->start_date;
         $end_date = $request->end_date;
         
         $expense = expense::with('type', 'particular', 'branch', 'company_type')
+            ->when($company != 'All', function($query) use($company){
+                $query->where('lead_company_type_id', $company);
+            })
+            ->when($branch != 'All', function($query) use($branch){
+                $query->where('branch_id', $branch);
+            })
             ->when($date_counter == 'true', function($query) use($start_date, $end_date){
                 $query->whereBetween('date', [$start_date, $end_date]);
             })->get();
@@ -66,7 +108,13 @@ class expenseController extends Controller
             return $data->particular->name;
         })
         ->addColumn('action', function($data){
-            return '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-warning btn-sm edit_expense" id="'.$data->id.'"><i class="fa fa-pen"></i></button>';
+            $html = '';
+
+            if(ExpenseHigherPermission()){
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-warning btn-sm edit_expense" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-sm delete_expense" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
+            }
+            return $html;
         })
         ->make(true);
     }
@@ -110,6 +158,34 @@ class expenseController extends Controller
         $expense->check_voucher = $request->check_voucher;
         $expense->remarks = $request->remarks;
         $expense->save();
+    }
+
+    public function delete_expense_particular(Request $request){
+        if(!Hash::check($request->password, Auth::user()->password)){
+            info('logout lang sa');
+            Auth::logout();
+            return Redirect::to('/');
+        }
+        $expense_particular = expense_particular::find($request->id);
+        $expense_particular->delete();
+    }
+
+    public function delete_expense_type(Request $request){
+        if(!Hash::check($request->password, Auth::user()->password)){
+            Auth::logout();
+            return Redirect::to('/');
+        }
+        $expense_type = expense_type::find($request->id);
+        $expense_type->delete();
+    }
+
+    public function delete_expense(Request $request){
+        if(!Hash::check($request->password, Auth::user()->password)){
+            Auth::logout();
+            return Redirect::to('/');
+        }
+        $expense = expense::find($request->id);
+        $expense->delete();
     }
 
     public function get_expense_type(Request $request){
@@ -163,77 +239,149 @@ class expenseController extends Controller
 
     public function view_cash_disbursement(Request $request){
         $date_counter = $request->date_counter;
+        $company = $request->company;
+        $branch = $request->branch;
         $start_date = $request->start_date;
         $end_date = $request->end_date;
         $expense_particular_type_total = [];
         $x = 0;
 
-        if($date_counter == 'true'){
-            $total = expense::whereBetween('date', [$start_date, $end_date])->sum('amount');
-            $non_vat = expense::whereBetween('date', [$start_date, $end_date])->where('vat', 'NON-VAT')->sum('amount');
-            $vat = expense::whereBetween('date', [$start_date, $end_date])->where('vat', 'VAT')->sum('amount');
-            $input_tax = expense::whereBetween('date', [$start_date, $end_date])->sum('input_tax');
-            $expense_type = expense_type::all();
-            $expense = expense::with('particular')->whereBetween('date', [$start_date, $end_date])
-                ->groupBy('expense_particular_id')->orderBy('id', 'asc')->get();
+        $total = expense::
+            when($company != 'All', function($query) use($company){
+                $query->where('lead_company_type_id', $company);
+            })
+            ->when($branch != 'All', function($query) use($branch){
+                $query->where('branch_id', $branch);
+            })
+            ->when($date_counter == 'true', function($query) use($start_date, $end_date){
+                $query->whereBetween('date', [$start_date, $end_date]);
+            })->sum('amount');
 
-            foreach($expense_type as $et){
-                $et->expense_type_total = expense::where('expense_type_id', $et->id)
-                    ->whereBetween('date', [$start_date, $end_date])->sum('amount');
-            }
-            
-            foreach($expense as $e){
-                $e->total_invoice = expense::where('expense_particular_id', $e->expense_particular_id)
-                    ->whereBetween('date', [$start_date, $end_date])->sum('amount');
-                $e->non_vat_total = expense::where('expense_particular_id', $e->expense_particular_id)
-                    ->where('vat', 'NON-VAT')->whereBetween('date', [$start_date, $end_date])->sum('amount');
-                $e->vat_total = expense::where('expense_particular_id', $e->expense_particular_id)
-                    ->where('vat', 'VAT')->whereBetween('date', [$start_date, $end_date])->sum('amount');
-                $e->input_tax_total = expense::where('expense_particular_id', $e->expense_particular_id)
-                    ->whereBetween('date', [$start_date, $end_date])->sum('input_tax');
-            }
-    
-            foreach($expense as $e){
-                $y = 0;
-                foreach($expense_type as $et){
-                    $expense_particular_type_total[$x][$y] = expense::where('expense_type_id', $et->id)
-                        ->where('expense_particular_id', $e->expense_particular_id)->sum('amount');
-                    $y++;
-                }
-                $x++;
-            }
+        $non_vat = expense::
+            when($company != 'All', function($query) use($company){
+                $query->where('lead_company_type_id', $company);
+            })
+            ->when($branch != 'All', function($query) use($branch){
+                $query->where('branch_id', $branch);
+            })
+            ->when($date_counter == 'true', function($query) use($start_date, $end_date){
+                $query->whereBetween('date', [$start_date, $end_date]);
+            })->where('vat', 'NON-VAT')->sum('amount');
+
+        $vat = expense::
+            when($company != 'All', function($query) use($company){
+                $query->where('lead_company_type_id', $company);
+            })
+            ->when($branch != 'All', function($query) use($branch){
+                $query->where('branch_id', $branch);
+            })
+            ->when($date_counter == 'true', function($query) use($start_date, $end_date){
+                $query->whereBetween('date', [$start_date, $end_date]);
+            })->where('vat', 'VAT')->sum('amount');
+
+        $input_tax = expense::
+            when($company != 'All', function($query) use($company){
+                $query->where('lead_company_type_id', $company);
+            })
+            ->when($branch != 'All', function($query) use($branch){
+                $query->where('branch_id', $branch);
+            })
+            ->when($date_counter == 'true', function($query) use($start_date, $end_date){
+                $query->whereBetween('date', [$start_date, $end_date]);
+            })->sum('input_tax');
+
+        $expense_type = expense_type::all();
+
+        $expense = expense::with('particular')
+            ->when($company != 'All', function($query) use($company){
+                $query->where('lead_company_type_id', $company);
+            })
+            ->when($branch != 'All', function($query) use($branch){
+                $query->where('branch_id', $branch);
+            })
+            ->when($date_counter == 'true', function($query) use($start_date, $end_date){
+                $query->whereBetween('date', [$start_date, $end_date]);
+            })
+            ->groupBy('expense_particular_id')->get();
+
+        foreach($expense_type as $et){
+            $et->expense_type_total = expense::where('expense_type_id', $et->id)
+                ->when($company != 'All', function($query) use($company){
+                    $query->where('lead_company_type_id', $company);
+                })
+                ->when($branch != 'All', function($query) use($branch){
+                    $query->where('branch_id', $branch);
+                })
+                ->when($date_counter == 'true', function($query) use($start_date, $end_date){
+                    $query->whereBetween('date', [$start_date, $end_date]);
+                })->sum('amount');
         }
-        else{
-            $total = expense::sum('amount');
-            $non_vat = expense::where('vat', 'NON-VAT')->sum('amount');
-            $vat = expense::where('vat', 'VAT')->sum('amount');
-            $input_tax = expense::sum('input_tax');
-            $expense_type = expense_type::all();
-            $expense = expense::with('particular')->groupBy('expense_particular_id')
-                ->orderBy('id', 'asc')->get();
-                
+        
+        foreach($expense as $e){
+            $e->total_invoice = expense::where('expense_particular_id', $e->expense_particular_id)
+                ->when($company != 'All', function($query) use($company){
+                    $query->where('lead_company_type_id', $company);
+                })
+                ->when($branch != 'All', function($query) use($branch){
+                    $query->where('branch_id', $branch);
+                })
+                ->when($date_counter == 'true', function($query) use($start_date, $end_date){
+                    $query->whereBetween('date', [$start_date, $end_date]);
+                })->sum('amount');
+
+            $e->non_vat_total = expense::where('expense_particular_id', $e->expense_particular_id)
+                ->where('vat', 'NON-VAT')
+                ->when($company != 'All', function($query) use($company){
+                    $query->where('lead_company_type_id', $company);
+                })
+                ->when($branch != 'All', function($query) use($branch){
+                    $query->where('branch_id', $branch);
+                })
+                ->when($date_counter == 'true', function($query) use($start_date, $end_date){
+                    $query->whereBetween('date', [$start_date, $end_date]);
+                })->sum('amount');
+
+            $e->vat_total = expense::where('expense_particular_id', $e->expense_particular_id)
+                ->where('vat', 'VAT')
+                ->when($company != 'All', function($query) use($company){
+                    $query->where('lead_company_type_id', $company);
+                })
+                ->when($branch != 'All', function($query) use($branch){
+                    $query->where('branch_id', $branch);
+                })
+                ->when($date_counter == 'true', function($query) use($start_date, $end_date){
+                    $query->whereBetween('date', [$start_date, $end_date]);
+                })->sum('amount');
+
+            $e->input_tax_total = expense::where('expense_particular_id', $e->expense_particular_id)
+                ->when($company != 'All', function($query) use($company){
+                    $query->where('lead_company_type_id', $company);
+                })
+                ->when($branch != 'All', function($query) use($branch){
+                    $query->where('branch_id', $branch);
+                })
+                ->when($date_counter == 'true', function($query) use($start_date, $end_date){
+                    $query->whereBetween('date', [$start_date, $end_date]);
+                })->sum('input_tax');
+        }
+
+        foreach($expense as $e){
+            $y = 0;
             foreach($expense_type as $et){
-                $et->expense_type_total = expense::where('expense_type_id', $et->id)->sum('amount');
+                $expense_particular_type_total[$x][$y] = expense::where('expense_type_id', $et->id)
+                    ->where('expense_particular_id', $e->expense_particular_id)
+                    ->when($company != 'All', function($query) use($company){
+                        $query->where('lead_company_type_id', $company);
+                    })
+                    ->when($branch != 'All', function($query) use($branch){
+                        $query->where('branch_id', $branch);
+                    })
+                    ->when($date_counter == 'true', function($query) use($start_date, $end_date){
+                        $query->whereBetween('date', [$start_date, $end_date]);
+                    })->sum('amount');
+                $y++;
             }
-            
-            foreach($expense as $e){
-                $e->total_invoice = expense::where('expense_particular_id', $e->expense_particular_id)->sum('amount');
-                $e->non_vat_total = expense::where('expense_particular_id', $e->expense_particular_id)
-                    ->where('vat', 'NON-VAT')->sum('amount');
-                $e->vat_total = expense::where('expense_particular_id', $e->expense_particular_id)
-                    ->where('vat', 'VAT')->sum('amount');
-                $e->input_tax_total = expense::where('expense_particular_id', $e->expense_particular_id)->sum('input_tax');
-            }
-    
-            foreach($expense as $e){
-                $y = 0;
-                foreach($expense_type as $et){
-                    $expense_particular_type_total[$x][$y] = expense::where('expense_type_id', $et->id)
-                        ->where('expense_particular_id', $e->expense_particular_id)->sum('amount');
-                    $y++;
-                }
-                $x++;
-            }
+            $x++;
         }
 
         $output = array(

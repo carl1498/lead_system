@@ -24,8 +24,10 @@
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
                     <li class="active expense_pick"><a href="#expense_tab" data-toggle="tab">Expense</a></li>
+                    @if(ExpenseHigherPermission())
                     <li class="expense_pick"><a href="#type_tab" data-toggle="tab">Type</a></li>
                     <li class="expense_pick"><a href="#particular_tab" data-toggle="tab">Particular</a></li>
+                    @endif
                     <li class="expense_pick"><a href="#cash_disbursement_tab" data-toggle="tab">Cash Disbursement Journal</a></li>
                 </ul>
 

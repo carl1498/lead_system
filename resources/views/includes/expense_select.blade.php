@@ -6,7 +6,27 @@
     <input id="date_counter" type="checkbox" checked data-toggle="toggle" data-on="Date" data-off="All"
         style="visibility: hidden;">
 
+    &nbsp;
+
+    <label class="company_type_select" style="display:none;">Company: </label>
+    <select type="text" id="company_type_select" class="company_type_select form-control select2" style="width: 100px; display: none;">
+        <option value="All">All</option>
+        @foreach ($lead_company_type as $lct)
+        <option value="{{ $lct->id }}">{{ $lct->name }}</option>
+        @endforeach
+    </select>
+
+    &nbsp;
+
+    <label class="branch_select" style="display:none;">Branch: </label>
+    <select type="text" id="branch_select" class="branch_select form-control select2" style="width: 100px; display: none;">
+        <option value="All">All</option>
+        @foreach ($branch as $b)
+        <option value="{{ $b->id }}">{{ $b->name }}</option>
+        @endforeach
+    </select>
+
     &nbsp;&nbsp;&nbsp;&nbsp;
-    <button id="cash_disbursement_template" class="btn btn-md btn-info">Download Cash Disbursement Template</button>
+    <a href="/files/Cash Disbursement Journal.xlsx" class="btn btn-md btn-info">Download Cash Disbursement Template</a>
 </div>
 <br>

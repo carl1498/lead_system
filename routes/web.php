@@ -267,6 +267,12 @@ Route::group(['middleware' => ['auth', 'expense']], function(){
     Route::get('/get_expense_particular/{id}', 'expenseController@get_expense_particular');
     Route::get('/get_expense/{id}', 'expenseController@get_expense');
     Route::get('/view_cash_disbursement', 'expenseController@view_cash_disbursement');
+
+    Route::group(['middleware' => ['invoice_high']], function(){
+        Route::get('/delete_expense_type', 'expenseController@delete_expense_type');
+        Route::get('/delete_expense_particular', 'expenseController@delete_expense_particular');
+        Route::get('/delete_expense', 'expenseController@delete_expense');
+    });
 });
 
 //FINANCE ROUTES -- END

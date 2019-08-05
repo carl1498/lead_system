@@ -3,7 +3,9 @@ $(document).ready(function(){
     //INITIALIZE -- START
 
     var current_tab = 'Expense'; //Expense, Type, Particular
-    var date_counter = true;
+    var date_counter = true; //True = base on date range | False = show all expense
+    var branch = 'All';
+    var company = 'All';
 
     $('.select2').select2();
 
@@ -20,8 +22,9 @@ $(document).ready(function(){
     var yyyy = today.getFullYear();
 
     today = mm + '/' + dd + '/' + yyyy;
-    var start_date = today;
-    var end_date = today;
+    today_converted = yyyy + '-' + mm + '-' + dd;
+    var start_date = today_converted;
+    var end_date = today_converted;
 
     $('#daterange').daterangepicker({
         showDropdowns: true,
@@ -75,6 +78,9 @@ $(document).ready(function(){
             refresh_cash_disbursement_table();
         }
     }
+    
+    $('.company_type_select, .branch_select').show();
+    $('#company_type_select, #branch_select').next(".select2-container").show();
 
     //INITIALIZE -- END
 
@@ -91,6 +97,15 @@ $(document).ready(function(){
             initComplete: function(settings, json) {
                 //enableTabs();  
             },
+            dom: 'Bflrtip',
+            buttons: [
+                {extend: 'excelHtml5', title: 'Expense',
+                exportOptions: {
+                    columns: ':visible',
+                },
+                footer: true},
+                'colvis',
+            ],
             processing: true,
             destroy: true,
             scrollX: true,
@@ -101,7 +116,9 @@ $(document).ready(function(){
                 data: {
                     start_date: start_date,
                     end_date: end_date,
-                    date_counter
+                    date_counter: date_counter,
+                    branch: branch,
+                    company: company,
                 }
             },
             columns: [
@@ -118,7 +135,60 @@ $(document).ready(function(){
                 {data: 'action', orderable: false, searchable: false}
             ],
             columnDefs: [{defaultContent: "", targets: "_all"}],
-            order: [4, 'desc']
+            order: [4, 'desc'],
+            footerCallback: function ( row, data, start, end, display ) {
+                var api = this.api(), data;
+     
+                // Remove the formatting to get integer data for summation
+                var intVal = function ( i ) {
+                    return typeof i === 'string' ?
+                        i.replace(/[\$,]/g, '')*1 :
+                        typeof i === 'number' ?
+                            i : 0;
+                };
+     
+                // Total over all pages
+                total = api
+                    .column( 5 )
+                    .data()
+                    .reduce( function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0 );
+
+                // Total over all pages
+                total2 = api
+                    .column( 7 )
+                    .data()
+                    .reduce( function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0 );
+     
+                // Total over this page
+                pageTotal = api
+                    .column( 5, { page: 'current'} )
+                    .data()
+                    .reduce( function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0 );
+     
+                // Update footer
+                $( api.column( 5 ).footer() ).html(
+                    '₱' + total.toFixed(2)
+                );
+
+                // Total over this page
+                pageTotal2 = api
+                    .column( 7, { page: 'current'} )
+                    .data()
+                    .reduce( function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0 );
+     
+                // Update footer
+                $( api.column( 7 ).footer() ).html(
+                    '₱' + total2.toFixed(2)
+                );
+            }
         });
     }
 
@@ -127,6 +197,15 @@ $(document).ready(function(){
             initComplete: function(settings, json) {
                 //enableTabs();  
             },
+            dom: 'Bflrtip',
+            buttons: [
+                {extend: 'excelHtml5', title: 'Expense Type',
+                exportOptions: {
+                    columns: ':visible',
+                },
+                footer: true},
+                'colvis',
+            ],
             processing: true,
             destroy: true,
             scrollX: true,
@@ -134,12 +213,52 @@ $(document).ready(function(){
             responsive: true,
             ajax: {
                 url: '/view_expense_type',
+                data: {
+                    start_date: start_date,
+                    end_date: end_date,
+                    date_counter: date_counter,
+                    branch: branch,
+                    company: company,
+                }
             },
             columns: [
                 {data: 'name', name: 'name'},
+                {data: 'total', name: 'total'},
                 {data: 'action', orderable: false, searchable: false}
             ],
             columnDefs: [{defaultContent: "", targets: "_all"}],
+            footerCallback: function ( row, data, start, end, display ) {
+                var api = this.api(), data;
+     
+                // Remove the formatting to get integer data for summation
+                var intVal = function ( i ) {
+                    return typeof i === 'string' ?
+                        i.replace(/[\$,]/g, '')*1 :
+                        typeof i === 'number' ?
+                            i : 0;
+                };
+     
+                // Total over all pages
+                total = api
+                    .column( 1 )
+                    .data()
+                    .reduce( function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0 );
+     
+                // Total over this page
+                pageTotal = api
+                    .column( 1, { page: 'current'} )
+                    .data()
+                    .reduce( function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0 );
+     
+                // Update footer
+                $( api.column( 1 ).footer() ).html(
+                    '₱' + total.toFixed(2)
+                );
+            }
         });
     }
 
@@ -178,20 +297,20 @@ $(document).ready(function(){
     });
 
     $(document).on('click', '.add_expense', function(){
-        if(current_tab == 'Expense'){
-            $('#e_add_edit').val('add')
-            $('#expense_modal').modal('toggle');
-            $('#expense_modal').modal('show');
+        if(current_tab == 'Particular'){
+            $('#p_add_edit').val('add')
+            $('#expense_particular_modal').modal('toggle');
+            $('#expense_particular_modal').modal('show');
         }
         else if(current_tab == 'Type'){
             $('#t_add_edit').val('add')
             $('#expense_type_modal').modal('toggle');
             $('#expense_type_modal').modal('show');
         }
-        else{//Particular
-            $('#p_add_edit').val('add')
-            $('#expense_particular_modal').modal('toggle');
-            $('#expense_particular_modal').modal('show');
+        else{//Expense
+            $('#e_add_edit').val('add')
+            $('#expense_modal').modal('toggle');
+            $('#expense_modal').modal('show');
         }
     });
 
@@ -356,6 +475,194 @@ $(document).ready(function(){
         });
     });
 
+    $(document).on('click', '.delete_expense_type', function(){
+        let id = $(this).attr('id');
+
+        swal.fire({
+            title: 'Confirm User',
+            text: 'For security purposes, input your password again.',
+            input: 'password',
+            inputAttributes: {
+                autocapitalize: 'off'
+            },
+            showCancelButton: true,
+            confirmButtonText: 'Confirm',
+            showLoaderOnConfirm: true,
+            preConfirm: (password) => {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: '/confirm_user',
+                    data: { password:password },
+                    method: 'POST',
+                    success: function(data){
+                        if(data == 0){
+                            swal('Password Incorrect!', 'Please try again', 'error');
+                            return;
+                        }
+                        else{
+                            swal({
+                                title: 'Warning',
+                                text: 'Are you sure?',
+                                type: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Yes, delete it!'
+                            }).then((result) => {
+                                if(result.value){
+                                    $.ajax({
+                                        headers: {
+                                            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                                        },
+                                        url: '/delete_expense_type',
+                                        data: {
+                                            id: id,
+                                            password: password
+                                        },
+                                        method: 'get',
+                                        type: 'json',
+                                        success:function(data){
+                                            notif('Success!', 'This expense type has been Deleted', 'success', 'glyphicon-ok');
+                                            refresh();
+                                        }
+                                    })
+                                }
+                            });
+                        }
+                    }
+                });
+            },
+        });
+    })
+
+    $(document).on('click', '.delete_expense_particular', function(){
+        let id = $(this).attr('id');
+
+        swal.fire({
+            title: 'Confirm User',
+            text: 'For security purposes, input your password again.',
+            input: 'password',
+            inputAttributes: {
+                autocapitalize: 'off'
+            },
+            showCancelButton: true,
+            confirmButtonText: 'Confirm',
+            showLoaderOnConfirm: true,
+            preConfirm: (password) => {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: '/confirm_user',
+                    data: { password:password },
+                    method: 'POST',
+                    success: function(data){
+                        if(data == 0){
+                            swal('Password Incorrect!', 'Please try again', 'error');
+                            return;
+                        }
+                        else{
+                            swal({
+                                title: 'Warning',
+                                text: 'Are you sure?',
+                                type: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Yes, delete it!'
+                            }).then((result) => {
+                                console.log(password);
+                                if(result.value){
+                                    $.ajax({
+                                        headers: {
+                                            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                                        },
+                                        url: '/delete_expense_particular',
+                                        data: {
+                                            id: id,
+                                            password: password
+                                        },
+                                        method: 'get',
+                                        type: 'json',
+                                        success:function(data){
+                                            console.log('nadelete na');
+                                            notif('Success!', 'This expense particular has been Deleted', 'success', 'glyphicon-ok');
+                                            refresh();
+                                        }
+                                    })
+                                }
+                            });
+                        }
+                    }
+                });
+            },
+        });
+    })
+
+    $(document).on('click', '.delete_expense', function(){
+        let id = $(this).attr('id');
+
+        swal.fire({
+            title: 'Confirm User',
+            text: 'For security purposes, input your password again.',
+            input: 'password',
+            inputAttributes: {
+                autocapitalize: 'off'
+            },
+            showCancelButton: true,
+            confirmButtonText: 'Confirm',
+            showLoaderOnConfirm: true,
+            preConfirm: (password) => {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: '/confirm_user',
+                    data: { password:password },
+                    method: 'POST',
+                    success: function(data){
+                        if(data == 0){
+                            swal('Password Incorrect!', 'Please try again', 'error');
+                            return;
+                        }
+                        else{
+                            swal({
+                                title: 'Warning',
+                                text: 'Are you sure?',
+                                type: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Yes, delete it!'
+                            }).then((result) => {
+                                if(result.value){
+                                    $.ajax({
+                                        headers: {
+                                            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                                        },
+                                        url: '/delete_expense',
+                                        data: {
+                                            id: id,
+                                            password: password
+                                        },
+                                        method: 'get',
+                                        type: 'json',
+                                        success:function(data){
+                                            notif('Success!', 'This expense has been Deleted', 'success', 'glyphicon-ok');
+                                            refresh();
+                                        }
+                                    })
+                                }
+                            });
+                        }
+                    }
+                });
+            },
+        });
+    })
+
     $('#amount').keyup(function(){
         if($('#vat').val() == 'VAT'){
             $('#input_tax').val(parseFloat($(this).val()/1.12*0.12).toFixed(2));
@@ -374,6 +681,27 @@ $(document).ready(function(){
         else{
             $('#input_tax').val(0);
         }
+    });
+
+    $(document).on('change', '#vat', function(){
+        if($(this).val() == 'VAT'){
+            if($('#amount').val() != ''){
+                $('#input_tax').val(parseFloat($('#amount').val()/1.12*0.12).toFixed(2));
+            }
+        }
+        else{
+            $('#input_tax').val(0);
+        }
+    });
+
+    $(document).on('change', '#company_type_select', function(){
+        company = $(this).val();
+        refresh();
+    });
+
+    $(document).on('change', '#branch_select', function(){
+        branch = $(this).val();
+        refresh();
     });
 
     $('#expense_type').select2({
@@ -429,7 +757,9 @@ $(document).ready(function(){
             data: {
                 start_date: start_date,
                 end_date: end_date,
-                date_counter
+                date_counter,
+                branch,
+                company,
             },
             method: 'get',
             dataType: 'json',

@@ -206,6 +206,34 @@ function canEditBookManagement(){
     return false;
 }
 
+function canAccessExpense(){
+    $id = Auth::user()->id;
+    $user = \App\User::with('employee.role')->find($id);
+    $authorized = ['President', 'Finance Director', 'HR/Finance Head', 'IT Officer', 'HR/Finance Officer', 
+                'Assistant Finance Officer'];
+
+    foreach($authorized as $auth){
+        if($user->employee->role->name == $auth){
+            return true;
+        }
+    }
+    return false;
+}
+
+function ExpenseHigherPermission(){
+    $id = Auth::user()->id;
+    $user = \App\User::with('employee.role')->find($id);
+    $authorized = ['President', 'Finance Director', 'HR/Finance Head', 'IT Officer',
+                'Assistant Finance Officer'];
+
+    foreach($authorized as $auth){
+        if($user->employee->role->name == $auth){
+            return true;
+        }
+    }
+    return false;
+}
+
 function getCurrentMonthName(){
     $month = Carbon::now()->format('F');
 

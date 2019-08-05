@@ -14,11 +14,11 @@ class expense extends Model
     public $timestamps = true;
 
     public function type(){
-        return $this->hasOne('App\expense_type', 'id', 'expense_type_id');
+        return $this->hasOne('App\expense_type', 'id', 'expense_type_id')->withTrashed();
     }
     
     public function particular(){
-        return $this->hasOne('App\expense_particular', 'id', 'expense_particular_id');
+        return $this->hasOne('App\expense_particular', 'id', 'expense_particular_id')->withTrashed();
     }
     
     public function branch(){

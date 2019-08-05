@@ -18,6 +18,21 @@
                 <th>Action</th>
             </tr>
         </thead>
+        <tfoot>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </tfoot>
     </table>
 
 </div>
@@ -32,9 +47,17 @@
         <thead>
             <tr>
                 <th>Name</th>
+                <th>Total</th>
                 <th>Action</th>
             </tr>
         </thead>
+        <tfoot>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </tfoot>
     </table>
 
 </div>
