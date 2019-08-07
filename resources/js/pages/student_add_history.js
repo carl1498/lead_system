@@ -24,7 +24,7 @@ $(document).ready(function(){
                 {data: 'stud_id', name: 'student'},
                 {data: 'student.program.name', name: 'program'},
                 {data: 'type', name: 'type'},
-                {data: 'added_by.fname', name: 'added_by'},
+                {data: 'added_by', name: 'added_by'},
                 {data: 'created_at', name: 'created_at'},
             ],
             columnDefs: [

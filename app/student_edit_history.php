@@ -20,7 +20,7 @@ class student_edit_history extends Model
         return $this->hasOne('App\student', 'id', 'stud_id')->withTrashed();
     }
 
-    public function edited_by(){
+    public function edited_by_emp(){
         return $this->hasOne('App\employee', 'id', 'edited_by')->withTrashed();
     }
 

@@ -18,7 +18,7 @@ class student_delete_history extends Model
         return $this->hasOne('App\student', 'id', 'stud_id')->withTrashed();
     }
     
-    public function deleted_by(){
+    public function deleted_by_emp(){
         return $this->hasOne('App\employee', 'id', 'deleted_by')->withTrashed();
     }
 

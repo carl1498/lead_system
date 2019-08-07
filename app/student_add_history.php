@@ -18,7 +18,7 @@ class student_add_history extends Model
         return $this->hasOne('App\student', 'id', 'stud_id')->withTrashed();
     }
 
-    public function added_by(){
+    public function added_by_emp(){
         return $this->hasOne('App\employee', 'id', 'added_by')->withTrashed();
     }
 

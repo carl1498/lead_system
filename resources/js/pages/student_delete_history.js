@@ -22,7 +22,7 @@ $(document).ready(function(){
             ajax: '/student_delete_history_table',
             columns: [
                 {data: 'stud_id', name: 'student'},
-                {data: 'deleted_by.fname', name: 'deleted_by'},
+                {data: 'deleted_by', name: 'deleted_by'},
                 {data: 'created_at', name: 'created_at'},
             ],
             order: [[2, 'desc']]

@@ -28,31 +28,43 @@ class studentLogsController extends Controller
     }
 
     public function add_history_table(){
-        $add_history = student_add_history::with('student.program', 'added_by')->get();
+        $add_history = student_add_history::with('student.program', 'added_by_emp.branch')->get();
 
         return Datatables::of($add_history)
         ->editColumn('stud_id', function($data){
             return $data->student->lname . ', ' . $data->student->fname . ' ' . $data->student->mname;
         })
+        ->editColumn('added_by', function($data){
+            info($data->added_by_emp);
+            return $data->added_by_emp->fname . ' (' . $data->added_by_emp->branch->name . ')';
+        })
         ->make(true);
     }
 
     public function edit_history_table(){
-        $edit_history = student_edit_history::with('student', 'edited_by')->get();
+        $edit_history = student_edit_history::with('student', 'edited_by_emp.branch')->get();
 
         return Datatables::of($edit_history)
         ->editColumn('stud_id', function($data){
             return $data->student->lname . ', ' . $data->student->fname . ' ' . $data->student->mname;
         })
+        ->editColumn('edited_by', function($data){
+            info($data->edited_by_emp);
+            return $data->edited_by_emp->fname . ' (' . $data->edited_by_emp->branch->name . ')';
+        })
         ->make(true);
     }
 
     public function delete_history_table(){
-        $delete_history = student_delete_history::with('student', 'deleted_by')->get();
+        $delete_history = student_delete_history::with('student', 'deleted_by_emp.branch')->get();
 
         return Datatables::of($delete_history)
         ->editColumn('stud_id', function($data){
             return $data->student->lname . ', ' . $data->student->fname . ' ' . $data->student->mname;
+        })
+        ->editColumn('deleted_by', function($data){
+            info($data->deleted_by_emp);
+            return $data->deleted_by_emp->fname . ' (' . $data->deleted_by_emp->branch->name . ')';
         })
         ->make(true);
     }

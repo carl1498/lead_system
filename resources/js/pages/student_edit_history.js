@@ -25,7 +25,7 @@ $(document).ready(function(){
                 {data: 'field', name: 'field'},
                 {data: 'previous', name: 'previous'},
                 {data: 'new', name: 'new'},
-                {data: 'edited_by.fname', name: 'edited_by'},
+                {data: 'edited_by', name: 'edited_by'},
                 {data: 'created_at', name: 'created_at'},
             ],
             columnDefs: [
