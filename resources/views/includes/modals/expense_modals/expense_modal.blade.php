@@ -95,7 +95,7 @@
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                 <div class="form-group">
-                                    <input type="number" id="amount" name="amount" class="form-control required" placeholder="Enter Amount" required>
+                                    <input type="number" id="amount" step="0.01" name="amount" class="form-control required" placeholder="Enter Amount" required>
                                 </div>
                             </div>
                         </div>
