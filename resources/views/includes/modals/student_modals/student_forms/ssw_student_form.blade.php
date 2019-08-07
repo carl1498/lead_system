@@ -163,7 +163,7 @@
                         <select type="text" id="s_referral" name="s_referral" class="form-control select2 required" style="width: 100%;" required>
                             <option value="">Select Referral</option>
                             @foreach($employee as $e)
-                                <option value="{{ $e->id }}">{{ $e->fname }}</option>
+                                <option value="{{ $e->id }}">{{ $e->fname }} {{ $e->lname }}</option>
                             @endforeach
                         </select>
                     </div>
