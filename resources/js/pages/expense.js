@@ -64,7 +64,24 @@ $(document).ready(function(){
         $('.select2').trigger('change.select2');
     });
 
+    function disableTabs(){
+        $(`li.expense_pick`).addClass('disabled').css('cursor', 'not-allowed');
+
+        $(`a.expense_pick`).addClass('disabled').css('pointer-events', 'none');
+
+        $('.refresh_table').attr('disabled', true);
+    }
+
+    function enableTabs(){
+        $(`li.expense_pick`).removeClass('disabled').css('cursor', 'pointer');
+
+        $(`a.expense_pick`).removeClass('disabled').css('pointer-events', 'auto');
+
+        $('.refresh_table').attr('disabled', false);
+    }
+
     function refresh(){
+        disableTabs();
         if(current_tab == 'Expense'){
             refresh_expense_table();
         }
@@ -81,6 +98,10 @@ $(document).ready(function(){
     
     $('.company_type_select, .branch_select').show();
     $('#company_type_select, #branch_select').next(".select2-container").show();
+    
+    $('.refresh_table').on('click', function(){
+        refresh();
+    });
 
     //INITIALIZE -- END
 
@@ -95,7 +116,7 @@ $(document).ready(function(){
     function refresh_expense_table(){
         $('#expense_table').DataTable({
             initComplete: function(settings, json) {
-                //enableTabs();  
+                enableTabs();  
             },
             dom: 'Bflrtip',
             buttons: [
@@ -110,6 +131,9 @@ $(document).ready(function(){
             destroy: true,
             scrollX: true,
             scrollCollapse: true,
+            fixedColumns: {
+                leftColumns: 2
+            },
             responsive: true,
             ajax: {
                 url: '/view_expense',
@@ -195,7 +219,7 @@ $(document).ready(function(){
     function refresh_type_table(){
         var type_table = $('#type_table').DataTable({
             initComplete: function(settings, json) {
-                //enableTabs();  
+                enableTabs();  
             },
             dom: 'Bflrtip',
             buttons: [
@@ -265,7 +289,7 @@ $(document).ready(function(){
     function refresh_particular_table(){
         var particular_table = $('#particular_table').DataTable({
             initComplete: function(settings, json) {
-                //enableTabs();  
+                enableTabs();  
             },
             processing: true,
             destroy: true,
@@ -829,6 +853,8 @@ $(document).ready(function(){
                     formats: ['xlsx'],
                     bootstrap: true
                 });
+
+                enableTabs();
             }
         });
     }
