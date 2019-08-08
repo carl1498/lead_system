@@ -441,14 +441,14 @@ class studentClassController extends Controller
     }
 
     public function student_class(Request $request){
-        $student = student::where('fname', 'LIKE', '%'.$request->name.'%')
+        $student = student::with('program')->where('fname', 'LIKE', '%'.$request->name.'%')
             ->orWhere('lname', 'LIKE', '%'.$request->name.'%')->get();
 
         $array = [];
         foreach ($student as $key => $value){
             $array[] = [
                 'id' => $value['id'],
-                'text' => $value['lname'].', '.$value['fname']
+                'text' => $value['lname'].', '.$value['fname'].' ('.$value['program']['name'].')'
             ];
         }
         return json_encode(['results' => $array]);

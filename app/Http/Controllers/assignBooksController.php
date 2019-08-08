@@ -22,7 +22,7 @@ class assignBooksController extends Controller
 
     public function get_student(Request $request){
         $employee = employee::where('id', Auth::user()->emp_id)->first();
-        $student = student::where('lname', 'like', '%'.$request->name.'%')
+        $student = student::with('program')->where('lname', 'like', '%'.$request->name.'%')
             ->orWhere('fname', 'like', '%'.$request->name.'%')
             ->orWhere('mname', 'like', '%'.$request->name.'%')->get();
 
@@ -31,7 +31,7 @@ class assignBooksController extends Controller
         foreach ($student as $key => $value){
             $array[] = [
                 'id' => $value['id'],
-                'text' => $value['lname'].', '.$value['fname']
+                'text' => $value['lname'].', '.$value['fname'].' ('.$value['program']['name'].')'
             ];
         }
         return json_encode(['results' => $array]);

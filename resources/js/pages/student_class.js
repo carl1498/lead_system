@@ -53,15 +53,22 @@ $(document).ready(function(){
     });
     
     $("#assign_student_class_modal").on("hidden.bs.modal", function(e){
+        assign_student_modal_clear();
+        $('#assign_continuous').bootstrapToggle('off')
+    });
+
+    function assign_student_modal_clear(){
         $('#assign_student_class_form :input.required').each(function (){
             this.style.setProperty('border-color', 'green', 'important');
         }); 
-        $(this).find(".select2, input").val('').end();
-        $(this).find("#date_class, #student_class").prop('disabled', true);
+        $('#assign_student_class_modal').find(".select2, input").val('').end();
+        $('#assign_student_class_modal').find("#date_class, #student_class").prop('disabled', true);
         $('.completeCheck').prop('checked', false);
         completeCheck = false;
         $('.select2').trigger('change.select2');
-    });
+    }
+
+    $('#assign_continuous').bootstrapToggle('off')
 
     function disableTabs(){
         $('li.tab_pick, .class_pick').addClass('disabled').css('cursor', 'not-allowed');
@@ -582,7 +589,7 @@ $(document).ready(function(){
                     return;
                 }
 
-                $('#assign_student_class_modal').modal('hide');
+                ($('#assign_continuous').is(':checked')) ? assign_student_modal_clear() : $('#assign_student_class_modal').modal('hide');
                 notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
                 refresh();
                 button.disabled = false;

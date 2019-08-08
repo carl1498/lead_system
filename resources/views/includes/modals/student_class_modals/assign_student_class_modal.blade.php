@@ -4,7 +4,11 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Assign Student's Class</h4>
+                <h4 class="modal-title pull-left">Assign Student's Class</h4>
+                <div class="pull-right">
+                    <input id="assign_continuous" type="checkbox" checked data-toggle="toggle" data-on="Multiple" data-off="Single"
+                    data-width="90" style="visibility: hidden; width: 100px !important;">&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
             </div>
             <form class="form-horizontal" id="assign_student_class_form">
                 @csrf
@@ -53,10 +57,10 @@
                         </div>
 
                         <div class="row clearfix">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 form-control-label">
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
                                     <label for="student_class" class="pull-right">Student</label>
                             </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                 <div class="form-group required">
                                     <select type="text" id="student_class" name="student_class" class="form-control select2 required" style="width: 100%;" disabled required>
                                         <!-- Controller: studentClassController@student_class -->

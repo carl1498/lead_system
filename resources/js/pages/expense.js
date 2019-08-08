@@ -57,12 +57,19 @@ $(document).ready(function(){
     });
 
     $("#expense_modal").on("hidden.bs.modal", function(e){
+        expense_modal_clear();
+        $('#expense_continuous').bootstrapToggle('off');
+    });
+
+    function expense_modal_clear(){
         $('#expense_form :input.required').each(function (){
             this.style.setProperty('border-color', 'green', 'important');
         });
-        $(this).find("input,textarea,select").val('').end();
+        $('#expense_modal').find("input,textarea,select").val('').end();
         $('.select2').trigger('change.select2');
-    });
+    }
+
+    $('#expense_continuous').bootstrapToggle('off')
 
     function disableTabs(){
         $(`li.expense_pick`).addClass('disabled').css('cursor', 'not-allowed');
@@ -486,7 +493,13 @@ $(document).ready(function(){
             data: $(this).serialize(),
             success:function(data){
                 notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
-                $('#expense_modal').modal('hide');
+                if($('#expense_continuous').is(':checked')){
+                    expense_modal_clear();
+                    $('#e_add_edit').val('add');
+                }
+                else{
+                    $('#expense_modal').modal('hide')
+                }
                 button.disabled = false;
                 input.html('SAVE CHANGES');
                 refresh();

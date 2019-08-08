@@ -39,11 +39,19 @@ $(document).ready(function(){
     });
 
     $('#assign_books_modal').on('hidden.bs.modal', function(e){
-        $(this).find("input,textarea,select").val('').end();
-        $('#assign_student_name, #assign_book_type, #assign_book').val('').trigger('change');
-        $('#assign_book_type, #assign_book').prop('disabled', true);
+        assign_modal_clear();
+        $('#assign_continuous').bootstrapToggle('off')
         modal_close = true;
     });
+
+    function assign_modal_clear(){
+        $('#assign_books_modal').find("input,textarea,select").val('').end();
+        $('#assign_student_name, #assign_book_type, #assign_book').val('').trigger('change');
+        $('#assign_book_type, #assign_book').prop('disabled', true);
+        $('#assign_continuous').bootstrapToggle('off')
+    }
+
+    $('#assign_continuous').bootstrapToggle('off')
 
     $('.select2').select2();
 
@@ -1168,7 +1176,7 @@ $(document).ready(function(){
             method: 'POST',
             dataType: 'text',
             success:function(data){
-                $('#assign_books_modal').modal('hide');
+                ($('#assign_continuous').is(':checked')) ? assign_modal_clear() : $('#assign_books_modal').modal('hide');
                 notif('Success!', 'Book Assigned!', 'success', 'glyphicon-ok');
                 button.disabled = false;
                 input.html('SAVE CHANGES');

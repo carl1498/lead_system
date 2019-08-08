@@ -4,7 +4,11 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Assign Books to Student</h4>
+                <h4 class="modal-title pull-left">Assign Books to Student</h4>&nbsp;
+                <div class="pull-right">
+                    <input id="assign_continuous" type="checkbox" checked data-toggle="toggle" data-on="Multiple" data-off="Single"
+                    data-width="90" style="visibility: hidden; width: 100px !important;">&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
             </div>
             <form class="form-horizontal" id="assign_books_form">
                 @csrf
@@ -15,10 +19,10 @@
                         <input type="hidden" name="add_edit" id="add_edit">
 
                         <div class="row clearfix">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 form-control-label">
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
                                 <label for="assign_student_name" class="pull-right">Student Name</label>
                             </div>
-                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                 <div class="form-group required">
                                     <select type="text" id="assign_student_name" name="assign_student_name" class="form-control select2 required" style="width: 100%;" required>
                                         <!-- Controller: assignBooksController@get_student -->
@@ -28,10 +32,10 @@
                         </div>
 
                         <div class="row clearfix">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 form-control-label">
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
                                 <label for="assign_book_type" class="pull-right">Book</label>
                             </div>
-                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                 <div class="form-group required">
                                     <select type="text" id="assign_book_type" name="assign_book_type" class="form-control required" style="width: 100%;" required disabled>
                                         <!-- Controller: releaseBooksController@get_books -->
