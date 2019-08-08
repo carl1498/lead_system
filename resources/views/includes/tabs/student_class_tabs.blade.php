@@ -22,6 +22,28 @@
 
 <!-- STUDENTS -- END -->
 
+<!-- WITH CLASSES -- START -->
+
+<div class="tab-pane fade in" id="student_with_class_tab">
+    
+    <table id="student_with_class_table" class="table table-hover table-striped table-bordered responsive nowrap" width="100%">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Contact</th>
+                <th>Program</th>
+                <th>Departure</th>
+                <th>Status</th>
+                <th>Class Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+    </table>
+    
+</div>
+
+<!-- WITH CLASSES -- END -->
+
 <!-- NO CLASSES -- START -->
 
 <div class="tab-pane fade in" id="student_no_class_tab">

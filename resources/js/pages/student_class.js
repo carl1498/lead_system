@@ -122,6 +122,16 @@ $(document).ready(function(){
         {data: "action", orderable:false,searchable:false}
     ]
 
+    var columns_with_class = [
+        {data: 'name', name: 'name'},
+        {data: 'contact', name: 'contact'},
+        {data: 'program.name', name: 'program'},
+        {data: 'departure', name: 'departure'},
+        {data: 'status', name: 'status'},
+        {data: 'class_status', name: 'class_status'},
+        {data: 'action', name: 'action'},
+    ]
+
     var columns_no_class = [
         {data: 'name', name: 'name'},
         {data: 'contact', name: 'contact'},
@@ -172,6 +182,32 @@ $(document).ready(function(){
             },
             columnDefs: [{defaultContent: "", targets: "_all"}],
             columns: columns_students_class
+        });
+    }
+
+    function refresh_student_with_class_table(){
+        $('#student_with_class_table').DataTable({
+            stateSave: true,
+            stateSaveCallback: function(settings,data) {
+                localStorage.setItem( 'DataTables_' + settings.sInstance, JSON.stringify(data) )
+            },
+            stateLoadCallback: function(settings) {
+                return JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ) )
+            },
+            initComplete: function(settings, json) {
+                enableTabs();
+            },
+            processing: true,
+            destroy: true,
+            scrollX: true,
+            scrollCollapse: true,
+            fixedColumns: true,
+            responsive: true,
+            ajax: {
+                url: '/with_class_students'
+            },
+            columnDefs: [{defaultContent: "", targets: "_all"}],
+            columns: columns_with_class
         });
     }
 
@@ -248,7 +284,8 @@ $(document).ready(function(){
                 url: '/view_student_class_history/'+id,
             },
             columnDefs: [{defaultContent: "", targets: "_all"}],
-            columns: columns_student_class_history
+            columns: columns_student_class_history,
+            order: [[2, 'desc']]
         });
     }
 
@@ -840,6 +877,9 @@ $(document).ready(function(){
         switch(current_tab){
             case 'Students':
                 refresh_student_class_table();
+                break;
+            case 'With Classes':
+                refresh_student_with_class_table();
                 break;
             case 'No Classes':
                 refresh_student_no_class_table();

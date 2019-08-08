@@ -40,9 +40,6 @@ class studentClassController extends Controller
             'student.departure_month')->where('class_settings_id', $current_class)->get();
 
         return Datatables::of($class_students)
-        /*->addColumn('complete', function($data){
-            return '';
-        })*/
         ->addColumn('name', function($data){
             return $data->student->lname.', '.$data->student->fname.' '.$data->student->mname;
         })
@@ -82,6 +79,47 @@ class studentClassController extends Controller
             }
             
             return $html;
+        })
+        ->make(true);
+    }
+
+    public function with_class_students(){
+        $class_students = class_students::groupBy('stud_id')->pluck('stud_id');
+
+        $student = student::with('program')->whereIn('id', $class_students)->get();
+
+        return Datatables::of($student)
+        ->editColumn('name', function($data){
+            return $data->lname.', '.$data->fname.' '.$data->mname;
+        })
+        ->addColumn('departure', function($data){
+            if($data->departure_month){
+                return $data->departure_year->name . ' ' . $data->departure_month->name;
+            }else{
+                return 'N/A';
+            }
+        })
+        ->addColumn('class_status', function($data){
+            $class_students = class_students::with('student', 'current_class.sensei')->where('stud_id', $data->id)
+                ->orderBy('id', 'desc')->first();
+
+            $html = '';
+
+            if($class_students->end_date && $class_students->student->status != 'Back Out'){
+                $html .= 'Complete ';
+            }
+            else if($class_students->end_date && $class_students->student->status == 'Back Out'){
+                $html .= 'Back Out ';
+            }
+            else{
+                $html .= 'Active ';
+            }
+
+            $html .= '(' . $class_students->current_class->sensei->fname . ')';
+            return $html;
+        })
+        ->addColumn('action', function($data){
+            return '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Class History" class="btn btn-success btn-xs view_class_history" id="'.$data->id.'"><i class="fa fa-eye"></i></button>';
         })
         ->make(true);
     }
