@@ -77,16 +77,29 @@ $(document).ready(function(){
     });
 
     $("#student_modal").on("hidden.bs.modal", function(e){
+        student_modal_clear();
+        $('#add_continuous').bootstrapToggle('off');
+        modal_close = true;
+    });
+
+    function student_modal_clear(){
         $('#student_form :input.required').each(function (){
             this.style.setProperty('border-color', 'green', 'important');
         });
         $('#language_student_form :input.required').each(function (){
             this.style.setProperty('border-color', 'green', 'important');
         });
-        $(this).find("input,textarea,select").val('').end();
+        $('#ssw_student_form :input.required').each(function (){
+            this.style.setProperty('border-color', 'green', 'important');
+        });
+        $('#trainee_student_form :input.required').each(function (){
+            this.style.setProperty('border-color', 'green', 'important');
+        });
+        $('#student_modal').find("input,textarea,select").val('').end();
         $('.select2').trigger('change.select2');
-        modal_close = true;
-    });
+    }
+    
+    $('#add_continuous').bootstrapToggle('off')
 
     $('input, select').attr('autocomplete', 'off');
 
@@ -682,7 +695,13 @@ $(document).ready(function(){
                     input.html('SAVE CHANGES');
                     return;
                 }
-                $('#student_modal').modal('hide');
+                if($('#add_continuous').is(':checked')){
+                    student_modal_clear();
+                    add_edit_init();
+                }
+                else{
+                    $('#student_modal').modal('hide')
+                }
                 notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
                 button.disabled = false;
                 input.html('SAVE CHANGES');
@@ -724,7 +743,13 @@ $(document).ready(function(){
                     input.html('SAVE CHANGES');
                     return;
                 }
-                $('#student_modal').modal('hide');
+                if($('#add_continuous').is(':checked')){
+                    student_modal_clear();
+                    add_edit_init();
+                }
+                else{
+                    $('#student_modal').modal('hide')
+                }
                 notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
                 button.disabled = false;
                 input.html('SAVE CHANGES');
@@ -766,7 +791,13 @@ $(document).ready(function(){
                     input.html('SAVE CHANGES');
                     return;
                 }
-                $('#student_modal').modal('hide');
+                if($('#add_continuous').is(':checked')){
+                    student_modal_clear();
+                    add_edit_init();
+                }
+                else{
+                    $('#student_modal').modal('hide')
+                }
                 notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
                 button.disabled = false;
                 input.html('SAVE CHANGES');
@@ -808,7 +839,13 @@ $(document).ready(function(){
                     input.html('SAVE CHANGES');
                     return;
                 }
-                $('#student_modal').modal('hide');
+                if($('#add_continuous').is(':checked')){
+                    student_modal_clear();
+                    add_edit_init();
+                }
+                else{
+                    $('#student_modal').modal('hide')
+                }
                 notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
                 button.disabled = false;
                 input.html('SAVE CHANGES');
@@ -826,14 +863,18 @@ $(document).ready(function(){
     //Open Student Modal (ADD)
     $('.add_student').on('click', function(){
         modal_close = false;
-        $('#add_edit').val('add');
-        $('#l_add_edit').val('add');
-        $('#s_add_edit').val('add');
-        $('#t_add_edit').val('add');
+        add_edit_init();
         $('#student_type_tab a:first').tab('show');
         $('#student_modal').modal('toggle');
         $('#student_modal').modal('show');
     });
+
+    function add_edit_init(){
+        $('#add_edit').val('add');
+        $('#l_add_edit').val('add');
+        $('#s_add_edit').val('add');
+        $('#t_add_edit').val('add');
+    }
 
     //Open Student Modal (EDIT)
     $(document).on('click', '.edit_student', function(){
