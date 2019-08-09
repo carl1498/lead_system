@@ -19,6 +19,8 @@ use App\company;
 use Carbon\Carbon;
 use Auth;
 use Yajra\Datatables\Datatables;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\Redirect;
 
 class studentController extends Controller
 {
@@ -381,7 +383,7 @@ class studentController extends Controller
         if($request->hasFile('picture')){
             $fileextension = $request->picture->getClientOriginalExtension();
 
-            if($fileextension != 'jpg' && $fileextension != 'png' && $fileextension != 'jpeg'){
+            if($fileextension != 'jpg' && $fileextension != 'png' && $fileextension != 'jpeg' && $fileextension != 'JPG'){
                 return false;
             }
         }
@@ -574,7 +576,7 @@ class studentController extends Controller
         if($request->hasFile('l_picture')){
             $fileextension = $request->l_picture->getClientOriginalExtension();
 
-            if($fileextension != 'jpg' && $fileextension != 'png' && $fileextension != 'jpeg'){
+            if($fileextension != 'jpg' && $fileextension != 'png' && $fileextension != 'jpeg' && $fileextension != 'JPG'){
                 return false;
             }
         }
@@ -724,7 +726,7 @@ class studentController extends Controller
         if($request->hasFile('s_picture')){
             $fileextension = $request->s_picture->getClientOriginalExtension();
 
-            if($fileextension != 'jpg' && $fileextension != 'png' && $fileextension != 'jpeg'){
+            if($fileextension != 'jpg' && $fileextension != 'png' && $fileextension != 'jpeg' && $fileextension != 'JPG'){
                 return false;
             }
         }
@@ -879,7 +881,7 @@ class studentController extends Controller
         if($request->hasFile('t_picture')){
             $fileextension = $request->t_picture->getClientOriginalExtension();
 
-            if($fileextension != 'jpg' && $fileextension != 'png' && $fileextension != 'jpeg'){
+            if($fileextension != 'jpg' && $fileextension != 'png' && $fileextension != 'jpeg' && $fileextension != 'JPG'){
                 return false;
             }
         }
@@ -1032,6 +1034,11 @@ class studentController extends Controller
     }
 
     public function delete_student(Request $request){
+        if(!Hash::check($request->password, Auth::user()->password)){
+            Auth::logout();
+            return \Redirect::to('/');
+        }
+
         $deleted_by = Auth::user()->emp_id;
         $student = student::find($request->id);
         $student->delete();

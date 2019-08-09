@@ -431,30 +431,62 @@ $(document).ready(function(){
     $(document).on('click', '.delete_employee', function(){
         var id = $(this).attr('id');
 
-        swal({
-            title: 'Are you sure?',
-            text: 'You are about to delete an employee. This may affect multiple rows',
-            type: 'warning',
+        swal.fire({
+            title: 'Confirm User',
+            text: 'For security purposes, input your password again.',
+            input: 'password',
+            inputAttributes: {
+                autocapitalize: 'off'
+            },
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if(result.value){
+            confirmButtonText: 'Confirm',
+            showLoaderOnConfirm: true,
+            preConfirm: (password) => {
                 $.ajax({
                     headers: {
                         'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
                     },
-                    url: '/delete_employee',
-                    method: 'get',
-                    data: {id:id},
-                    type: 'json',
-                    success:function(data){
-                        notif('Deleted!', 'This Employee has been Deleted', 'success', 'glyphicon-ok');
-                        refresh();
+                    url: '/confirm_user',
+                    data: { password:password },
+                    method: 'POST',
+                    success: function(data){
+                        if(data == 0){
+                            swal('Password Incorrect!', 'Please try again', 'error');
+                            return;
+                        }
+                        else{
+                            swal({
+                                title: 'Are you sure?',
+                                text: 'You are about to delete an employee. This may affect multiple rows',
+                                type: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Yes, delete it!'
+                            }).then((result) => {
+                                if(result.value){
+                                    $.ajax({
+                                        headers: {
+                                            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                                        },
+                                        url: '/delete_employee',
+                                        method: 'get',
+                                        data: {
+                                            id:id,
+                                            password:password
+                                        },
+                                        type: 'json',
+                                        success:function(data){
+                                            notif('Deleted!', 'This Employee has been Deleted', 'success', 'glyphicon-ok');
+                                            refresh();
+                                        }
+                                    })
+                                }
+                            });
+                        }
                     }
-                })
-            }
+                });
+            },
         });
     });
 
@@ -836,6 +868,36 @@ $(document).ready(function(){
             }
         });
     });
+    
+    $(document).on('click', '.delete_prev_employment_history', function(){
+        var id = $(this).attr('id');
+
+        swal({
+            title: 'Are you sure?',
+            text: 'You are about to delete an employee employment history',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if(result.value){
+                $.ajax({
+                    headers: {
+                        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: '/delete_prev_employment_history/'+id,
+                    method: 'get',
+                    type: 'json',
+                    success:function(data){
+                        refresh_employment_history(data);
+                        view_profile(data);
+                        notif('Deleted!', 'This Employment History has been Deleted', 'success', 'glyphicon-ok');
+                    }
+                })
+            }
+        });
+    });
 
     //Educational Background
 
@@ -903,7 +965,37 @@ $(document).ready(function(){
         });
     });
 
-    //EMPLOYEE HISTORY -- END
+    $(document).on('click', '.delete_educational_background', function(){
+        var id = $(this).attr('id');
+
+        swal({
+            title: 'Are you sure?',
+            text: 'You are about to delete an employee educational background',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if(result.value){
+                $.ajax({
+                    headers: {
+                        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: '/delete_educational_background/'+id,
+                    method: 'get',
+                    type: 'json',
+                    success:function(data){
+                        refresh_employment_history(data);
+                        view_profile(data);
+                        notif('Deleted!', 'This Educational Background has been Deleted', 'success', 'glyphicon-ok');
+                    }
+                })
+            }
+        });
+    });
+
+    //EDUCATIONAL BACKGROUND -- END
 
     //EMPLOYEE FAMILY -- START
 

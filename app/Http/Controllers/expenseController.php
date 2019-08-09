@@ -162,7 +162,6 @@ class expenseController extends Controller
 
     public function delete_expense_particular(Request $request){
         if(!Hash::check($request->password, Auth::user()->password)){
-            info('logout lang sa');
             Auth::logout();
             return Redirect::to('/');
         }

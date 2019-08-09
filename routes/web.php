@@ -179,6 +179,8 @@ Route::group(['middleware' => ['auth', 'employee']], function(){
         Route::get('/delete_employee_emergency/{id}', 'employeeController@delete_employee_emergency');
         Route::get('/delete_employee_spouse/{id}', 'employeeController@delete_employee_spouse');
         Route::get('/delete_employee_child/{id}', 'employeeController@delete_employee_child');
+        Route::get('/delete_educational_background/{id}', 'employeeController@delete_educational_background');
+        Route::get('/delete_prev_employment_history/{id}', 'employeeController@delete_prev_employment_history');
     });
 
 });

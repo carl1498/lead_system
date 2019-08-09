@@ -996,31 +996,63 @@ $(document).ready(function(){
     $(document).on('click', '.delete_student', function(){
         var id = $(this).attr('id');
 
-        swal({
-            title: 'Are you sure?',
-            text: 'You are about to delete a student. This may affect multiple rows',
-            type: 'warning',
+        swal.fire({
+            title: 'Confirm User',
+            text: 'For security purposes, input your password again.',
+            input: 'password',
+            inputAttributes: {
+                autocapitalize: 'off'
+            },
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if(result.value){
+            confirmButtonText: 'Confirm',
+            showLoaderOnConfirm: true,
+            preConfirm: (password) => {
                 $.ajax({
                     headers: {
                         'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
                     },
-                    url: '/delete_student',
-                    method: 'get',
-                    data: {id:id},
-                    type: 'json',
-                    success:function(data){
-                        notif('Success!', 'This Student has been Deleted', 'success', 'glyphicon-ok');
-
-                        refresh();
+                    url: '/confirm_user',
+                    data: { password:password },
+                    method: 'POST',
+                    success: function(data){
+                        if(data == 0){
+                            swal('Password Incorrect!', 'Please try again', 'error');
+                            return;
+                        }
+                        else{
+                            swal({
+                                title: 'Are you sure?',
+                                text: 'You are about to delete a student. This may affect multiple rows',
+                                type: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Yes, delete it!'
+                            }).then((result) => {
+                                if(result.value){
+                                    $.ajax({
+                                        headers: {
+                                            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                                        },
+                                        url: '/delete_student',
+                                        method: 'get',
+                                        data: {
+                                            id:id,
+                                            password:password
+                                        },
+                                        type: 'json',
+                                        success:function(data){
+                                            notif('Success!', 'This Student has been Deleted', 'success', 'glyphicon-ok');
+                    
+                                            refresh();
+                                        }
+                                    });
+                                }
+                            });
+                        }
                     }
                 });
-            }
+            },
         });
     });
 

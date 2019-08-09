@@ -1,7 +1,7 @@
 {
     "/js/app.js": "/js/app.js?id=8c5e5d5425fcac26d372",
     "/css/app.css": "/css/app.css?id=7f90fb49ef43339c0a25",
-    "/js/pages/students.js": "/js/pages/students.js?id=0f8189e40497daf7b793",
+    "/js/pages/students.js": "/js/pages/students.js?id=d50e1d98772d2ee4452b",
     "/js/pages/student_settings.js": "/js/pages/student_settings.js?id=add1a871cd521bff3699",
     "/js/pages/student_edit_history.js": "/js/pages/student_edit_history.js?id=efcf34c3bf358e68dc99",
     "/js/pages/student_delete_history.js": "/js/pages/student_delete_history.js?id=31c32974c38f40d6d1b9",
@@ -9,7 +9,7 @@
     "/js/pages/student_add_history.js": "/js/pages/student_add_history.js?id=b2bcfbffae8109891599",
     "/js/pages/invoice.js": "/js/pages/invoice.js?id=9f078d66b6e068f1cf40",
     "/js/pages/expense.js": "/js/pages/expense.js?id=76b1d78f7cd8b4d055d2",
-    "/js/pages/employees.js": "/js/pages/employees.js?id=8f0f8421738d1fcb163c",
+    "/js/pages/employees.js": "/js/pages/employees.js?id=163be0dd0be9728e5d9c",
     "/js/pages/dashboard.js": "/js/pages/dashboard.js?id=7d9c9a7a12ea520d40fc",
     "/js/pages/book_management.js": "/js/pages/book_management.js?id=20eea0d4200a722c1188"
 }

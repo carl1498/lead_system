@@ -170,6 +170,7 @@ class employeeController extends Controller
         ->addColumn('action', function($data){
             $html = '';
             $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-primary btn-xs edit_prev_employment_history" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_prev_employment_history" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>&nbsp;';
             return $html;
         })
         ->make(true);
@@ -184,6 +185,7 @@ class employeeController extends Controller
         ->addColumn('action', function($data){
             $html = '';
             $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-primary btn-xs edit_educational_background" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_educational_background" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>&nbsp;';
             return $html;
         })->make(true);
 
@@ -253,7 +255,7 @@ class employeeController extends Controller
         if($request->hasFile('picture')){
             $fileextension = $request->picture->getClientOriginalExtension();
 
-            if($fileextension != 'jpg' && $fileextension != 'png' && $fileextension != 'jpeg'){
+            if($fileextension != 'jpg' && $fileextension != 'png' && $fileextension != 'jpeg' && $fileextension != 'JPG'){
                 return false;
             }
         }
@@ -509,6 +511,11 @@ class employeeController extends Controller
     }
 
     public function delete_employee(Request $request){
+        if(!Hash::check($request->password, Auth::user()->password)){
+            Auth::logout();
+            return \Redirect::to('/');
+        }
+        
         $employee = employee::find($request->id);
         $employee->delete();
     }
@@ -537,6 +544,22 @@ class employeeController extends Controller
         return $emp_id;
     }
 
+    public function delete_educational_background(Request $request){
+        $educational_background = educational_background::find($request->id);
+        $emp_id = $educational_background->emp_id;
+        $educational_background->delete();
+
+        return $emp_id;
+    }
+
+    public function delete_prev_employment_history(Request $request){
+        $prev_employment_history = prev_employment_history::find($request->id);
+        $emp_id = $prev_employment_history->emp_id;
+        $prev_employment_history->delete();
+
+        return $emp_id;
+    }
+
     public function get_account(Request $request){
         $id = $request->id;
         $account = User::with('employee')->where('emp_id', $id)->first();
@@ -556,7 +579,7 @@ class employeeController extends Controller
     public function save_account(Request $request){
         if(!Hash::check($request->confirm_password, Auth::user()->password)){
             Auth::logout();
-            return Redirect::to('/');
+            return \Redirect::to('/');
         }
         $id = $request->a_id;
         $user = User::find($id);
@@ -571,7 +594,7 @@ class employeeController extends Controller
     public function resign_employee(Request $request){
         if(!Hash::check($request->password, Auth::user()->password)){
             Auth::logout();
-            return Redirect::to('/');
+            return \Redirect::to('/');
         }
         $id = $request->r_id;
         
@@ -588,7 +611,7 @@ class employeeController extends Controller
     public function rehire_employee(Request $request){
         if(!Hash::check($request->password, Auth::user()->password)){
             Auth::logout();
-            return Redirect::to('/');
+            return \Redirect::to('/');
         }
         $id = $request->rh_id;
 
