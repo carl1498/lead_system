@@ -19,7 +19,8 @@ class InvoiceHigherPermission
     {
         $id = Auth::user()->id;
         $user = User::with('employee.role')->find($id);
-        $authorized = ['Language Head', 'President', 'Finance Director', 'HR/Finance Head', 'IT Officer'];
+        $authorized = ['Language Head', 'President', 'Finance Director', 'HR/Finance Head', 'IT Officer',
+                'Assistant Finance Officer'];
 
         foreach($authorized as $auth){
             if($user->employee->role->name == $auth && $user->employee->employment_status != 'Resigned'){
