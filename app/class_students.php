@@ -17,7 +17,7 @@ class class_students extends Model
     }
 
     public function student(){
-        return $this->hasOne('App\student', 'id', 'stud_id')->withTrashed();
+        return $this->hasOne('App\student', 'id', 'stud_id');
     }
 
     public $timestamps = true;
