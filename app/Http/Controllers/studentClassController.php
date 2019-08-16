@@ -39,6 +39,8 @@ class studentClassController extends Controller
         $class_students = class_students::with('student', 'student.program', 'student.departure_year',
             'student.departure_month')->where('class_settings_id', $current_class)->get();
 
+        info($class_students);
+
         return Datatables::of($class_students)
         ->addColumn('name', function($data){
             return $data->student->lname.', '.$data->student->fname.' '.$data->student->mname;
