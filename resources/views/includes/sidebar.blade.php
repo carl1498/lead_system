@@ -81,6 +81,14 @@
 				</li>
 				@endif
 
+				@if(canAccessAll())
+				<li class="{{ (Request::path() == 'client') ? 'active' : '' }}">
+				<a href="/client" >
+					<i class="fa fa-address-card"></i> <span>Clients</span>
+				</a>
+				</li>
+				@endif
+
 				@if(canAccessAll() || canAccessEmployees())
 				<li class="{{ (Request::path() == 'employees') ? 'active' : '' }}">
 					<a href="/employees" >

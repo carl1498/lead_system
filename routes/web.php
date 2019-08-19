@@ -279,3 +279,14 @@ Route::group(['middleware' => ['auth', 'expense']], function(){
 });
 
 //FINANCE ROUTES -- END
+
+//CLIENT ROUTES -- START
+
+Route::group(['middleware' => ['auth', 'admin']], function(){
+    Route::get('/client', 'clientController@index');
+    Route::get('/view_client', 'clientController@view_client');
+    Route::post('/save_client', 'clientController@save_client');
+    Route::get('/get_client/{id}', 'clientController@get_client');
+});
+
+//CLIENT ROUTES -- END

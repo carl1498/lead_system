@@ -69,7 +69,7 @@ $(document).ready(function(){
         $('.select2').trigger('change.select2');
     }
 
-    $('#expense_continuous').bootstrapToggle('off')
+    $('#expense_continuous').bootstrapToggle('off');
 
     function disableTabs(){
         $(`li.expense_pick`).addClass('disabled').css('cursor', 'not-allowed');
@@ -329,7 +329,7 @@ $(document).ready(function(){
 
     $(document).on('click', '.add_expense', function(){
         if(current_tab == 'Particular'){
-            $('#p_add_edit').val('add')
+            $('#p_add_edit').val('add');
             $('#expense_particular_modal').modal('toggle');
             $('#expense_particular_modal').modal('show');
         }
@@ -624,7 +624,6 @@ $(document).ready(function(){
                                         method: 'get',
                                         type: 'json',
                                         success:function(data){
-                                            console.log('nadelete na');
                                             notif('Success!', 'This expense particular has been Deleted', 'success', 'glyphicon-ok');
                                             refresh();
                                         }

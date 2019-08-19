@@ -10,7 +10,6 @@
                 @csrf
                 <div class="modal-body clearfix">
 
-                    <!-- LEFT COLUMN -->
                     <div class="col-md-12">
 
                         <div class="row clearfix">
