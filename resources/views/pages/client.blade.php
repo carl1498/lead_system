@@ -4,7 +4,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        Client
+        Client Page
     </h1>
     <ol class="breadcrumb">
         <li>
@@ -54,6 +54,9 @@
     <!-- MODALS -- START -->
 
     @include('includes.modals.client_modals.client_modal')
+    @include('includes.modals.client_modals.client_view_pic_modal')
+    @include('includes.modals.client_modals.client_pic_modal')
+    @include('includes.modals.client_modals.client_bank_modal')
 
     <!-- MODALS -- END -->
 

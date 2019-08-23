@@ -3,9 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class client extends Model
 {
+    use SoftDeletes;
     protected $primaryKey = 'id';
     protected $table = 'client';
     protected $fillable = [

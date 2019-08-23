@@ -285,8 +285,16 @@ Route::group(['middleware' => ['auth', 'expense']], function(){
 Route::group(['middleware' => ['auth', 'admin']], function(){
     Route::get('/client', 'clientController@index');
     Route::get('/view_client', 'clientController@view_client');
+    Route::get('/view_client_pic/{id}', 'clientController@view_client_pic');
     Route::post('/save_client', 'clientController@save_client');
+    Route::post('/save_client_pic', 'clientController@save_client_pic');
+    Route::post('/save_client_bank', 'clientController@save_client_bank');
     Route::get('/get_client/{id}', 'clientController@get_client');
+    Route::get('/get_client_pic/{id}', 'clientController@get_client_pic');
+    Route::get('/get_pic/{id}', 'clientController@get_pic');
+    Route::get('/get_bank/{id}', 'clientController@get_bank');
+    Route::get('/delete_client', 'clientController@delete_client');
+    Route::get('/delete_pic', 'clientController@delete_pic');
 });
 
 //CLIENT ROUTES -- END

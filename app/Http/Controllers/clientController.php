@@ -38,7 +38,27 @@ class clientController extends Controller
             $html = '';
 
             $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-primary btn-xs edit_client" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Person in Charge" class="btn btn-warning btn-xs pic" id="'.$data->id.'"><i class="fa fa-id-card"></i></button>&nbsp;';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Bank" class="btn btn-info btn-xs bank" id="'.$data->id.'"><i class="fa fa-university"></i></button>&nbsp;';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_client" id="'.$data->id.'"><i class="fa fa-trash"></i></button>&nbsp;';
             
+            return $html;
+        })
+        ->make(true);
+    }
+
+    public function view_client_pic(Request $request){
+        $client_id = $request->id;
+
+        $client_pic = client_pic::where('client_id', $client_id);
+
+        return Datatables::of($client_pic)
+        ->addColumn('action', function($data){
+            $html = '';
+            
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-primary btn-xs edit_pic" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_pic" id="'.$data->id.'"><i class="fa fa-trash"></i></button>&nbsp;';
+
             return $html;
         })
         ->make(true);
@@ -47,8 +67,6 @@ class clientController extends Controller
     public function save_client(Request $request){
         $id = $request->id;
         $add_edit = $request->add_edit;
-        info($id);
-        info($add_edit);
 
         $client = ($add_edit == 'add') ? new client : client::find($id);
 
@@ -60,7 +78,79 @@ class clientController extends Controller
         $client->save();
     }
 
+    public function save_client_pic(Request $request){
+        $id = $request->p_id;
+        $client_id = $request->p_client_id;
+        $add_edit = $request->p_add_edit;
+
+        $client_pic = ($add_edit == 'add') ? new client_pic : client_pic::find($id);
+
+        $client_pic->name = $request->p_name;
+        $client_pic->position = $request->p_position;
+        $client_pic->contact = $request->p_contact;
+        $client_pic->email = $request->p_email;
+        $client_pic->client_id = $client_id;
+        $client_pic->save();
+
+        return $client_id;
+    }
+
+    public function save_client_bank(Request $request){
+        $id = $request->b_id;
+        $client_id = $request->b_client_id;
+        $add_edit = $request->b_add_edit;
+
+        $client_bank = ($add_edit == 'add') ? new client_bank : client_bank::find($id);
+
+        info($client_bank);
+        
+        $client_bank->bank_name = $request->bank_name;
+        $client_bank->swift_code = $request->swift_code;
+        $client_bank->branch_name = $request->bank_branch_name;
+        $client_bank->address = $request->bank_address;
+        $client_bank->account_name = $request->account_name;
+        $client_bank->account_number = $request->account_number;
+        $client_bank->contact = $request->bank_contact;
+        $client_bank->client_id = $request->b_client_id;
+        $client_bank->save();
+    }
+
     public function get_client(Request $request){
         return client::find($request->id);
+    }
+
+    public function get_client_pic(Request $request){
+        return client::with('pic')->where('id', $request->id)->first();
+    }
+
+    public function get_pic(Request $request){
+        return client_pic::find($request->id);
+    }
+
+    public function get_bank(Request $request){
+        return (client_bank::where('client_id', $request->id)->first()) ? client_bank::where('client_id', $request->id)->first() : 'false';
+    }
+
+    public function delete_client(Request $request){
+        if(!Hash::check($request->password, Auth::user()->password)){
+            Auth::logout();
+            return \Redirect::to('/');
+        }
+
+        $client = client::find($request->id);
+        $client->delete();
+    }
+
+    public function delete_pic(Request $request){
+        if(!Hash::check($request->password, Auth::user()->password)){
+            Auth::logout();
+            return \Redirect::to('/');
+        }
+
+        $client_pic = client_pic::find($request->id);
+        $client_id = $client_pic->client_id;
+        $client_pic->delete();
+
+        return $client_id;
     }
 }
