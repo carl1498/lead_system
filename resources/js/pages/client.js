@@ -78,7 +78,7 @@ $(document).ready(function(){
     function refresh_client_table(){
         $('#client_table').DataTable({
             initComplete: function(settings, json) {
-                enableTabs();  
+                enableTabs(); 
             },
             processing: true,
             destroy: true,
@@ -184,7 +184,6 @@ $(document).ready(function(){
                 $('#client_bank_modal').modal('show');
             }
         });
-
     })
 
     $(document).on('click', '.add_pic', function(){
@@ -376,30 +375,49 @@ $(document).ready(function(){
     $(document).on('submit', '#client_form', function(e){
         e.preventDefault();
 
-        var input = $('.save_client');
-        var button = document.getElementsByClassName("save_client")[0];
-
-        button.disabled = true;
-        input.html('SAVING...');
-
-        $.ajax({
-            headers: {
-                'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+        swal.fire({
+            title: 'Confirm User',
+            text: 'For security purposes, input your password again.',
+            input: 'password',
+            inputAttributes: {
+                autocapitalize: 'off'
             },
-            url: '/save_client',
-            method: 'POST',
-            data: $(this).serialize(),
-            success:function(data){
-                notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
-                $('#client_modal').modal('hide');
-                button.disabled = false;
-                input.html('SAVE CHANGES');
-                refresh();
-            },
-            error: function(data){
-                swal("Error!", "Something went wrong, try again.", "error");
-                button.disabled = false;
-                input.html('SAVE CHANGES');
+            showCancelButton: true,
+            confirmButtonText: 'Confirm',
+            showLoaderOnConfirm: true,
+            preConfirm: (password) => {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: '/confirm_user',
+                    data: { password:password },
+                    method: 'POST',
+                    success: function(data){
+                        if(data == 0){
+                            swal('Password Incorrect!', 'Please try again', 'error');
+                            return;
+                        }
+                        else{
+                            $.ajax({
+                                headers: {
+                                    'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                                },
+                                url: '/save_client',
+                                method: 'POST',
+                                data: $('#client_form').serialize() + '&password=' + password,
+                                success:function(data){
+                                    notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
+                                    $('#client_modal').modal('hide');
+                                    refresh();
+                                },
+                                error: function(data){
+                                    swal("Error!", "Something went wrong, try again.", "error");
+                                }
+                            });
+                        }
+                    }
+                });
             }
         });
     });
@@ -407,63 +425,103 @@ $(document).ready(function(){
     $(document).on('submit', '#client_pic_form', function(e){
         e.preventDefault();
 
-        var input = $('.save_client_pic');
-        var button = document.getElementsByClassName("save_client_pic")[0];
-
-        button.disabled = true;
-        input.html('SAVING...');
-
-        $.ajax({
-            headers: {
-                'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+        swal.fire({
+            title: 'Confirm User',
+            text: 'For security purposes, input your password again.',
+            input: 'password',
+            inputAttributes: {
+                autocapitalize: 'off'
             },
-            url: '/save_client_pic',
-            method: 'POST',
-            data: $(this).serialize(),
-            success:function(data){
-                notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
-                $('#client_pic_modal').modal('hide');
-                setTimeout(function(){$('#client_view_pic_modal').modal('show')}, 500);
-                refresh_pic_table(data);
-                button.disabled = false;
-                input.html('SAVE CHANGES');
-                refresh();
-            },
-            error: function(data){
-                swal("Error!", "Something went wrong, try again.", "error");
-                button.disabled = false;
-                input.html('SAVE CHANGES');
+            showCancelButton: true,
+            confirmButtonText: 'Confirm',
+            showLoaderOnConfirm: true,
+            preConfirm: (password) => {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: '/confirm_user',
+                    data: { password:password },
+                    method: 'POST',
+                    success: function(data){
+                        if(data == 0){
+                            swal('Password Incorrect!', 'Please try again', 'error');
+                            return;
+                        }
+                        else{
+                            $.ajax({
+                                headers: {
+                                    'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                                },
+                                url: '/save_client_pic',
+                                method: 'POST',
+                                data: $('#client_pic_form').serialize() + '&password=' + password,
+                                success:function(data){
+                                    notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
+                                    $('#client_pic_modal').modal('hide');
+                                    setTimeout(function(){$('#client_view_pic_modal').modal('show')}, 500);
+                                    refresh_pic_table(data);
+                                    refresh();
+                                },
+                                error: function(data){
+                                    swal("Error!", "Something went wrong, try again.", "error");
+                                }
+                            });
+                        }
+                    }
+                });
             }
         });
+
+        
     });
 
     $(document).on('submit', '#client_bank_form', function(e){
         e.preventDefault();
 
-        var input = $('.save_client_bank');
-        var button = document.getElementsByClassName("save_client_bank")[0];
-
-        button.disabled = true;
-        input.html('SAVING...');
-
-        $.ajax({
-            headers: {
-                'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+        swal.fire({
+            title: 'Confirm User',
+            text: 'For security purposes, input your password again.',
+            input: 'password',
+            inputAttributes: {
+                autocapitalize: 'off'
             },
-            url: '/save_client_bank',
-            method: 'POST',
-            data: $(this).serialize(),
-            success:function(data){
-                notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
-                $('#client_bank_modal').modal('hide');
-                button.disabled = false;
-                input.html('SAVE CHANGES');
-                refresh();
-            },
-            error: function(data){
-                swal("Error!", "Something went wrong, try again.", "error");
-                button.disabled = false;
-                input.html('SAVE CHANGES');
+            showCancelButton: true,
+            confirmButtonText: 'Confirm',
+            showLoaderOnConfirm: true,
+            preConfirm: (password) => {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: '/confirm_user',
+                    data: { password:password },
+                    method: 'POST',
+                    success: function(data){
+                        if(data == 0){
+                            swal('Password Incorrect!', 'Please try again', 'error');
+                            return;
+                        }
+                        else{
+                            $.ajax({
+                                headers: {
+                                    'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                                },
+                                url: '/save_client_bank',
+                                method: 'POST',
+                                data: $('#client_bank_form').serialize() + '&password=' + password,
+                                success:function(data){
+                                    notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
+                                    $('#client_bank_modal').modal('hide');
+                                    refresh();
+                                },
+                                error: function(data){
+                                    swal("Error!", "Something went wrong, try again.", "error");
+                                }
+                            });
+                        }
+                    }
+                });
             }
         });
     });

@@ -282,7 +282,7 @@ Route::group(['middleware' => ['auth', 'expense']], function(){
 
 //CLIENT ROUTES -- START
 
-Route::group(['middleware' => ['auth', 'admin']], function(){
+Route::group(['middleware' => ['auth', 'client']], function(){
     Route::get('/client', 'clientController@index');
     Route::get('/view_client', 'clientController@view_client');
     Route::get('/view_client_pic/{id}', 'clientController@view_client_pic');

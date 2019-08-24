@@ -81,7 +81,7 @@
 				</li>
 				@endif
 
-				@if(canAccessAll())
+				@if(canAccessAll() || canAccessClient())
 				<li class="{{ (Request::path() == 'client') ? 'active' : '' }}">
 					<a href="/client" >
 						<i class="fa fa-user-tie"></i> <span>Clients</span>

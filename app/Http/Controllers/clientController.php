@@ -65,6 +65,11 @@ class clientController extends Controller
     }
 
     public function save_client(Request $request){
+        if(!Hash::check($request->password, Auth::user()->password)){
+            Auth::logout();
+            return \Redirect::to('/');
+        }
+
         $id = $request->id;
         $add_edit = $request->add_edit;
 
@@ -79,6 +84,11 @@ class clientController extends Controller
     }
 
     public function save_client_pic(Request $request){
+        if(!Hash::check($request->password, Auth::user()->password)){
+            Auth::logout();
+            return \Redirect::to('/');
+        }
+
         $id = $request->p_id;
         $client_id = $request->p_client_id;
         $add_edit = $request->p_add_edit;
@@ -96,13 +106,16 @@ class clientController extends Controller
     }
 
     public function save_client_bank(Request $request){
+        if(!Hash::check($request->password, Auth::user()->password)){
+            Auth::logout();
+            return \Redirect::to('/');
+        }
+
         $id = $request->b_id;
         $client_id = $request->b_client_id;
         $add_edit = $request->b_add_edit;
 
         $client_bank = ($add_edit == 'add') ? new client_bank : client_bank::find($id);
-
-        info($client_bank);
         
         $client_bank->bank_name = $request->bank_name;
         $client_bank->swift_code = $request->swift_code;
