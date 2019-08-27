@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use PDF;
+use Elibyy\TCPDF\Facades\TCPDF;
 use App\student;
 use App\class_students;
 use App\book_type;
@@ -96,13 +96,13 @@ class pdfController extends Controller
         $view = \View::make('pages.studentpdf', compact('student'));
         $html = $view->render();
 
-        PDF::changeFormat('A4');
-        PDF::reset();
-        PDF::SetTitle('Student Profile - '.$student->fname . ' ' . $student->lname);
-        PDF::AddPage();
-        PDF::setPageMark();
-        PDF::writeHTML($html, true, false, true, false, '');
+        TCPDF::changeFormat('A4');
+        TCPDF::reset();
+        TCPDF::SetTitle('Student Profile - '.$student->fname . ' ' . $student->lname);
+        TCPDF::AddPage();
+        TCPDF::setPageMark();
+        TCPDF::writeHTML($html, true, false, true, false, '');
 
-        PDF::Output('StudentProfile_'.$student->lname.'.pdf');
+        TCPDF::Output('StudentProfile_'.$student->lname.'.pdf');
     }
 }
