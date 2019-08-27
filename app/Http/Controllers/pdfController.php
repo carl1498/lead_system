@@ -103,6 +103,7 @@ class pdfController extends Controller
         PDF::setPageMark();
         PDF::writeHTML($html, true, false, true, false, '');
 
-        PDF::Output('StudentProfile_'.$student->lname.'.pdf', 'FI');
+        ob_end_clean();
+        PDF::Output('StudentProfile_'.$student->lname.'.pdf', 'I');
     }
 }
