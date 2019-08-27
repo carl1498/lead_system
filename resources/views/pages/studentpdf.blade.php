@@ -78,14 +78,14 @@
             <td><b>Sign Up Date: </b> {{ $student->date_of_signup }}</td>
         </tr>
         <tr>
-            <td colspan="2"><b>Remarks:</b> {{ $student->remarks }}</td>
+            <td><b>Remarks:</b> {{ $student->remarks }}</td>
             @if($student->departure_year && $student->departure_month)
             <td><b>Departure: </b> {{ $student->departure_year->name }} {{ $student->departure_month->name }}</td>
             @else
             <td><b>Departure: </b> N/A</td>
             @endif
         </tr>
-
+        
         <tr>
             <td></td>
         </tr>
