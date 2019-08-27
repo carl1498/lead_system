@@ -1485,9 +1485,19 @@ $(document).ready(function(){
                 $('#p_course').text(data.course.name);
                 $('#p_address').text(data.address);
                 $('#p_remarks').text(data.remarks ? data.remarks : '-');
+                $('.print_student_profile').attr('id', data.id);
+                $('.print_student_profile').removeAttr('disabled');
             }
         });
     }
+
+    $(document).on('click', '.print_student_profile', function(){
+        if(!$(this).hasClass('disabled')){
+            let id = $(this).attr('id');
+
+            window.open('/studentPDF/'+id, '_blank');
+        }
+    });
 
     //FUNCTIONS -- END
 });

@@ -1,4 +1,4 @@
-<?php
+ <?php
 
 return [
 
@@ -174,6 +174,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         //Intervention\Image\ImageServiceProvider::class
+        Elibyy\TCPDF\ServiceProvider::class,
 
     ],
 
@@ -226,6 +227,7 @@ return [
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'Carbon' => 'Carbon\Carbon',
         //'Image' => Intervention\Image\Facades\Image::class
+        'PDF' => Elibyy\TCPDF\Facades\TCPDF::class
 
     ],
 

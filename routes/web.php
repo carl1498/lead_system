@@ -90,6 +90,9 @@ Route::group(['middleware' => ['auth', 'student_list']], function(){
     Route::get('/view_student_class_history/{id}', 'studentClassController@view_student_class_history');
     Route::get('/student_class_name/{id}', 'studentClassController@student_class_name');
 
+    //PDF
+    Route::get('/studentPDF/{id}', 'pdfController@studentPDF');
+
     //Student Class Higher
     Route::group(['middleware' => ['student_class_add']], function(){
         Route::post('/add_class', 'studentClassController@add_class');

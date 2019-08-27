@@ -67,7 +67,7 @@ class studentClassController extends Controller
             if($data->end_date){
                 return $data->end_date;
             }else{
-                return 'TBD';
+                return 'TBA';
             }
         })
         ->addColumn('action', function($data){
@@ -466,7 +466,7 @@ class studentClassController extends Controller
 
         foreach($class_settings as $cs){
             if($cs->end_date == null){
-                $cs->end_date = 'TBD';
+                $cs->end_date = 'TBA';
             }
         }
 

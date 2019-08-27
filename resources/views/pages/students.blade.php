@@ -43,6 +43,11 @@
             <div class="box box-primary" id="box-primary-fixed">
                 <div class="box-body box-profile">
                     <div style="width: auto; height: 200px;">
+                        <button disabled class="btn btn-primary btn-sm print_student_profile"
+                            style="position: absolute; right: 20px; z-index: 1000;">
+                            <i class="fa fa-print"></i>
+                        </button>
+
                         <img id="p_picture" class="profile-user-img img-responsive img-rounded" src="./img/avatar5.png" alt="Student Profile Picture" style="max-width: 97px; max-height: 97px;">
 
                         <h4 id="p_stud_name" class="profile-username text-center">Student Name</h4>
