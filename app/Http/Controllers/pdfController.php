@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use PDF;
+use Elibyy\TCPDF\Facades\TCPDF as PDF;
 use App\student;
 use App\class_students;
 use App\book_type;

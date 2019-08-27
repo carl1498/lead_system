@@ -51,6 +51,5 @@ $app->singleton(
 | from the actual running of the application and sending responses.
 |
 */
-class_alias('Elibyy\TCPDF\Facades\TCPDF', 'PDF');
 
 return $app;
