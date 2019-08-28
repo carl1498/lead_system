@@ -28,7 +28,6 @@ class pdfController extends Controller
         $student->age = $birth->diffInYears(Carbon::now());
         //BIRTHDATE -- END
 
-
         //CLASS -- START
 
         $class_students = class_students::with('student', 'current_class.sensei')->where('stud_id', $student->id)
@@ -60,8 +59,10 @@ class pdfController extends Controller
         $book_ssw = ['Minna 1 (SSW)', 'WB 1 (SSW)', 'Minna 2 (SSW)', 'WB 2 (SSW)', 'Kanji (SSW)'];
         $book_type = $book_student;
 
-        if($student->program->name == 'SSV (Careworker)' || $student->program->name == 'SSV (Hospitality)'){
-            $book_type = $book_ssw;
+        if($student->program){
+            if($student->program->name == 'SSV (Careworker)' || $student->program->name == 'SSV (Hospitality)'){
+                $book_type = $book_ssw;
+            }
         }
 
         $get_book = book_type::where('name', $book_type[0])->first();
