@@ -15,12 +15,19 @@ $(document).ready(function(){
     });
 
     $("#client_modal").on("hidden.bs.modal", function(e){
+        client_modal_clear();
+        $('#client_continuous').bootstrapToggle('off');
+    });
+
+    function client_modal_clear(){
         $('#client_form :input.required').each(function (){
             this.style.setProperty('border-color', 'green', 'important');
         });
-        $(this).find("input,textarea,select").val('').end();
+        $('#client_form').find("input,textarea,select").val('').end();
         $('.select2').trigger('change.select2');
-    });
+    }
+
+    $('#client_continuous').bootstrapToggle('off');
     
     $('#client_view_pic_modal').on('shown.bs.modal', function(){
         $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
@@ -408,7 +415,13 @@ $(document).ready(function(){
                                 data: $('#client_form').serialize() + '&password=' + password,
                                 success:function(data){
                                     notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
-                                    $('#client_modal').modal('hide');
+                                    if($('#client_continuous').is(':checked')){
+                                        client_modal_clear();
+                                        $('#add_edit').val('add');
+                                    }
+                                    else{
+                                        $('#client_modal').modal('hide')
+                                    }
                                     refresh();
                                 },
                                 error: function(data){
