@@ -174,16 +174,17 @@ $(document).ready(function(){
             dataType: 'json',
             success:function(data){
                 $('#b_client_id').val(id);
-                if(data != false){
-                    $('#b_id').val(data.id);
+                $('.title_bank').text(data.client.name);
+                if(data.client_bank != 'false'){
+                    $('#b_id').val(data.client_bank.id);
                     $('#b_add_edit').val('edit');
-                    $('#bank_name').val(data.bank_name);
-                    $('#swift_code').val(data.swift_code);
-                    $('#bank_branch_name').val(data.branch_name);
-                    $('#bank_address').val(data.address);
-                    $('#account_name').val(data.account_name);
-                    $('#account_number').val(data.account_number);
-                    $('#bank_contact').val(data.contact);
+                    $('#bank_name').val(data.client_bank.bank_name);
+                    $('#swift_code').val(data.client_bank.swift_code);
+                    $('#bank_branch_name').val(data.client_bank.branch_name);
+                    $('#bank_address').val(data.client_bank.address);
+                    $('#account_name').val(data.client_bank.account_name);
+                    $('#account_number').val(data.client_bank.account_number);
+                    $('#bank_contact').val(data.client_bank.contact);
                 }
                 else{
                     $('#b_add_edit').val('add');

@@ -4,7 +4,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Add Employee</h4>
+                <h4 class="modal-title">Bank - <span class="title_bank"></span></h4>
             </div>
             <form class="form-horizontal" id="client_bank_form" enctype="multipart/form-data">
                 @csrf

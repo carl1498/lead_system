@@ -141,7 +141,16 @@ class clientController extends Controller
     }
 
     public function get_bank(Request $request){
-        return (client_bank::where('client_id', $request->id)->first()) ? client_bank::where('client_id', $request->id)->first() : 'false';
+        $client = client::find($request->id);
+        $client_bank = (client_bank::where('client_id', $request->id)->first()) ? client_bank::where('client_id', $request->id)->first() : 'false';
+
+
+        $output = array(
+            'client' => $client,
+            'client_bank' => $client_bank,
+        );
+        
+        echo json_encode($output);
     }
 
     public function delete_client(Request $request){
