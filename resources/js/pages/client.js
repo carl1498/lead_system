@@ -410,6 +410,8 @@ $(document).ready(function(){
                     success: function(data){
                         if(data == 0){
                             swal('Password Incorrect!', 'Please try again', 'error');
+                            button.disabled = false;
+                            input.html('SAVE CHANGES');
                             return;
                         }
                         else{
@@ -476,6 +478,8 @@ $(document).ready(function(){
                     success: function(data){
                         if(data == 0){
                             swal('Password Incorrect!', 'Please try again', 'error');
+                            button.disabled = false;
+                            input.html('SAVE CHANGES');
                             return;
                         }
                         else{
@@ -540,6 +544,8 @@ $(document).ready(function(){
                     success: function(data){
                         if(data == 0){
                             swal('Password Incorrect!', 'Please try again', 'error');
+                            button.disabled = false;
+                            input.html('SAVE CHANGES');
                             return;
                         }
                         else{
