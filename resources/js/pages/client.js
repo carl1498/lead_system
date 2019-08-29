@@ -383,12 +383,6 @@ $(document).ready(function(){
     $(document).on('submit', '#client_form', function(e){
         e.preventDefault();
 
-        var input = $('.save_client');
-        var button = document.getElementsByClassName("save_client")[0];
-
-        button.disabled = true;
-        input.html('SAVING...');
-
         swal.fire({
             title: 'Confirm User',
             text: 'For security purposes, input your password again.',
@@ -410,8 +404,6 @@ $(document).ready(function(){
                     success: function(data){
                         if(data == 0){
                             swal('Password Incorrect!', 'Please try again', 'error');
-                            button.disabled = false;
-                            input.html('SAVE CHANGES');
                             return;
                         }
                         else{
@@ -431,14 +423,10 @@ $(document).ready(function(){
                                     else{
                                         $('#client_modal').modal('hide')
                                     }
-                                    button.disabled = false;
-                                    input.html('SAVE CHANGES');
                                     refresh();
                                 },
                                 error: function(data){
                                     swal("Error!", "Something went wrong, try again.", "error");
-                                    button.disabled = false;
-                                    input.html('SAVE CHANGES');
                                 }
                             });
                         }
@@ -450,12 +438,6 @@ $(document).ready(function(){
 
     $(document).on('submit', '#client_pic_form', function(e){
         e.preventDefault();
-
-        var input = $('.save_client_pic');
-        var button = document.getElementsByClassName("save_client_pic")[0];
-
-        button.disabled = true;
-        input.html('SAVING...');
 
         swal.fire({
             title: 'Confirm User',
@@ -478,8 +460,6 @@ $(document).ready(function(){
                     success: function(data){
                         if(data == 0){
                             swal('Password Incorrect!', 'Please try again', 'error');
-                            button.disabled = false;
-                            input.html('SAVE CHANGES');
                             return;
                         }
                         else{
@@ -495,14 +475,10 @@ $(document).ready(function(){
                                     $('#client_pic_modal').modal('hide');
                                     setTimeout(function(){$('#client_view_pic_modal').modal('show')}, 500);
                                     refresh_pic_table(data);
-                                    button.disabled = false;
-                                    input.html('SAVE CHANGES');
                                     refresh();
                                 },
                                 error: function(data){
                                     swal("Error!", "Something went wrong, try again.", "error");
-                                    button.disabled = false;
-                                    input.html('SAVE CHANGES');
                                 }
                             });
                         }
@@ -516,12 +492,6 @@ $(document).ready(function(){
 
     $(document).on('submit', '#client_bank_form', function(e){
         e.preventDefault();
-
-        var input = $('.save_client_bank');
-        var button = document.getElementsByClassName("save_client_bank")[0];
-
-        button.disabled = true;
-        input.html('SAVING...');
 
         swal.fire({
             title: 'Confirm User',
@@ -544,8 +514,6 @@ $(document).ready(function(){
                     success: function(data){
                         if(data == 0){
                             swal('Password Incorrect!', 'Please try again', 'error');
-                            button.disabled = false;
-                            input.html('SAVE CHANGES');
                             return;
                         }
                         else{
@@ -559,14 +527,10 @@ $(document).ready(function(){
                                 success:function(data){
                                     notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
                                     $('#client_bank_modal').modal('hide');
-                                    button.disabled = false;
-                                    input.html('SAVE CHANGES');
                                     refresh();
                                 },
                                 error: function(data){
                                     swal("Error!", "Something went wrong, try again.", "error");
-                                    button.disabled = false;
-                                    input.html('SAVE CHANGES');
                                 }
                             });
                         }
