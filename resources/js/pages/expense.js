@@ -7,6 +7,11 @@ $(document).ready(function(){
     var branch = 'All';
     var company = 'All';
 
+    $(".datepicker").datepicker({
+        format: 'yyyy-mm-dd',
+        forceParse: false
+    });
+    
     $('.select2').select2();
 
     $('input, select').attr('autocomplete', 'off');
