@@ -30,6 +30,7 @@
                     <li class="disabled client_pick"><a class="client_pick" href="#client_tab" data-toggle="tab">Medical Facility</a></li>
                     <li class="disabled client_pick"><a class="client_pick" href="#client_tab" data-toggle="tab">Manpower Agency</a></li>
                     <li class="disabled client_pick"><a class="client_pick" href="#client_tab" data-toggle="tab">Benefactor</a></li>
+                    <li class="disabled client_pick"><a class="client_pick" href="#client_tab" data-toggle="tab">FTS</a></li>
                 </ul>
 
                 <div class="tab-content">
