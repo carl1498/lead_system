@@ -82,10 +82,17 @@
 				@endif
 
 				@if(canAccessAll() || canAccessClient())
-				<li class="{{ (Request::path() == 'client') ? 'active' : '' }}">
-					<a href="/client" >
-						<i class="fa fa-user-tie"></i> <span>Clients</span>
+                <li class="{{ (Request::path() == 'client' || Request::path() == 'order') ? 'active' : '' }} treeview">
+					<a href="">
+						<i class="fa fa-building"></i> <span>Clients</span>
+						<span class="pull-right-container">
+							<i class="fa fa-angle-left pull-right"></i>
+						</span>
 					</a>
+					<ul class="treeview-menu">
+						<li class="{{ (Request::path() == 'client') ? 'active' : '' }}"><a href="/client"><i class="fa fa-user-tie"></i> Client List</a></li>
+						<li class="{{ (Request::path() == 'order') ? 'active' : '' }}"><a href="/order"><i class="fa fa-hand-holding"></i> Orders</a></li>
+					</ul>
 				</li>
 				@endif
 

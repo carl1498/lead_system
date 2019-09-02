@@ -14,6 +14,10 @@ $(document).ready(function(){
         trigger : 'hover'
     });
 
+    $('[data-toggle="tooltip"]').click(function () {
+        $('[data-toggle="tooltip"]').tooltip("hide");
+    });
+
     $("#client_modal").on("hidden.bs.modal", function(e){
         client_modal_clear();
         $('#client_continuous').bootstrapToggle('off');
@@ -67,7 +71,9 @@ $(document).ready(function(){
     function refresh(){
         disableTabs();
         refresh_client_table();
-        $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
+        setTimeout(function(){
+            $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
+        }, 1000);
     }
     
     $('.refresh_table').on('click', function(){

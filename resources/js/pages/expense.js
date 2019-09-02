@@ -366,7 +366,7 @@ $(document).ready(function(){
                 $('#expense_type_name').val(data.name);
                 $('#expense_type_modal').modal('show');
             }
-        })
+        });
     });
 
     $(document).on('click', '.edit_expense_particular', function(){
