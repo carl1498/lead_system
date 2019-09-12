@@ -42,8 +42,10 @@ class orderController extends Controller
         ->addColumn('action', function($data){
             $html = '';
 
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-primary btn-xs edit_order" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_order" id="'.$data->id.'"><i class="fa fa-trash"></i></button>&nbsp;';
+            if(canAccessAll()){
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-primary btn-xs edit_order" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_order" id="'.$data->id.'"><i class="fa fa-trash"></i></button>&nbsp;';
+            }
             
             return $html;
         })

@@ -305,13 +305,18 @@ Route::group(['middleware' => ['auth', 'client']], function(){
     Route::get('/get_bank/{id}', 'clientController@get_bank');
     Route::get('/delete_client', 'clientController@delete_client');
     Route::get('/delete_pic', 'clientController@delete_pic');
+});
 
+Route::group(['middleware' => ['auth', 'order']], function(){
     Route::get('/order', 'orderController@index');
     Route::get('/view_order', 'orderController@view_order');
     Route::get('/get_order/{id}', 'orderController@get_order');
     Route::get('/clientAll', 'orderController@clientAll');
-    Route::post('/save_order', 'orderController@save_order');
-    Route::get('/delete_order', 'orderController@delete_order');
+    
+    Route::group(['middleware' => ['admin']], function(){
+        Route::get('/delete_order', 'orderController@delete_order');
+        Route::post('/save_order', 'orderController@save_order');
+    });
 });
 
 //CLIENT ROUTES -- END
