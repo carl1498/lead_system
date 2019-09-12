@@ -24,5 +24,20 @@ class tuitionController extends Controller
 
     public function view_tf_program(){
         $program = program::all();
+
+        return Datatables::of($program)
+        ->addColumn('total', function($data){
+            $tf_projected = tf_projected::where('program_id', $data->id)->sum('amount');
+
+            return $tf_projected;
+        })
+        ->addColumn('action', function($data){
+            $html = '';
+
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Projected Expense" class="btn btn-warning btn-sm projection" id="'.$data->id.'"><i class="fa fa-clipboard-list"></i></button>&nbsp;';
+
+            return $html;
+        })
+        ->make(true);
     }
 }

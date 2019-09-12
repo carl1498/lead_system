@@ -45,11 +45,10 @@ $(document).ready(function(){
     function refresh_program_table(){
         $('#program_table').DataTable({
             initComplete: function(settings, json) {
-                enableTabs();
+                //enableTabs();
             },
             processing: true,
             destroy: true,
-            scrollX: true,
             scrollCollapse: true,
             responsive: true,
             ajax: {
@@ -69,6 +68,11 @@ $(document).ready(function(){
     //DATATABLES -- END
 
     //FUNCTIONS -- START
+
+    $('.student_pick, .tuition_sec_pick, .program_pick').on('click', function(){
+        refresh_program_table();
+        $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
+    });
     
     //FUNCTIONS -- END
 });
