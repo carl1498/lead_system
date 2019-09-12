@@ -34,10 +34,14 @@ class tuitionController extends Controller
         ->addColumn('action', function($data){
             $html = '';
 
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Projected Expense" class="btn btn-warning btn-sm projection" id="'.$data->id.'"><i class="fa fa-clipboard-list"></i></button>&nbsp;';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Projected Expense" class="btn btn-success btn-sm projection" id="'.$data->id.'"><i class="fa fa-list-alt" style="font-size: 15px;"></i></button>&nbsp;';
 
             return $html;
         })
         ->make(true);
+    }
+
+    public function save_projection(Request $request){
+        info($request);
     }
 }

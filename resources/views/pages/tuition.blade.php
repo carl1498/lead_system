@@ -44,6 +44,7 @@
 
     <!-- MODALS -- START -->
     
+    @include('includes.modals.tuition_modals.projection_modal')
 
     <!-- MODALS -- END -->
 

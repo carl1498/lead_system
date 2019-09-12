@@ -8,6 +8,17 @@ $(document).ready(function(){
     });
 
     $('.select2').select2();
+
+    $('body').tooltip({
+        selector: '[data-toggle="tooltip"]',
+        trigger : 'hover'
+    });
+
+    $('[data-toggle="tooltip"]').click(function () {
+        $('[data-toggle="tooltip"]').tooltip("hide");
+    });
+    
+    $('input, select').attr('autocomplete', 'off');
     
     //INITIALIZE -- END
 
@@ -73,6 +84,28 @@ $(document).ready(function(){
         refresh_program_table();
         $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
     });
+
+    $(document).on('click', '.projection', function(){
+        console.log('mao ni');
+        $('#projection_modal').modal('toggle');
+        $('#projection_modal').modal('show');
+    })
+
+    $(document).on('submit', '#projection_form', function(e){
+        e.preventDefault();
+
+        $.ajax({
+            headers: {
+                'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: '/save_projection',
+            method: 'POST',
+            data: $(this).serialize(),
+            success:function(data){
+               
+            },
+        });
+    })
     
     //FUNCTIONS -- END
 });
