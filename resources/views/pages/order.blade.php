@@ -31,7 +31,7 @@
                     <li class="disabled order_pick active"><a class="order_pick" href="#order_tab" data-toggle="tab">Student</a></li>
                     <li class="disabled order_pick"><a class="order_pick" href="#order_tab" data-toggle="tab">SSW</a></li>
                     <li class="disabled order_pick"><a class="order_pick" href="#order_tab" data-toggle="tab">Internship</a></li>
-                    <li class="disabled order_pick"><a class="order_pick" href="#order_tab" data-toggle="tab">EMI</a></li>
+                    <li class="disabled order_pick"><a class="order_pick" href="#order_tab" data-toggle="tab">EHI</a></li>
                     <li class="disabled order_pick"><a class="order_pick" href="#order_tab" data-toggle="tab">TITP</a></li>
                     <li class="disabled order_pick"><a class="order_pick" href="#order_tab" data-toggle="tab">Others</a></li>
                 </ul>
