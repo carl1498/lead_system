@@ -40,7 +40,7 @@
                             <thead>
                                 <th>Name</th>
                                 <th>Address</th>
-                                <th>Contact</th>
+                                <th>Contact #</th>
                                 <th>Email</th>
                                 <th>Action</th>
                             </thead>

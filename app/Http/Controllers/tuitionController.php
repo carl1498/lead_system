@@ -24,6 +24,5 @@ class tuitionController extends Controller
 
     public function view_tf_program(){
         $program = program::all();
-
     }
 }

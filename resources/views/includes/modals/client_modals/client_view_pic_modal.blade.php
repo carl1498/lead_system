@@ -16,7 +16,7 @@
                         <tr>
                             <th>Name</th>
                             <th>Position</th>
-                            <th>Contact</th>
+                            <th>Contact #</th>
                             <th>Email</th>
                             <th>Action</th>
                         </tr>
