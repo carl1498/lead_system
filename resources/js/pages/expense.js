@@ -170,7 +170,10 @@ $(document).ready(function(){
                 {data: 'remarks', name: 'remarks'},
                 {data: 'action', orderable: false, searchable: false}
             ],
-            columnDefs: [{defaultContent: "", targets: "_all"}],
+            columnDefs: [
+                {defaultContent: "", targets: "_all"},
+                {className: "text-right", targets: [5, 7]}
+            ],
             order: [4, 'desc'],
             footerCallback: function ( row, data, start, end, display ) {
                 var api = this.api(), data;
@@ -262,7 +265,10 @@ $(document).ready(function(){
                 {data: 'total', name: 'total'},
                 {data: 'action', orderable: false, searchable: false}
             ],
-            columnDefs: [{defaultContent: "", targets: "_all"}],
+            columnDefs: [
+                {defaultContent: "", targets: "_all"},
+                {className: "text-right", targets: 1}
+            ],
             footerCallback: function ( row, data, start, end, display ) {
                 var api = this.api(), data;
      
@@ -845,7 +851,7 @@ $(document).ready(function(){
                 for(let x = 0; x < data.expense.length; x++){
                     let particular = '';
                     for(let y = 0; y < data.expense_type.length; y++){
-                        particular += '<td>' + data.expense_particular_type_total[x][y] + '</td>';
+                        particular += '<td style="text-align:right;">' + data.expense_particular_type_total[x][y] + '</td>';
                     }
                     html += '<tr>'+
                         '<td>' + data.expense[x].date + '</td>'+
@@ -853,10 +859,10 @@ $(document).ready(function(){
                         '<td>' + data.expense[x].particular.name + '</td>'+
                         '<td>' + ((data.expense[x].particular.tin) ? data.expense[x].particular.tin : '') + '</td>'+
                         '<td>' + ((data.expense[x].particular.address) ? data.expense[x].particular.address : '') + '</td>'+
-                        '<td>' + data.expense[x].total_invoice + '</td>'+
-                        '<td>' + data.expense[x].non_vat_total + '</td>'+
-                        '<td>' + data.expense[x].vat_total + '</td>'+
-                        '<td>' + data.expense[x].input_tax_total + '</td>'
+                        '<td style="text-align:right;">' + data.expense[x].total_invoice + '</td>'+
+                        '<td style="text-align:right;">' + data.expense[x].non_vat_total + '</td>'+
+                        '<td style="text-align:right;">' + data.expense[x].vat_total + '</td>'+
+                        '<td style="text-align:right;">' + data.expense[x].input_tax_total + '</td>'
                         +particular+
                     '</tr>';
                 }
