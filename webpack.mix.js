@@ -25,5 +25,6 @@ mix.js('resources/js/app.js', 'public/js')
    .js('resources/js/pages/expense.js', 'public/js/pages')
    .js('resources/js/pages/client.js', 'public/js/pages')
    .js('resources/js/pages/order.js', 'public/js/pages')
+   .js('resources/js/pages/tuition.js', 'public/js/pages')
    .sass('resources/sass/app.scss', 'public/css')
    .version();

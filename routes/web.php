@@ -281,6 +281,13 @@ Route::group(['middleware' => ['auth', 'expense']], function(){
     });
 });
 
+//Tuition Fee
+
+Route::group(['middleware' => ['auth', 'admin']], function(){
+    Route::get('/tuition', 'tuitionController@index');
+    Route::get('/view_tf_program', 'tuitionController@view_tf_program');
+});
+
 //FINANCE ROUTES -- END
 
 //CLIENT ROUTES -- START
