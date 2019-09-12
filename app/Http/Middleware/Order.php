@@ -20,7 +20,8 @@ class Order
         $id = Auth::user()->id;
         $user = User::with('employee.role')->find($id);
         $authorized = ['President', 'Finance Director', 'HR/Finance Head', 'IT Officer', 
-                        'Assistant Finance Officer', 'Marketing Officer', 'Marketing Head'];
+                        'Assistant Finance Officer', 'Marketing Officer', 'Marketing Head',
+                        'Branch Manager', 'OIC'];
 
         foreach($authorized as $auth){
             if($user->employee->role->name == $auth && $user->employee->employment_status != 'Resigned'){

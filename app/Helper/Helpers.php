@@ -252,7 +252,7 @@ function canAccessOrder(){
     $id = Auth::user()->id;
     $user = \App\User::with('employee.role')->find($id);
     $authorized = ['President', 'Finance Director', 'HR/Finance Head', 'IT Officer', 'HR/Finance Officer', 
-                'Assistant Finance Officer', 'Marketing Officer', 'Marketing Head'];
+                'Assistant Finance Officer', 'Marketing Officer', 'Marketing Head', 'Branch Manager', 'OIC'];
 
     foreach($authorized as $auth){
         if($user->employee->role->name == $auth){
