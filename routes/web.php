@@ -286,6 +286,7 @@ Route::group(['middleware' => ['auth', 'expense']], function(){
 Route::group(['middleware' => ['auth', 'admin']], function(){
     Route::get('/tuition', 'tuitionController@index');
     Route::get('/view_tf_program', 'tuitionController@view_tf_program');
+    Route::get('/get_tf_projected/{id}', 'tuitionController@get_tf_projected');
     Route::post('/save_projection', 'tuitionController@save_projection');
 });
 

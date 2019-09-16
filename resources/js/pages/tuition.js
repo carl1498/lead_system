@@ -19,6 +19,14 @@ $(document).ready(function(){
     });
     
     $('input, select').attr('autocomplete', 'off');
+
+    $("#projection_modal").on("hidden.bs.modal", function(e){
+        $('#projection_form :input.required').each(function (){
+            this.style.setProperty('border-color', 'green', 'important');
+        });
+        $(this).find("input,textarea,select").val('').end();
+        $('.select2').trigger('change.select2');
+    });
     
     //INITIALIZE -- END
 
@@ -86,10 +94,34 @@ $(document).ready(function(){
     });
 
     $(document).on('click', '.projection', function(){
-        console.log('mao ni');
+        let id = $(this).attr('id');
+
+        $('#prog_id').val(id);
+
+        $.ajax({
+            url: '/get_tf_projected/'+id,
+            method: 'get',
+            dataType: 'json',
+            success:function(data){
+                for(let x = 0; x < data.tf_name_list.length; x++){
+                    $($('.proj_name_id')[x]).val(data.tf_name_list[x]);
+                    if(data.tf_projected.count != 0){
+                        for(let y = 0; y < data.tf_projected.length; y++){
+                            if(data.tf_name_list[x] == data.tf_projected[y].tf_name_id){
+                                $($('.proj_amount')[x]).val(data.tf_projected[y].amount);
+                                $($('.proj_date')[x]).val(data.tf_projected[y].date_of_payment);
+                                $($('.proj_remarks')[x]).val(data.tf_projected[y].remarks);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
         $('#projection_modal').modal('toggle');
         $('#projection_modal').modal('show');
-    })
+    });
 
     $(document).on('submit', '#projection_form', function(e){
         e.preventDefault();
@@ -102,10 +134,12 @@ $(document).ready(function(){
             method: 'POST',
             data: $(this).serialize(),
             success:function(data){
-               
+                notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
+                $('#projection_modal').modal('hide');
+                refresh_program_table();
             },
         });
-    })
+    });
     
     //FUNCTIONS -- END
 });
