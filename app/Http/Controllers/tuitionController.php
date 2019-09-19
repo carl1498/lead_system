@@ -9,6 +9,8 @@ use App\tf_payment;
 use App\tf_projected;
 use App\tf_student;
 use App\program;
+use App\student;
+use App\class_students;
 use Yajra\Datatables\Datatables;
 
 class tuitionController extends Controller
@@ -41,6 +43,50 @@ class tuitionController extends Controller
         ->make(true);
     }
 
+    public function view_tf_student(){
+        $tf_student = tf_student::with('student.program')->get();
+
+        return Datatables::of($tf_student)
+        ->addColumn('name', function($data){
+            return $data->student->lname . ', ' . $data->student->fname . ' ' . $data->student->mname;
+        })
+        ->editColumn('balance', function($data){
+            $tf_payment = tf_payment::where('tf_stud_id', $data->stud_id)->sum('amount');
+
+            return $data->balance - $tf_payment;
+        })
+        ->addColumn('sec_bond', function($data){
+            return sec_bond::where('tf_stud_id', $data->stud_id)->sum('amount');
+        })
+        ->addColumn('class', function($data){
+            $class_students = class_students::with('student', 'current_class.sensei')->where('stud_id', $data->id)
+                ->orderBy('id', 'desc')->first();
+
+            $html = '';
+
+            if($class_students){
+                if($class_students->end_date && $class_students->student->status != 'Back Out'){
+                    $html .= 'Complete ';
+                }
+                else if($class_students->end_date && $class_students->student->status == 'Back Out'){
+                    $html .= 'Back Out ';
+                }
+                else{
+                    $html .= 'Active ';
+                }
+
+                $html .= '(' . $class_students->current_class->sensei->fname . ')';
+                return $html;
+            }else{
+                return 'N/A';
+            }
+        })
+        ->addColumn('action', function($data){
+            return '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Student" class="btn btn-warning btn-sm view_student_tuition" id="'.$data->id.'"><i class="fa fa-list-alt" style="font-size: 15px;"></i></button>&nbsp;';
+        })
+        ->make(true);
+    }
+
     public function get_tf_projected(Request $request){
         $tf_name_list = [1, 2, 3, 4, 5, 6];
         $tf_projected = tf_projected::where('program_id', $request->id)->get();
@@ -48,6 +94,23 @@ class tuitionController extends Controller
         $output = array(
             'tf_name_list' => $tf_name_list,
             'tf_projected' => $tf_projected,
+        );
+
+        echo json_encode($output);
+    }
+
+    public function get_tf_student(Request $request){
+        $tf_student = tf_student::with('student')->find($request->id);
+        
+        $tf_payment = tf_payment::where('tf_stud_id', $tf_student->stud_id)->sum('amount');
+        $tf_payment = $tf_student->balance - $tf_payment;
+
+        $sec_bond = sec_bond::where('tf_stud_id', $tf_student->stud_id)->sum('amount');
+
+        $output = array(
+            'tf_student' => $tf_student,
+            'tf_payment' => $tf_payment,
+            'sec_bond' => $sec_bond,
         );
 
         echo json_encode($output);
@@ -89,5 +152,70 @@ class tuitionController extends Controller
                 $tf_project_temp->save();
             }
         }
+    }
+
+    public function save_tf_student(Request $request){
+        $stud_id = $request->student;
+        $balance = $request->balance;
+        info($request);
+
+        $tf_student = new tf_student;
+        $tf_student->stud_id = $stud_id;
+        $tf_student->balance = $balance;
+        $tf_student->save();
+    }
+
+    public function t_get_student(Request $request){
+        $tf_student = tf_student::pluck('stud_id');
+
+        $student = student::with('program')->where('fname', 'LIKE', '%'.$request->name.'%')
+        ->orWhere('lname', 'LIKE', '%'.$request->name.'%')->get();
+
+        $student = $student->whereNotIn('id', $tf_student);
+
+        $array = [];
+        foreach ($student as $key => $value){
+            $array[] = [
+                'id' => $value['id'],
+                'text' => $value['fname'].' '.$value['lname'].' ('.$value['program']['name'].')'
+            ];
+        }
+        return json_encode(['results' => $array]);
+    }
+
+    public function get_balance_class(Request $request){
+        $id = $request->id;
+
+        $student = student::find($id);
+
+        $balance = tf_projected::where('program_id', $student->program_id)->sum('amount');
+        
+        $class = class_students::with('student', 'current_class.sensei')->where('stud_id', $id)
+        ->orderBy('id', 'desc')->first();
+
+        if($class){
+            $html = '';
+            if($class->end_date && $class->student->status != 'Back Out'){
+                $html .= 'Complete ';
+            }
+            else if($class->end_date && $class->student->status == 'Back Out'){
+                $html .= 'Back Out ';
+            }
+            else{
+                $html .= 'Active ';
+            }
+
+            $class = $html . '(' . $class->current_class->sensei->fname . ')';
+        }else{
+            $class = 'N/A';
+        }
+
+        
+        $output = array(
+            'balance' => $balance,
+            'class' => $class
+        );
+
+        return json_encode($output);
     }
 }

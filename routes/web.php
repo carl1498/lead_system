@@ -286,8 +286,14 @@ Route::group(['middleware' => ['auth', 'expense']], function(){
 Route::group(['middleware' => ['auth', 'admin']], function(){
     Route::get('/tuition', 'tuitionController@index');
     Route::get('/view_tf_program', 'tuitionController@view_tf_program');
+    Route::get('/view_tf_student', 'tuitionController@view_tf_student');
     Route::get('/get_tf_projected/{id}', 'tuitionController@get_tf_projected');
     Route::post('/save_projection', 'tuitionController@save_projection');
+    Route::post('/save_tf_student', 'tuitionController@save_tf_student');
+
+    Route::get('/t_get_student', 'tuitionController@t_get_student');
+    Route::get('/get_balance_class/{id}', 'tuitionController@get_balance_class');
+    Route::get('/get_tf_student/{id}', 'tuitionController@get_tf_student');
 });
 
 //FINANCE ROUTES -- END

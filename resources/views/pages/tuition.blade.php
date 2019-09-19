@@ -11,8 +11,14 @@
             <button data-container="body" data-toggle="tooltip" data-placement="left" title="Refresh Table" class="btn btn-secondary bg-red refresh_table" disabled>
                 <i class="fa fa-sync"></i>
             </button>
-            <button data-container="body" data-toggle="tooltip" data-placement="left" title="Add"  class="btn btn-secondary bg-red add_student">
+            <button data-container="body" data-toggle="tooltip" data-placement="left" title="Add Student"  class="btn btn-secondary bg-red add_student">
                 <i class="fa fa-user-plus"></i>
+            </button>
+            <button data-container="body" data-toggle="tooltip" data-placement="left" title="Security Bond Payment"  class="btn btn-secondary bg-red sb_payment">
+                <i class="fa fa-shield-alt"></i>
+            </button>
+            <button data-container="body" data-toggle="tooltip" data-placement="left" title="Tuition Fee Payment"  class="btn btn-secondary bg-red tf_payment">
+                <i class="fa fa-money-check-alt"></i>
             </button>
         </li>
     </ol>
@@ -45,6 +51,8 @@
     <!-- MODALS -- START -->
     
     @include('includes.modals.tuition_modals.projection_modal')
+    @include('includes.modals.tuition_modals.add_student_modal')
+    @include('includes.modals.tuition_modals.student_tuition_modal')
 
     <!-- MODALS -- END -->
 

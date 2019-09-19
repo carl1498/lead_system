@@ -700,7 +700,7 @@ $(document).ready(function(){
                     add_edit_init();
                 }
                 else{
-                    $('#student_modal').modal('hide')
+                    $('#student_modal').modal('hide');
                 }
                 notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
                 button.disabled = false;
