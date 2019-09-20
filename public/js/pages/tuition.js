@@ -115,6 +115,21 @@ $(document).ready(function () {
 
     $('#add_student_continuous').bootstrapToggle('off');
 
+    $("#tf_sb_payment_modal").on("hidden.bs.modal", function (e) {
+        tf_sb_payment_clear();
+        $('#tf_sb_payment_continuous').bootstrapToggle('off');
+    });
+
+    function tf_sb_payment_clear() {
+        $('#tf_sb_payment_form :input.required').each(function () {
+            this.style.setProperty('border-color', 'green', 'important');
+        });
+        $('#tf_sb_payment_form').find("input,textarea,select").val('').end();
+        $('.select2').trigger('change.select2');
+    }
+
+    $('#tf_sb_payment_continuous').bootstrapToggle('off');
+
     function disableTabs() {
         $('li.student_pick, li.tuition_sec_pick, li.program_pick').addClass('disabled').css('cursor', 'not-allowed');
 
@@ -136,9 +151,10 @@ $(document).ready(function () {
 
         if (current_tab == 'Student') {
             refresh_student_table();
-        } else {
-            console.log('mao ni');
+        } else if (current_tab == 'Programs') {
             refresh_program_table();
+        } else {
+            refresh_tuition_sec_table();
         }
 
         setTimeout(function () {
@@ -166,6 +182,28 @@ $(document).ready(function () {
             },
             columns: [{ data: 'name', name: 'name' }, { data: 'student.program.name', name: 'program' }, { data: 'student.contact', name: 'contact' }, { data: 'balance', name: 'balance' }, { data: 'sec_bond', name: 'sec_bond' }, { data: 'class', name: 'class' }, { data: 'student.status', name: 'status' }, { data: 'action', orderable: false, searchable: false }],
             columnDefs: [{ defaultContent: "", targets: "_all" }]
+        });
+    }
+
+    function refresh_tuition_sec_table() {
+        $('#tuition_sec_table').DataTable({
+            initComplete: function initComplete(settings, json) {
+                enableTabs();
+            },
+            processing: true,
+            destroy: true,
+            scrollX: true,
+            scrollCollapse: true,
+            responsive: true,
+            ajax: {
+                url: '/view_tuition_sec',
+                data: {
+                    current_tab: current_tab
+                }
+            },
+            columns: [{ data: 'name', name: 'name' }, { data: 'student.student.program.name', name: 'program' }, { data: 'class', name: 'class' }, { data: 'amount', name: 'amount' }, { data: 'date', name: 'date' }, { data: 'action', orderable: false, searchable: false }],
+            columnDefs: [{ defaultContent: "", targets: "_all" }],
+            order: [4, 'desc']
         });
     }
 
@@ -209,11 +247,29 @@ $(document).ready(function () {
         $('#add_student_modal').modal('show');
     });
 
+    $(document).on('click', '.sb_payment', function () {
+        $('#tf_sb_payment_modal .modal-title').text('Security Bond Payment');
+        $('#add_edit').val('add');
+        $('#p_type').val('sec_bond');
+
+        $('#tf_sb_payment_modal').modal('toggle');
+        $('#tf_sb_payment_modal').modal('show');
+    });
+
+    $(document).on('click', '.tf_payment', function () {
+        $('#tf_sb_payment_modal .modal-title').text('Tuition Fee Payment');
+        $('#add_edit').val('add');
+        $('#p_type').val('tuition');
+
+        $('#tf_sb_payment_modal').modal('toggle');
+        $('#tf_sb_payment_modal').modal('show');
+    });
+
     $(document).on('click', '.view_student_tuition', function () {
         var id = $(this).attr('id');
 
         $.ajax({
-            url: '/get_tf_student/' + id,
+            url: '/get_student_tuition/' + id,
             method: 'get',
             dataType: 'JSON',
             success: function success(data) {
@@ -306,11 +362,45 @@ $(document).ready(function () {
             data: $(this).serialize(),
             success: function success(data) {
                 notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
-                $('#add_student_modal').modal('hide');
                 if ($('#add_student_continuous').is(':checked')) {
                     add_student_modal_clear();
                 } else {
                     $('#add_student_modal').modal('hide');
+                }
+                refresh();
+                button.disabled = false;
+                input.html('SAVE CHANGES');
+            },
+            error: function error(data) {
+                swal("Error!", "Something went wrong, try again.", "error");
+                button.disabled = false;
+                input.html('SAVE CHANGES');
+            }
+        });
+    });
+
+    $(document).on('submit', '#tf_sb_payment_form', function (e) {
+        e.preventDefault();
+
+        var input = $('.save_tf_sb_payment');
+        var button = document.getElementsByClassName("save_tf_sb_payment")[0];
+
+        button.disabled = true;
+        input.html('SAVING...');
+
+        $.ajax({
+            headers: {
+                'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: '/save_tf_sb_payment',
+            method: 'POST',
+            data: $(this).serialize(),
+            success: function success(data) {
+                notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
+                if ($('#tf_sb_payment_continuous').is(':checked')) {
+                    add_student_modal_clear();
+                } else {
+                    $('#tf_sb_payment_modal').modal('hide');
                 }
                 refresh();
                 button.disabled = false;
@@ -345,12 +435,72 @@ $(document).ready(function () {
         }
     });
 
+    $('#p_student').on('change', function () {
+        var id = $(this).val();
+
+        if ($(this).val() != null) {
+            $.ajax({
+                url: '/get_student_tuition/' + id,
+                method: 'get',
+                dataType: 'JSON',
+                success: function success(data) {
+                    if ($('#p_type').val() == 'tuition') {
+                        $('#current').val(data.tf_payment);
+                        $('#total').val(data.tf_payment);
+                    } else if ($('#p_type').val() == 'sec_bond') {
+                        $('#current').val(data.sec_bond);
+                        $('#total').val(data.sec_bond);
+                    }
+                    $('#p_amount').attr('readonly', false);
+                }
+            });
+        } else {
+            $('#current').val('');
+            $('#total').val('');
+            $('#p_amount').val('');
+            $('#p_amount').attr('readonly', true);
+            $('#date').val('');
+            $('#remarks').val('');
+        }
+    });
+
+    $('#p_amount').on('keyup', function () {
+        if ($('#p_type').val() == 'tuition') {
+            $('#total').val(parseFloat($('#current').val()) - parseFloat($(this).val()));
+        } else if ($('#p_type').val() == 'sec_bond') {
+            $('#total').val(parseFloat($('#current').val()) + parseFloat($(this).val()));
+        }
+    });
+
     //Student Select
     $('#student').select2({
         allowClear: true,
         placeholder: 'Select Student',
         ajax: {
             url: "/t_get_student",
+            dataType: 'json',
+
+            data: function data(params) {
+                return {
+                    name: params.term,
+                    page: params.page
+                };
+            },
+
+            processResults: function processResults(data) {
+                return {
+                    results: data.results
+                };
+            }
+        }
+    });
+
+    //Student Select TF SB
+    $('#p_student').select2({
+        allowClear: true,
+        placeholder: 'Select Student',
+        ajax: {
+            url: "/get_tf_student",
             dataType: 'json',
 
             data: function data(params) {
