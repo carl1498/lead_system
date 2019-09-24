@@ -288,6 +288,8 @@ Route::group(['middleware' => ['auth', 'admin']], function(){
     Route::get('/view_tf_program', 'tuitionController@view_tf_program');
     Route::get('/view_tf_student', 'tuitionController@view_tf_student');
     Route::get('/view_tuition_sec', 'tuitionController@view_tuition_sec');
+    Route::get('/view_tuition_fee/{id}', 'tuitionController@view_tuition_fee');
+    Route::get('/view_sec_bond/{id}', 'tuitionController@view_sec_bond');
     Route::get('/get_tf_projected/{id}', 'tuitionController@get_tf_projected');
     Route::post('/save_projection', 'tuitionController@save_projection');
     Route::post('/save_tf_student', 'tuitionController@save_tf_student');
@@ -297,6 +299,8 @@ Route::group(['middleware' => ['auth', 'admin']], function(){
     Route::get('/get_tf_student', 'tuitionController@get_tf_student');
     Route::get('/get_balance_class/{id}', 'tuitionController@get_balance_class');
     Route::get('/get_student_tuition/{id}', 'tuitionController@get_student_tuition');
+
+    Route::get('/get_tf_payment/{id}', 'tuitionController@get_tf_payment');
 });
 
 //FINANCE ROUTES -- END

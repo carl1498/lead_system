@@ -484,6 +484,7 @@ $(document).ready(function(){
                     html += `
                     <li class="list-group-item class_pick" id="`+data.class_settings[x].id+`">
                         <p class="class_get_id" style="word-wrap: break-word;">`+
+                            `Class ID: ` + data.class_settings[x].id + ` | ` +
                             data.class_settings[x].start_date + ' ~ ' + ((data.class_settings[x].end_date) ? data.class_settings[x].end_date : 'TBD') + '<br>'+
                             '<b>' + data.class_settings[x].sensei.fname + ' ' + data.class_settings[x].sensei.lname + '</b><br>'+
                             '<span style="cursor:help;">' + days + '<br>' +

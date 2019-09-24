@@ -3,6 +3,7 @@ $(document).ready(function(){
     //INITIALIZE -- START
 
     var current_tab = 'Student';
+    var add_edit, p_type;
 
     $(".datepicker").datepicker({
         format: 'yyyy-mm-dd',
@@ -127,7 +128,10 @@ $(document).ready(function(){
                 {data: 'student.status', name: 'status'},
                 {data: 'action', orderable: false, searchable: false}
             ],
-            columnDefs: [{defaultContent: "", targets: "_all"}]
+            columnDefs: [
+                {defaultContent: "", targets: "_all"},
+                {className: "text-right", targets: [3,4]}
+            ],
         });
     }
 
@@ -155,7 +159,10 @@ $(document).ready(function(){
                 {data: 'date', name: 'date'},
                 {data: 'action', orderable: false, searchable: false}
             ],
-            columnDefs: [{defaultContent: "", targets: "_all"}],
+            columnDefs: [
+                {defaultContent: "", targets: "_all"},
+                {className: "text-right", targets: [3]}
+            ],
             order: [4, 'desc']
         });
     }
@@ -179,7 +186,62 @@ $(document).ready(function(){
                 {data: 'total', name: 'total'},
                 {data: 'action', orderable: false, searchable: false}
             ],
-            columnDefs: [{defaultContent: "", targets: "_all"}]
+            columnDefs: [
+                {defaultContent: "", targets: "_all"},
+                {className: "text-right", targets: [1]}
+            ],
+        });
+    }
+
+    function refresh_tuition_sec_bond_table(id){
+        $('#tuition_fee_table').DataTable({
+            paging: false,
+            info: false,
+            searching: false,
+            processing: true,
+            destroy: true,
+            scrollCollapse: true,
+            responsive: true,
+            ajax: {
+                url: '/view_tuition_fee/'+id,
+                data: {
+                }
+            },
+            columns: [
+                {data: 'amount', name: 'amount'},
+                {data: 'date', name: 'date'},
+                {data: 'action', orderable: false, searchable: false}
+            ],
+            columnDefs: [
+                {defaultContent: "", targets: "_all"},
+                {className: "text-right", targets: [0]}
+            ],
+            order: [1, 'desc']
+        });
+        
+        $('#sec_bond_table').DataTable({
+            paging: false,
+            info: false,
+            searching: false,
+            processing: true,
+            destroy: true,
+            scrollCollapse: true,
+            responsive: true,
+            ajax: {
+                url: '/view_sec_bond/'+id,
+                data: {
+                }
+            },
+            columns: [
+                {data: 'amount', name: 'amount'},
+                {data: 'date', name: 'date'},
+                {data: 'action', orderable: false, searchable: false}
+            ],
+            columnDefs: [
+                {defaultContent: "", targets: "_all"},
+                {className: "text-right", targets: [0]}
+            ],
+            order: [1, 'desc']
         });
     }
 
@@ -207,21 +269,49 @@ $(document).ready(function(){
 
     $(document).on('click', '.sb_payment', function(){
         $('#tf_sb_payment_modal .modal-title').text('Security Bond Payment');
-        $('#add_edit').val('add');
-        $('#p_type').val('sec_bond');
+        add_edit = 'add';
+        p_type = 'sec_bond';
+        add_edit_p_type(add_edit, p_type);
 
         $('#tf_sb_payment_modal').modal('toggle');
         $('#tf_sb_payment_modal').modal('show');
     });
 
     $(document).on('click', '.tf_payment', function(){
-        $('#tf_sb_payment_modal .modal-title').text('Tuition Fee Payment');
-        $('#add_edit').val('add');
-        $('#p_type').val('tuition');
+        tf_payment_init();
+    });
 
+    $(document).on('click', '.edit_tf_payment', function(){
+        let id = $(this).attr('id');
+
+        $.ajax({
+            url: '/get_tf_payment/'+id,
+            method: 'get',
+            dataType: 'json',
+            success:function(data){
+                $('#p_id').val(data.id);
+                $('#p_student').attr('disabled', true);
+                $('#p_student').val(data.tf_stud_id).trigger('change');
+                $('#p_amount').val(data.amount).trigger('change');
+            }
+        });
+
+        tf_payment_init();
+    });
+
+    function tf_payment_init(){
+        $('#tf_sb_payment_modal .modal-title').text('Tuition Fee Payment');
+        add_edit = 'edit';
+        p_type = 'tuition';
+        add_edit_p_type(add_edit, p_type);
         $('#tf_sb_payment_modal').modal('toggle');
         $('#tf_sb_payment_modal').modal('show');
-    });
+    }
+
+    function add_edit_p_type(add_edit, p_type){
+        $('#add_edit').val(add_edit);
+        $('#p_type').val(p_type);
+    }
 
     $(document).on('click', '.view_student_tuition', function(){
         let id = $(this).attr('id');
@@ -231,7 +321,9 @@ $(document).ready(function(){
             method: 'get',
             dataType: 'JSON',
             success:function(data){
+                refresh_tuition_sec_bond_table(data.tf_student.id);
                 $('#student_tuition_modal .modal-title').text(data.tf_student.student.fname + ' ' + data.tf_student.student.lname);
+                $('.current_class').text(data.class);
                 $('.tf_balance').text(data.tf_payment);
                 $('.tf_sb_total').text(data.sec_bond);
             }
@@ -357,7 +449,8 @@ $(document).ready(function(){
             success:function(data){
                 notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
                 if($('#tf_sb_payment_continuous').is(':checked')){
-                    add_student_modal_clear();
+                    tf_sb_payment_clear();
+                    add_edit_p_type(add_edit, p_type);
                 }
                 else{
                     $('#tf_sb_payment_modal').modal('hide')
@@ -407,27 +500,24 @@ $(document).ready(function(){
                 success:function(data){
                     if($('#p_type').val() == 'tuition'){
                         $('#current').val(data.tf_payment);
-                        $('#total').val(data.tf_payment);
+                        $('#total').val(($('#p_amount').val() != '') ? data.tf_payment - $('#p_amount').val() : data.tf_payment);
                     }
                     else if($('#p_type').val() == 'sec_bond'){
                         $('#current').val(data.sec_bond);
                         $('#total').val(data.sec_bond);
+                        $('#total').val(($('#p_amount').val() != '') ? data.sec_bond + $('#p_amount').val() : data.sec_bond);
                     }
                     $('#p_amount').attr('readonly', false);
                 }
             });
         }
         else{
-            $('#current').val('');
-            $('#total').val('');
-            $('#p_amount').val('');
+            $('#current, #total, #p_amount, #date, #remarks').val('');
             $('#p_amount').attr('readonly', true);
-            $('#date').val('');
-            $('#remarks').val('');
         }
     });
 
-    $('#p_amount').on('keyup', function(){
+    $('#p_amount').on('keyup change', function(){
         if($('#p_type').val() == 'tuition'){
             $('#total').val(parseFloat($('#current').val()) - parseFloat($(this).val()))
         }

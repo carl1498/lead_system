@@ -11,6 +11,10 @@
             </div>
             <div class="modal-body">
 
+                <h5 class="title_class">Class: <span class="current_class"></span></h5>
+
+                <br>
+
                 <h4 class="title_probationary">Tuition Fee - <span class="tf_balance"></span></h4>
 
                 <table id="tuition_fee_table" class="table table-hover table-striped table-bordered" cellspacing="0" width="100%">

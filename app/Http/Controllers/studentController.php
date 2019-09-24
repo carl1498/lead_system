@@ -1192,7 +1192,8 @@ class studentController extends Controller
     public function program_all(Request $request){
         $program = program::where('name', 'LIKE', '%'.$request->name.'%')
             ->where('name', '<>', 'Language Only')->where('name', '<>', 'SSW (Careworker)')
-            ->where('name', '<>', 'SSW (Hospitality)')->get()->toArray();
+            ->where('name', '<>', 'SSW (Hospitality)')->where('name', '<>', 'Trainee')
+            ->get()->toArray();
 
         $array = [];
         foreach ($program as $key => $value){

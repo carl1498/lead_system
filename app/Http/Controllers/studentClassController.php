@@ -39,8 +39,6 @@ class studentClassController extends Controller
         $class_students = class_students::with('student', 'student.program', 'student.departure_year',
             'student.departure_month')->where('class_settings_id', $current_class)->get();
 
-        info($class_students);
-
         return Datatables::of($class_students)
         ->addColumn('name', function($data){
             return $data->student->lname.', '.$data->student->fname.' '.$data->student->mname;
@@ -107,10 +105,10 @@ class studentClassController extends Controller
 
             $html = '';
 
-            if($class_students->end_date && $class_students->student->status != 'Back Out'){
+            if($class_students->current_class->end_date && $class_students->student->status != 'Back Out'){
                 $html .= 'Complete ';
             }
-            else if($class_students->end_date && $class_students->student->status == 'Back Out'){
+            else if($class_students->current_class->end_date && $class_students->student->status == 'Back Out'){
                 $html .= 'Back Out ';
             }
             else{
@@ -166,17 +164,17 @@ class studentClassController extends Controller
             $html = '';
 
             if($class_students){
-                if($class_students->end_date && $class_students->student->status != 'Back Out'){
+                if($class_students->current_class->end_date && $class_students->student->status != 'Back Out'){
                     $html .= 'Complete ';
                 }
-                else if($class_students->end_date && $class_students->student->status == 'Back Out'){
+                else if($class_students->current_class->end_date && $class_students->student->status == 'Back Out'){
                     $html .= 'Back Out ';
                 }
                 else{
                     $html .= 'Active ';
                 }
 
-                $html .= '(' . $class_students->current_class->sensei->fname . ')';
+                $html .= '(' . $class_students->current_class->sensei->fname . ') | ' . $class_students->current_class->start_date . ' ~ ' . $class_students->current_class->end_date;
                 return $html;
             }else{
                 return 'N/A';

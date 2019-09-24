@@ -104,7 +104,10 @@ $(document).ready(function(){
                 {data: 'remarks', name: 'remarks'},
                 {data: 'action', orderable: false, searchable: false}
             ],
-            columnDefs: [{defaultContent: "", targets: "_all"}],
+            columnDefs: [
+                {defaultContent: "", targets: "_all"},
+                {className: "text-right", targets: [2, 3]}
+            ],
             order: [[4, 'desc']],
             footerCallback: function ( row, data, start, end, display ) {
                 var api = this.api(), data;
@@ -133,10 +136,6 @@ $(document).ready(function(){
                         return intVal(a) + intVal(b);
                     }, 0 );
                     
-                // Update footer
-                $( api.column( 2 ).footer() ).html(
-                    total
-                );
 
                 // Total over this page
                 pageTotal2 = api
@@ -146,10 +145,17 @@ $(document).ready(function(){
                         return intVal(a) + intVal(b);
                     }, 0 );
      
-                // Update footer
+                // Update footer hires
                 $( api.column( 3 ).footer() ).html(
                     total2
                 );
+
+                // Update footer orders
+                $( api.column( 2 ).footer() ).html(
+                    (total-total2) + '/' + total
+                );
+
+
             }
         });
     }

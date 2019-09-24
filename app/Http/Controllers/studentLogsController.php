@@ -35,7 +35,6 @@ class studentLogsController extends Controller
             return $data->student->lname . ', ' . $data->student->fname . ' ' . $data->student->mname;
         })
         ->editColumn('added_by', function($data){
-            info($data->added_by_emp);
             return $data->added_by_emp->fname . ' (' . $data->added_by_emp->branch->name . ')';
         })
         ->make(true);
@@ -49,7 +48,6 @@ class studentLogsController extends Controller
             return $data->student->lname . ', ' . $data->student->fname . ' ' . $data->student->mname;
         })
         ->editColumn('edited_by', function($data){
-            info($data->edited_by_emp);
             return $data->edited_by_emp->fname . ' (' . $data->edited_by_emp->branch->name . ')';
         })
         ->make(true);
@@ -63,7 +61,6 @@ class studentLogsController extends Controller
             return $data->student->lname . ', ' . $data->student->fname . ' ' . $data->student->mname;
         })
         ->editColumn('deleted_by', function($data){
-            info($data->deleted_by_emp);
             return $data->deleted_by_emp->fname . ' (' . $data->deleted_by_emp->branch->name . ')';
         })
         ->make(true);

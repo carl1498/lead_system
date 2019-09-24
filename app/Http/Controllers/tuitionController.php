@@ -21,7 +21,9 @@ class tuitionController extends Controller
     }
 
     public function index(){
-        return view('pages.tuition');
+        $student = tf_student::with('student.program')->get();
+
+        return view('pages.tuition', compact('student'));
     }
 
     public function view_tf_program(){
@@ -59,23 +61,23 @@ class tuitionController extends Controller
             return sec_bond::where('tf_stud_id', $data->stud_id)->sum('amount');
         })
         ->addColumn('class', function($data){
-            $class_students = class_students::with('student', 'current_class.sensei')->where('stud_id', $data->id)
+            $class_students = class_students::with('student', 'current_class.sensei')->where('stud_id', $data->stud_id)
                 ->orderBy('id', 'desc')->first();
 
             $html = '';
 
             if($class_students){
-                if($class_students->end_date && $class_students->student->status != 'Back Out'){
+                if($class_students->current_class->end_date && $class_students->student->status != 'Back Out'){
                     $html .= 'Complete ';
                 }
-                else if($class_students->end_date && $class_students->student->status == 'Back Out'){
+                else if($class_students->current_class->end_date && $class_students->student->status == 'Back Out'){
                     $html .= 'Back Out ';
                 }
                 else{
                     $html .= 'Active ';
                 }
 
-                $html .= '(' . $class_students->current_class->sensei->fname . ')';
+                $html .= '(' . $class_students->current_class->sensei->fname . ') | ' . $class_students->current_class->start_date . ' ~ ' . $class_students->current_class->end_date;
                 return $html;
             }else{
                 return 'N/A';
@@ -92,9 +94,11 @@ class tuitionController extends Controller
 
         if($current_tab == 'Tuition Fee Payment History'){
             $tf_sb = tf_payment::with('student.student.program')->get();
+            $edit_button = 'edit_tf_payment';
         }
         else if($current_tab == 'Security Bond Payment History'){
             $tf_sb = sec_bond::with('student.student.program')->get();
+            $edit_button = 'edit_sb_payment';
         }
 
         return Datatables::of($tf_sb)
@@ -108,21 +112,52 @@ class tuitionController extends Controller
             $html = '';
 
             if($class_students){
-                if($class_students->end_date && $class_students->student->status != 'Back Out'){
+                if($class_students->current_class->end_date && $class_students->student->status != 'Back Out'){
                     $html .= 'Complete ';
                 }
-                else if($class_students->end_date && $class_students->student->status == 'Back Out'){
+                else if($class_students->current_class->end_date && $class_students->student->status == 'Back Out'){
                     $html .= 'Back Out ';
                 }
                 else{
                     $html .= 'Active ';
                 }
 
-                $html .= '(' . $class_students->current_class->sensei->fname . ')';
+                $html .= '(' . $class_students->current_class->sensei->fname . ') | ' . $class_students->current_class->start_date . ' ~ ' . $class_students->current_class->end_date;
                 return $html;
             }else{
                 return 'N/A';
             }
+        })
+        ->addColumn('action', function($data) use($edit_button){
+            $html = '';
+
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-warning btn-xs '.$edit_button.'" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
+
+            return $html;
+        })
+        ->make(true);
+    }
+
+    public function view_tuition_fee(Request $request){
+        $id = $request->id;
+        
+        $tf_payment = tf_payment::where('tf_stud_id', $id)->get();
+
+        return Datatables::of($tf_payment)
+        ->addColumn('action', function($data){
+            return '';
+        })
+        ->make(true);
+    }
+
+    public function view_sec_bond(Request $request){
+        $id = $request->id;
+        
+        $sec_bond = sec_bond::where('tf_stud_id', $id)->get();
+
+        return Datatables::of($sec_bond)
+        ->addColumn('action', function($data){
+            return '';
         })
         ->make(true);
     }
@@ -147,13 +182,39 @@ class tuitionController extends Controller
 
         $sec_bond = sec_bond::where('tf_stud_id', $tf_student->id)->sum('amount');
 
+        $class_students = class_students::with('student', 'current_class.sensei')->where('stud_id', $tf_student->stud_id)
+                ->orderBy('id', 'desc')->first();
+
+        $html = '';
+
+        if($class_students){
+            if($class_students->current_class->end_date && $class_students->student->status != 'Back Out'){
+                $html .= 'Complete ';
+            }
+            else if($class_students->current_class->end_date && $class_students->student->status == 'Back Out'){
+                $html .= 'Back Out ';
+            }
+            else{
+                $html .= 'Active ';
+            }
+
+            $html .= '(' . $class_students->current_class->sensei->fname . ') | ' . $class_students->current_class->start_date . ' ~ ' . $class_students->current_class->end_date;
+        }else{
+            $html = 'N/A';
+        }
+
         $output = array(
             'tf_student' => $tf_student,
             'tf_payment' => $tf_payment,
             'sec_bond' => $sec_bond,
+            'class' => $html
         );
 
         echo json_encode($output);
+    }
+
+    public function get_tf_payment(Request $request){
+        return tf_payment::with('student')->find($request->id);
     }
 
     public function save_projection(Request $request){
@@ -211,7 +272,9 @@ class tuitionController extends Controller
             $tf_sb = ($request->add_edit == 'add') ? new sec_bond : sec_bond::find($id);
         }
 
-        $tf_sb->tf_stud_id = $request->p_student;
+        if($request->p_student){
+            $tf_sb->tf_stud_id = $request->p_student;
+        }
         $tf_sb->amount = $request->p_amount;
         $tf_sb->date = $request->date;
         $tf_sb->remarks = $request->remarks;

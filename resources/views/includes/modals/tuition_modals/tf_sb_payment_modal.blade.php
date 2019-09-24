@@ -26,6 +26,10 @@
                             <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
                                 <div class="form-group required">
                                     <select type="text" id="p_student" name="p_student" class="form-control select2" style="width: 100%;" required>
+                                        <option value="" disabled selected>Select Student</option>
+                                            @foreach($student as $s)
+                                            <option value="{{ $s->id }}">{{ $s->student->fname }} {{ $s->student->lname }} ({{ $s->student->program->name }})</option>
+                                            @endforeach
                                         <!-- Controller: tuitionController@get_tf_student -->
                                     </select>
                                 </div>
