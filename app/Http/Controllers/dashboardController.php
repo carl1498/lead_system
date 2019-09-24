@@ -61,6 +61,8 @@ class dashboardController extends Controller
                 $query->where('name', '<>', 'Trainee');
             })->count();
 
+        info($student_count);
+
         //Birthdays
         $month = Carbon::now()->month;
         $student_birthdays = student::whereMonth('birthdate', $month)->get();
@@ -98,7 +100,7 @@ class dashboardController extends Controller
         foreach($leaderboard as $l){
             $ref_count = 0;
 
-            $student_count += student::where('referral_id', $l->referral_id)->whereNull('program_id')->count();
+            $ref_count += student::where('referral_id', $l->referral_id)->whereNull('program_id')->count();
             $ref_count += student::where('referral_id', $l->referral_id)
             ->whereHas('program', function($query){
                 $query->where('name', '<>', 'SSW (Careworker)');
