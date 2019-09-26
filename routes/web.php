@@ -300,7 +300,7 @@ Route::group(['middleware' => ['auth', 'admin']], function(){
     Route::get('/get_balance_class/{id}', 'tuitionController@get_balance_class');
     Route::get('/get_student_tuition/{id}', 'tuitionController@get_student_tuition');
 
-    Route::get('/get_tf_payment/{id}', 'tuitionController@get_tf_payment');
+    Route::get('/get_tf_sb_payment', 'tuitionController@get_tf_sb_payment');
 });
 
 //FINANCE ROUTES -- END

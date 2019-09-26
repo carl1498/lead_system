@@ -30,6 +30,7 @@
             <th>Class</th>
             <th>Amount</th>
             <th>Date</th>
+            <th>Remarks</th>
             <th>Action</th>
         </thead>
     </table>

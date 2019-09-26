@@ -58,7 +58,7 @@ class tuitionController extends Controller
             return $data->balance - $tf_payment;
         })
         ->addColumn('sec_bond', function($data){
-            return sec_bond::where('tf_stud_id', $data->stud_id)->sum('amount');
+            return sec_bond::where('tf_stud_id', $data->id)->sum('amount');
         })
         ->addColumn('class', function($data){
             $class_students = class_students::with('student', 'current_class.sensei')->where('stud_id', $data->stud_id)
@@ -67,17 +67,21 @@ class tuitionController extends Controller
             $html = '';
 
             if($class_students){
-                if($class_students->current_class->end_date && $class_students->student->status != 'Back Out'){
+                if($class_students->end_date && $class_students->student->status != 'Back Out'){
                     $html .= 'Complete ';
                 }
-                else if($class_students->current_class->end_date && $class_students->student->status == 'Back Out'){
+                else if($class_students->end_date && $class_students->student->status == 'Back Out'){
                     $html .= 'Back Out ';
                 }
                 else{
                     $html .= 'Active ';
                 }
 
-                $html .= '(' . $class_students->current_class->sensei->fname . ') | ' . $class_students->current_class->start_date . ' ~ ' . $class_students->current_class->end_date;
+                $html .= '(' . $class_students->current_class->sensei->fname . ') | ' . $class_students->current_class->start_date . ' ~ ' 
+                    . (($class_students->current_class->end_date) ? $class_students->current_class->end_date : 'TBD');
+
+
+
                 return $html;
             }else{
                 return 'N/A';
@@ -112,17 +116,19 @@ class tuitionController extends Controller
             $html = '';
 
             if($class_students){
-                if($class_students->current_class->end_date && $class_students->student->status != 'Back Out'){
+                if($class_students->end_date && $class_students->student->status != 'Back Out'){
                     $html .= 'Complete ';
                 }
-                else if($class_students->current_class->end_date && $class_students->student->status == 'Back Out'){
+                else if($class_students->end_date && $class_students->student->status == 'Back Out'){
                     $html .= 'Back Out ';
                 }
                 else{
                     $html .= 'Active ';
                 }
 
-                $html .= '(' . $class_students->current_class->sensei->fname . ') | ' . $class_students->current_class->start_date . ' ~ ' . $class_students->current_class->end_date;
+                $html .= '(' . $class_students->current_class->sensei->fname . ') | ' . $class_students->current_class->start_date . ' ~ ' 
+                    . (($class_students->current_class->end_date) ? $class_students->current_class->end_date : 'TBD');
+
                 return $html;
             }else{
                 return 'N/A';
@@ -145,7 +151,11 @@ class tuitionController extends Controller
 
         return Datatables::of($tf_payment)
         ->addColumn('action', function($data){
-            return '';
+            $html = '';
+
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-warning btn-xs edit_tf_payment" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
+
+            return $html;
         })
         ->make(true);
     }
@@ -157,7 +167,11 @@ class tuitionController extends Controller
 
         return Datatables::of($sec_bond)
         ->addColumn('action', function($data){
-            return '';
+            $html = '';
+
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-warning btn-xs edit_sb_payment" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
+
+            return $html;
         })
         ->make(true);
     }
@@ -188,17 +202,18 @@ class tuitionController extends Controller
         $html = '';
 
         if($class_students){
-            if($class_students->current_class->end_date && $class_students->student->status != 'Back Out'){
+            if($class_students->end_date && $class_students->student->status != 'Back Out'){
                 $html .= 'Complete ';
             }
-            else if($class_students->current_class->end_date && $class_students->student->status == 'Back Out'){
+            else if($class_students->end_date && $class_students->student->status == 'Back Out'){
                 $html .= 'Back Out ';
             }
             else{
                 $html .= 'Active ';
             }
 
-            $html .= '(' . $class_students->current_class->sensei->fname . ') | ' . $class_students->current_class->start_date . ' ~ ' . $class_students->current_class->end_date;
+            $html .= '(' . $class_students->current_class->sensei->fname . ') | ' . $class_students->current_class->start_date . ' ~ ' 
+            . (($class_students->current_class->end_date) ? $class_students->current_class->end_date : 'TBD');
         }else{
             $html = 'N/A';
         }
@@ -213,8 +228,18 @@ class tuitionController extends Controller
         echo json_encode($output);
     }
 
-    public function get_tf_payment(Request $request){
-        return tf_payment::with('student')->find($request->id);
+    public function get_tf_sb_payment(Request $request){
+        $id = $request->id;
+        $p_type = $request->p_type;
+
+        if($p_type == 'tuition'){
+            $tf_sb_payment = tf_payment::with('student')->find($id);
+        }
+        else if($p_type == 'sec_bond'){
+            $tf_sb_payment = sec_bond::with('student')->find($id);
+        }
+
+        return $tf_sb_payment;
     }
 
     public function save_projection(Request $request){

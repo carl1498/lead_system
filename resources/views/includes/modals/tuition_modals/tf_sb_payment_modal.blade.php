@@ -49,6 +49,17 @@
 
                         <div class="row clearfix">
                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
+                                    <label for="p_prev_amount" class="pull-right">Previous Amt.</label>
+                            </div>
+                            <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+                                <div class="form-group">
+                                    <input type="number" id="p_prev_amount" min="0.00" name="p_prev_amount" class="form-control required" placeholder="Previous Amount" required readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row clearfix">
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
                                     <label for="p_amount" class="pull-right">Amount</label>
                             </div>
                             <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">

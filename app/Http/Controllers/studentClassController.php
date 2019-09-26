@@ -105,17 +105,19 @@ class studentClassController extends Controller
 
             $html = '';
 
-            if($class_students->current_class->end_date && $class_students->student->status != 'Back Out'){
+            if($class_students->end_date && $class_students->student->status != 'Back Out'){
                 $html .= 'Complete ';
             }
-            else if($class_students->current_class->end_date && $class_students->student->status == 'Back Out'){
+            else if($class_students->end_date && $class_students->student->status == 'Back Out'){
                 $html .= 'Back Out ';
             }
             else{
                 $html .= 'Active ';
             }
 
-            $html .= '(' . $class_students->current_class->sensei->fname . ')';
+            $html .= '(' . $class_students->current_class->sensei->fname . ') | ' . $class_students->current_class->start_date . ' ~ ' 
+            . (($class_students->current_class->end_date) ? $class_students->current_class->end_date : 'TBD');
+            
             return $html;
         })
         ->addColumn('action', function($data){
@@ -164,17 +166,19 @@ class studentClassController extends Controller
             $html = '';
 
             if($class_students){
-                if($class_students->current_class->end_date && $class_students->student->status != 'Back Out'){
+                if($class_students->end_date && $class_students->student->status != 'Back Out'){
                     $html .= 'Complete ';
                 }
-                else if($class_students->current_class->end_date && $class_students->student->status == 'Back Out'){
+                else if($class_students->end_date && $class_students->student->status == 'Back Out'){
                     $html .= 'Back Out ';
                 }
                 else{
                     $html .= 'Active ';
                 }
 
-                $html .= '(' . $class_students->current_class->sensei->fname . ') | ' . $class_students->current_class->start_date . ' ~ ' . $class_students->current_class->end_date;
+                $html .= '(' . $class_students->current_class->sensei->fname . ') | ' . $class_students->current_class->start_date . ' ~ ' 
+                    . (($class_students->current_class->end_date) ? $class_students->current_class->end_date : 'TBD');
+
                 return $html;
             }else{
                 return 'N/A';
