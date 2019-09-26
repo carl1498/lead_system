@@ -3,8 +3,8 @@ $(document).ready(function(){
     //INITIALIZE -- START
 
     var current_tab = 'Student';
-    var add_edit, p_type;
-    var modal_close = true;
+    var add_edit, payment_type;
+    var s_modal = false, p_modal = false;
 
     $(".datepicker").datepicker({
         format: 'yyyy-mm-dd',
@@ -50,6 +50,17 @@ $(document).ready(function(){
     $("#tf_sb_payment_modal").on("hidden.bs.modal", function(e){
         tf_sb_payment_clear();
         $('#tf_sb_payment_continuous').bootstrapToggle('off');
+        if(p_modal == true){
+            s_modal = true;
+            p_modal = false;
+            setTimeout(function(){$('#student_tuition_modal').modal('show')}, 500);
+        }
+    });
+    
+    $("#student_tuition_modal").on("hidden.bs.modal", function(e){
+        if(s_modal == true){
+            s_modal = false;
+        }
     });
 
     function tf_sb_payment_clear(){
@@ -134,6 +145,44 @@ $(document).ready(function(){
                 {defaultContent: "", targets: "_all"},
                 {className: "text-right", targets: [3,4]}
             ],
+            footerCallback: function ( row, data, start, end, display ) {
+                var api = this.api(), data;
+     
+                // Remove the formatting to get integer data for summation
+                var intVal = function ( i ) {
+                    return typeof i === 'string' ?
+                        i.replace(/[\$,]/g, '')*1 :
+                        typeof i === 'number' ?
+                            i : 0;
+                };
+     
+                // Total over all pages
+                total = api
+                    .column( 3 )
+                    .data()
+                    .reduce( function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0 );
+
+                // Total over all pages
+                total2 = api
+                    .column( 4 )
+                    .data()
+                    .reduce( function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0 );
+     
+     
+                // Update footer
+                $( api.column( 3 ).footer() ).html(
+                    '₱' + total.toFixed(2)
+                );
+     
+                // Update footer
+                $( api.column( 4 ).footer() ).html(
+                    '₱' + total2.toFixed(2)
+                );
+            }
         });
     }
 
@@ -166,7 +215,31 @@ $(document).ready(function(){
                 {defaultContent: "", targets: "_all"},
                 {className: "text-right", targets: [3]}
             ],
-            order: [4, 'desc']
+            order: [4, 'desc'],
+            footerCallback: function ( row, data, start, end, display ) {
+                var api = this.api(), data;
+     
+                // Remove the formatting to get integer data for summation
+                var intVal = function ( i ) {
+                    return typeof i === 'string' ?
+                        i.replace(/[\$,]/g, '')*1 :
+                        typeof i === 'number' ?
+                            i : 0;
+                };
+     
+                // Total over all pages
+                total = api
+                    .column( 3 )
+                    .data()
+                    .reduce( function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0 );
+     
+                // Update footer
+                $( api.column( 3 ).footer() ).html(
+                    '₱' + total.toFixed(2)
+                );
+            }
         });
     }
 
@@ -273,20 +346,24 @@ $(document).ready(function(){
     });
 
     $(document).on('click', '.sb_payment', function(){
+        payment_type = 'sec_bond';
         tf_sb_payment_init('add', 'sec_bond', 'Security Bond Payment');
     });
 
     $(document).on('click', '.edit_sb_payment', function(){
         let id = $(this).attr('id');
+        payment_type = 'sec_bond';
         get_tf_sb_payment(id, 'sec_bond', 'Security Bond Payment');
     });
 
     $(document).on('click', '.tf_payment', function(){
+        payment_type = 'tuition';
         tf_sb_payment_init('add', 'tuition', 'Tuition Fee Payment');
     });
 
     $(document).on('click', '.edit_tf_payment', function(){
         let id = $(this).attr('id');
+        payment_type = 'tuition';
         get_tf_sb_payment(id, 'tuition', 'Tuition Fee Payment');
     });
 
@@ -316,8 +393,15 @@ $(document).ready(function(){
         $('#tf_sb_payment_modal .modal-title').text(payment);
         $('#add_edit').val(add_edit);
         $('#p_type').val(p_type);
-        $('#tf_sb_payment_modal').modal('toggle');
-        $('#tf_sb_payment_modal').modal('show');
+
+        if(s_modal == true){
+            p_modal = true;
+            $('#student_tuition_modal').modal('hide');
+            setTimeout(function(){$('#tf_sb_payment_modal').modal('show')}, 500);
+        }
+        else{
+            $('#tf_sb_payment_modal').modal('show')
+        }
     }
 
     $(document).on('click', '.view_student_tuition', function(){
@@ -333,11 +417,10 @@ $(document).ready(function(){
                 $('.current_class').text(data.class);
                 $('.tf_balance').text(data.tf_payment);
                 $('.tf_sb_total').text(data.sec_bond);
+                s_modal = true;
+                $('#student_tuition_modal').modal('show');
             }
         });
-
-        modal_close = true;
-        $('#student_tuition_modal').modal('show');
     });
 
     $(document).on('click', '.projection', function(){
@@ -457,9 +540,11 @@ $(document).ready(function(){
                 notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
                 if($('#tf_sb_payment_continuous').is(':checked')){
                     tf_sb_payment_clear();
-                    add_edit_p_type(add_edit, p_type);
+                    $('#add_edit').val('add');
+                    $('#p_type').val(payment_type);
                 }
                 else{
+                    refresh_tuition_sec_bond_table($('#p_student').val());
                     $('#tf_sb_payment_modal').modal('hide')
                 }
                 refresh();

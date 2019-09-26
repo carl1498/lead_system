@@ -55,7 +55,7 @@ class tuitionController extends Controller
         ->editColumn('balance', function($data){
             $tf_payment = tf_payment::where('tf_stud_id', $data->id)->sum('amount');
 
-            return $data->balance - $tf_payment;
+            return number_format((float)($data->balance - $tf_payment), 2, '.', '');
         })
         ->addColumn('sec_bond', function($data){
             return sec_bond::where('tf_stud_id', $data->id)->sum('amount');
