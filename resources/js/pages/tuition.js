@@ -20,8 +20,8 @@ $(document).ready(function(){
 
     //tuition select init -- Start
 
-    $('.class_select, .program_select, .departure_select').show();
-    $(`#class_select, #program_select, #departure_year_select,
+    $('.class_select, .program_select, .branch_select, .departure_select').show();
+    $(`#class_select, #program_select, #branch_select, #departure_year_select,
         #departure_month_select`).next(".select2-container").show();
 
     //tuition select init -- End
@@ -59,7 +59,6 @@ $(document).ready(function(){
     $("#tf_sb_payment_modal").on("hidden.bs.modal", function(e){
         tf_sb_payment_clear();
         $('#tf_sb_payment_continuous').bootstrapToggle('off');
-        console.log(p_modal);
         if(p_modal == true){
             s_modal = true;
             p_modal = false;
@@ -84,25 +83,27 @@ $(document).ready(function(){
         $('#tf_sb_payment_form').find("input,textarea,select").val('').end();
         $('.select2').trigger('change.select2');
         $('#p_student').attr('disabled', false);
+        $('#sign_up_check').prop('checked', false).attr('disabled', true);
+        $('#sign_up').val(0);
     }
 
     $('#tf_sb_payment_continuous').bootstrapToggle('off');
 
     function disableTabs(){
-        $(`li.student_pick, li.tuition_sec_pick, li.program_pick`
+        $(`li.student_pick, li.tuition_sec_pick, li.program_pick, li.tf_breakdown_pick`
         ).addClass('disabled').css('cursor', 'not-allowed');
 
-        $(`a.student_pick, a.tuition_sec_pick, a.program_pick`
+        $(`a.student_pick, a.tuition_sec_pick, a.program_pick, a.tf_breakdown_pick`
         ).addClass('disabled').css('pointer-events', 'none');
 
         $('.refresh_table').attr('disabled', true);
     }
 
     function enableTabs(){
-        $(`li.student_pick, li.tuition_sec_pick, li.program_pick`
+        $(`li.student_pick, li.tuition_sec_pick, li.program_pick, li.tf_breakdown_pick`
         ).removeClass('disabled').css('cursor', 'pointer');
         
-        $(`a.student_pick, a.tuition_sec_pick, a.program_pick`
+        $(`a.student_pick, a.tuition_sec_pick, a.program_pick, a.tf_breakdown_pick`
         ).removeClass('disabled').css('pointer-events', 'auto');
 
         $('.refresh_table').attr('disabled', false);
@@ -134,6 +135,7 @@ $(document).ready(function(){
         
         class_select = $('#class_select').val();
         program_select = $('#program_select').val();
+        branch_select = $('#branch_select').val();
         departure_year_select = $('#departure_year_select').val();
         departure_month_select = $('#departure_month_select').val();
 
@@ -152,6 +154,7 @@ $(document).ready(function(){
                 data: {
                     class_select:class_select,
                     program_select:program_select,
+                    branch_select:branch_select,
                     departure_year_select:departure_year_select,
                     departure_month_select:departure_month_select,
                 }
@@ -159,11 +162,13 @@ $(document).ready(function(){
             columns: [
                 {data: 'name', name: 'name'},
                 {data: 'student.program.name', name: 'program'},
+                {data: 'student.branch.name', name: 'branch'},
                 {data: 'student.contact', name: 'contact'},
                 {data: 'balance', name: 'balance'},
                 {data: 'sec_bond', name: 'sec_bond'},
                 {data: 'class', name: 'class'},
                 {data: 'student.status', name: 'status'},
+                {data: 'departure', name: 'departure'},
                 {data: 'action', orderable: false, searchable: false}
             ],
             columnDefs: [
@@ -215,6 +220,7 @@ $(document).ready(function(){
         
         class_select = $('#class_select').val();
         program_select = $('#program_select').val();
+        branch_select = $('#branch_select').val();
         departure_year_select = $('#departure_year_select').val();
         departure_month_select = $('#departure_month_select').val();
 
@@ -233,6 +239,7 @@ $(document).ready(function(){
                     current_tab:current_tab,
                     class_select:class_select,
                     program_select:program_select,
+                    branch_select:branch_select,
                     departure_year_select:departure_year_select,
                     departure_month_select:departure_month_select,
                 }
@@ -388,11 +395,13 @@ $(document).ready(function(){
     $(document).on('click', '.edit_sb_payment', function(){
         let id = $(this).attr('id');
         payment_type = 'sec_bond';
+        $('#sign_up').val(0);
         get_tf_sb_payment(id, 'sec_bond', 'Security Bond Payment');
     });
 
     $(document).on('click', '.tf_payment', function(){
         payment_type = 'tuition';
+        $('#sign_up').val(0);
         tf_sb_payment_init('add', 'tuition', 'Tuition Fee Payment');
     });
 
@@ -435,6 +444,13 @@ $(document).ready(function(){
                 $('#p_amount, #p_prev_amount').val(data.amount).trigger('change');
                 $('#date').val(data.date);
                 $('#remarks').val(data.remarks);
+                if(data.sign_up == 1){
+                    $('#sign_up_check').attr('disabled', false).prop('checked', true);
+                    $('#sign_up').val(1);
+                }
+                else{
+                    $('#sign_up').val(0);
+                }
             }
         });
 
@@ -454,7 +470,6 @@ $(document).ready(function(){
         else{
             $('#tf_sb_payment_modal').modal('show')
         }
-        console.log(p_modal);
     }
 
     $(document).on('click', '.view_student_tuition', function(){
@@ -469,11 +484,13 @@ $(document).ready(function(){
             method: 'get',
             dataType: 'JSON',
             success:function(data){
+                console.log(data);
                 refresh_tuition_sec_bond_table(data.tf_student.id);
                 $('.edit_initial_balance').attr('id', data.tf_student.id);
                 $('#student_tuition_modal .modal-title').text(data.tf_student.student.fname + ' ' + data.tf_student.student.lname);
                 $('.current_class').text(data.class);
                 $('.tf_balance').text(data.tf_payment.toFixed(2));
+                $('.tf_sign_up').text(data.tf_sign_up);
                 $('.tf_sb_total').text(data.sec_bond);
                 s_modal = true;
 
@@ -653,6 +670,10 @@ $(document).ready(function(){
             }
         });
     });
+    
+    $('#sign_up_check').on('change', function(){
+        ($(this).is(':checked')) ? $('#sign_up').val(1) :  $('#sign_up').val(0);
+    });
 
     $('#student').on('change', function(){
         let id = $(this).val();
@@ -687,6 +708,7 @@ $(document).ready(function(){
                 success:function(data){
                     if($('#p_type').val() == 'tuition'){
                         $('#current, #total').val(data.tf_payment);
+                        $('#sign_up_check').attr('disabled', false);
                     }
                     else if($('#p_type').val() == 'sec_bond'){
                         $('#current, #total').val(data.sec_bond);
@@ -701,7 +723,8 @@ $(document).ready(function(){
         }
     });
 
-    $('#class_select, #program_select').on('change', function(){
+    $(`#class_select, #branch_select, #program_select, #departure_year_select, 
+        #departure_month_select`).on('change', function(){
         refresh();
     });
 

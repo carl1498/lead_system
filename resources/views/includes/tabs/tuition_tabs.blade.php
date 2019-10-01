@@ -7,16 +7,20 @@
             <tr>
                 <th>Name</th>
                 <th>Program</th>
+                <th>Branch</th>
                 <th>Contact</th>
                 <th>Balance</th>
                 <th>Security Bond</th>
                 <th>Class</th>
                 <th>Status</th>
+                <th>Departure</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tfoot>
             <tr>
+                <th></th>
+                <th></th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -83,3 +87,17 @@
 </div>
 
 <!-- PROGRAMS -- END -->
+
+<!-- CASH DISBURSEMENT -- START -->
+
+<div class="tab-pane fade in" id="tf_breakdown_tab">
+    
+    <div style="overflow: auto; width: 100%;">
+        <table id="tf_breakdown_table" class="table table-hover table-striped table-bordered">
+
+        </table>
+    </div>
+
+</div>
+
+<!-- CASH DISBURSEMENT -- END -->

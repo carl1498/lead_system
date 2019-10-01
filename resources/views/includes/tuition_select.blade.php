@@ -20,6 +20,14 @@
     @endforeach
 </select>
 
+<label class="branch_select" style="display:none;">Branch: </label>
+<select type="text" id="branch_select" class="form-control select2" style="width: 90px; display:none;">
+    <option value="All">All</option>
+    @foreach($branch as $b)
+    <option value="{{ $b->id }}">{{ $b->name }}</option>
+    @endforeach
+</select>
+
 <label class="departure_select" style="display:none;">Departure: </label>
 <select type="text" id="departure_year_select" class="form-control select2" style="width: 70px; display:none;">
     <option value="All">All</option>

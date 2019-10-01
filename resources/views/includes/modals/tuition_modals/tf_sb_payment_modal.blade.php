@@ -62,9 +62,21 @@
                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
                                     <label for="p_amount" class="pull-right">Amount</label>
                             </div>
-                            <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                 <div class="form-group">
                                     <input type="number" id="p_amount" step="0.01" name="p_amount" class="form-control required" placeholder="Enter Amount" required readonly>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" style="position: relative; top:10px; text-align: right;">
+                                <div class="pretty p-icon p-pulse pull-left"
+                                data-container="body" data-toggle="tooltip" data-placement="left" title="Check if this payment is for Sign Up Fee">
+                                    <input type="checkbox" id="sign_up_check" disabled/>
+                                    <div class="state p-success">
+                                        <i class="icon fa fa-check"></i>
+                                        <label></label>
+                                        <input type="hidden" id="sign_up" name="sign_up">
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -15,7 +15,7 @@
 
                 <br>
 
-                <h4 class="title_probationary">Tuition Fee - <span class="tf_balance"></span></h4>
+                <h4 class="title_probationary">Tuition Fee - <span class="tf_balance"></span> (Sign Up - <span class="tf_sign_up"></span>)</h4>
 
                 <table id="tuition_fee_table" class="table table-hover table-striped table-bordered nowrap" cellspacing="0" width="100%">
                     <thead>

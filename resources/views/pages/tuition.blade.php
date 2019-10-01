@@ -36,6 +36,7 @@
                     <li class="tuition_sec_pick"><a class="tuition_sec_pick" href="#tuition_sec_tab" data-toggle="tab">Tuition Fee Payment History</a></li>
                     <li class="tuition_sec_pick"><a class="tuition_sec_pick" href="#tuition_sec_tab" data-toggle="tab">Security Bond Payment History</a></li>
                     <li class="program_pick"><a class="program_pick" href="#program_tab" data-toggle="tab">Programs</a></li>
+                    <li class="tf_breakdown_pick"><a class="tf_breakdown_pick" href="#tf_breakdown_tab" data-toggle="tab">TF Breakdown</a></li>
                 </ul>
 
                 <div class="tab-content">
