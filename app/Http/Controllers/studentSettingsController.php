@@ -41,7 +41,7 @@ class studentSettingsController extends Controller
             $html = '';
             if($current_settings == 'Program'){
                 if($data->name == 'Language Only' || $data->name == 'SSW (Careworker)' ||
-                $data->name == 'SSW (Hospitality)' || $data->name == 'Trainee'){
+                $data->name == 'SSW (Hospitality)' || $data->name == 'TITP' || $data->name == 'TITP (Careworker)'){
                     return;
                 }
             }

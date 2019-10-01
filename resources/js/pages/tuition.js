@@ -18,9 +18,18 @@ $(document).ready(function(){
         trigger : 'hover'
     });
 
-    $('[data-toggle="tooltip"]').click(function () {
+    //tuition select init -- Start
+
+    $('.class_select, .program_select, .departure_select').show();
+    $(`#class_select, #program_select, #departure_year_select,
+        #departure_month_select`).next(".select2-container").show();
+
+    //tuition select init -- End
+
+    $('body').click(function () {
         $('[data-toggle="tooltip"]').tooltip("hide");
     });
+    
     
     $('input, select').attr('autocomplete', 'off');
 
@@ -50,6 +59,7 @@ $(document).ready(function(){
     $("#tf_sb_payment_modal").on("hidden.bs.modal", function(e){
         tf_sb_payment_clear();
         $('#tf_sb_payment_continuous').bootstrapToggle('off');
+        console.log(p_modal);
         if(p_modal == true){
             s_modal = true;
             p_modal = false;
@@ -61,6 +71,10 @@ $(document).ready(function(){
         if(s_modal == true){
             s_modal = false;
         }
+    });
+    
+    $("#initial_balance_modal").on("hidden.bs.modal", function(e){
+        setTimeout(function(){$('#student_tuition_modal').modal('show')}, 500);
     });
 
     function tf_sb_payment_clear(){
@@ -117,6 +131,12 @@ $(document).ready(function(){
     //DATATABLES -- START
 
     function refresh_student_table(){
+        
+        class_select = $('#class_select').val();
+        program_select = $('#program_select').val();
+        departure_year_select = $('#departure_year_select').val();
+        departure_month_select = $('#departure_month_select').val();
+
         $('#student_table').DataTable({
             initComplete: function(settings, json) {
                 enableTabs();
@@ -125,10 +145,15 @@ $(document).ready(function(){
             destroy: true,
             scrollX: true,
             scrollCollapse: true,
+            fixedColumns: true,
             responsive: true,
             ajax: {
                 url: '/view_tf_student',
                 data: {
+                    class_select:class_select,
+                    program_select:program_select,
+                    departure_year_select:departure_year_select,
+                    departure_month_select:departure_month_select,
                 }
             },
             columns: [
@@ -187,6 +212,12 @@ $(document).ready(function(){
     }
 
     function refresh_tuition_sec_table(){
+        
+        class_select = $('#class_select').val();
+        program_select = $('#program_select').val();
+        departure_year_select = $('#departure_year_select').val();
+        departure_month_select = $('#departure_month_select').val();
+
         $('#tuition_sec_table').DataTable({
             initComplete: function(settings, json) {
                 enableTabs();
@@ -199,13 +230,17 @@ $(document).ready(function(){
             ajax: {
                 url: '/view_tuition_sec',
                 data: {
-                    current_tab:current_tab
+                    current_tab:current_tab,
+                    class_select:class_select,
+                    program_select:program_select,
+                    departure_year_select:departure_year_select,
+                    departure_month_select:departure_month_select,
                 }
             },
             columns: [
                 {data: 'name', name: 'name'},
                 {data: 'student.student.program.name', name: 'program'},
-                {data: 'class', name: 'class'},
+                {data: 'student.student.branch.name', name: 'branch'},
                 {data: 'amount', name: 'amount'},
                 {data: 'date', name: 'date'},
                 {data: 'remarks', name: 'remarks'},
@@ -367,6 +402,23 @@ $(document).ready(function(){
         get_tf_sb_payment(id, 'tuition', 'Tuition Fee Payment');
     });
 
+    $(document).on('click', '.edit_initial_balance', function(){
+        let id = $(this).attr('id');
+
+        $.ajax({
+            url: '/get_initial_balance/'+id,
+            method: 'get',
+            dataType: 'json',
+            success:function(data){
+                $('#i_id').val(data.id);
+                $('#initial_balance_modal .modal-title').text(data.student.fname + ' ' + data.student.lname);
+                $('#init_balance').val(data.balance);
+                $('#student_tuition_modal').modal('hide');
+                setTimeout(function(){$('#initial_balance_modal').modal('show')}, 500);
+            }
+        });
+    });
+
     function get_tf_sb_payment(id, p_type, payment){
         $.ajax({
             url: '/get_tf_sb_payment',
@@ -402,26 +454,33 @@ $(document).ready(function(){
         else{
             $('#tf_sb_payment_modal').modal('show')
         }
+        console.log(p_modal);
     }
 
     $(document).on('click', '.view_student_tuition', function(){
         let id = $(this).attr('id');
 
+        refresh_view_student_tuition(id);
+    });
+
+    function refresh_view_student_tuition(id){
         $.ajax({
             url: '/get_student_tuition/'+id,
             method: 'get',
             dataType: 'JSON',
             success:function(data){
                 refresh_tuition_sec_bond_table(data.tf_student.id);
+                $('.edit_initial_balance').attr('id', data.tf_student.id);
                 $('#student_tuition_modal .modal-title').text(data.tf_student.student.fname + ' ' + data.tf_student.student.lname);
                 $('.current_class').text(data.class);
-                $('.tf_balance').text(data.tf_payment);
+                $('.tf_balance').text(data.tf_payment.toFixed(2));
                 $('.tf_sb_total').text(data.sec_bond);
                 s_modal = true;
+
                 $('#student_tuition_modal').modal('show');
             }
         });
-    });
+    }
 
     $(document).on('click', '.projection', function(){
         let id = $(this).attr('id');
@@ -544,8 +603,11 @@ $(document).ready(function(){
                     $('#p_type').val(payment_type);
                 }
                 else{
-                    refresh_tuition_sec_bond_table($('#p_student').val());
-                    $('#tf_sb_payment_modal').modal('hide')
+                    if(p_modal == true){
+                        refresh_view_student_tuition($('#p_student').val());
+                        refresh_tuition_sec_bond_table($('#p_student').val());
+                    }
+                    $('#tf_sb_payment_modal').modal('hide');
                 }
                 refresh();
                 button.disabled = false;
@@ -557,7 +619,40 @@ $(document).ready(function(){
                 input.html('SAVE CHANGES');
             }
         });
-    })
+    });
+
+    $(document).on('submit', '#initial_balance_form', function(e){
+        e.preventDefault();
+
+        var input = $('.save_initial_balance');
+        var button = document.getElementsByClassName("save_initial_balance")[0];
+
+        button.disabled = true;
+        input.html('SAVING...');
+
+        $.ajax({
+            headers: {
+                'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: '/save_initial_balance',
+            method: 'POST',
+            data: $(this).serialize(),
+            success:function(data){
+                notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
+                refresh_view_student_tuition($('#i_id').val())
+                refresh_tuition_sec_bond_table($('#i_id').val());
+                refresh();
+                $('#initial_balance_modal').modal('hide');
+                button.disabled = false;
+                input.html('SAVE CHANGES');
+            },
+            error: function(data){
+                swal("Error!", "Something went wrong, try again.", "error");
+                button.disabled = false;
+                input.html('SAVE CHANGES');
+            }
+        });
+    });
 
     $('#student').on('change', function(){
         let id = $(this).val();
@@ -604,6 +699,10 @@ $(document).ready(function(){
             $('#current, #total, #p_amount, #date, #remarks').val('');
             $('#p_amount').attr('readonly', true);
         }
+    });
+
+    $('#class_select, #program_select').on('change', function(){
+        refresh();
     });
 
     $('#p_amount').on('keyup change', function(){

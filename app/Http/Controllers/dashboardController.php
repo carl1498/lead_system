@@ -40,7 +40,7 @@ class dashboardController extends Controller
             return redirect()->to('/logout');
         }
 
-        $program_except = ['SSW (Careworker)', 'SSW (Hospitality)', 'Language Only', 'Trainee'];
+        $program_except = ['SSW (Careworker)', 'SSW (Hospitality)', 'Language Only', 'TITP', 'TITP (Careworker)'];
 
         //User Referrals
         $referral_count = 0; $student_count = 0;
@@ -98,13 +98,12 @@ class dashboardController extends Controller
         foreach($leaderboard as $l){
             $ref_count = 0;
 
-            $ref_count += student::where('referral_id', $l->referral_id)->whereNull('program_id')->count();
             $ref_count += student::where('referral_id', $l->referral_id)
-            ->whereHas('program', function($query){
-                $query->where('name', '<>', 'SSW (Careworker)');
-                $query->where('name', '<>', 'SSW (Hospitality)');
-                $query->where('name', '<>', 'Language Only');
-                $query->where('name', '<>', 'Trainee');
+            ->where(function ($query) use($program_except){
+                $query->doesntHave('program')
+                ->orWhereHas('program', function($query) use($program_except){
+                    $query->whereNotIn('name', $program_except);
+                });
             })->count();
             $l = array_add($l, 'referral_count', $ref_count);
         }
@@ -118,7 +117,7 @@ class dashboardController extends Controller
         $id = Auth::user()->emp_id;
         $employee = employee::find($id);
         $referral_count = 0; $student_count = 0;
-        $program_except = ['SSW (Careworker)', 'SSW (Hospitality)', 'Language Only', 'Trainee'];
+        $program_except = ['SSW (Careworker)', 'SSW (Hospitality)', 'Language Only', 'TITP', 'TITP (Careworker)'];
 
         $referral_count += student::with('program')->where('referral_id', $employee->id)
             ->where(function ($query) use($program_except){
@@ -148,7 +147,7 @@ class dashboardController extends Controller
         $year = $request->year;
         $departure_year = $request->departure_year;
         $departure_month = $request->departure_month;
-        $program_except = ['SSW (Careworker)', 'SSW (Hospitality)', 'Language Only', 'Trainee'];
+        $program_except = ['SSW (Careworker)', 'SSW (Hospitality)', 'Language Only', 'TITP', 'TITP (Careworker)'];
 
         $all = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         $branch_array = [$all, $all, $all]; //Makati, Cebu, Davao | Just copied from all variable
@@ -205,7 +204,7 @@ class dashboardController extends Controller
         $all_total = 0; $all_active = 0; $all_backout = 0; $total = [0, 0, 0]; //Makati, Cebu, Davao
         $approved = [0, 0, 0]; $denied = [0, 0, 0]; $cancelled = [0, 0, 0]; 
         $final = [0, 0, 0]; $active = [0, 0, 0]; $backout = [0, 0, 0];
-        $program_except = ['SSW (Careworker)', 'SSW (Hospitality)', 'Language Only', 'Trainee'];
+        $program_except = ['SSW (Careworker)', 'SSW (Hospitality)', 'Language Only', 'TITP', 'TITP (Careworker)'];
 
         //Total
         for($x = 0; $x < 3; $x++){

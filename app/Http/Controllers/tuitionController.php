@@ -11,6 +11,9 @@ use App\tf_student;
 use App\program;
 use App\student;
 use App\class_students;
+use App\class_settings;
+use App\departure_year;
+use App\departure_month;
 use Yajra\Datatables\Datatables;
 
 class tuitionController extends Controller
@@ -22,8 +25,13 @@ class tuitionController extends Controller
 
     public function index(){
         $student = tf_student::with('student.program')->get();
+        $class_settings = class_settings::with('sensei')->orderBy('start_date', 'desc')->get();
+        $program = program::all();
+        $departure_year = departure_year::all();
+        $departure_month = departure_month::all();
 
-        return view('pages.tuition', compact('student'));
+        return view('pages.tuition', compact('student', 'class_settings', 
+            'program', 'departure_year', 'departure_month'));
     }
 
     public function view_tf_program(){
@@ -45,8 +53,48 @@ class tuitionController extends Controller
         ->make(true);
     }
 
-    public function view_tf_student(){
-        $tf_student = tf_student::with('student.program')->get();
+    public function view_tf_student(Request $request){
+        $class = $request->class_select;
+        $program = $request->program_select;
+        $departure_year = $request->departure_year_select;
+        $departure_month = $request->departure_month_select;
+
+        if($class != 'All'){
+            $current_class = [];
+            $student_group = tf_student::pluck('stud_id');
+            
+            for($x = 0; $x < count($student_group); $x++){
+                $class_students = class_students::where('stud_id', $student_group[$x])
+                    ->orderBy('id', 'desc')->first();
+
+                if(!empty($class_students)){
+                    if($class_students->class_settings_id == $class){
+                        array_push($current_class, $class_students->stud_id);
+                    }
+                }
+            }
+        }
+
+        $tf_student = tf_student::with('student.program', 'student.branch')
+        ->when($class != 'All', function($query){
+            $query->whereIn('stud_id', $current_class);
+        })
+        ->when($program != 'All', function($query) use($program){
+            $query->whereHas('student', function($query) use($program){
+                $query->where('program_id', $program);
+            });
+        })
+        ->when($departure_year != 'All', function($query) use($departure_year){
+            $query->whereHas('student', function($query) use($departure_year){
+                $query->where('departure_year_id', $departure_month);
+            });
+        })
+        ->when($departure_month != 'All', function($query) use($departure_month){
+            $query->whereHas('student', function($query) use($departure_month){
+                $query->where('departure_month_id', $departure_month);
+            });
+        })
+        ->get();
 
         return Datatables::of($tf_student)
         ->addColumn('name', function($data){
@@ -80,8 +128,6 @@ class tuitionController extends Controller
                 $html .= '(' . $class_students->current_class->sensei->fname . ') | ' . $class_students->current_class->start_date . ' ~ ' 
                     . (($class_students->current_class->end_date) ? $class_students->current_class->end_date : 'TBD');
 
-
-
                 return $html;
             }else{
                 return 'N/A';
@@ -95,13 +141,47 @@ class tuitionController extends Controller
 
     public function view_tuition_sec(Request $request){
         $current_tab = $request->current_tab;
+        $class = $request->class_select;
+        $program = $request->program_select;
+
+        if($class != 'All'){
+            $current_class = [];
+            $student_group = tf_student::pluck('stud_id');
+            
+            for($x = 0; $x < count($student_group); $x++){
+                $class_students = class_students::where('stud_id', $student_group[$x])
+                    ->orderBy('id', 'desc')->first();
+
+                if(!empty($class_students)){
+                    if($class_students->class_settings_id == $class){
+                        array_push($current_class, $class_students->stud_id);
+                    }
+                }
+            }
+        }
+        
+        $tf_student = tf_student::with('student.program', 'student.branch')
+        ->when($class != 'All', function($query){
+            $query->whereIn('stud_id', $current_class);
+        })
+        ->when($program != 'All', function($query) use($program){
+            $query->whereHas('student', function($query) use($program){
+                $query->where('program_id', $program);
+            });
+        })
+        ->pluck('id');
 
         if($current_tab == 'Tuition Fee Payment History'){
-            $tf_sb = tf_payment::with('student.student.program')->get();
+            $tf_sb = tf_payment::with('student.student.program', 'student.student.branch')
+            ->when(!empty($tf_student), function($query) use($tf_student){
+                $query->whereIn('tf_stud_id', $tf_student);
+            })->get();
             $edit_button = 'edit_tf_payment';
         }
         else if($current_tab == 'Security Bond Payment History'){
-            $tf_sb = sec_bond::with('student.student.program')->get();
+            $tf_sb = sec_bond::with('student.student.program', 'student.student.branch')->when(!empty($tf_student), function($query) use($tf_student){
+                $query->whereIn('tf_stud_id', $tf_student);
+            })->get();
             $edit_button = 'edit_sb_payment';
         }
 
@@ -306,6 +386,13 @@ class tuitionController extends Controller
         $tf_sb->save();
     }
 
+    public function save_initial_balance(Request $request){
+        $tf_student = tf_student::find($request->i_id);
+
+        $tf_student->balance = $request->init_balance;
+        $tf_student->save();
+    }
+
     public function t_get_student(Request $request){
         $tf_student = tf_student::pluck('stud_id');
 
@@ -377,5 +464,9 @@ class tuitionController extends Controller
         );
 
         return json_encode($output);
+    }
+
+    public function get_initial_balance(Request $request){
+        return tf_student::with('student')->find($request->id);
     }
 }

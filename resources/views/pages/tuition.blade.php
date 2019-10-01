@@ -40,6 +40,7 @@
 
                 <div class="tab-content">
                     
+                @include('includes.tuition_select')
                 @include('includes.tabs.tuition_tabs')
 
                 </div>
@@ -54,6 +55,7 @@
     @include('includes.modals.tuition_modals.add_student_modal')
     @include('includes.modals.tuition_modals.student_tuition_modal')
     @include('includes.modals.tuition_modals.tf_sb_payment_modal')
+    @include('includes.modals.tuition_modals.initial_balance_modal')
 
     <!-- MODALS -- END -->
 

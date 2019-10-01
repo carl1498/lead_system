@@ -70,14 +70,14 @@
 
 <!-- SSW STUDENTS -- END -->
 
-<!-- TRAINEE STUDENTS -- START -->
+<!-- TITP STUDENTS -- START -->
 
-<div class="tab-pane fade in" id="trainee_student_tab">
+<div class="tab-pane fade in" id="titp_student_tab">
     
-    <table id="trainee_students" class="table table-hover table-striped table-bordered responsive nowrap" width="100%">
-        @include('includes.tables.students.student_table_trainee')
+    <table id="titp_students" class="table table-hover table-striped table-bordered responsive nowrap" width="100%">
+        @include('includes.tables.students.student_table_titp')
     </table>
     
 </div>
 
-<!-- TRAINEE STUDENTS -- END -->
+<!-- TITP STUDENTS -- END -->

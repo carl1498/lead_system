@@ -64,7 +64,7 @@
                             </div>
                             <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
                                 <div class="form-group">
-                                    <input type="number" id="p_amount" min="0.00" name="p_amount" class="form-control required" placeholder="Enter Amount" required readonly>
+                                    <input type="number" id="p_amount" step="0.01" name="p_amount" class="form-control required" placeholder="Enter Amount" required readonly>
                                 </div>
                             </div>
                         </div>

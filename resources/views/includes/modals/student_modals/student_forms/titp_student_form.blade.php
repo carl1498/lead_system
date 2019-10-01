@@ -1,4 +1,4 @@
-<form class="form-horizontal tab-pane fade in" id="trainee_student_form">
+<form class="form-horizontal tab-pane fade in" id="titp_student_form">
     @csrf
     <div class="modal-body">
         <input type="hidden" name="t_id" id="t_id">
@@ -36,6 +36,24 @@
                 <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
                     <div class="form-group">
                         <input type="text" id="t_lname" name="t_lname" class="form-control required" placeholder="Enter Last Name" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row clearfix">
+                <div class="col-lg-4 col-md-4 col-sm-3 col-xs-3 form-control-label">
+                        <label for="t_program" class="pull-right">Program</label>
+                </div>
+                <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
+                    <div class="form-group required">
+                        <select type="text" id="t_program" name="t_program" class="form-control select2 required" style="width: 100%;" required>
+                            <option value="" disabled selected>Select Program</option>
+                            @foreach($program as $p)
+                                @if($p->name == 'TITP' || $p->name == 'TITP (Careworker)')
+                                <option value="{{ $p->id }}">{{ $p->name }}</option>
+                                @endif
+                            @endforeach
+                        </select>
                     </div>
                 </div>
             </div>
@@ -198,7 +216,7 @@
     <div class="modal-footer">
         <div class="col-md-12">
             <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary save_trainee_student">Save changes</button>
+            <button type="submit" class="btn btn-primary save_titp_student">Save changes</button>
         </div>
     </div>
 </form>

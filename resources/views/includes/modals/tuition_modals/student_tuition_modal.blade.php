@@ -6,7 +6,7 @@
                 <span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title pull-left"></h4>&nbsp;
                 <div class="pull-right">
-                    <button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit Initial Balance" class="btn btn-info btn-s add_emergency" style="margin-right: 20px;"><i class="fa fa-pen"></i></button>
+                    <button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit Initial Balance" class="btn btn-info btn-s edit_initial_balance" style="margin-right: 20px;"><i class="fa fa-pen"></i></button>
                 </div>
             </div>
             <div class="modal-body">

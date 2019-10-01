@@ -42,7 +42,7 @@
             <tr>
                 <th>Name</th>
                 <th>Program</th>
-                <th>Class</th>
+                <th>Branch</th>
                 <th>Amount</th>
                 <th>Date</th>
                 <th>Remarks</th>

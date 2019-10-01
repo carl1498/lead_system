@@ -4,7 +4,7 @@ $(document).ready(function(){
 
     var current_branch = 'Makati';
     var current_status = '', current_result = '',
-    current_ssw = '', current_trainee = '';
+    current_ssw = '', current_titp = '';
     var departure_year, departure_month = $('#month_select').val();
     var get_year, get_month, get_departure;
     var current_tab = 'Branch';
@@ -92,7 +92,7 @@ $(document).ready(function(){
         $('#ssw_student_form :input.required').each(function (){
             this.style.setProperty('border-color', 'green', 'important');
         });
-        $('#trainee_student_form :input.required').each(function (){
+        $('#titp_student_form :input.required').each(function (){
             this.style.setProperty('border-color', 'green', 'important');
         });
         $('#student_modal').find("input,textarea,select").val('').end();
@@ -105,11 +105,11 @@ $(document).ready(function(){
 
     function disableTabs(){
         $(`li.branch_pick, li.status_pick, li.result_pick, 
-        li.language_pick, li.all_pick, li.ssw_pick, li.trainee_pick`
+        li.language_pick, li.all_pick, li.ssw_pick, li.titp_pick`
         ).addClass('disabled').css('cursor', 'not-allowed');
 
         $(`a.branch_pick, a.status_pick, a.result_pick,
-        a.language_pick, a.all_pick, a.ssw_pick, a.trainee_pick`
+        a.language_pick, a.all_pick, a.ssw_pick, a.titp_pick`
         ).addClass('disabled').css('pointer-events', 'none');
 
         $('.switch, .refresh_table').attr('disabled', true);
@@ -117,19 +117,19 @@ $(document).ready(function(){
 
     function enableTabs(){
         $(`li.branch_pick, li.status_pick, li.result_pick, 
-        li.language_pick, li.all_pick, li.ssw_pick, li.trainee_pick`
+        li.language_pick, li.all_pick, li.ssw_pick, li.titp_pick`
         ).removeClass('disabled').css('cursor', 'pointer');
         
         $(`a.branch_pick, a.status_pick, a.result_pick,
-        a.language_pick, a.all_pick, a.ssw_pick, a.trainee_pick`
+        a.language_pick, a.all_pick, a.ssw_pick, a.titp_pick`
         ).removeClass('disabled').css('pointer-events', 'auto');
 
         $('.refresh_table').attr('disabled', false);
         
         switch(current_switch){
-            case 'SSW'  : $('.switch_student, .switch_trainee').attr('disabled', false); break;
-            case 'Student'  : $('.switch_ssw, .switch_trainee').attr('disabled', false); break;
-            case 'Trainee'  : $('.switch_student, .switch_ssw').attr('disabled', false); break;
+            case 'SSW'  : $('.switch_student, .switch_titp').attr('disabled', false); break;
+            case 'Student'  : $('.switch_ssw, .switch_titp').attr('disabled', false); break;
+            case 'TITP'  : $('.switch_student, .switch_ssw').attr('disabled', false); break;
         }
     }
 
@@ -158,7 +158,7 @@ $(document).ready(function(){
             $('.month_select').hide();
             $('#month_select').next(".select2-container").hide();
             $('.select_description').text('Year:');
-        }else if(current_tab == 'Trainee'){
+        }else if(current_tab == 'TITP'){
             showYearSelect();
             showMonthSelect();
             $('.select_description').text('Departure:');
@@ -170,7 +170,7 @@ $(document).ready(function(){
             case 'Result'   : refresh_student_result(); break;
             case 'Language' : refresh_language_student(); break;
             case 'SSW'      : refresh_ssw_student(); break;
-            case 'Trainee'  : refresh_trainee_student(); break;
+            case 'TITP'     : refresh_titp_student(); break;
             case 'All'      : refresh_all_student(); break;
         }
     }
@@ -270,8 +270,9 @@ $(document).ready(function(){
         {data: "action", orderable:false,searchable:false}
     ]
 
-    var columns_trainee_students = [
+    var columns_titp_students = [
         {data: 'name', name: 'name'},
+        {data: 'program.name', name: 'program'},
         {data: 'contact', name: 'contact'},
         {data: 'company.name', name: 'company'},
         {data: 'gender', name: 'gender'},
@@ -297,16 +298,16 @@ $(document).ready(function(){
                     case 'SSW'      : title = current_ssw; break;
                     case 'Back Out' : title = 'SSW ' + current_ssw; break;
                 }
-            case 'Trainee'  : 
+            case 'TITP'  : 
                 switch(current_ssw){
-                    case 'Trainee'  : title = current_ssw; break;
+                    case 'TITP'  : title = current_ssw; break;
                     case 'Back Out' : title = 'SSW ' + current_ssw; break;
                 }
         }
 
         get_departure = (get_year == 'All' && get_month == 'All') ? 'All' : get_year + ' ' + get_month;
 
-        buttons_format = [//for branches, final school, back out, result monitoring, trainee
+        buttons_format = [//for branches, final school, back out, result monitoring, titp
             {extend: 'excelHtml5', title: title + ' - ' + get_departure,
             exportOptions: {
                 columns: ':visible'
@@ -544,12 +545,12 @@ $(document).ready(function(){
         });
     }
 
-    function refresh_trainee_student(){
+    function refresh_titp_student(){
         
         departure_year = $('#year_select').val();
         departure_month = $('#month_select').val();
 
-        trainee_students = $('#trainee_students').DataTable({
+        titp_students = $('#titp_students').DataTable({
             stateSave: true,
             stateSaveCallback: function(settings,data) {
                 localStorage.setItem( 'DataTables_' + settings.sInstance, JSON.stringify(data) )
@@ -569,15 +570,15 @@ $(document).ready(function(){
             buttons: buttons_format,
             responsive: true,
             ajax: {
-                url: '/trainee_student',
+                url: '/titp_student',
                 data: {
                     departure_year: departure_year,
                     departure_month: departure_month,
-                    current_trainee: current_trainee
+                    current_titp: current_titp
                 }
             },
             columnDefs: [{defaultContent: "", targets: "_all"}],
-            columns: columns_trainee_students,
+            columns: columns_titp_students,
             order: [[1,'asc']]
         });
     }
@@ -588,22 +589,22 @@ $(document).ready(function(){
     
     $('.switch').on('click', function(){
         if($(this).find('.switch_name').text() == 'Student'){
-            $('.ssw_pick, .trainee_pick').hide();
+            $('.ssw_pick, .titp_pick').hide();
             $('.branch_pick, .status_pick, .result_pick, .language_pick').show();
             $('#student_list_tab #student_first').click();
             current_switch = 'Student';
         }
         else if($(this).find('.switch_name').text() == 'SSW'){
-            $('.branch_pick, .status_pick, .result_pick, .language_pick, .trainee_pick').hide();
+            $('.branch_pick, .status_pick, .result_pick, .language_pick, .titp_pick').hide();
             $('.ssw_pick').show();
             $('#student_list_tab #ssw_first').click();
             current_switch = 'SSW';
         }
-        else if($(this).find('.switch_name').text() == 'Trainee'){
+        else if($(this).find('.switch_name').text() == 'TITP'){
             $('.branch_pick, .status_pick, .result_pick, .language_pick, .ssw_pick').hide();
-            $('.trainee_pick').show();
-            $('#student_list_tab #trainee_first').click();
-            current_switch = 'Trainee';
+            $('.titp_pick').show();
+            $('#student_list_tab #titp_first').click();
+            current_switch = 'TITP';
         }
         disableTabs();
     });
@@ -656,11 +657,11 @@ $(document).ready(function(){
         }
     });
 
-    $('.trainee_pick').on('click', function(){
+    $('.titp_pick').on('click', function(){
         if(!$(this).hasClass('disabled')){
-            current_trainee = $(this).text();
+            current_titp = $(this).text();
 
-            current_tab = 'Trainee';
+            current_tab = 'TITP';
         }
     })
 
@@ -812,11 +813,11 @@ $(document).ready(function(){
         });
     });
 
-    $(document).on('submit', '#trainee_student_form', function(e){
+    $(document).on('submit', '#titp_student_form', function(e){
         e.preventDefault();
 
-        var input = $('.save_trainee_student');
-        var button = document.getElementsByClassName("save_trainee_student")[0];
+        var input = $('.save_titp_student');
+        var button = document.getElementsByClassName("save_titp_student")[0];
 
         button.disabled = true;
         input.html('SAVING...');
@@ -827,7 +828,7 @@ $(document).ready(function(){
             headers: {
                 'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
             },
-            url: '/save_trainee_student',
+            url: '/save_titp_student',
             method: 'POST',
             data: formData,
             processData: false,
@@ -998,10 +999,10 @@ $(document).ready(function(){
         });
     });
 
-    //Open Trainee Student Modal (EDIT)
-    $(document).on('click', '.edit_trainee_student', function(){
+    //Open TITP Student Modal (EDIT)
+    $(document).on('click', '.edit_titp_student', function(){
         modal_close = false;
-        $('#student_type_tab a[href="#trainee_student_form"]').tab('show');
+        $('#student_type_tab a[href="#titp_student_form"]').tab('show');
         var id = $(this).attr('id');
 
         $.ajax({
@@ -1015,6 +1016,7 @@ $(document).ready(function(){
                 $('#t_fname').val(data.fname);
                 $('#t_mname').val(data.mname);
                 $('#t_lname').val(data.lname);
+                $('#t_program').val(data.program.id).trigger('change');   
                 if(data.company){
                     $('#t_company').val(data.company.id).trigger('change');   
                 }
@@ -1199,7 +1201,7 @@ $(document).ready(function(){
         title = 'Student COE Approved?';
         text = 'Confirm that this student\'s COE is approved?';
 
-        if(current_tab == 'Trainee'){
+        if(current_tab == 'TITP'){
             title = 'Student has Passed?';
             text = 'Confirm that this trainee has passed?';
         }
@@ -1237,7 +1239,7 @@ $(document).ready(function(){
         title = 'Student COE Denied?';
         text = 'Confirm that this student\'s COE is denied?';
         
-        if(current_tab == 'Trainee'){
+        if(current_tab == 'TITP'){
             title = 'Student has Failed?';
             text = 'Confirm that this trainee has failed?';
         }
@@ -1354,6 +1356,28 @@ $(document).ready(function(){
         placeholder: 'Select Program',
         ajax: {
             url: "/programSSW",
+            dataType: 'json',
+
+            data: function (params){
+                return {
+                    name: params.term,
+                    page:params.page
+                }
+            },
+            
+            processResults: function (data){
+                return {
+                    results:data.results      
+                }
+            }
+        },
+    });
+
+    $('#t_program').select2({
+        allowClear: true,
+        placeholder: 'Select Program',
+        ajax: {
+            url: "/programTITP",
             dataType: 'json',
 
             data: function (params){

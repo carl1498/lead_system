@@ -16,8 +16,8 @@
                 <button class="btn btn-secondary bg-red switch switch_ssw" disabled>
                     <b class="switch_name">SSW</b>
                 </button>
-                <button class="btn btn-secondary bg-red switch switch_trainee" disabled>
-                    <b class="switch_name">Trainee</b>
+                <button class="btn btn-secondary bg-red switch switch_titp" disabled>
+                    <b class="switch_name">TITP</b>
                 </button>
             </div>
 
@@ -81,7 +81,7 @@
                             </p>
                         </li>
                         <li class="list-group-item">
-                            <strong>Company (For Trainees Only)</strong>
+                            <strong>Company (For TITP Only)</strong>
                             <p id="p_company" class="text-muted">
                             -
                             </p>
@@ -149,9 +149,9 @@
         <div class="col-md-9 col-xl-10">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs" id="student_list_tab">
-                    <!-- Trainees -->
-                    <li class="disabled trainee_pick" style="display: none;"><a style="display: none;" id="trainee_first" class="trainee_pick" href="#trainee_student_tab" data-toggle="tab">Trainee</a></li>
-                    <li class="disabled trainee_pick" style="display: none;"><a style="display: none;" class="trainee_pick" href="#trainee_student_tab" data-toggle="tab">Back Out</a></li>
+                    <!-- TITP -->
+                    <li class="disabled titp_pick" style="display: none;"><a style="display: none;" id="titp_first" class="titp_pick" href="#titp_student_tab" data-toggle="tab">TITP</a></li>
+                    <li class="disabled titp_pick" style="display: none;"><a style="display: none;" class="titp_pick" href="#titp_student_tab" data-toggle="tab">Back Out</a></li>
                     
                     <!-- SSW -->
                     <li class="disabled ssw_pick" style="display: none;"><a style="display: none;" id="ssw_first" class="ssw_pick" href="#ssw_student_tab" data-toggle="tab">SSW</a></li>

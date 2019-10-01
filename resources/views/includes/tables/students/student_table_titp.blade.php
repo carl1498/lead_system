@@ -1,6 +1,7 @@
 <thead>
     <tr>
         <th>Name</th>
+        <th>Program</th>
         <th>Contact</th>
         <th>Company</th>
         <th>Gender</th>

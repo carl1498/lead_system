@@ -49,7 +49,7 @@ class studentController extends Controller
         $current_branch = $request->current_branch;
         $departure_year = $request->departure_year;
         $departure_month = $request->departure_month;
-        $except = ['Language Only', 'Trainee', 'SSW (Careworker)', 'SSW (Hospitality)'];
+        $except = ['Language Only', 'TITP', 'TITP (Careworker)', 'SSW (Careworker)', 'SSW (Hospitality)'];
         $except = program::whereIn('name', $except)->pluck('id');
 
         $branch = student::with('program', 'school', 'benefactor', 'referral', 
@@ -101,7 +101,7 @@ class studentController extends Controller
         $current_status = $request->current_status;
         $departure_year = $request->departure_year;
         $departure_month = $request->departure_month;
-        $except = ['Language Only', 'Trainee', 'SSW (Careworker)', 'SSW (Hospitality)'];
+        $except = ['Language Only', 'TITP', 'TITP (Careworker)', 'SSW (Careworker)', 'SSW (Hospitality)'];
         $except = program::whereIn('name', $except)->pluck('id');
 
         $status = student::with('program', 'school', 'benefactor', 'referral', 
@@ -155,7 +155,7 @@ class studentController extends Controller
     public function result(Request $request){//Result Monitoring
         $departure_year = $request->departure_year;
         $departure_month = $request->departure_month;
-        $except = ['Language Only', 'Trainee', 'SSW (Careworker)', 'SSW (Hospitality)'];
+        $except = ['Language Only', 'TITP', 'TITP (Careworker)', 'SSW (Careworker)', 'SSW (Hospitality)'];
         $except = program::whereIn('name', $except)->pluck('id');
 
         $result = student::with('program', 'school', 'referral', 
@@ -317,17 +317,17 @@ class studentController extends Controller
         ->make(true);
     }
 
-    public function trainee(Request $request){
+    public function titp(Request $request){
         $departure_year = $request->departure_year;
         $departure_month = $request->departure_month;
-        $current_trainee = $request->current_trainee;
+        $current_titp = $request->current_titp;
 
-        $trainee = student::with('company', 'course')
+        $titp = student::with('program', 'company', 'course')
             ->whereHas('program', function($query){
-                $query->where('name', 'Trainee');
-            })->when($current_trainee == 'Trainee', function($query){
+                $query->where('name', 'TITP')->orWhere('name', 'TITP (Careworker)');
+            })->when($current_titp == 'TITP', function($query){
                 $query->where('status', 'Active');
-            })->when($current_trainee == 'Back Out', function($query){
+            })->when($current_titp == 'Back Out', function($query){
                 $query->where('status', 'Back Out');
             })->when($departure_year != 'All', function($query) use($departure_year){
                 $query->where('departure_year_id', $departure_year);
@@ -336,7 +336,7 @@ class studentController extends Controller
                 $query->where('departure_month_id', $departure_month);
             })->get();
 
-        return Datatables::of($trainee)
+        return Datatables::of($titp)
             ->editColumn('name', function($data){
                 return $data->lname.', '.$data->fname.' '.$data->mname;
             })
@@ -356,7 +356,7 @@ class studentController extends Controller
 
                 if(canAccessAll()){
                     $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-primary btn-xs view_profile" id="'.$data->id.'"><i class="fa fa-eye"></i></button>&nbsp;';
-                    $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_trainee_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';   
+                    $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_titp_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';   
     
                     if($data->coe_status == 'Approved' || $data->coe_status == 'Denied' || $data->status == 'Back Out'){
                         $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Re Apply" class="btn btn-default btn-xs continue_student" id="'.$data->id.'"><i class="fa fa-step-backward"></i></button>&nbsp;';
@@ -877,7 +877,7 @@ class studentController extends Controller
         return $student->id;
     }
 
-    public function save_trainee_student(Request $request){
+    public function save_titp_student(Request $request){
         if($request->hasFile('t_picture')){
             $fileextension = $request->t_picture->getClientOriginalExtension();
 
@@ -885,9 +885,8 @@ class studentController extends Controller
                 return false;
             }
         }
-
+        
         $add_edit = $request->t_add_edit;
-        $trainee_program = program::where('name', 'Trainee')->first();
 
         if($add_edit == 'add'){
             $student = new student;
@@ -902,16 +901,16 @@ class studentController extends Controller
         }
 
         if(isset($edited_by)){
-            $edit_fields = ['First Name', 'Middle Name', 'Last Name', 'Company',
+            $edit_fields = ['First Name', 'Middle Name', 'Last Name', 'Program', 'Company',
                 'Contact #', 'Gender', 'Birth Date', 'Course', 'Email', 'Address',
                 'Year', 'Month', 'Remarks'];
 
-            $student_fields = [$student->fname, $student->mname, $student->lname,
+            $student_fields = [$student->fname, $student->mname, $student->lname, $student->program_id,
                 $student->company_id, $student->contact, $student->gender, $student->birthdate,
                 $student->course_id, $student->email, $student->address, $student->departure_year_id,
                 $student->departure_month_id, $student->remarks];
 
-            $request_fields = [$request->t_fname, $request->t_mname, $request->t_lname,
+            $request_fields = [$request->t_fname, $request->t_mname, $request->t_lname, $request->t_program,
                 $request->t_company, $request->t_contact, $request->t_gender, $request->t_birthdate,
                 $request->t_course, $request->t_email, $request->t_address, $request->t_year,
                 $request->t_month, $request->t_remarks];
@@ -920,7 +919,7 @@ class studentController extends Controller
         $student->fname = $request->t_fname;
         $student->mname = $request->t_mname;
         $student->lname = $request->t_lname;
-        $student->program_id = $trainee_program->id;
+        $student->program_id = $request->t_program;
         $student->company_id = $request->t_company;
         $student->contact = $request->t_contact;
         $student->gender = $request->t_gender;
@@ -942,7 +941,7 @@ class studentController extends Controller
         if(isset($added_by)){
             $add_history = new student_add_history;
             $add_history->stud_id = $student->id;
-            $add_history->type = 'Trainee';
+            $add_history->type = 'TITP';
             $add_history->added_by = $added_by;
             $add_history->save();
         }
@@ -958,12 +957,16 @@ class studentController extends Controller
                     $edit_history = new student_edit_history;
                     $edit_history->stud_id = $student->id;
                     $edit_history->field = $edit_fields[$x];
-                    if($edit_fields[$x] == 'Company' || $edit_fields[$x] == 'Course' || 
-                        $edit_fields[$x] == 'Year' || $edit_fields[$x] == 'Month'){
+                    if($edit_fields[$x] == 'Program' || $edit_fields[$x] == 'Company' || 
+                        $edit_fields[$x] == 'Course' || $edit_fields[$x] == 'Year' || 
+                        $edit_fields[$x] == 'Month'){
                         if($student_fields[$x] == null){
                             $prev = 'N/A';
                         }else{
-                            if($edit_fields[$x] == 'Company'){
+                            if($edit_fields[$x] == 'Program'){
+                                $prev = program::where('id', $student_fields[$x])->pluck('name');
+                            }
+                            else if($edit_fields[$x] == 'Company'){
                                 $prev = company::where('id', $student_fields[$x])->pluck('name');
                             }
                             else if($edit_fields[$x] == 'Course'){
@@ -982,7 +985,10 @@ class studentController extends Controller
                         if($request_fields[$x] == null){
                             $new = 'N/A';
                         }else{
-                            if($edit_fields[$x] == 'Company'){
+                            if($edit_fields[$x] == 'Program'){
+                                $new = program::where('id', $request_fields[$x])->pluck('name');
+                            }
+                            else if($edit_fields[$x] == 'Company'){
                                 $new = company::where('id', $request_fields[$x])->pluck('name');
                             }
                             else if($edit_fields[$x] == 'Referred By'){
@@ -993,6 +999,9 @@ class studentController extends Controller
                             }
                             else if($edit_fields[$x] == 'Year'){
                                 $new = departure_year::where('id', $request_fields[$x])->pluck('name');
+                            }
+                            else if($edit_fields[$x] == 'Month'){
+                                $new = departure_month::where('id', $request_fields[$x])->pluck('name');
                             }
                             $new = $new[0];
                         }
@@ -1192,7 +1201,7 @@ class studentController extends Controller
     public function program_all(Request $request){
         $program = program::where('name', 'LIKE', '%'.$request->name.'%')
             ->where('name', '<>', 'Language Only')->where('name', '<>', 'SSW (Careworker)')
-            ->where('name', '<>', 'SSW (Hospitality)')->where('name', '<>', 'Trainee')
+            ->where('name', '<>', 'SSW (Hospitality)')->where('name', '<>', 'TITP')->where('name', '<>', 'TITP (Careworker)')
             ->get()->toArray();
 
         $array = [];
@@ -1208,6 +1217,20 @@ class studentController extends Controller
     public function program_ssw(Request $request){
         $program = program::where('name', 'LIKE', '%'.$request->name.'%')
             ->where('name', '=', 'SSW (Careworker)')->orWhere('name', '=', 'SSW (Hospitality)')->get()->toArray();
+
+        $array = [];
+        foreach ($program as $key => $value){
+            $array[] = [
+                'id' => $value['id'],
+                'text' => $value['name']
+            ];
+        }
+        return json_encode(['results' => $array]);
+    }
+
+    public function program_titp(Request $request){
+        $program = program::where('name', 'LIKE', '%'.$request->name.'%')
+            ->where('name', '=', 'TITP')->orWhere('name', '=', 'TITP (Careworker)')->get()->toArray();
 
         $array = [];
         foreach ($program as $key => $value){

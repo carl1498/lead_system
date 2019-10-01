@@ -70,7 +70,7 @@
             <td><b>Branch: </b> {{ $student->branch->name }}</td>
         </tr>
         <tr>
-            <td><b>Company (Trainees Only):</b> @if($student->company){{ $student->company->name }}@endif</td>
+            <td><b>Company (TITP Only):</b> @if($student->company){{ $student->company->name }}@endif</td>
             <td><b>Referred By: </b> {{ $student->referral->fname }}</td>
         </tr>
         <tr>
