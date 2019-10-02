@@ -621,7 +621,6 @@ $(document).ready(function(){
                                 cancelButtonColor: '#d33',
                                 confirmButtonText: 'Yes, delete it!'
                             }).then((result) => {
-                                console.log(password);
                                 if(result.value){
                                     $.ajax({
                                         headers: {
