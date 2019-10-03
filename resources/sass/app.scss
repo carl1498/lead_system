@@ -470,3 +470,20 @@ a.invoice_pick, a.books_pick{
 #projection_modal .col-lg-3{
     width: 21%;
 }
+
+#tf_breakdown_table tr th{
+    text-align: center;
+    vertical-align: middle;
+}
+
+#tf_breakdown_table tr td{
+    word-wrap: break-all;
+}
+
+.installments{
+    width: 250px;
+}
+
+#tf_breakdown_table{
+    table-layout: fixed;
+}

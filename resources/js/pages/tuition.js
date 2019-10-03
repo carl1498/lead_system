@@ -118,6 +118,9 @@ $(document).ready(function(){
         else if(current_tab == 'Programs'){
             refresh_program_table();
         }
+        else if(current_tab == 'TF Breakdown'){
+            refresh_tf_breakdown_table();
+        }
         else{
             refresh_tuition_sec_table();
         }
@@ -173,7 +176,7 @@ $(document).ready(function(){
             ],
             columnDefs: [
                 {defaultContent: "", targets: "_all"},
-                {className: "text-right", targets: [3,4]}
+                {className: "text-right", targets: [4,5]}
             ],
             footerCallback: function ( row, data, start, end, display ) {
                 var api = this.api(), data;
@@ -188,7 +191,7 @@ $(document).ready(function(){
      
                 // Total over all pages
                 total = api
-                    .column( 3 )
+                    .column( 4 )
                     .data()
                     .reduce( function (a, b) {
                         return intVal(a) + intVal(b);
@@ -196,7 +199,7 @@ $(document).ready(function(){
 
                 // Total over all pages
                 total2 = api
-                    .column( 4 )
+                    .column( 5 )
                     .data()
                     .reduce( function (a, b) {
                         return intVal(a) + intVal(b);
@@ -204,12 +207,12 @@ $(document).ready(function(){
      
      
                 // Update footer
-                $( api.column( 3 ).footer() ).html(
+                $( api.column( 4 ).footer() ).html(
                     '₱' + total.toFixed(2)
                 );
      
                 // Update footer
-                $( api.column( 4 ).footer() ).html(
+                $( api.column( 5 ).footer() ).html(
                     '₱' + total2.toFixed(2)
                 );
             }
@@ -375,7 +378,7 @@ $(document).ready(function(){
 
     //FUNCTIONS -- START
     
-    $('.student_pick, .tuition_sec_pick, .program_pick').on('click', function(){
+    $('.student_pick, .tuition_sec_pick, .program_pick, .tf_breakdown_pick').on('click', function(){
         if(!$(this).hasClass('disabled')){
             current_tab = $(this).text();
             refresh();
@@ -792,6 +795,139 @@ $(document).ready(function(){
                 }
             }
         },
+    });
+
+    function refresh_tf_breakdown_table(){
+        
+        class_select = $('#class_select').val();
+        program_select = $('#program_select').val();
+        branch_select = $('#branch_select').val();
+        departure_year_select = $('#departure_year_select').val();
+        departure_month_select = $('#departure_month_select').val();
+
+        $.ajax({
+            headers: {
+                'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: '/view_tf_breakdown',
+            data: {
+                class_select:class_select,
+                program_select:program_select,
+                branch_select:branch_select,
+                departure_year_select:departure_year_select,
+                departure_month_select:departure_month_select,
+            },
+            method: 'get',
+            dataType: 'json',
+            success:function(data){
+                console.log(data);
+                $('#tf_breakdown_table').empty();
+
+                let html = '';
+                let installment = '';
+                let i_amount_date = '';
+                let i_payment = '';
+
+                html += '<thead>';
+
+                for(let x = 0; x < data.installment; x++){
+
+                    installment += '<th colspan="2" class="installments">Installment ' + (x+1) + '</th>';
+                    i_amount_date += '<th>Amount Paid</th><th>Payment Date</th>';
+                }
+                i_amount_date += '<th>Amount Paid</th><th>Payment Date</th>';
+
+                html += `
+                <tr>
+                    <th rowspan="2" style="width: 300px;">Name</th>
+                    <th rowspan="2" style="width: 150px;">Program</th>
+                    <th colspan="2" style="width: 250px;">Prof Fee</th>
+                    <th rowspan="2" style="width: 150px;">Total Tuition</th>
+                    <th rowspan="2" style="width: 150px;">Total Payment</th>`
+                    +installment+
+                    `<th rowspan="2" style="width: 100px;">Balance</th>
+                </tr>
+                <tr>`
+                    +i_amount_date;
+
+                html += '</thead>';
+
+                html += '<tbody>';
+
+                for(let x = 0; x < data.tf_student.length; x++){
+                    let mname = (data.tf_student[x].student.mname) ? data.tf_student[x].student.mname : '';
+                    let i_payment = '';
+
+                    for(let y = 0; y < data.installment; y++){
+                        let amount = 0;
+                        let date = '';
+                        if(data.tf_student[x].payment[y]){
+                            amount = data.tf_student[x].payment[y].amount;
+                            date = data.tf_student[x].payment[y].date;
+                        }
+                        i_payment += '<td style="text-align:right;">' + amount + '</td>' +
+                            '<td style="text-align:center;">' + date + '</td>';
+                    }
+
+                    html += `<tr>
+                        <td>` + 
+                        data.tf_student[x].student.lname + ', ' + data.tf_student[x].student.fname + ' ' + mname +
+                        '</td>' +
+                        '<td>' + data.tf_student[x].student.program.name + '</td>' +
+                        '<td style="text-align:right;">' + data.tf_student[x].prof_fee + '</td>' +
+                        '<td style="text-align:center;">' + data.tf_student[x].prof_fee_date + '</td>' +
+                        '<td style="text-align:right;">' + data.tf_student[x].balance + '</td>' +
+                        '<td style="text-align:right;">' + data.tf_student[x].total_payment + '</td>' +
+                        i_payment +
+                        '<td style="text-align:right;">' + data.tf_student[x].remaining_bal + '</td>' +
+                    '</tr>'
+                }
+
+                html += '</tbody>';
+
+                $('#tf_breakdown_table').append(html);
+
+                /*setTimeout(function(){
+                    $("#tf_breakdown_table").tableExport({
+                        position: 'top',
+                        formats: ['xlsx']
+                    });
+                }, 1000);*/
+
+                
+                enableTabs();
+            }
+        });
+    }
+
+    $("#btnExport").click(function (e) {
+        var downloadLink;
+        var dataType = 'application/vnd.ms-excel';
+        var tableSelect = document.getElementById('tf_breakdown_table');
+        var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+        // Specify file name
+        filename = 'excel_data.xls';
+        
+        // Create download link element
+        downloadLink = document.createElement("a");
+        
+        document.body.appendChild(downloadLink);
+        
+        if(navigator.msSaveOrOpenBlob){
+            var blob = new Blob(['\ufeff', tableHTML], {
+                type: dataType
+            });
+            navigator.msSaveOrOpenBlob( blob, filename);
+        }else{
+            // Create a link to the file
+            downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+        
+            // Setting the file name
+            downloadLink.download = filename;
+            
+            //triggering the function
+            downloadLink.click();
+        }
     });
     
     //FUNCTIONS -- END

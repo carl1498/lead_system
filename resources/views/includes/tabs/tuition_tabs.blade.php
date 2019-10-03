@@ -92,6 +92,7 @@
 
 <div class="tab-pane fade in" id="tf_breakdown_tab">
     
+    <button id="btnExport">download</button>
     <div style="overflow: auto; width: 100%;">
         <table id="tf_breakdown_table" class="table table-hover table-striped table-bordered">
 

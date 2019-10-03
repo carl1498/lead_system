@@ -273,7 +273,7 @@ $(document).ready(function(){
             book_type = $('#book_type_add_book').val();
             
             $.ajax({
-                url: '/getPending/'+invoice_id+'/'+book_type,
+                url: '/getPending',
                 method: 'get',
                 data: {
                     invoice_id: invoice_id,

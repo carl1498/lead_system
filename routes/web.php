@@ -208,7 +208,7 @@ Route::group(['middleware' => ['auth', 'invoice']], function(){
     Route::get('/viewAddBooks', 'invoiceController@view_add_books');
     Route::get('/invoiceAll', 'invoiceController@invoice_all');
     Route::get('/bookAll/{invoice_id}', 'invoiceController@book_all');
-    Route::get('/getPending/{invoice_id}/{book_type}', 'invoiceController@get_pending');
+    Route::get('/getPending', 'invoiceController@get_pending');
     Route::get('/getStarting/{book_type}', 'invoiceController@get_starting');
     Route::post('/save_books', 'invoiceController@save_books');
 });
@@ -289,6 +289,7 @@ Route::group(['middleware' => ['auth', 'admin']], function(){
     Route::get('/view_tf_program', 'tuitionController@view_tf_program');
     Route::get('/view_tf_student', 'tuitionController@view_tf_student');
     Route::get('/view_tuition_sec', 'tuitionController@view_tuition_sec');
+    Route::get('/view_tf_breakdown', 'tuitionController@view_tf_breakdown');
     Route::get('/view_tuition_fee/{id}', 'tuitionController@view_tuition_fee');
     Route::get('/view_sec_bond/{id}', 'tuitionController@view_sec_bond');
     Route::get('/get_tf_projected/{id}', 'tuitionController@get_tf_projected');

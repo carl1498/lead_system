@@ -1,7 +1,7 @@
 {
     "/js/app.js": "/js/app.js?id=8c5e5d5425fcac26d372",
-    "/css/app.css": "/css/app.css?id=639f1fd223bb4d53e8d8",
-    "/js/pages/tuition.js": "/js/pages/tuition.js?id=309916c9176aab479a8e",
+    "/css/app.css": "/css/app.css?id=29d2cee6ca75e0d03d39",
+    "/js/pages/tuition.js": "/js/pages/tuition.js?id=4b0a5c9136df39637007",
     "/js/pages/students.js": "/js/pages/students.js?id=6dcfc1f471fb621109c0",
     "/js/pages/student_settings.js": "/js/pages/student_settings.js?id=add1a871cd521bff3699",
     "/js/pages/student_edit_history.js": "/js/pages/student_edit_history.js?id=efcf34c3bf358e68dc99",
@@ -9,7 +9,7 @@
     "/js/pages/student_class.js": "/js/pages/student_class.js?id=c7f5c264b6942bbcc4bb",
     "/js/pages/student_add_history.js": "/js/pages/student_add_history.js?id=b2bcfbffae8109891599",
     "/js/pages/order.js": "/js/pages/order.js?id=b136027ea54466665a90",
-    "/js/pages/invoice.js": "/js/pages/invoice.js?id=9f078d66b6e068f1cf40",
+    "/js/pages/invoice.js": "/js/pages/invoice.js?id=f62f4b582cbe61a4c1d7",
     "/js/pages/expense.js": "/js/pages/expense.js?id=f75de00e77164465226a",
     "/js/pages/employees.js": "/js/pages/employees.js?id=163be0dd0be9728e5d9c",
     "/js/pages/dashboard.js": "/js/pages/dashboard.js?id=7d9c9a7a12ea520d40fc",
