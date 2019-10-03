@@ -294,8 +294,8 @@ $(document).ready(function(){
                 },
                 dataType: 'text',
                 success: function(data){
-                    $('#starting').val(data);
-                    $('#start').val(data);
+                    $('#starting').val(parseInt(data));
+                    $('#start').val(parseInt(data));
                     $('#starting').prop('disabled', false);
                 }
             });
