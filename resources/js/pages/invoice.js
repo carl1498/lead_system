@@ -281,8 +281,8 @@ $(document).ready(function(){
                 },
                 dataType: 'text',
                 success: function(data){
-                    $('#previous_pending').val(data);
-                    $('#pending').val(data);
+                    $('#previous_pending').val(parseInt(data));
+                    $('#pending').val(parseInt(data));
                 }
             });
 
