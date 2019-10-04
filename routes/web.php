@@ -305,6 +305,8 @@ Route::group(['middleware' => ['auth', 'admin']], function(){
     Route::get('/get_initial_balance/{id}', 'tuitionController@get_initial_balance');
 
     Route::get('/get_tf_sb_payment', 'tuitionController@get_tf_sb_payment');
+
+    Route::post('/excel_tf_breakdown', 'excelController@excel_tf_breakdown');
 });
 
 //FINANCE ROUTES -- END

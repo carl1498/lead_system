@@ -487,7 +487,6 @@ $(document).ready(function(){
             method: 'get',
             dataType: 'JSON',
             success:function(data){
-                console.log(data);
                 refresh_tuition_sec_bond_table(data.tf_student.id);
                 $('.edit_initial_balance').attr('id', data.tf_student.id);
                 $('#student_tuition_modal .modal-title').text(data.tf_student.student.fname + ' ' + data.tf_student.student.lname);
@@ -728,6 +727,22 @@ $(document).ready(function(){
 
     $(`#class_select, #branch_select, #program_select, #departure_year_select, 
         #departure_month_select`).on('change', function(){
+        if($(this).attr('id') == "class_select"){
+            $('#class_hidden').val($(this).val());
+        }
+        else if($(this).attr('id') == "program_select"){
+            $('#program_hidden').val($(this).val());
+        }
+        else if($(this).attr('id') == "branch_select"){
+            $('#branch_hidden').val($(this).val());
+        }
+        else if($(this).attr('id') == "departure_year_select"){
+            $('#year_hidden').val($(this).val());
+        }
+        else if($(this).attr('id') == "departure_month_select"){
+            $('#month_hidden').val($(this).val());
+        }
+
         refresh();
     });
 
@@ -820,7 +835,6 @@ $(document).ready(function(){
             method: 'get',
             dataType: 'json',
             success:function(data){
-                console.log(data);
                 $('#tf_breakdown_table').empty();
 
                 let html = '';
@@ -886,49 +900,11 @@ $(document).ready(function(){
                 html += '</tbody>';
 
                 $('#tf_breakdown_table').append(html);
-
-                /*setTimeout(function(){
-                    $("#tf_breakdown_table").tableExport({
-                        position: 'top',
-                        formats: ['xlsx']
-                    });
-                }, 1000);*/
-
                 
                 enableTabs();
             }
         });
-    }
-
-    $("#btnExport").click(function (e) {
-        var downloadLink;
-        var dataType = 'application/vnd.ms-excel';
-        var tableSelect = document.getElementById('tf_breakdown_table');
-        var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
-        // Specify file name
-        filename = 'excel_data.xls';
-        
-        // Create download link element
-        downloadLink = document.createElement("a");
-        
-        document.body.appendChild(downloadLink);
-        
-        if(navigator.msSaveOrOpenBlob){
-            var blob = new Blob(['\ufeff', tableHTML], {
-                type: dataType
-            });
-            navigator.msSaveOrOpenBlob( blob, filename);
-        }else{
-            // Create a link to the file
-            downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
-        
-            // Setting the file name
-            downloadLink.download = filename;
-            
-            //triggering the function
-            downloadLink.click();
-        }
-    });
+    }    
     
     //FUNCTIONS -- END
 });

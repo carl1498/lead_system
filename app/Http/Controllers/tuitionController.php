@@ -309,7 +309,6 @@ class tuitionController extends Controller
     }
 
     public function view_tf_breakdown(Request $request){
-        info($request);
         $class_select = $request->class_select;
         $program_select = $request->program_select;
         $branch_select = $request->branch_select;
