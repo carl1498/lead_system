@@ -48,7 +48,6 @@ $(document).ready(function(){
         $('#assign_books_modal').find("input,textarea,select").val('').end();
         $('#assign_student_name, #assign_book_type, #assign_book').val('').trigger('change');
         $('#assign_book_type, #assign_book').prop('disabled', true);
-        $('#assign_continuous').bootstrapToggle('off')
     }
 
     $('#assign_continuous').bootstrapToggle('off')

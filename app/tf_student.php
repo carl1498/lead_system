@@ -17,7 +17,7 @@ class tf_student extends Model
     }
 
     public function payment(){
-        return $this->hasMany('App\tf_payment', 'tf_stud_id', 'id')->where('sign_up', 0);
+        return $this->hasMany('App\tf_payment', 'tf_stud_id', 'id')->where('sign_up', 0)->orderBy('date', 'asc');
     }
 
     public $timestamps = true;

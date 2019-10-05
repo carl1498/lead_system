@@ -109,6 +109,13 @@ class excelController extends Controller
                 'vertical' => Alignment::VERTICAL_CENTER,
             ]
         ];
+
+        $centerStyleArray = [
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+                'vertical' => Alignment::VERTICAL_CENTER,
+            ]
+        ];
         //STYLE -- END
 
         /* SETTINGS
@@ -162,18 +169,16 @@ class excelController extends Controller
             $sheet->setCellValue('A'.$row, $count);
             $sheet->setCellValue('B'.$row, $ts->student->lname . ', ' . $ts->student->fname . ' ' .
             (($ts->student->mname) ? $ts->student->mname : ''));
-            $sheet->setCellValue('C'.$row, $ts->student->program->name);
+            $sheet->setCellValue('C'.$row, (($ts->student->program) ? $ts->student->program->name : ''));
             $sheet->setCellValue('D'.$row, $ts->prof_fee);
             $sheet->setCellValue('E'.$row, $ts->prof_fee_date);
             $sheet->setCellValue('F'.$row, $ts->balance);
             $sheet->setCellValue('G'.$row, $ts->total_payment);
             $col = 'H';
             $col2 = 'I';
-            info($installment);
             for($x = 8, $y = 0; $x < 8+($installment*2); $x+=2, $y++){
                 $amount = '';
                 $date = '';
-                info($y);
 
                 if(!empty($ts->payment[$y])){
                     $amount = $ts->payment[$y]->amount;
@@ -190,6 +195,22 @@ class excelController extends Controller
 
         //BODY -- END
 
+        //FOOTER -- START
+
+        $highestrow = $sheet->getHighestRow()+1;
+        $sheet->setCellValue('A'.$highestrow, 'TOTAL')->mergeCells('A'.$highestrow.':'.'C'.$highestrow);
+        $sheet->setCellValue('D'.$highestrow, '=sum(D7:D'.($sheet->getHighestRow()-1).')');
+        $sheet->setCellValue('F'.$highestrow, '=sum(F7:F'.($sheet->getHighestRow()-1).')');
+        $sheet->setCellValue('G'.$highestrow, '=sum(G7:G'.($sheet->getHighestRow()-1).')');
+        $col = 'H';
+        for($x = 8, $y = 0; $x < 8+($installment*2); $x+=2, $y++){
+            $sheet->setCellValue($col.$highestrow, '=sum('.$col.'7:'.$col.($sheet->getHighestRow()-1).')');
+            $col++;$col++;
+        }
+        $sheet->setCellValue($col.$highestrow, '=sum('.$col.'7:'.$col.($sheet->getHighestRow()-1).')');
+
+        //FOOTER -- END
+
 
 
         $sheet->freezePane('D7');
@@ -201,17 +222,21 @@ class excelController extends Controller
         ->mergeCells('A3:'.$sheet->getHighestColumn().'3');
         
 
-
-
+        //Using Styles -- START
 
         //Set title alignment to center
-        $sheet->getStyle('A1:'.$sheet->getHighestColumn().'3')->getAlignment()
-        ->setHorizontal(Alignment::HORIZONTAL_CENTER)->setVertical(Alignment::VERTICAL_CENTER);
+
+        $sheet->getStyle('A1:A'.$sheet->getHighestRow())->applyFromArray($centerStyleArray);
+        $sheet->getStyle('A1:'.$sheet->getHighestColumn().'3')->applyFromArray($centerStyleArray);
 
         $highestcolumn = $sheet->getHighestColumn();
         $highestcolumn++;
         for($x = 'A'; $x != $highestcolumn; $x++){
             $sheet->getColumnDimension($x)->setAutoSize(TRUE);
+        }
+
+        for($x = 'A'; $x != $highestcolumn; $x++){
+            
         }
 
         $no_borders = ['A1', 'A2', 'A3'];
@@ -230,10 +255,6 @@ class excelController extends Controller
             $sheet->getStyle($merged)->applyFromArray($headerStyleArray);
         }
 
-
-
-
-
         //$sheet->fromArray($tf_student->total_payment,null,'A1');
 
         $filename = 'sample2.xlsx';
@@ -245,5 +266,7 @@ class excelController extends Controller
 
         $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
         $writer->save('php://output');
+
+        //Using Styles -- END
     }
 }
