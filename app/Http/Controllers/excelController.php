@@ -9,6 +9,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use App\tf_student;
 use App\tf_payment;
 use App\class_settings;
@@ -116,6 +117,17 @@ class excelController extends Controller
                 'vertical' => Alignment::VERTICAL_CENTER,
             ]
         ];
+
+        $allStyleArray = [
+            'borders' => [
+                'outline' => [
+                    'borderStyle' => Border::BORDER_THIN
+                ]
+            ],
+            'alignment' => [
+                'vertical' => Alignment::VERTICAL_CENTER,
+            ]
+        ];
         //STYLE -- END
 
         /* SETTINGS
@@ -149,7 +161,7 @@ class excelController extends Controller
         //Header Installment -- START
         $col = 'H';
         $col2 = 'I';
-        for($x = 8, $y = 1; $x < 8+($installment*2); $x+=2, $y++){
+        for($x = 8, $y = 1; $x < 8+($installment*2)+2; $x+=2, $y++){
             $sheet->setCellValueByColumnAndRow($x, 5, 'Installment '.$y)->mergeCells($col.'5:'.$col2.'5');
             $sheet->setCellValueByColumnAndRow($x, 6, 'Amount Paid');
             $sheet->setCellValueByColumnAndRow($x+1, 6, 'Payment Date');
@@ -172,6 +184,7 @@ class excelController extends Controller
             $sheet->setCellValue('C'.$row, (($ts->student->program) ? $ts->student->program->name : ''));
             $sheet->setCellValue('D'.$row, $ts->prof_fee);
             $sheet->setCellValue('E'.$row, $ts->prof_fee_date);
+            $sheet->getStyle('E'.$row)->applyFromArray($centerStyleArray);
             $sheet->setCellValue('F'.$row, $ts->balance);
             $sheet->setCellValue('G'.$row, $ts->total_payment);
             $col = 'H';
@@ -187,8 +200,10 @@ class excelController extends Controller
 
                 $sheet->setCellValueByColumnAndRow($x, $row, $amount);
                 $sheet->setCellValueByColumnAndRow($x+1, $row, $date);
+                $sheet->getStyle($col2.$row)->applyFromArray($centerStyleArray);
                 $col++;$col++;$col2++;$col2++;
             }
+            $col++;$col++;
             $sheet->setCellValue($col.$row, $ts->remaining_bal);
             $row++;$count++;
         }
@@ -207,6 +222,7 @@ class excelController extends Controller
             $sheet->setCellValue($col.$highestrow, '=sum('.$col.'7:'.$col.($sheet->getHighestRow()-1).')');
             $col++;$col++;
         }
+        $col++;$col++;
         $sheet->setCellValue($col.$highestrow, '=sum('.$col.'7:'.$col.($sheet->getHighestRow()-1).')');
 
         //FOOTER -- END
@@ -220,14 +236,13 @@ class excelController extends Controller
 
         $sheet->mergeCells('A1:'.$sheet->getHighestColumn().'1')->mergeCells('A2:'.$sheet->getHighestColumn().'2')
         ->mergeCells('A3:'.$sheet->getHighestColumn().'3');
-        
 
         //Using Styles -- START
 
-        //Set title alignment to center
+        //Set title
 
         $sheet->getStyle('A1:A'.$sheet->getHighestRow())->applyFromArray($centerStyleArray);
-        $sheet->getStyle('A1:'.$sheet->getHighestColumn().'3')->applyFromArray($centerStyleArray);
+        $sheet->getStyle('A1:'.$sheet->getHighestColumn().'3')->getFont()->setSize(18);
 
         $highestcolumn = $sheet->getHighestColumn();
         $highestcolumn++;
@@ -235,29 +250,31 @@ class excelController extends Controller
             $sheet->getColumnDimension($x)->setAutoSize(TRUE);
         }
 
-        for($x = 'A'; $x != $highestcolumn; $x++){
-            
-        }
-
-        $no_borders = ['A1', 'A2', 'A3'];
-
-        
-        $counter = 0;
-        foreach($sheet->getMergeCells() as $merged){
-            $counter_bool = false;
-            for($x = 0; $x < 3; $x++){
-                if(stripos($merged, $no_borders[$x]) !== false){
-                    $counter_bool = true;
-                    break;
+        $highestrow = $sheet->getHighestRow();
+        for($x = 5; $x <= $highestrow; $x++){
+            for($y = 'A'; $y != $highestcolumn; $y++){
+                if($x < 7){
+                    $sheet->getStyle($y.$x)->applyFromArray($headerStyleArray);
+                }
+                else{
+                    $sheet->getStyle($y.$x)->applyFromArray($allStyleArray);
                 }
             }
-            if($counter_bool == true){continue;}
-            $sheet->getStyle($merged)->applyFromArray($headerStyleArray);
+            $sheet->getRowDimension($x)->setRowHeight(30);
         }
 
-        //$sheet->fromArray($tf_student->total_payment,null,'A1');
+        $sheet->getPageSetup()->setOrientation(PageSetup::ORIENTATION_LANDSCAPE)
+        ->setPaperSize(PageSetup::PAPERSIZE_FOLIO);
 
-        $filename = 'sample2.xlsx';
+        $sheet->getPageMargins()->setTop(0.75);
+        $sheet->getPageMargins()->setRight(0.7);
+        $sheet->getPageMargins()->setLeft(0.25);
+        $sheet->getPageMargins()->setBottom(0.75);
+
+        $sheet->getPageSetup()->setFitToPage(true);
+        $sheet->getPageSetup()->setPrintArea('A1:'.$sheet->getHighestColumn().$sheet->getHighestRow());
+
+        $filename = 'Tuition Fee Breakdown.xlsx';
 
         //redirect output to client
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');

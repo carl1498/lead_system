@@ -675,6 +675,7 @@ $(document).ready(function(){
     
     $('#sign_up_check').on('change', function(){
         ($(this).is(':checked')) ? $('#sign_up').val(1) :  $('#sign_up').val(0);
+        $('#p_student').trigger('change');
     });
 
     $('#student').on('change', function(){
@@ -708,7 +709,10 @@ $(document).ready(function(){
                 method: 'get',
                 dataType: 'JSON',
                 success:function(data){
-                    if($('#p_type').val() == 'tuition'){
+                    if($('#sign_up_check').is(':checked')){
+                        $('#current, #total').val(data.tf_sign_up);
+                    }
+                    else if($('#p_type').val() == 'tuition'){
                         $('#current, #total').val(data.tf_payment);
                         $('#sign_up_check').attr('disabled', false);
                     }
@@ -752,6 +756,12 @@ $(document).ready(function(){
         let prev_amount = $('#p_prev_amount').val();
         let p_type = $('#p_type').val();
 
+        if($('#sign_up_check').is(':checked')){
+            if(prev_amount != ''){
+                amount = parseFloat(amount) - parseFloat(prev_amount);
+            }
+            $('#total').val(parseFloat(current) + parseFloat(amount));
+        }
         if(p_type == 'tuition'){
             if(prev_amount != ''){
                 amount = parseFloat(amount) - parseFloat(prev_amount);
@@ -898,6 +908,25 @@ $(document).ready(function(){
                 }
 
                 html += '</tbody>';
+
+                html += '<tfoot>';
+
+                let footer_installment = '';
+
+                for(let x = 0; x < data.installment; x++){
+                    footer_installment += '<td style="text-align:right;">' + data.footer.installment[x] + '</td><td></td>';
+                }
+
+                html += `<tr>
+                    <td style="text-align:center;" colspan="2">TOTAL</td>
+                    <td style="text-align:right;">` + data.footer.sign_up + `</td>
+                    <td></td>
+                    <td style="text-align:right;">` + data.footer.total_tuition + `</td>
+                    <td style="text-align:right;">` + data.footer.total_payment + `</td>` +
+                    footer_installment +
+                    '<td style="text-align:right;">' + data.footer.balance + '</td>';
+
+                html += '</tfoot>';
 
                 $('#tf_breakdown_table').append(html);
                 

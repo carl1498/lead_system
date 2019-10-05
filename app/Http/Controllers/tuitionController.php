@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use App\sec_bond;
 use App\tf_name;
@@ -375,9 +376,33 @@ class tuitionController extends Controller
             $ts->remaining_bal = $ts->balance - $ts->total_payment;
         }
 
+        //For Footer
+        $tf_student_footer = $tf_student->pluck('id');
+
+        $footer = new Collection;
+        $footer->put('sign_up', tf_payment::whereIn('tf_stud_id', $tf_student_footer)->where('sign_up', 1)->sum('amount'));
+        $footer->put('total_tuition', tf_student::whereIn('id', $tf_student_footer)->sum('balance'));
+        $footer->put('total_payment', tf_payment::whereIn('tf_stud_id', $tf_student_footer)->where('sign_up', 0)->sum('amount'));
+
+        $footer_installment = [];
+
+        for($x = 0; $x < $installment; $x++){
+            $temp_installment = 0;
+            foreach($tf_student as $ts){
+                if(!empty($ts->payment[$x])){
+                    $temp_installment += $ts->payment[$x]->amount;
+                }
+            }
+            array_push($footer_installment, $temp_installment);
+        }
+        
+        $footer->put('installment', $footer_installment);
+        $footer->put('balance', $footer['total_tuition'] - $footer['total_payment']);
+
         $output = array(
             'tf_student' => $tf_student,
             'installment' => $installment,
+            'footer' => $footer
         );
 
         echo json_encode($output);
