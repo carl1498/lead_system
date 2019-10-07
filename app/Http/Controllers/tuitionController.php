@@ -16,7 +16,10 @@ use App\class_students;
 use App\class_settings;
 use App\departure_year;
 use App\departure_month;
+use Auth;
 use Yajra\Datatables\Datatables;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\Redirect;
 
 class tuitionController extends Controller
 {
@@ -216,12 +219,14 @@ class tuitionController extends Controller
                 $query->whereIn('tf_stud_id', $tf_student);
             })->get();
             $edit_button = 'edit_tf_payment';
+            $delete_button = 'delete_tf_payment';
         }
         else if($current_tab == 'Security Bond Payment History'){
             $tf_sb = sec_bond::with('student.student.program', 'student.student.branch')->when(!empty($tf_student), function($query) use($tf_student){
                 $query->whereIn('tf_stud_id', $tf_student);
             })->get();
             $edit_button = 'edit_sb_payment';
+            $delete_button = 'delete_sb_payment';
         }
 
         return Datatables::of($tf_sb)
@@ -260,10 +265,12 @@ class tuitionController extends Controller
             }
             return $html;
         })
-        ->addColumn('action', function($data) use($edit_button){
+        ->addColumn('action', function($data) use($edit_button, $delete_button){
             $html = '';
 
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-warning btn-xs '.$edit_button.'" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Student" class="btn btn-warning btn-xs view_student_tuition" id="'.$data->tf_stud_id.'"><i class="fa fa-list-alt" style="font-size: 15px;"></i></button>&nbsp;';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs '.$edit_button.'" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs '.$delete_button.'" id="'.$data->id.'"><i class="fa fa-trash"></i></button>&nbsp;';
 
             return $html;
         })
@@ -286,7 +293,8 @@ class tuitionController extends Controller
         ->addColumn('action', function($data){
             $html = '';
 
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-warning btn-xs edit_tf_payment" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_tf_payment" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_tf_payment" id="'.$data->id.'"><i class="fa fa-trash"></i></button>&nbsp;';
 
             return $html;
         })
@@ -302,7 +310,8 @@ class tuitionController extends Controller
         ->addColumn('action', function($data){
             $html = '';
 
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-warning btn-xs edit_sb_payment" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_sb_payment" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_sb_payment" id="'.$data->id.'"><i class="fa fa-trash"></i></button>&nbsp;';
 
             return $html;
         })
@@ -406,6 +415,43 @@ class tuitionController extends Controller
         );
 
         echo json_encode($output);
+    }
+
+    public function view_summary(Request $request){
+        $program_select = $request->program_select;
+        $branch_select = $request->branch_select;
+        $departure_year_select = $request->departure_year_select;
+        $departure_month_select = $request->departure_month_select;
+        $current_class = [];
+
+        $tf_student = tf_student::with('student.program', 'student.school', 'payment')
+        ->when($program_select != 'All', function($query) use($program_select){
+            $query->whereHas('student', function($query) use($program_select){
+                $query->where('program_id', $program_select);
+            });
+        })
+        ->when($branch_select != 'All', function($query) use($branch_select){
+            $query->whereHas('student', function($query) use($branch_select){
+                $query->where('branch_id', $branch_select);
+            });
+        })
+        ->when($departure_year_select != 'All', function($query) use($departure_year_select){
+            $query->whereHas('student', function($query) use($departure_year_select){
+                $query->where('departure_year_id', $departure_year_select);
+            });
+        })
+        ->when($departure_month_select != 'All', function($query) use($departure_month_select){
+            $query->whereHas('student', function($query) use($departure_month_select){
+                $query->where('departure_month_id', $departure_month_select);
+            });
+        })->get();
+
+        foreach($tf_student as $ts){
+            $ts->total_payment = tf_payment::where('tf_stud_id', $ts->id)->sum('amount');
+            $ts->sec_bond = sec_bond::where('tf_stud_id', $ts->id)->sum('amount');
+        }
+
+        return $tf_student;
     }
 
     public function get_tf_projected(Request $request){
@@ -624,5 +670,27 @@ class tuitionController extends Controller
 
     public function get_initial_balance(Request $request){
         return tf_student::with('student')->find($request->id);
+    }
+
+    public function delete_tf_payment(Request $request){
+        if(!Hash::check($request->password, Auth::user()->password)){
+            Auth::logout();
+            return \Redirect::to('/');
+        }
+
+        $tf_payment = tf_payment::find($request->id);
+        $tf_payment->delete();
+        return $tf_payment->tf_stud_id;
+    }
+
+    public function delete_sb_payment(Request $request){
+        if(!Hash::check($request->password, Auth::user()->password)){
+            Auth::logout();
+            return \Redirect::to('/');
+        }
+
+        $sec_bond = sec_bond::find($request->id);
+        $sec_bond->delete();
+        return $sec_bond->tf_stud_id;
     }
 }

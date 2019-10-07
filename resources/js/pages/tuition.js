@@ -5,6 +5,8 @@ $(document).ready(function(){
     var current_tab = 'Student';
     var add_edit, payment_type;
     var s_modal = false, p_modal = false;
+    var edit_status = false;
+    var title;
 
     $(".datepicker").datepicker({
         format: 'yyyy-mm-dd',
@@ -64,6 +66,7 @@ $(document).ready(function(){
             p_modal = false;
             setTimeout(function(){$('#student_tuition_modal').modal('show')}, 500);
         }
+        edit_status = false;
     });
     
     $("#student_tuition_modal").on("hidden.bs.modal", function(e){
@@ -90,20 +93,24 @@ $(document).ready(function(){
     $('#tf_sb_payment_continuous').bootstrapToggle('off');
 
     function disableTabs(){
-        $(`li.student_pick, li.tuition_sec_pick, li.program_pick, li.tf_breakdown_pick`
+        $(`li.student_pick, li.tuition_sec_pick, li.program_pick, 
+        li.tf_breakdown_pick, li.summary_pick`
         ).addClass('disabled').css('cursor', 'not-allowed');
 
-        $(`a.student_pick, a.tuition_sec_pick, a.program_pick, a.tf_breakdown_pick`
+        $(`a.student_pick, a.tuition_sec_pick, a.program_pick, 
+        a.tf_breakdown_pick, a.summary_pick`
         ).addClass('disabled').css('pointer-events', 'none');
 
         $('.refresh_table').attr('disabled', true);
     }
 
     function enableTabs(){
-        $(`li.student_pick, li.tuition_sec_pick, li.program_pick, li.tf_breakdown_pick`
+        $(`li.student_pick, li.tuition_sec_pick, li.program_pick, 
+        li.tf_breakdown_pick, li.summary_pick`
         ).removeClass('disabled').css('cursor', 'pointer');
         
-        $(`a.student_pick, a.tuition_sec_pick, a.program_pick, a.tf_breakdown_pick`
+        $(`a.student_pick, a.tuition_sec_pick, a.program_pick, 
+        a.tf_breakdown_pick, a.summary_pick`
         ).removeClass('disabled').css('pointer-events', 'auto');
 
         $('.refresh_table').attr('disabled', false);
@@ -111,6 +118,9 @@ $(document).ready(function(){
 
     function refresh(){
         disableTabs();
+        get_year = $("#departure_year_select option:selected").text();
+        get_month = $("#departure_month_select option:selected").text();
+        update_buttons();
         
         if(current_tab == 'Student'){
             refresh_student_table();
@@ -120,6 +130,9 @@ $(document).ready(function(){
         }
         else if(current_tab == 'TF Breakdown'){
             refresh_tf_breakdown_table();
+        }
+        else if(current_tab == 'Summary'){
+            refresh_summary_table();
         }
         else{
             refresh_tuition_sec_table();
@@ -134,6 +147,24 @@ $(document).ready(function(){
 
     //DATATABLES -- START
 
+    function update_buttons(){
+        
+        switch(current_tab){
+            case 'Tuition Fee Payment History'  :   title = ' DEPARTURE TUITION FEE'; break;
+            case 'Security Bond Payment History'  :   title = ' DEPARTURE SECURITY BOND'; break;
+        }
+
+        get_departure = (get_year == 'All' && get_month == 'All') ? 'All' : get_year + ' ' + get_month;
+
+        payment_buttons_format = [
+            {extend: 'excelHtml5', title: get_departure + title,
+            exportOptions: {
+                columns: ':visible'
+            }},
+            'colvis'
+        ];
+    }
+
     function refresh_student_table(){
         
         class_select = $('#class_select').val();
@@ -146,6 +177,8 @@ $(document).ready(function(){
             initComplete: function(settings, json) {
                 enableTabs();
             },
+            dom: 'Bflrtip',
+            buttons: payment_buttons_format,
             processing: true,
             destroy: true,
             scrollX: true,
@@ -231,6 +264,8 @@ $(document).ready(function(){
             initComplete: function(settings, json) {
                 enableTabs();
             },
+            dom: 'Bflrtip',
+            buttons: payment_buttons_format,
             processing: true,
             destroy: true,
             scrollX: true,
@@ -368,6 +403,189 @@ $(document).ready(function(){
         });
     }
 
+    function refresh_tf_breakdown_table(){
+        
+        class_select = $('#class_select').val();
+        program_select = $('#program_select').val();
+        branch_select = $('#branch_select').val();
+        departure_year_select = $('#departure_year_select').val();
+        departure_month_select = $('#departure_month_select').val();
+
+        $.ajax({
+            headers: {
+                'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: '/view_tf_breakdown',
+            data: {
+                class_select:class_select,
+                program_select:program_select,
+                branch_select:branch_select,
+                departure_year_select:departure_year_select,
+                departure_month_select:departure_month_select,
+            },
+            method: 'get',
+            dataType: 'json',
+            success:function(data){
+                $('#tf_breakdown_table').empty();
+
+                let html = '';
+                let installment = '';
+                let i_amount_date = '';
+                let i_payment = '';
+
+                html += '<thead>';
+
+                for(let x = 0; x < data.installment; x++){
+
+                    installment += '<th colspan="2" class="installments">Installment ' + (x+1) + '</th>';
+                    i_amount_date += '<th>Amount Paid</th><th>Payment Date</th>';
+                }
+                i_amount_date += '<th>Amount Paid</th><th>Payment Date</th>';
+
+                html += `
+                <tr>
+                    <th rowspan="2" style="width: 300px;">Name</th>
+                    <th rowspan="2" style="width: 150px;">Program</th>
+                    <th colspan="2" style="width: 250px;">Prof Fee</th>
+                    <th rowspan="2" style="width: 150px;">Total Tuition</th>
+                    <th rowspan="2" style="width: 150px;">Total Payment</th>`
+                    +installment+
+                    `<th rowspan="2" style="width: 100px;">Balance</th>
+                </tr>
+                <tr>`
+                    +i_amount_date;
+
+                html += '</thead>';
+
+                html += '<tbody>';
+
+                for(let x = 0; x < data.tf_student.length; x++){
+                    let mname = (data.tf_student[x].student.mname) ? data.tf_student[x].student.mname : '';
+                    let school = (data.tf_student[x].program) ? data.tf_student[x].program.name : '';
+                    let i_payment = '';
+
+                    for(let y = 0; y < data.installment; y++){
+                        let amount = 0;
+                        let date = '';
+                        
+                        if(data.tf_student[x].payment[y]){
+                            amount = data.tf_student[x].payment[y].amount;
+                            date = data.tf_student[x].payment[y].date;
+                        }
+                        i_payment += '<td style="text-align:right;">' + amount + '</td>' +
+                            '<td style="text-align:center;">' + date + '</td>';
+                    }
+
+                    html += `<tr>
+                        <td>` + 
+                        data.tf_student[x].student.lname + ', ' + data.tf_student[x].student.fname + ' ' + mname +
+                        '</td>' +
+                        '<td>' + data.tf_student[x].student.program.name + '</td>' +
+                        '<td style="text-align:right;">' + data.tf_student[x].prof_fee + '</td>' +
+                        '<td style="text-align:center;">' + data.tf_student[x].prof_fee_date + '</td>' +
+                        '<td style="text-align:right;">' + data.tf_student[x].balance + '</td>' +
+                        '<td style="text-align:right;">' + data.tf_student[x].total_payment + '</td>' +
+                        i_payment +
+                        '<td style="text-align:right;">' + data.tf_student[x].remaining_bal + '</td>' +
+                    '</tr>'
+                }
+
+                html += '</tbody>';
+
+                html += '<tfoot>';
+
+                let footer_installment = '';
+
+                for(let x = 0; x < data.installment; x++){
+                    footer_installment += '<td style="text-align:right;">' + data.footer.installment[x] + '</td><td></td>';
+                }
+
+                html += `<tr>
+                    <td style="text-align:center;" colspan="2">TOTAL</td>
+                    <td style="text-align:right;">` + data.footer.sign_up + `</td>
+                    <td></td>
+                    <td style="text-align:right;">` + data.footer.total_tuition + `</td>
+                    <td style="text-align:right;">` + data.footer.total_payment + `</td>` +
+                    footer_installment +
+                    '<td style="text-align:right;">' + data.footer.balance + '</td>';
+
+                html += '</tfoot>';
+
+                $('#tf_breakdown_table').append(html);
+                
+                enableTabs();
+            }
+        });
+    }    
+    
+    function refresh_summary_table(){
+        
+        class_select = $('#class_select').val();
+        program_select = $('#program_select').val();
+        branch_select = $('#branch_select').val();
+        departure_year_select = $('#departure_year_select').val();
+        departure_month_select = $('#departure_month_select').val();
+
+        $.ajax({
+            headers: {
+                'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: '/view_summary',
+            data: {
+                class_select:class_select,
+                program_select:program_select,
+                branch_select:branch_select,
+                departure_year_select:departure_year_select,
+                departure_month_select:departure_month_select,
+            },
+            method: 'get',
+            dataType: 'json',
+            success:function(data){
+                $('#summary_table').empty();
+                
+                let html = '';
+
+                html += '<thead>';
+
+                html += `
+                <tr>
+                    <th style="width: 300px;">Name</th>
+                    <th style="width: 150px;">Program</th>
+                    <th style="width: 150px;">School</th>
+                    <th style="width: 300px;">Sec Bond Amount</th>
+                    <th style="width: 250px;">Tuition Fee / Sign Up Fee</th>
+                </tr>`
+
+                html += '</thead>';
+
+                html += '<tbody>';
+
+                for(let x = 0; x < data.length; x++){
+                    let mname = (data[x].student.mname) ? data[x].student.mname : '';
+                    let program = (data[x].student.program) ? data[x].student.program.name : '';
+                    let student = (data[x].student.school) ? data[x].student.school.name : '';
+
+                    html += `<tr>
+                    <td>` +
+                    data[x].student.lname + ', ' + data[x].student.fname + ' ' + mname +
+                    '</td>' +
+                    '<td>' + program + '</td>' +
+                    '<td>' + student + '</td>' +
+                    '<td>' + data[x].sec_bond + '</td>' +
+                    '<td>' + data[x].total_payment + '</td>' +
+                    '</td>'
+                }
+
+                html += '</tbody>';
+
+                $('#summary_table').append(html);
+
+                enableTabs();
+            }
+        })
+
+    }
+
     refresh();
     
     $('.refresh_table').on('click', function(){
@@ -378,7 +596,8 @@ $(document).ready(function(){
 
     //FUNCTIONS -- START
     
-    $('.student_pick, .tuition_sec_pick, .program_pick, .tf_breakdown_pick').on('click', function(){
+    $(`.student_pick, .tuition_sec_pick, .program_pick, 
+        .tf_breakdown_pick, .summary_pick`).on('click', function(){
         if(!$(this).hasClass('disabled')){
             current_tab = $(this).text();
             refresh();
@@ -412,6 +631,7 @@ $(document).ready(function(){
         let id = $(this).attr('id');
         payment_type = 'tuition';
         get_tf_sb_payment(id, 'tuition', 'Tuition Fee Payment');
+        edit_status = true;
     });
 
     $(document).on('click', '.edit_initial_balance', function(){
@@ -428,6 +648,136 @@ $(document).ready(function(){
                 $('#student_tuition_modal').modal('hide');
                 setTimeout(function(){$('#initial_balance_modal').modal('show')}, 500);
             }
+        });
+    });
+    
+    $(document).on('click', '.delete_tf_payment', function(){
+        let id = $(this).attr('id');
+
+        swal.fire({
+            title: 'Confirm User',
+            text: 'For security purposes, input your password again.',
+            input: 'password',
+            inputAttributes: {
+                autocapitalize: 'off'
+            },
+            showCancelButton: true,
+            confirmButtonText: 'Confirm',
+            showLoaderOnConfirm: true,
+            preConfirm: (password) => {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: '/confirm_user',
+                    data: { password:password },
+                    method: 'POST',
+                    success: function(data){
+                        if(data == 0){
+                            swal('Password Incorrect!', 'Please try again', 'error');
+                            return;
+                        }
+                        else{
+                            swal({
+                                title: 'Warning',
+                                text: 'Are you sure?',
+                                type: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Yes, delete it!'
+                            }).then((result) => {
+                                if(result.value){
+                                    $.ajax({
+                                        headers: {
+                                            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                                        },
+                                        url: '/delete_tf_payment',
+                                        data: {
+                                            id: id,
+                                            password: password
+                                        },
+                                        method: 'get',
+                                        type: 'json',
+                                        success:function(data){
+                                            notif('Success!', 'This Payment has been Deleted', 'success', 'glyphicon-ok');
+                                            refresh();
+                                            if(s_modal == true){
+                                                refresh_view_student_tuition(data);
+                                            }
+                                        }
+                                    })
+                                }
+                            });
+                        }
+                    }
+                });
+            },
+        });
+    });
+
+    $(document).on('click', '.delete_sb_payment', function(){
+        let id = $(this).attr('id');
+
+        swal.fire({
+            title: 'Confirm User',
+            text: 'For security purposes, input your password again.',
+            input: 'password',
+            inputAttributes: {
+                autocapitalize: 'off'
+            },
+            showCancelButton: true,
+            confirmButtonText: 'Confirm',
+            showLoaderOnConfirm: true,
+            preConfirm: (password) => {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: '/confirm_user',
+                    data: { password:password },
+                    method: 'POST',
+                    success: function(data){
+                        if(data == 0){
+                            swal('Password Incorrect!', 'Please try again', 'error');
+                            return;
+                        }
+                        else{
+                            swal({
+                                title: 'Warning',
+                                text: 'Are you sure?',
+                                type: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Yes, delete it!'
+                            }).then((result) => {
+                                if(result.value){
+                                    $.ajax({
+                                        headers: {
+                                            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                                        },
+                                        url: '/delete_sb_payment',
+                                        data: {
+                                            id: id,
+                                            password: password
+                                        },
+                                        method: 'get',
+                                        type: 'json',
+                                        success:function(data){
+                                            notif('Success!', 'This Payment has been Deleted', 'success', 'glyphicon-ok');
+                                            refresh();
+                                            if(s_modal == true){
+                                                refresh_view_student_tuition(data);
+                                            }
+                                        }
+                                    })
+                                }
+                            });
+                        }
+                    }
+                });
+            },
         });
     });
 
@@ -448,7 +798,7 @@ $(document).ready(function(){
                 $('#date').val(data.date);
                 $('#remarks').val(data.remarks);
                 if(data.sign_up == 1){
-                    $('#sign_up_check').attr('disabled', false).prop('checked', true);
+                    $('#sign_up_check').attr('disabled', true).prop('checked', true);
                     $('#sign_up').val(1);
                 }
                 else{
@@ -714,12 +1064,16 @@ $(document).ready(function(){
                     }
                     else if($('#p_type').val() == 'tuition'){
                         $('#current, #total').val(data.tf_payment);
-                        $('#sign_up_check').attr('disabled', false);
+                        if(edit_status == false){
+                            $('#sign_up_check').attr('disabled', false);
+                        }
                     }
                     else if($('#p_type').val() == 'sec_bond'){
                         $('#current, #total').val(data.sec_bond);
                     }
                     $('#p_amount').attr('readonly', false);
+
+                    $('#p_amount').trigger('change');
                 }
             });
         }
@@ -732,28 +1086,28 @@ $(document).ready(function(){
     $(`#class_select, #branch_select, #program_select, #departure_year_select, 
         #departure_month_select`).on('change', function(){
         if($(this).attr('id') == "class_select"){
-            $('#class_hidden').val($(this).val());
+            $('.class_hidden').val($(this).val());
         }
         else if($(this).attr('id') == "program_select"){
-            $('#program_hidden').val($(this).val());
+            $('.program_hidden').val($(this).val());
         }
         else if($(this).attr('id') == "branch_select"){
-            $('#branch_hidden').val($(this).val());
+            $('.branch_hidden').val($(this).val());
         }
         else if($(this).attr('id') == "departure_year_select"){
-            $('#year_hidden').val($(this).val());
+            $('.year_hidden').val($(this).val());
         }
         else if($(this).attr('id') == "departure_month_select"){
-            $('#month_hidden').val($(this).val());
+            $('.month_hidden').val($(this).val());
         }
 
         refresh();
     });
 
     $('#p_amount').on('keyup change', function(){
-        let current = $('#current').val();
-        let amount = $('#p_amount').val();
-        let prev_amount = $('#p_prev_amount').val();
+        let current = ($('#current').val()) ? $('#current').val() : 0;
+        let amount = ($('#p_amount').val() != '') ? $('#p_amount').val() : 0;
+        let prev_amount = ($('#p_prev_amount').val() != '') ? $('#p_prev_amount').val() : 0;
         let p_type = $('#p_type').val();
 
         if($('#sign_up_check').is(':checked')){
@@ -762,7 +1116,7 @@ $(document).ready(function(){
             }
             $('#total').val(parseFloat(current) + parseFloat(amount));
         }
-        if(p_type == 'tuition'){
+        else if(p_type == 'tuition'){
             if(prev_amount != ''){
                 amount = parseFloat(amount) - parseFloat(prev_amount);
             }
@@ -821,119 +1175,6 @@ $(document).ready(function(){
             }
         },
     });
-
-    function refresh_tf_breakdown_table(){
-        
-        class_select = $('#class_select').val();
-        program_select = $('#program_select').val();
-        branch_select = $('#branch_select').val();
-        departure_year_select = $('#departure_year_select').val();
-        departure_month_select = $('#departure_month_select').val();
-
-        $.ajax({
-            headers: {
-                'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-            },
-            url: '/view_tf_breakdown',
-            data: {
-                class_select:class_select,
-                program_select:program_select,
-                branch_select:branch_select,
-                departure_year_select:departure_year_select,
-                departure_month_select:departure_month_select,
-            },
-            method: 'get',
-            dataType: 'json',
-            success:function(data){
-                $('#tf_breakdown_table').empty();
-
-                let html = '';
-                let installment = '';
-                let i_amount_date = '';
-                let i_payment = '';
-
-                html += '<thead>';
-
-                for(let x = 0; x < data.installment; x++){
-
-                    installment += '<th colspan="2" class="installments">Installment ' + (x+1) + '</th>';
-                    i_amount_date += '<th>Amount Paid</th><th>Payment Date</th>';
-                }
-                i_amount_date += '<th>Amount Paid</th><th>Payment Date</th>';
-
-                html += `
-                <tr>
-                    <th rowspan="2" style="width: 300px;">Name</th>
-                    <th rowspan="2" style="width: 150px;">Program</th>
-                    <th colspan="2" style="width: 250px;">Prof Fee</th>
-                    <th rowspan="2" style="width: 150px;">Total Tuition</th>
-                    <th rowspan="2" style="width: 150px;">Total Payment</th>`
-                    +installment+
-                    `<th rowspan="2" style="width: 100px;">Balance</th>
-                </tr>
-                <tr>`
-                    +i_amount_date;
-
-                html += '</thead>';
-
-                html += '<tbody>';
-
-                for(let x = 0; x < data.tf_student.length; x++){
-                    let mname = (data.tf_student[x].student.mname) ? data.tf_student[x].student.mname : '';
-                    let i_payment = '';
-
-                    for(let y = 0; y < data.installment; y++){
-                        let amount = 0;
-                        let date = '';
-                        if(data.tf_student[x].payment[y]){
-                            amount = data.tf_student[x].payment[y].amount;
-                            date = data.tf_student[x].payment[y].date;
-                        }
-                        i_payment += '<td style="text-align:right;">' + amount + '</td>' +
-                            '<td style="text-align:center;">' + date + '</td>';
-                    }
-
-                    html += `<tr>
-                        <td>` + 
-                        data.tf_student[x].student.lname + ', ' + data.tf_student[x].student.fname + ' ' + mname +
-                        '</td>' +
-                        '<td>' + data.tf_student[x].student.program.name + '</td>' +
-                        '<td style="text-align:right;">' + data.tf_student[x].prof_fee + '</td>' +
-                        '<td style="text-align:center;">' + data.tf_student[x].prof_fee_date + '</td>' +
-                        '<td style="text-align:right;">' + data.tf_student[x].balance + '</td>' +
-                        '<td style="text-align:right;">' + data.tf_student[x].total_payment + '</td>' +
-                        i_payment +
-                        '<td style="text-align:right;">' + data.tf_student[x].remaining_bal + '</td>' +
-                    '</tr>'
-                }
-
-                html += '</tbody>';
-
-                html += '<tfoot>';
-
-                let footer_installment = '';
-
-                for(let x = 0; x < data.installment; x++){
-                    footer_installment += '<td style="text-align:right;">' + data.footer.installment[x] + '</td><td></td>';
-                }
-
-                html += `<tr>
-                    <td style="text-align:center;" colspan="2">TOTAL</td>
-                    <td style="text-align:right;">` + data.footer.sign_up + `</td>
-                    <td></td>
-                    <td style="text-align:right;">` + data.footer.total_tuition + `</td>
-                    <td style="text-align:right;">` + data.footer.total_payment + `</td>` +
-                    footer_installment +
-                    '<td style="text-align:right;">' + data.footer.balance + '</td>';
-
-                html += '</tfoot>';
-
-                $('#tf_breakdown_table').append(html);
-                
-                enableTabs();
-            }
-        });
-    }    
     
     //FUNCTIONS -- END
 });

@@ -334,7 +334,8 @@ $fa-font-path: "../webfonts";
 #all_students_wrapper .dataTables_length, #ssw_students_wrapper .dataTables_length,
 #trainee_students_wrapper .dataTables_length, #employees_all_wrapper .dataTables_length,
 #employees_branch_wrapper .dataTables_length, #expense_table_wrapper .dataTables_length,
-#type_table_wrapper .dataTables_length{
+#type_table_wrapper .dataTables_length, #tuition_sec_table_wrapper .dataTables_length,
+#student_table_wrapper .dataTables_length{
   float: right !important;
   margin-right: 25px;
 }
@@ -344,7 +345,8 @@ $fa-font-path: "../webfonts";
 #all_students_wrapper .dataTables_filter, #ssw_students_wrapper .dataTables_filter,
 #trainee_students_wrapper .dataTables_filter, #employees_all_wrapper .dataTables_filter,
 #employees_branch_wrapper .dataTables_filter, #expense_table_wrapper .dataTables_filter,
-#type_table_wrapper .dataTables_filter{ 
+#type_table_wrapper .dataTables_filter, #tuition_sec_table_wrapper .dataTables_filter,
+#student_table_wrapper .dataTables_filter{ 
   float: right !important;
 }
 

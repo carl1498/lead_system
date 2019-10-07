@@ -290,6 +290,7 @@ Route::group(['middleware' => ['auth', 'admin']], function(){
     Route::get('/view_tf_student', 'tuitionController@view_tf_student');
     Route::get('/view_tuition_sec', 'tuitionController@view_tuition_sec');
     Route::get('/view_tf_breakdown', 'tuitionController@view_tf_breakdown');
+    Route::get('/view_summary', 'tuitionController@view_summary');
     Route::get('/view_tuition_fee/{id}', 'tuitionController@view_tuition_fee');
     Route::get('/view_sec_bond/{id}', 'tuitionController@view_sec_bond');
     Route::get('/get_tf_projected/{id}', 'tuitionController@get_tf_projected');
@@ -297,16 +298,17 @@ Route::group(['middleware' => ['auth', 'admin']], function(){
     Route::post('/save_tf_student', 'tuitionController@save_tf_student');
     Route::post('/save_tf_sb_payment', 'tuitionController@save_tf_sb_payment');
     Route::post('/save_initial_balance', 'tuitionController@save_initial_balance');
-
     Route::get('/t_get_student', 'tuitionController@t_get_student');
     Route::get('/get_tf_student', 'tuitionController@get_tf_student');
     Route::get('/get_balance_class/{id}', 'tuitionController@get_balance_class');
     Route::get('/get_student_tuition/{id}', 'tuitionController@get_student_tuition');
     Route::get('/get_initial_balance/{id}', 'tuitionController@get_initial_balance');
-
     Route::get('/get_tf_sb_payment', 'tuitionController@get_tf_sb_payment');
+    Route::get('/delete_tf_payment', 'tuitionController@delete_tf_payment');
+    Route::get('/delete_sb_payment', 'tuitionController@delete_sb_payment');
 
     Route::post('/excel_tf_breakdown', 'excelController@excel_tf_breakdown');
+    Route::post('/excel_tf_sb_summary', 'excelController@excel_tf_sb_summary');
 });
 
 //FINANCE ROUTES -- END
