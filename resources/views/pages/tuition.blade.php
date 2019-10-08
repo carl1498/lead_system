@@ -11,13 +11,10 @@
             <button data-container="body" data-toggle="tooltip" data-placement="left" title="Refresh Table" class="btn btn-secondary bg-red refresh_table" disabled>
                 <i class="fa fa-sync"></i>
             </button>
-            <button data-container="body" data-toggle="tooltip" data-placement="left" title="Add Student"  class="btn btn-secondary bg-red add_student">
-                <i class="fa fa-user-plus"></i>
-            </button>
-            <button data-container="body" data-toggle="tooltip" data-placement="left" title="Security Bond Payment"  class="btn btn-secondary bg-red sb_payment">
+            <button data-container="body" data-toggle="tooltip" data-placement="left" title="Security Bond"  class="btn btn-secondary bg-red sb_payment">
                 <i class="fa fa-shield-alt"></i>
             </button>
-            <button data-container="body" data-toggle="tooltip" data-placement="left" title="Tuition Fee Payment"  class="btn btn-secondary bg-red tf_payment">
+            <button data-container="body" data-toggle="tooltip" data-placement="left" title="Payment"  class="btn btn-secondary bg-red tf_payment">
                 <i class="fa fa-money-check-alt"></i>
             </button>
         </li>
@@ -33,8 +30,8 @@
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
                     <li class="active student_pick"><a class="student_pick" href="#student_tab" data-toggle="tab">Student</a></li>
-                    <li class="tuition_sec_pick"><a class="tuition_sec_pick" href="#tuition_sec_tab" data-toggle="tab">Tuition Fee Payment History</a></li>
-                    <li class="tuition_sec_pick"><a class="tuition_sec_pick" href="#tuition_sec_tab" data-toggle="tab">Security Bond Payment History</a></li>
+                    <li class="payment_pick"><a class="payment_pick" href="#payment_tab" data-toggle="tab">Payment History</a></li>
+                    <li class="sec_bond_pick"><a class="sec_bond_pick" href="#sec_bond_tab" data-toggle="tab">Security Bond History</a></li>
                     <li class="program_pick"><a class="program_pick" href="#program_tab" data-toggle="tab">Programs</a></li>
                     <li class="tf_breakdown_pick"><a class="tf_breakdown_pick" href="#tf_breakdown_tab" data-toggle="tab">TF Breakdown</a></li>
                     <li class="summary_pick"><a class="summary_pick" href="#summary_tab" data-toggle="tab">Summary</a></li>
@@ -54,9 +51,7 @@
     <!-- MODALS -- START -->
     
     @include('includes.modals.tuition_modals.projection_modal')
-    @include('includes.modals.tuition_modals.add_student_modal')
     @include('includes.modals.tuition_modals.student_tuition_modal')
-    @include('includes.modals.tuition_modals.tf_sb_payment_modal')
     @include('includes.modals.tuition_modals.initial_balance_modal')
 
     <!-- MODALS -- END -->

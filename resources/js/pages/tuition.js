@@ -32,7 +32,6 @@ $(document).ready(function(){
         $('[data-toggle="tooltip"]').tooltip("hide");
     });
     
-    
     $('input, select').attr('autocomplete', 'off');
 
     $("#projection_modal").on("hidden.bs.modal", function(e){
@@ -42,21 +41,6 @@ $(document).ready(function(){
         $(this).find("input,textarea,select").val('').end();
         $('.select2').trigger('change.select2');
     });
-
-    $("#add_student_modal").on("hidden.bs.modal", function(e){
-        add_student_modal_clear();
-        $('#add_student_continuous').bootstrapToggle('off');
-    });
-
-    function add_student_modal_clear(){
-        $('#add_student_form :input.required').each(function (){
-            this.style.setProperty('border-color', 'green', 'important');
-        });
-        $('#add_student_form').find("input,textarea,select").val('').end();
-        $('.select2').trigger('change.select2');
-    }
-
-    $('#add_student_continuous').bootstrapToggle('off');
 
     $("#tf_sb_payment_modal").on("hidden.bs.modal", function(e){
         tf_sb_payment_clear();
@@ -93,11 +77,11 @@ $(document).ready(function(){
     $('#tf_sb_payment_continuous').bootstrapToggle('off');
 
     function disableTabs(){
-        $(`li.student_pick, li.tuition_sec_pick, li.program_pick, 
+        $(`li.student_pick, li.payment_pick, li.sec_bond_pick, li.program_pick, 
         li.tf_breakdown_pick, li.summary_pick`
         ).addClass('disabled').css('cursor', 'not-allowed');
 
-        $(`a.student_pick, a.tuition_sec_pick, a.program_pick, 
+        $(`a.student_pick, a.payment_pick, a.sec_bond_pick, a.program_pick, 
         a.tf_breakdown_pick, a.summary_pick`
         ).addClass('disabled').css('pointer-events', 'none');
 
@@ -105,11 +89,11 @@ $(document).ready(function(){
     }
 
     function enableTabs(){
-        $(`li.student_pick, li.tuition_sec_pick, li.program_pick, 
+        $(`li.student_pick, li.payment_pick, li.sec_bond_pick, li.program_pick, 
         li.tf_breakdown_pick, li.summary_pick`
         ).removeClass('disabled').css('cursor', 'pointer');
         
-        $(`a.student_pick, a.tuition_sec_pick, a.program_pick, 
+        $(`a.student_pick, a.payment_pick, a.sec_bond_pick, a.program_pick, 
         a.tf_breakdown_pick, a.summary_pick`
         ).removeClass('disabled').css('pointer-events', 'auto');
 
@@ -134,18 +118,16 @@ $(document).ready(function(){
         else if(current_tab == 'Summary'){
             refresh_summary_table();
         }
-        else{
-            refresh_tuition_sec_table();
-        }
         
-        setTimeout(function(){
-            $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
-        }, 1000);
     }
     
     //INITIALIZE -- END
 
     //DATATABLES -- START
+
+    $(document).on('shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
+        $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
+    });
 
     function update_buttons(){
         
@@ -197,13 +179,13 @@ $(document).ready(function(){
             },
             columns: [
                 {data: 'name', name: 'name'},
-                {data: 'student.program.name', name: 'program'},
-                {data: 'student.branch.name', name: 'branch'},
-                {data: 'student.contact', name: 'contact'},
+                {data: 'program.name', name: 'program'},
+                {data: 'branch.name', name: 'branch'},
+                {data: 'contact', name: 'contact'},
                 {data: 'balance', name: 'balance'},
                 {data: 'sec_bond', name: 'sec_bond'},
                 {data: 'class', name: 'class'},
-                {data: 'student.status', name: 'status'},
+                {data: 'status', name: 'status'},
                 {data: 'departure', name: 'departure'},
                 {data: 'action', orderable: false, searchable: false}
             ],
@@ -604,11 +586,6 @@ $(document).ready(function(){
         }
     });
 
-    $(document).on('click', '.add_student', function(){
-        $('#add_student_modal').modal('toggle');
-        $('#add_student_modal').modal('show');
-    });
-
     $(document).on('click', '.sb_payment', function(){
         payment_type = 'sec_bond';
         tf_sb_payment_init('add', 'sec_bond', 'Security Bond Payment');
@@ -900,42 +877,6 @@ $(document).ready(function(){
             success:function(data){
                 notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
                 $('#projection_modal').modal('hide');
-                refresh();
-                button.disabled = false;
-                input.html('SAVE CHANGES');
-            },
-            error: function(data){
-                swal("Error!", "Something went wrong, try again.", "error");
-                button.disabled = false;
-                input.html('SAVE CHANGES');
-            }
-        });
-    });
-
-    $(document).on('submit', '#add_student_form', function(e){
-        e.preventDefault();
-
-        var input = $('.save_add_student');
-        var button = document.getElementsByClassName("save_add_student")[0];
-
-        button.disabled = true;
-        input.html('SAVING...');
-
-        $.ajax({
-            headers: {
-                'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-            },
-            url: '/save_tf_student',
-            method: 'POST',
-            data: $(this).serialize(),
-            success:function(data){
-                notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
-                if($('#add_student_continuous').is(':checked')){
-                    add_student_modal_clear();
-                }
-                else{
-                    $('#add_student_modal').modal('hide')
-                }
                 refresh();
                 button.disabled = false;
                 input.html('SAVE CHANGES');

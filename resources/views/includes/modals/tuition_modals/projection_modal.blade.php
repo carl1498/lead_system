@@ -144,6 +144,50 @@
                                 </div>
                             </div>
                         </div>
+                        
+                        <div class="row clearfix">
+                            <input type="hidden" class="proj_name_id" name="proj_name_id[]">
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
+                                <label for="proj_amount" class="pull-right">Airfare</label>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                                <div class="form-group">
+                                    <input type="number" name="proj_amount[]" class="proj_amount form-control required" placeholder="Amount" required>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                <div class="form-group">
+                                    <input type="text" name="proj_date[]" class="proj_date form-control" placeholder="Date of Payment">
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                                <div class="form-group">
+                                    <input type="text" name="proj_remarks[]" class="proj_remarks form-control" placeholder="Remarks">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row clearfix">
+                            <input type="hidden" class="proj_name_id" name="proj_name_id[]">
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
+                                <label for="proj_amount" class="pull-right">DHL</label>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                                <div class="form-group">
+                                    <input type="number" name="proj_amount[]" class="proj_amount form-control required" placeholder="Amount" required>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                <div class="form-group">
+                                    <input type="text" name="proj_date[]" class="proj_date form-control" placeholder="Date of Payment">
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                                <div class="form-group">
+                                    <input type="text" name="proj_remarks[]" class="proj_remarks form-control" placeholder="Remarks">
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
 

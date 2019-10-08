@@ -8,7 +8,6 @@ use App\sec_bond;
 use App\tf_name;
 use App\tf_payment;
 use App\tf_projected;
-use App\tf_student;
 use App\program;
 use App\branch;
 use App\student;
@@ -29,7 +28,6 @@ class tuitionController extends Controller
     }
 
     public function index(){
-        $student = tf_student::with('student.program')->get();
         $class_settings = class_settings::with('sensei')->orderBy('start_date', 'desc')->get();
         $program = program::all();
         $branch = branch::all();
@@ -45,7 +43,7 @@ class tuitionController extends Controller
 
         return Datatables::of($program)
         ->addColumn('total', function($data){
-            $tf_projected = tf_projected::where('tf_name_id', '<>', 1)->where('program_id', $data->id)->sum('amount');
+            $tf_projected = tf_projected::where('program_id', $data->id)->sum('amount');
 
             return $tf_projected;
         })
@@ -68,7 +66,7 @@ class tuitionController extends Controller
         $current_class = [];
 
         if($class != 'All'){
-            $student_group = tf_student::pluck('stud_id');
+            $student_group = student::pluck('id');
             
             for($x = 0; $x < count($student_group); $x++){
                 $class_students = class_students::where('stud_id', $student_group[$x])
@@ -82,46 +80,34 @@ class tuitionController extends Controller
             }
         }
 
-        $tf_student = tf_student::with('student.program', 'student.branch')
+        $student = student::with('program', 'branch')
         ->when($class != 'All', function($query) use($current_class){
-            $query->whereIn('stud_id', $current_class);
+            $query->whereIn('id', $current_class);
         })
         ->when($program != 'All', function($query) use($program){
-            $query->whereHas('student', function($query) use($program){
-                $query->where('program_id', $program);
-            });
+            $query->where('program_id', $program);
         })
         ->when($branch != 'All', function($query) use($branch){
-            $query->whereHas('student', function($query) use($branch){
-                $query->where('branch_id', $branch);
-            });
+            $query->where('branch_id', $branch);
         })
         ->when($departure_year != 'All', function($query) use($departure_year){
-            $query->whereHas('student', function($query) use($departure_year){
-                $query->where('departure_year_id', $departure_year);
-            });
+            $query->where('departure_year_id', $departure_year);
         })
         ->when($departure_month != 'All', function($query) use($departure_month){
-            $query->whereHas('student', function($query) use($departure_month){
-                $query->where('departure_month_id', $departure_month);
-            });
+            $query->where('departure_month_id', $departure_month);
         })
         ->get();
 
-        return Datatables::of($tf_student)
+        return Datatables::of($student)
         ->addColumn('name', function($data){
-            return $data->student->lname . ', ' . $data->student->fname . ' ' . $data->student->mname;
+            return $data->lname . ', ' . $data->fname . ' ' . $data->mname;
         })
         ->editColumn('balance', function($data){
-            $tf_payment = tf_payment::where('sign_up', 0)->where('tf_stud_id', $data->id)->sum('amount');
-
-            return number_format((float)($data->balance - $tf_payment), 2, '.', '');
         })
         ->addColumn('sec_bond', function($data){
-            return sec_bond::where('tf_stud_id', $data->id)->sum('amount');
         })
         ->addColumn('class', function($data){
-            $class_students = class_students::with('student', 'current_class.sensei')->where('stud_id', $data->stud_id)
+            $class_students = class_students::with('student', 'current_class.sensei')->where('stud_id', $data->id)
                 ->orderBy('id', 'desc')->first();
 
             $html = '';
@@ -146,15 +132,15 @@ class tuitionController extends Controller
             }
         })
         ->addColumn('departure', function($data){
-            if($data->student->program){
-                if($data->student->program->name == 'Language Only' || 
-                    $data->student->program->name == 'SSW (Careworker)' ||
-                    $data->student->program->name == 'SSW (Hospitality)'){
+            if($data->program){
+                if($data->program->name == 'Language Only' || 
+                    $data->program->name == 'SSW (Careworker)' ||
+                    $data->program->name == 'SSW (Hospitality)'){
                     return 'N/A';
                 }
             }
 
-            return $data->student->departure_year->name . ' ' . $data->student->departure_month->name;
+            return $data->departure_year->name . ' ' . $data->departure_month->name;
         })
         ->addColumn('action', function($data){
             return '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Student" class="btn btn-warning btn-sm view_student_tuition" id="'.$data->id.'"><i class="fa fa-list-alt" style="font-size: 15px;"></i></button>&nbsp;';
@@ -455,7 +441,7 @@ class tuitionController extends Controller
     }
 
     public function get_tf_projected(Request $request){
-        $tf_name_list = [1, 2, 3, 4, 5, 6];
+        $tf_name_list = [1, 2, 3, 4, 5, 6, 7, 8];
         $tf_projected = tf_projected::where('program_id', $request->id)->get();
 
         $output = array(
