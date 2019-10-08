@@ -47,6 +47,10 @@ $(document).ready(function(){
         refresh();
     });
 
+    $('#expense_type_modal').on('shown.bs.modal', function(){
+        $('#fname').focus();
+    });
+
     $("#expense_type_modal").on("hidden.bs.modal", function(e){
         $('#expense_type_form :input.required').each(function (){
             this.style.setProperty('border-color', 'green', 'important');
