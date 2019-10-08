@@ -285,6 +285,7 @@ class excelController extends Controller
         header('Cache-Control: max-age=0');
 
         $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+        ob_end_clean();
         $writer->save('php://output');
     }
 
@@ -491,6 +492,7 @@ class excelController extends Controller
         header('Cache-Control: max-age=0');
 
         $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+        ob_end_clean();
         $writer->save('php://output');
     }
 }
