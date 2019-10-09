@@ -37,11 +37,46 @@
 
 <!-- STUDENTS -- END -->
 
-<!-- TUITION FEE / SEC BOND -- START -->
+<!-- PAYMENT -- START -->
 
-<div class="tab-pane fade in" id="tuition_sec_tab">
+<div class="tab-pane fade in" id="payment_tab">
     
-    <table id="tuition_sec_table" class="table table-hover table-striped table-bordered responsive nowrap" width="100%">
+    <table id="payment_table" class="table table-hover table-striped table-bordered responsive nowrap" width="100%">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Payment Type</th>
+                <th>Program</th>
+                <th>Branch</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Remarks</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </tfoot>
+    </table>
+    
+</div>
+
+<!-- PAYMENT -- END -->
+
+<!-- SEC BOND -- START -->
+
+<div class="tab-pane fade in" id="sec_bond_tab">
+    
+    <table id="sec_bond_table" class="table table-hover table-striped table-bordered responsive nowrap" width="100%">
         <thead>
             <tr>
                 <th>Name</th>
@@ -68,7 +103,7 @@
     
 </div>
 
-<!-- TUITION FEE / SEC BOND  -- END -->
+<!-- SEC BOND  -- END -->
 
 <!-- PROGRAMS -- START -->
 
@@ -88,7 +123,7 @@
 
 <!-- PROGRAMS -- END -->
 
-<!-- CASH DISBURSEMENT -- START -->
+<!-- TUITION FEE BREAKDOWN -- START -->
 
 <div class="tab-pane fade in" id="tf_breakdown_tab">
     
@@ -109,7 +144,7 @@
 
 </div>
 
-<!-- CASH DISBURSEMENT -- END -->
+<!-- TUITION FEE BREAKDOWN -- END -->
 
 <!-- SUMMARY -- START -->
 

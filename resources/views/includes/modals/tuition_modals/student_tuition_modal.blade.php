@@ -5,9 +5,6 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title pull-left"></h4>&nbsp;
-                <div class="pull-right">
-                    <button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit Initial Balance" class="btn btn-info btn-s edit_initial_balance" style="margin-right: 20px;"><i class="fa fa-pen"></i></button>
-                </div>
             </div>
             <div class="modal-body">
 
@@ -15,13 +12,69 @@
 
                 <br>
 
-                <h4 class="title_probationary">Tuition Fee - <span class="tf_balance"></span> (Sign Up - <span class="tf_sign_up"></span>)</h4>
+                <table id="all_fee_table" class="table table-hover table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Paid</th>
+                            <th>Balance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><!--Sign Up-->
+                            <td>Sign Up Fee</td>
+                            <td class="pay"></td>
+                            <td class="bal"></td>
+                        </tr>
+                        <tr><!--VISA-->
+                            <td>Visa Processing</td>
+                            <td class="pay"></td>
+                            <td class="bal"></td>
+                        </tr>
+                        <tr><!--Language-->
+                            <td>Language</td>
+                            <td class="pay"></td>
+                            <td class="bal"></td>
+                        </tr>
+                        <tr><!--Documentation-->
+                            <td>Documentation</td>
+                            <td class="pay"></td>
+                            <td class="bal"></td>
+                        </tr>
+                        <tr><!--Selection-->
+                            <td>Selection</td>
+                            <td class="pay"></td>
+                            <td class="bal"></td>
+                        </tr>
+                        <tr><!--PDOS-->
+                            <td>PDOS</td>
+                            <td class="pay"></td>
+                            <td class="bal"></td>
+                        </tr>
+                        <tr><!--Airfare-->
+                            <td>Airfare</td>
+                            <td class="pay"></td>
+                            <td class="bal"></td>
+                        </tr>
+                        <tr><!--DHL-->
+                            <td>DHL</td>
+                            <td class="pay"></td>
+                            <td class="bal"></td>
+                        </tr>
+                        <tr><!--TOTAL-->
+                            <td>TOTAL</td>
+                            <td class="pay"></td>
+                            <td class="bal"></td>
+                        </tr>
+                    </tbody>
+                </table>
 
-                <table id="tuition_fee_table" class="table table-hover table-striped table-bordered nowrap" cellspacing="0" width="100%">
+                <table id="tf_modal_table" class="table table-hover table-striped table-bordered nowrap" cellspacing="0" width="100%">
                     <thead>
                         <tr>
                             <th>Amount</th>
-                            <th>Date of Payment</th>
+                            <th>Type</th>
+                            <th>Date</th>
                             <th>Remarks</th>
                             <th>Action</th>
                         </tr>
@@ -30,13 +83,13 @@
                 
                 <br>
 
-                <h4 class="title_probationary">Security Bond - <span class="tf_sb_total"></span></h4>
+                <h4 class="title_probationary">Security Bond - <span class="sb_total"></span></h4>
 
-                <table id="sec_bond_table" class="table table-hover table-striped table-bordered nowrap" cellspacing="0" width="100%">
+                <table id="sb_modal_table" class="table table-hover table-striped table-bordered nowrap" cellspacing="0" width="100%">
                     <thead>
                         <tr>
                             <th>Amount</th>
-                            <th>Date of Payment</th>
+                            <th>Date</th>
                             <th>Remarks</th>
                             <th>Action</th>
                         </tr>

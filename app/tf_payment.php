@@ -9,10 +9,14 @@ class tf_payment extends Model
     protected $primaryKey = 'id';
     protected $table = 'tf_payment';
     protected $fillable = [
-        'tf_stud_id', 'amount', 'date', 'remarks'
+        'stud_id', 'tf_name_id', 'amount', 'date', 'remarks'
     ];
 
     public function student(){
-        return $this->hasOne('App\tf_student', 'id', 'tf_stud_id');
+        return $this->hasOne('App\student', 'id', 'stud_id');
+    }
+
+    public function tf_name(){
+        return $this->hasOne('App\tf_name', 'id', 'tf_name_id');
     }
 }

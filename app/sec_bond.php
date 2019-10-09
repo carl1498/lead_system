@@ -13,6 +13,6 @@ class sec_bond extends Model
     ];
 
     public function student(){
-        return $this->hasOne('App\tf_student', 'id', 'tf_stud_id');
+        return $this->hasOne('App\student', 'id', 'stud_id');
     }
 }

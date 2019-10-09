@@ -51,8 +51,9 @@
     <!-- MODALS -- START -->
     
     @include('includes.modals.tuition_modals.projection_modal')
+    @include('includes.modals.tuition_modals.tf_payment_modal')
+    @include('includes.modals.tuition_modals.sb_payment_modal')
     @include('includes.modals.tuition_modals.student_tuition_modal')
-    @include('includes.modals.tuition_modals.initial_balance_modal')
 
     <!-- MODALS -- END -->
 

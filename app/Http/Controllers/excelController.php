@@ -10,8 +10,9 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
-use App\tf_student;
+use App\student;
 use App\tf_payment;
+use App\tf_projected;
 use App\sec_bond;
 use App\class_settings;
 use App\class_students;
@@ -34,10 +35,10 @@ class excelController extends Controller
         $current_class = [];
 
         if($class_select != 'All'){
-            $student_group = tf_student::pluck('stud_id');
+            $student_group = student::pluck('id');
             
             for($x = 0; $x < count($student_group); $x++){
-                $class_students = class_students::where('stud_id', $student_group[$x])
+                $class_students = class_students::where('id', $student_group[$x])
                     ->orderBy('id', 'desc')->first();
 
                 if(!empty($class_students)){
@@ -48,46 +49,42 @@ class excelController extends Controller
             }
         }
 
-        $tf_student = tf_student::with('student.program', 'payment')
+        $student = student::with('program', 'payment')
         ->when($class_select != 'All', function($query) use($current_class){
-            $query->whereIn('stud_id', $current_class);
+            $query->whereIn('id', $current_class);
         })
         ->when($program_select != 'All', function($query) use($program_select){
-            $query->whereHas('student', function($query) use($program_select){
-                $query->where('program_id', $program_select);
-            });
+            $query->where('program_id', $program_select);
         })
         ->when($branch_select != 'All', function($query) use($branch_select){
-            $query->whereHas('student', function($query) use($branch_select){
-                $query->where('branch_id', $branch_select);
-            });
+            $query->where('branch_id', $branch_select);
         })
         ->when($departure_year_select != 'All', function($query) use($departure_year_select){
-            $query->whereHas('student', function($query) use($departure_year_select){
-                $query->where('departure_year_id', $departure_year_select);
-            });
+            $query->where('departure_year_id', $departure_year_select);
         })
         ->when($departure_month_select != 'All', function($query) use($departure_month_select){
-            $query->whereHas('student', function($query) use($departure_month_select){
-                $query->where('departure_month_id', $departure_month_select);
-            });
+            $query->where('departure_month_id', $departure_month_select);
         })->get();
+        
+        $total_tuition = 0;
 
-        foreach($tf_student as $ts){
-            $temp = tf_payment::where('tf_stud_id', $ts->id)->where('sign_up', 0)->count();
+        foreach($student as $s){
+            $temp = tf_payment::where('stud_id', $s->id)->where('tf_name_id', 3)->count();
             if($temp > $installment){
                 $installment = $temp;
             }
-            $ts->prof_fee = tf_payment::where('tf_stud_id', $ts->id)->where('sign_up', 1)->sum('amount');
-            if($ts->prof_fee != 0){
-                $date_temp = tf_payment::where('tf_stud_id', $ts->id)->orderBy('date', 'desc')->where('sign_up', 1)->first();
-                $ts->prof_fee_date = $date_temp->date;
+            $s->prof_fee = tf_payment::where('stud_id', $s->id)->where('tf_name_id', 1)->sum('amount');
+            if($s->prof_fee != 0){
+                $date_temp = tf_payment::where('stud_id', $s->id)->orderBy('date', 'desc')->where('tf_name_id', 1)->first();
+                $s->prof_fee_date = $date_temp->date;
             }
             else{
-                $ts->prof_fee_date = '';
+                $s->prof_fee_date = '';
             }
-            $ts->total_payment = tf_payment::where('tf_stud_id', $ts->id)->where('sign_up', 0)->sum('amount');
-            $ts->remaining_bal = $ts->balance - $ts->total_payment;
+            $s->total_payment = tf_payment::where('stud_id', $s->id)->where('tf_name_id', 3)->sum('amount');
+            $s->balance = tf_projected::where('program_id', $s->program_id)->where('tf_name_id', 3)->sum('amount');
+            $s->remaining_bal = $s->balance - $s->total_payment;
+            $total_tuition += $s->balance;
         }
 
         $class = $class_select;
@@ -181,25 +178,25 @@ class excelController extends Controller
 
         $row = 7;
         $count = 1;
-        foreach($tf_student as $ts){
+        foreach($student as $s){
             $sheet->setCellValue('A'.$row, $count);
-            $sheet->setCellValue('B'.$row, $ts->student->lname . ', ' . $ts->student->fname . ' ' .
-            (($ts->student->mname) ? $ts->student->mname : ''));
-            $sheet->setCellValue('C'.$row, (($ts->student->program) ? $ts->student->program->name : ''));
-            $sheet->setCellValue('D'.$row, $ts->prof_fee);
-            $sheet->setCellValue('E'.$row, $ts->prof_fee_date);
+            $sheet->setCellValue('B'.$row, $s->lname . ', ' . $s->fname . ' ' .
+            (($s->mname) ? $s->mname : ''));
+            $sheet->setCellValue('C'.$row, (($s->program) ? $s->program->name : ''));
+            $sheet->setCellValue('D'.$row, $s->prof_fee);
+            $sheet->setCellValue('E'.$row, $s->prof_fee_date);
             $sheet->getStyle('E'.$row)->applyFromArray($centerStyleArray);
-            $sheet->setCellValue('F'.$row, $ts->balance);
-            $sheet->setCellValue('G'.$row, $ts->total_payment);
+            $sheet->setCellValue('F'.$row, $s->balance);
+            $sheet->setCellValue('G'.$row, $s->total_payment);
             $col = 'H';
             $col2 = 'I';
             for($x = 8, $y = 0; $x < 8+($installment*2); $x+=2, $y++){
                 $amount = '';
                 $date = '';
 
-                if(!empty($ts->payment[$y])){
-                    $amount = $ts->payment[$y]->amount;
-                    $date = $ts->payment[$y]->date;
+                if(!empty($s->payment[$y])){
+                    $amount = $s->payment[$y]->amount;
+                    $date = $s->payment[$y]->date;
                 }
 
                 $sheet->setCellValueByColumnAndRow($x, $row, $amount);
@@ -208,7 +205,7 @@ class excelController extends Controller
                 $col++;$col++;$col2++;$col2++;
             }
             $col++;$col++;
-            $sheet->setCellValue($col.$row, $ts->remaining_bal);
+            $sheet->setCellValue($col.$row, $s->remaining_bal);
             $row++;$count++;
         }
 
@@ -272,7 +269,8 @@ class excelController extends Controller
         $sheet->getPageMargins()->setLeft(0.25);
         $sheet->getPageMargins()->setBottom(0.75);
 
-        $sheet->getPageSetup()->setFitToPage(true);
+        $sheet->getPageSetup()->setFitToWidth(1);    
+        $sheet->getPageSetup()->setFitToHeight(0);
         $sheet->getPageSetup()->setPrintArea('A1:'.$sheet->getHighestColumn().$sheet->getHighestRow());
         
         //Using Styles -- END
@@ -297,26 +295,20 @@ class excelController extends Controller
 
         //ALL DATA -- START
 
-        $tf_student = tf_student::with('student.program', 'payment')
+        $student = student::with('program', 'payment')
         ->when($branch_select != 'All', function($query) use($branch_select){
-            $query->whereHas('student', function($query) use($branch_select){
-                $query->where('branch_id', $branch_select);
-            });
+            $query->where('branch_id', $branch_select);
         })
         ->when($departure_year_select != 'All', function($query) use($departure_year_select){
-            $query->whereHas('student', function($query) use($departure_year_select){
-                $query->where('departure_year_id', $departure_year_select);
-            });
+            $query->where('departure_year_id', $departure_year_select);
         })
         ->when($departure_month_select != 'All', function($query) use($departure_month_select){
-            $query->whereHas('student', function($query) use($departure_month_select){
-                $query->where('departure_month_id', $departure_month_select);
-            });
+            $query->where('departure_month_id', $departure_month_select);
         })->get();
 
-        foreach($tf_student as $ts){
-            $ts->total_payment = tf_payment::where('tf_stud_id', $ts->id)->sum('amount');
-            $ts->sec_bond = sec_bond::where('tf_stud_id', $ts->id)->sum('amount');
+        foreach($student as $s){
+            $s->total_payment = tf_payment::where('stud_id', $s->id)->sum('amount');
+            $s->sec_bond = sec_bond::where('stud_id', $s->id)->sum('amount');
         }
 
         if($departure_year_select == 'All' && $departure_month_select == 'All'){
@@ -413,14 +405,14 @@ class excelController extends Controller
         
         $row = 5;
         $count = 1;
-        foreach($tf_student as $ts){
+        foreach($student as $s){
             $sheet->setCellValue('A'.$row, $count);
-            $sheet->setCellValue('B'.$row, $ts->student->lname . ', ' . $ts->student->fname . ' ' .
-            (($ts->student->mname) ? $ts->student->mname : ''));
-            $sheet->setCellValue('C'.$row, (($ts->student->program) ? $ts->student->program->name : ''));
-            $sheet->setCellValue('D'.$row, (($ts->student->school) ? $ts->student->school->name : ''));
-            $sheet->setCellValue('E'.$row, $ts->sec_bond);
-            $sheet->setCellValue('F'.$row, $ts->total_payment);
+            $sheet->setCellValue('B'.$row, $s->lname . ', ' . $s->fname . ' ' .
+            (($s->mname) ? $s->mname : ''));
+            $sheet->setCellValue('C'.$row, (($s->program) ? $s->program->name : ''));
+            $sheet->setCellValue('D'.$row, (($s->school) ? $s->school->name : ''));
+            $sheet->setCellValue('E'.$row, $s->sec_bond);
+            $sheet->setCellValue('F'.$row, $s->total_payment);
             $row++;$count++;
         }
 
@@ -441,7 +433,8 @@ class excelController extends Controller
         $sheet->getPageMargins()->setLeft(0.25);
         $sheet->getPageMargins()->setBottom(0.75);
         
-        $sheet->getPageSetup()->setFitToPage(true);
+        $sheet->getPageSetup()->setFitToWidth(1);    
+        $sheet->getPageSetup()->setFitToHeight(0);
         $sheet->getPageSetup()->setPrintArea('A1:'.$sheet->getHighestColumn().$sheet->getHighestRow());
         
         //FOOTER -- END

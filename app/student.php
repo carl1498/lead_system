@@ -71,5 +71,9 @@ class student extends Model
         return $this->hasOne('App\departure_month', 'id', 'departure_month_id');
     }
 
+    public function payment(){
+        return $this->hasMany('App\tf_payment', 'stud_id', 'id')->where('tf_name_id', 3)->orderBy('date', 'asc');
+    }
+
     public $timestamps = true;
 }
