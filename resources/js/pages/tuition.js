@@ -610,14 +610,14 @@ $(document).ready(function(){
                     <th style="width: 300px;">Name</th>
                     <th style="width: 150px;">Program</th>
                     <th style="width: 150px;">School</th>
-                    <th style="width: 250px;">Sec Bond Amount</th>
-                    <th style="width: 250px;">Tuition Fee / Sign Up Fee</th>
-                    <th style="width: 250px;">VISA Fee</th>
-                    <th style="width: 250px;">PDOS</th>
-                    <th style="width: 250px;">Selection Fee</th>
-                    <th style="width: 250px;">Airfare</th>
-                    <th style="width: 250px;">DHL</th>
-                    <th style="width: 250px;">BC&ITR</th>
+                    <th style="width: 150px;">Sec Bond Amount</th>
+                    <th style="width: 200px;">Tuition Fee / Sign Up Fee</th>
+                    <th style="width: 100px;">VISA Fee</th>
+                    <th style="width: 100px;">PDOS</th>
+                    <th style="width: 120px;">Selection Fee</th>
+                    <th style="width: 100px;">Airfare</th>
+                    <th style="width: 100px;">DHL</th>
+                    <th style="width: 100px;">BC&ITR</th>
                 </tr>`
 
                 html += '</thead>';

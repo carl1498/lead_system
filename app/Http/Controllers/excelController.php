@@ -75,8 +75,7 @@ class excelController extends Controller
             }
             $s->prof_fee = tf_payment::where('stud_id', $s->id)->where('tf_name_id', 1)->sum('amount');
             if($s->prof_fee != 0){
-                $date_temp = tf_payment::where('stud_id', $s->id)->orderBy('date', 'desc')->where('tf_name_id', 1)->first();
-                $s->prof_fee_date = $date_temp->date;
+                $s->prof_fee_date = tf_payment::where('stud_id', $s->id)->orderBy('date', 'desc')->where('tf_name_id', 1)->value('date');
             }
             else{
                 $s->prof_fee_date = '';
@@ -307,8 +306,29 @@ class excelController extends Controller
         })->get();
 
         foreach($student as $s){
-            $s->total_payment = tf_payment::where('stud_id', $s->id)->sum('amount');
+            $tf_projected = tf_projected::where('program_id', $s->program_id);$tp_temp = tf_payment::where('stud_id', $s->id);
+
             $s->sec_bond = sec_bond::where('stud_id', $s->id)->sum('amount');
+            $s->tf_su = ($tf_projected
+            ->where(function($query){
+                $query->where('tf_name_id', 1)->orWhere('tf_name_id', 3);
+            })->sum('amount')) - 
+            ($tp_temp
+            ->where(function($query){
+                $query->where('tf_name_id', 1)->orWhere('tf_name_id', 3);
+            })->sum('amount'));
+            $tf_projected = tf_projected::where('program_id', $s->program_id);$tp_temp = tf_payment::where('stud_id', $s->id);
+            $s->visa = ($tf_projected->where('tf_name_id', 2)->sum('amount')) - ($tp_temp->where('tf_name_id', 2)->sum('amount'));
+            $tf_projected = tf_projected::where('program_id', $s->program_id);$tp_temp = tf_payment::where('stud_id', $s->id);
+            $s->docu = ($tf_projected->where('tf_name_id', 4)->sum('amount')) - ($tp_temp->where('tf_name_id', 4)->sum('amount'));
+            $tf_projected = tf_projected::where('program_id', $s->program_id);$tp_temp = tf_payment::where('stud_id', $s->id);
+            $s->select = ($tf_projected->where('tf_name_id', 5)->sum('amount')) - ($tp_temp->where('tf_name_id', 5)->sum('amount'));
+            $tf_projected = tf_projected::where('program_id', $s->program_id);$tp_temp = tf_payment::where('stud_id', $s->id);
+            $s->pdos = ($tf_projected->where('tf_name_id', 6)->sum('amount')) - ($tp_temp->where('tf_name_id', 6)->sum('amount'));
+            $tf_projected = tf_projected::where('program_id', $s->program_id);$tp_temp = tf_payment::where('stud_id', $s->id);
+            $s->air = ($tf_projected->where('tf_name_id', 7)->sum('amount')) - ($tp_temp->where('tf_name_id', 7)->sum('amount'));
+            $tf_projected = tf_projected::where('program_id', $s->program_id);$tp_temp = tf_payment::where('stud_id', $s->id);
+            $s->dhl = ($tf_projected->where('tf_name_id', 8)->sum('amount')) - ($tp_temp->where('tf_name_id', 8)->sum('amount'));
         }
 
         if($departure_year_select == 'All' && $departure_month_select == 'All'){
@@ -412,13 +432,13 @@ class excelController extends Controller
             $sheet->setCellValue('C'.$row, (($s->program) ? $s->program->name : ''));
             $sheet->setCellValue('D'.$row, (($s->school) ? $s->school->name : ''));
             $sheet->setCellValue('E'.$row, $s->sec_bond);
-            $sheet->setCellValue('F'.$row, $s->total_payment);
+            $sheet->setCellValue('F'.$row, $s->tf_su);
             $row++;$count++;
         }
 
         //BODY -- END
 
-        //FOOTER -- START
+        /*//FOOTER -- START
 
         $highestrow = $sheet->getHighestRow()+1;
         $sheet->setCellValue('A'.$highestrow, 'TOTAL')->mergeCells('A'.$highestrow.':'.'D'.$highestrow);
@@ -437,11 +457,11 @@ class excelController extends Controller
         $sheet->getPageSetup()->setFitToHeight(0);
         $sheet->getPageSetup()->setPrintArea('A1:'.$sheet->getHighestColumn().$sheet->getHighestRow());
         
-        //FOOTER -- END
+        //FOOTER -- END*/
 
         //Using Styles -- START
 
-        $sheet->freezePane('E5');
+        $sheet->freezePane('D5');
 
         //Set Title
         

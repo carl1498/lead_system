@@ -60,6 +60,7 @@ class tuitionController extends Controller
     }
 
     public function view_tf_student(Request $request){
+        info($request);
         $class = $request->class_select;
         $program = $request->program_select;
         $branch = $request->branch_select;
@@ -75,7 +76,10 @@ class tuitionController extends Controller
                     ->orderBy('id', 'desc')->first();
 
                 if(!empty($class_students)){
-                    if($class_students->class_settings_id == $class){
+                    if($class == 'No Class'){
+                        array_push($current_class, $class_students->stud_id);
+                    }
+                    else if($class_students->class_settings_id == $class){
                         array_push($current_class, $class_students->stud_id);
                     }
                 }
@@ -83,8 +87,11 @@ class tuitionController extends Controller
         }
 
         $student = student::with('program', 'branch')
-        ->when($class != 'All', function($query) use($current_class){
+        ->when($class != 'All' && $class != 'No Class', function($query) use($current_class){
             $query->whereIn('id', $current_class);
+        })
+        ->when($class == 'No Class', function($query) use($current_class){
+            $query->whereNotIn('id', $current_class);
         })
         ->when($program != 'All', function($query) use($program){
             $query->where('program_id', $program);
@@ -105,8 +112,12 @@ class tuitionController extends Controller
             return $data->lname . ', ' . $data->fname . ' ' . $data->mname;
         })
         ->editColumn('balance', function($data){
+            $tf_projected = tf_projected::where('program_id', $data->program_id)->sum('amount');
+            $tf_payment = tf_payment::where('stud_id', $data->id)->sum('amount');
+            return $tf_projected - $tf_payment;
         })
         ->addColumn('sec_bond', function($data){
+            return sec_bond::where('stud_id', $data->id)->sum('amount');
         })
         ->addColumn('class', function($data){
             $class_students = class_students::with('student', 'current_class.sensei')->where('stud_id', $data->id)
@@ -258,6 +269,7 @@ class tuitionController extends Controller
         ->addColumn('action', function($data){
             $html = '';
 
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Student" class="btn btn-warning btn-sm view_tf_student_modal" id="'.$data->id.'"><i class="fa fa-list-alt" style="font-size: 15px;"></i></button>&nbsp;';
             $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit Payment" class="btn btn-info btn-xs edit_tf_payment" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
             $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete Payment" class="btn btn-danger btn-xs delete_tf_payment" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>&nbsp;';
 
@@ -321,6 +333,7 @@ class tuitionController extends Controller
         ->addColumn('action', function($data){
             $html = '';
 
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Student" class="btn btn-warning btn-sm view_tf_student_modal" id="'.$data->id.'"><i class="fa fa-list-alt" style="font-size: 15px;"></i></button>&nbsp;';
             $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit Payment" class="btn btn-info btn-xs edit_sb_payment" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
             $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete Payment" class="btn btn-danger btn-xs delete_sb_payment" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>&nbsp;';
 
@@ -411,8 +424,7 @@ class tuitionController extends Controller
             }
             $s->prof_fee = tf_payment::where('stud_id', $s->id)->where('tf_name_id', 1)->sum('amount');
             if($s->prof_fee != 0){
-                $date_temp = tf_payment::where('stud_id', $s->id)->orderBy('date', 'desc')->where('tf_name_id', 1)->first();
-                $s->prof_fee_date = $date_temp->date;
+                $s->prof_fee_date = tf_payment::where('stud_id', $s->id)->orderBy('date', 'desc')->where('tf_name_id', 1)->value('date');
             }
             else{
                 $s->prof_fee_date = '';
@@ -477,17 +489,29 @@ class tuitionController extends Controller
         })->get();
 
         foreach($student as $s){
+            $tf_projected = tf_projected::where('program_id', $s->program_id);$tp_temp = tf_payment::where('stud_id', $s->id);
+
             $s->sec_bond = sec_bond::where('stud_id', $s->id)->sum('amount');
-            $s->tf_su = tf_payment::where('stud_id', $s->id)
+            $s->tf_su = ($tf_projected
             ->where(function($query){
                 $query->where('tf_name_id', 1)->orWhere('tf_name_id', 3);
-            })->sum('amount');
-            $s->visa = tf_payment::where('stud_id', $s->id)->where('tf_name_id', 2)->sum('amount');
-            $s->docu = tf_payment::where('stud_id', $s->id)->where('tf_name_id', 4)->sum('amount');
-            $s->select = tf_payment::where('stud_id', $s->id)->where('tf_name_id', 5)->sum('amount');
-            $s->pdos = tf_payment::where('stud_id', $s->id)->where('tf_name_id', 6)->sum('amount');
-            $s->air = tf_payment::where('stud_id', $s->id)->where('tf_name_id', 7)->sum('amount');
-            $s->dhl = tf_payment::where('stud_id', $s->id)->where('tf_name_id', 8)->sum('amount');
+            })->sum('amount')) - 
+            ($tp_temp
+            ->where(function($query){
+                $query->where('tf_name_id', 1)->orWhere('tf_name_id', 3);
+            })->sum('amount'));
+            $tf_projected = tf_projected::where('program_id', $s->program_id);$tp_temp = tf_payment::where('stud_id', $s->id);
+            $s->visa = ($tf_projected->where('tf_name_id', 2)->sum('amount')) - ($tp_temp->where('tf_name_id', 2)->sum('amount'));
+            $tf_projected = tf_projected::where('program_id', $s->program_id);$tp_temp = tf_payment::where('stud_id', $s->id);
+            $s->docu = ($tf_projected->where('tf_name_id', 4)->sum('amount')) - ($tp_temp->where('tf_name_id', 4)->sum('amount'));
+            $tf_projected = tf_projected::where('program_id', $s->program_id);$tp_temp = tf_payment::where('stud_id', $s->id);
+            $s->select = ($tf_projected->where('tf_name_id', 5)->sum('amount')) - ($tp_temp->where('tf_name_id', 5)->sum('amount'));
+            $tf_projected = tf_projected::where('program_id', $s->program_id);$tp_temp = tf_payment::where('stud_id', $s->id);
+            $s->pdos = ($tf_projected->where('tf_name_id', 6)->sum('amount')) - ($tp_temp->where('tf_name_id', 6)->sum('amount'));
+            $tf_projected = tf_projected::where('program_id', $s->program_id);$tp_temp = tf_payment::where('stud_id', $s->id);
+            $s->air = ($tf_projected->where('tf_name_id', 7)->sum('amount')) - ($tp_temp->where('tf_name_id', 7)->sum('amount'));
+            $tf_projected = tf_projected::where('program_id', $s->program_id);$tp_temp = tf_payment::where('stud_id', $s->id);
+            $s->dhl = ($tf_projected->where('tf_name_id', 8)->sum('amount')) - ($tp_temp->where('tf_name_id', 8)->sum('amount'));
         }
 
         return $student;

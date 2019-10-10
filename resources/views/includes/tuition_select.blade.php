@@ -1,6 +1,7 @@
 <label class="class_select" style="display:none;">Class: </label>
 <select type="text" id="class_select" class="form-control select2" style="width: 300px; display:none;">
     <option value="All">All</option>
+    <option value="No Class">No Class</option>
     @foreach($class_settings as $cs)
     <option value="{{ $cs->id }}">{{ $cs->sensei->fname }} | {{ $cs->start_date }} ~ 
         @if(!$cs->end_date)
