@@ -445,18 +445,6 @@ class excelController extends Controller
         $sheet->setCellValue('E'.$highestrow, '=sum(E5:E'.($sheet->getHighestRow()-1).')');
         $sheet->setCellValue('F'.$highestrow, '=sum(F5:F'.($sheet->getHighestRow()-1).')');
         
-        $sheet->getPageSetup()->setOrientation(PageSetup::ORIENTATION_LANDSCAPE)
-        ->setPaperSize(PageSetup::PAPERSIZE_FOLIO);
-        
-        $sheet->getPageMargins()->setTop(0.75);
-        $sheet->getPageMargins()->setRight(0.7);
-        $sheet->getPageMargins()->setLeft(0.25);
-        $sheet->getPageMargins()->setBottom(0.75);
-        
-        $sheet->getPageSetup()->setFitToWidth(1);    
-        $sheet->getPageSetup()->setFitToHeight(0);
-        $sheet->getPageSetup()->setPrintArea('A1:'.$sheet->getHighestColumn().$sheet->getHighestRow());
-        
         //FOOTER -- END*/
 
         //Using Styles -- START
@@ -494,6 +482,18 @@ class excelController extends Controller
             }
             $sheet->getRowDimension($x)->setRowHeight(40);
         }
+        
+        $sheet->getPageSetup()->setOrientation(PageSetup::ORIENTATION_LANDSCAPE)
+        ->setPaperSize(PageSetup::PAPERSIZE_FOLIO);
+        
+        $sheet->getPageMargins()->setTop(0.75);
+        $sheet->getPageMargins()->setRight(0.7);
+        $sheet->getPageMargins()->setLeft(0.25);
+        $sheet->getPageMargins()->setBottom(0.75);
+        
+        $sheet->getPageSetup()->setFitToWidth(1);    
+        $sheet->getPageSetup()->setFitToHeight(0);
+        $sheet->getPageSetup()->setPrintArea('A1:'.$sheet->getHighestColumn().$sheet->getHighestRow());
         
         //Using Styles -- END
 
