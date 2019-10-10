@@ -269,7 +269,7 @@ class tuitionController extends Controller
         ->addColumn('action', function($data){
             $html = '';
 
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Student" class="btn btn-warning btn-sm view_tf_student_modal" id="'.$data->id.'"><i class="fa fa-list-alt" style="font-size: 15px;"></i></button>&nbsp;';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Student" class="btn btn-warning btn-xs view_tf_student_modal" id="'.$data->id.'"><i class="fa fa-list-alt" style="font-size: 15px;"></i></button>&nbsp;';
             $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit Payment" class="btn btn-info btn-xs edit_tf_payment" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
             $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete Payment" class="btn btn-danger btn-xs delete_tf_payment" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>&nbsp;';
 
@@ -333,7 +333,7 @@ class tuitionController extends Controller
         ->addColumn('action', function($data){
             $html = '';
 
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Student" class="btn btn-warning btn-sm view_tf_student_modal" id="'.$data->id.'"><i class="fa fa-list-alt" style="font-size: 15px;"></i></button>&nbsp;';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Student" class="btn btn-warning btn-xs view_tf_student_modal" id="'.$data->id.'"><i class="fa fa-list-alt" style="font-size: 15px;"></i></button>&nbsp;';
             $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit Payment" class="btn btn-info btn-xs edit_sb_payment" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
             $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete Payment" class="btn btn-danger btn-xs delete_sb_payment" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>&nbsp;';
 
