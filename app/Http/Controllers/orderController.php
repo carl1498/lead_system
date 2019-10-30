@@ -43,8 +43,8 @@ class orderController extends Controller
             $html = '';
 
             if(canAccessAll()){
-                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-primary btn-xs edit_order" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
-                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_order" id="'.$data->id.'"><i class="fa fa-trash"></i></button>&nbsp;';
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-primary btn-xs edit_order" id="'.$data->id.'"><i class="fa fa-pen"></i></button>';
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_order" id="'.$data->id.'"><i class="fa fa-trash"></i></button>';
             }
             
             return $html;

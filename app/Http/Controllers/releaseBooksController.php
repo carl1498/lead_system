@@ -155,15 +155,15 @@ class releaseBooksController extends Controller
             $html = '';
 
             if($data->status == 'Pending'){
-                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Received" class="btn btn-success btn-xs receive_release" id="'.$data->id.'"><i class="fa fa-thumbs-up"></i></button>&nbsp;';
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Received" class="btn btn-success btn-xs receive_release" id="'.$data->id.'"><i class="fa fa-thumbs-up"></i></button>';
             }
 
             if(canAccessAll() || $user->role->name == 'Language Head'){
                 if($data->status == 'Received'){
-                    $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Pending" class="btn btn-warning btn-xs pending_release" id="'.$data->id.'"><i class="fa fa-minus"></i></button>&nbsp;';
+                    $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Pending" class="btn btn-warning btn-xs pending_release" id="'.$data->id.'"><i class="fa fa-minus"></i></button>';
                 }
                 if($data->status == 'Pending'){
-                    $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Return" class="btn btn-danger btn-xs return_release" id="'.$data->id.'"><i class="fa fa-undo"></i></button>&nbsp;';
+                    $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Return" class="btn btn-danger btn-xs return_release" id="'.$data->id.'"><i class="fa fa-undo"></i></button>';
                 }
             }
             

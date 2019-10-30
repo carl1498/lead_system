@@ -110,20 +110,20 @@ class requestBooksController extends Controller
 
             if(canAccessAll() || $user->role->name == 'Language Head'){
                 if($data->status == 'Pending'){
-                    $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Approve" class="btn btn-info btn-xs approve_request" id="'.$data->id.'"><i class="fa fa-check"></i></button>&nbsp;';
+                    $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Approve" class="btn btn-info btn-xs approve_request" id="'.$data->id.'"><i class="fa fa-check"></i></button>';
                 }
 
                 if($data->status != 'Delivered' && $data->status != 'Cancelled'){
-                    $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delivered" class="btn btn-success btn-xs deliver_request" id="'.$data->id.'"><i class="fa fa-thumbs-up"></i></button>&nbsp;';
+                    $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delivered" class="btn btn-success btn-xs deliver_request" id="'.$data->id.'"><i class="fa fa-thumbs-up"></i></button>';
                 }
                 
                 if($data->status == 'Approved' || $data->status == 'Delivered'){
-                    $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Pending" class="btn btn-warning btn-xs pending_request" id="'.$data->id.'"><i class="fa fa-minus"></i></button>&nbsp;';
+                    $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Pending" class="btn btn-warning btn-xs pending_request" id="'.$data->id.'"><i class="fa fa-minus"></i></button>';
                 }
             }
 
             if($data->status == 'Pending'){
-                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Cancel" class="btn btn-danger btn-xs cancel_request" id="'.$data->id.'"><i class="fa fa-times"></i></button>&nbsp;';
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Cancel" class="btn btn-danger btn-xs cancel_request" id="'.$data->id.'"><i class="fa fa-times"></i></button>';
             }
 
             return $html;

@@ -191,18 +191,6 @@ $(document).ready(function(){
                 {data: 'remarks', name: 'remarks'},
                 {data: 'action', orderable: false, searchable: false}
             ],
-            columnDefs: [
-                { width: 30, targets: 0 }, //id
-                { width: 80, targets: 1 }, //branch
-                { width: 250, targets: 2 }, //book type
-                { width: 70, targets: 3 }, //previous
-                { width: 70, targets: 4 }, //quantity
-                { width: 70, targets: 5 }, //pending
-                { width: 130, targets: 6 }, //date
-                { width: 50, targets: 7 }, //status
-                { width: 160, targets: 8 }, //remarks
-                { width: 100, targets: 9 }, //action
-            ],
             order: [[
                 6, 'desc'
             ]]
@@ -252,19 +240,6 @@ $(document).ready(function(){
                 {data: 'remarks', name: 'remarks'},
                 {data: 'action', orderable: false, searchable: false}
             ],
-            columnDefs: [
-                { width: 30, targets: 0 }, //id
-                { width: 80, targets: 1 }, //branch
-                { width: 250, targets: 2 }, //book type
-                { width: 70, targets: 3 }, //previous
-                { width: 70, targets: 4 }, //quantity
-                { width: 70, targets: 5 }, //pending
-                { width: 130, targets: 6 }, //book range
-                { width: 130, targets: 7 }, //date
-                { width: 50, targets: 8 }, //status
-                { width: 160, targets: 9 }, //remarks
-                { width: 110, targets: 10 }, //action
-            ],
             order: [[
                 7, 'desc'
             ]]
@@ -309,14 +284,6 @@ $(document).ready(function(){
                 {data: 'books.name', name: 'book_no'},
                 {data: 'books.reference_no.invoice_ref_no', name: 'reference_no'},
                 {data: 'created_at', name: 'date'},
-            ],
-            columnDefs: [
-                { width: 250, targets: 0 }, //student name
-                { width: 80, targets: 1 }, //branch
-                { width: 250, targets: 2 }, //book type
-                { width: 100, targets: 3 }, //book no.
-                { width: 130, targets: 4 }, //reference no.
-                { width: 200, targets: 5 }, //date
             ],
             order: [[
                 5, 'desc'
@@ -364,15 +331,6 @@ $(document).ready(function(){
                 {data: 'status', name: 'status'},
                 {data: 'student_name', name: 'student_name'},
                 {data: 'action', orderable: false, searchable: false}
-            ],
-            columnDefs: [
-                { width: 250, targets: 0 }, //book type
-                { width: 80, targets: 1 }, //book no.
-                { width: 130, targets: 2 }, //invoice ref no
-                { width: 100, targets: 3 }, //branch
-                { width: 100, targets: 4 }, //status
-                { width: 250, targets: 5 }, //student name
-                { width: 100, targets: 6 }, //action
             ]
         });
     }
@@ -425,18 +383,6 @@ $(document).ready(function(){
                 {data: 'status', name: 'status'},
                 {data: 'departure', name: 'departure'},
             ],
-            columnDefs: [
-                { width: 250, targets: 0 }, //student name
-                { width: 100, targets: 1 }, //branch
-                { width: 60, targets: 2 }, //book 1
-                { width: 60, targets: 3 }, //wb 1
-                { width: 60, targets: 4 }, //book 2
-                { width: 60, targets: 5 }, //wb 2
-                { width: 60, targets: 6 }, //kanji
-                { width: 150, targets: 7 }, //program
-                { width: 110, targets: 8 }, //status
-                { width: 110, targets: 9 }, //departure
-            ],
             order: [[7, 'asc']]
         });
     }
@@ -488,17 +434,6 @@ $(document).ready(function(){
                 {data: 'program.name', name: 'program', defaultContent: ''},
                 {data: 'status', name: 'status'},
             ],
-            columnDefs: [
-                { width: 250, targets: 0 }, //student name
-                { width: 100, targets: 1 }, //branch
-                { width: 60, targets: 2 }, //book 1 ssw
-                { width: 60, targets: 3 }, //wb 1 ssw
-                { width: 60, targets: 4 }, //book 2 ssw
-                { width: 60, targets: 5 }, //wb 2 ssw
-                { width: 60, targets: 6 }, //kanji ssw
-                { width: 150, targets: 7 }, //program
-                { width: 110, targets: 8 }, //status
-            ]
         });
     }
 
@@ -552,19 +487,6 @@ $(document).ready(function(){
                 {data: 'wb_2_ssw', name: 'wb_2_ssw'},
                 {data: 'kanji_ssw', name: 'kanji_ssw'},
             ],
-            columnDefs: [
-                { width: 70, targets: 0 }, //branch
-                { width: 90, targets: 1 }, //book 1
-                { width: 90, targets: 2 }, //wb 1
-                { width: 90, targets: 3 }, //book 2
-                { width: 90, targets: 4 }, //wb 2
-                { width: 90, targets: 5 }, //kanji
-                { width: 90, targets: 6 }, //book 1 ssw
-                { width: 90, targets: 7 }, //wb 1 ssw
-                { width: 90, targets: 8 }, //book 2 ssw
-                { width: 90, targets: 9 }, //wb 2 ssw
-                { width: 90, targets: 10 }, //kanji ssw
-            ]
         });
     }
 
@@ -606,14 +528,6 @@ $(document).ready(function(){
                 {data: 'books.branch.name', name: 'branch'},
                 {data: 'stud_id', name: 'student_name'},
                 {data: 'created_at', name: 'date'},
-            ],
-            columnDefs: [
-                { width: 250, targets: 0 }, //book type
-                { width: 130, targets: 1 }, //book no
-                { width: 130, targets: 2 }, //invoice ref no
-                { width: 70, targets: 3 }, //branch
-                { width: 250, targets: 4 }, //student name
-                { width: 130, targets: 5 }, //date
             ],
             order: [[
                 5, 'desc'
@@ -659,14 +573,6 @@ $(document).ready(function(){
                 {data: 'books.branch.name', name: 'branch'},
                 {data: 'stud_id', name: 'student_name'},
                 {data: 'created_at', name: 'date'},
-            ],
-            columnDefs: [
-                { width: 250, targets: 0 }, //book type
-                { width: 130, targets: 1 }, //book no
-                { width: 130, targets: 2 }, //invoice ref no
-                { width: 70, targets: 3 }, //branch
-                { width: 250, targets: 4 }, //student name
-                { width: 130, targets: 5 }, //date
             ],
             order: [[
                 5, 'desc'

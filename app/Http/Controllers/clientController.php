@@ -37,10 +37,10 @@ class clientController extends Controller
         ->addColumn('action', function($data){
             $html = '';
 
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-primary btn-xs edit_client" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Person in Charge" class="btn btn-warning btn-xs pic" id="'.$data->id.'"><i class="fa fa-id-card"></i></button>&nbsp;';
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Bank" class="btn btn-info btn-xs bank" id="'.$data->id.'"><i class="fa fa-university"></i></button>&nbsp;';
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_client" id="'.$data->id.'"><i class="fa fa-trash"></i></button>&nbsp;';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-primary btn-xs edit_client" id="'.$data->id.'"><i class="fa fa-pen"></i></button>';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Person in Charge" class="btn btn-warning btn-xs pic" id="'.$data->id.'"><i class="fa fa-id-card"></i></button>';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Bank" class="btn btn-info btn-xs bank" id="'.$data->id.'"><i class="fa fa-university"></i></button>';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_client" id="'.$data->id.'"><i class="fa fa-trash"></i></button>';
             
             return $html;
         })
@@ -56,8 +56,8 @@ class clientController extends Controller
         ->addColumn('action', function($data){
             $html = '';
             
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-primary btn-xs edit_pic" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_pic" id="'.$data->id.'"><i class="fa fa-trash"></i></button>&nbsp;';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-primary btn-xs edit_pic" id="'.$data->id.'"><i class="fa fa-pen"></i></button>';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_pic" id="'.$data->id.'"><i class="fa fa-trash"></i></button>';
 
             return $html;
         })

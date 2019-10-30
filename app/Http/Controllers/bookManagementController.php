@@ -70,7 +70,7 @@ class bookManagementController extends Controller
         ->addColumn('action', function($data){
             $action = '';
             if($data->status != 'Lost'){
-                $action .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Lost" class="btn btn-danger btn-xs lost_book" id="'.$data->id.'"><i class="fas fa-eye-slash"></i></button>&nbsp;&nbsp;';
+                $action .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Lost" class="btn btn-danger btn-xs lost_book" id="'.$data->id.'"><i class="fas fa-eye-slash"></i></button>';
             }
             if($data->student || $data->status == 'Lost'){
                 $action .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Return" class="btn btn-warning btn-xs return_book" id="'.$data->id.'"><i class="fas fa-undo"></i></button>';

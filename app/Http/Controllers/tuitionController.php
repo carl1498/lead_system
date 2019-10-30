@@ -52,7 +52,7 @@ class tuitionController extends Controller
         ->addColumn('action', function($data){
             $html = '';
 
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Projected Expense" class="btn btn-success btn-sm projection" id="'.$data->id.'"><i class="fa fa-list-alt" style="font-size: 15px;"></i></button>&nbsp;';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Projected Expense" class="btn btn-success btn-sm projection" id="'.$data->id.'"><i class="fa fa-list-alt" style="font-size: 15px;"></i></button>';
 
             return $html;
         })
@@ -60,7 +60,6 @@ class tuitionController extends Controller
     }
 
     public function view_tf_student(Request $request){
-        info($request);
         $class = $request->class_select;
         $program = $request->program_select;
         $branch = $request->branch_select;
@@ -156,7 +155,7 @@ class tuitionController extends Controller
             return $data->departure_year->name . ' ' . $data->departure_month->name;
         })
         ->addColumn('action', function($data){
-            return '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Student" class="btn btn-warning btn-sm view_tf_student_modal" id="'.$data->id.'"><i class="fa fa-list-alt" style="font-size: 15px;"></i></button>&nbsp;';
+            return '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Student" class="btn btn-warning btn-sm view_tf_student_modal" id="'.$data->id.'"><i class="fa fa-list-alt" style="font-size: 15px;"></i></button>';
         })
         ->make(true);
     }
@@ -269,9 +268,9 @@ class tuitionController extends Controller
         ->addColumn('action', function($data){
             $html = '';
 
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Student" class="btn btn-warning btn-xs view_tf_student_modal" id="'.$data->id.'"><i class="fa fa-list-alt" style="font-size: 15px;"></i></button>&nbsp;';
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit Payment" class="btn btn-info btn-xs edit_tf_payment" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete Payment" class="btn btn-danger btn-xs delete_tf_payment" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>&nbsp;';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Student" class="btn btn-warning btn-xs view_tf_student_modal" id="'.$data->id.'"><i class="fa fa-list-alt" style="font-size: 15px;"></i></button>';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit Payment" class="btn btn-info btn-xs edit_tf_payment" id="'.$data->id.'"><i class="fa fa-pen"></i></button>';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete Payment" class="btn btn-danger btn-xs delete_tf_payment" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
 
             return $html;
         })->make(true);
@@ -333,9 +332,9 @@ class tuitionController extends Controller
         ->addColumn('action', function($data){
             $html = '';
 
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Student" class="btn btn-warning btn-xs view_tf_student_modal" id="'.$data->id.'"><i class="fa fa-list-alt" style="font-size: 15px;"></i></button>&nbsp;';
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit Payment" class="btn btn-info btn-xs edit_sb_payment" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete Payment" class="btn btn-danger btn-xs delete_sb_payment" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>&nbsp;';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Student" class="btn btn-warning btn-xs view_tf_student_modal" id="'.$data->id.'"><i class="fa fa-list-alt" style="font-size: 15px;"></i></button>';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit Payment" class="btn btn-info btn-xs edit_sb_payment" id="'.$data->id.'"><i class="fa fa-pen"></i></button>';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete Payment" class="btn btn-danger btn-xs delete_sb_payment" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
 
             return $html;
         })->make(true);
@@ -350,8 +349,8 @@ class tuitionController extends Controller
         ->addColumn('action', function($data){
             $html = '';
 
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit Payment" class="btn btn-info btn-xs edit_tf_payment" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete Payment" class="btn btn-danger btn-xs delete_tf_payment" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>&nbsp;';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit Payment" class="btn btn-info btn-xs edit_tf_payment" id="'.$data->id.'"><i class="fa fa-pen"></i></button>';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete Payment" class="btn btn-danger btn-xs delete_tf_payment" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
 
             return $html;
         })->make(true);
@@ -366,8 +365,8 @@ class tuitionController extends Controller
         ->addColumn('action', function($data){
             $html = '';
 
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit Payment" class="btn btn-info btn-xs edit_sb_payment" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete Payment" class="btn btn-danger btn-xs delete_sb_payment" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>&nbsp;';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit Payment" class="btn btn-info btn-xs edit_sb_payment" id="'.$data->id.'"><i class="fa fa-pen"></i></button>';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete Payment" class="btn btn-danger btn-xs delete_sb_payment" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
 
             return $html;
         })->make(true);

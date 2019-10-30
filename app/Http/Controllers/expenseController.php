@@ -57,8 +57,8 @@ class expenseController extends Controller
             $html = '';
             
             if(ExpenseHigherPermission()){
-                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-warning btn-sm edit_expense_type" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
-                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-danger btn-sm delete_expense_type" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>&nbsp;';
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-warning btn-sm edit_expense_type" id="'.$data->id.'"><i class="fa fa-pen"></i></button>';
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-danger btn-sm delete_expense_type" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
             }
             return $html;
         })
@@ -111,7 +111,7 @@ class expenseController extends Controller
             $html = '';
 
             if(ExpenseHigherPermission()){
-                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-warning btn-sm edit_expense" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-warning btn-sm edit_expense" id="'.$data->id.'"><i class="fa fa-pen"></i></button>';
                 $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-sm delete_expense" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
             }
             return $html;

@@ -88,14 +88,14 @@ class employeeController extends Controller
         ->addColumn('action', function($data){
             $html = '';
 
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-success btn-xs view_employee_profile" id="'.$data->id.'"><i class="fa fa-eye"></i></button>&nbsp;';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-success btn-xs view_employee_profile" id="'.$data->id.'"><i class="fa fa-eye"></i></button>';
             
             if(canAccessAll()){
-                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Account" class="btn btn-info btn-xs edit_account" id="'.$data->id.'"><i class="fa fa-key"></i></button>&nbsp;';
-                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-primary btn-xs edit_employee" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
-                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="History" class="btn btn-warning btn-xs history_employee" id="'.$data->id.'"><i class="fa fa-history"></i></button>&nbsp;';
-                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Family" class="btn btn-default btn-xs family_employee" id="'.$data->id.'"><i class="fa fa-users"></i></button>&nbsp;';
-                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_employee" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>&nbsp;';
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Account" class="btn btn-info btn-xs edit_account" id="'.$data->id.'"><i class="fa fa-key"></i></button>';
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-primary btn-xs edit_employee" id="'.$data->id.'"><i class="fa fa-pen"></i></button>';
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="History" class="btn btn-warning btn-xs history_employee" id="'.$data->id.'"><i class="fa fa-history"></i></button>';
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Family" class="btn btn-default btn-xs family_employee" id="'.$data->id.'"><i class="fa fa-users"></i></button>';
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_employee" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
             }
             return $html;
         })
@@ -138,7 +138,7 @@ class employeeController extends Controller
         ->addColumn('action', function($data){
             $html = '';
             if($data->until){
-                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-primary btn-xs edit_employment_history" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-primary btn-xs edit_employment_history" id="'.$data->id.'"><i class="fa fa-pen"></i></button>';
             }
             return $html;
         })
@@ -169,8 +169,8 @@ class employeeController extends Controller
         })
         ->addColumn('action', function($data){
             $html = '';
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-primary btn-xs edit_prev_employment_history" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_prev_employment_history" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>&nbsp;';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-primary btn-xs edit_prev_employment_history" id="'.$data->id.'"><i class="fa fa-pen"></i></button>';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_prev_employment_history" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
             return $html;
         })
         ->make(true);
@@ -184,8 +184,8 @@ class employeeController extends Controller
         return Datatables::of($educational_background)
         ->addColumn('action', function($data){
             $html = '';
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-primary btn-xs edit_educational_background" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_educational_background" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>&nbsp;';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-primary btn-xs edit_educational_background" id="'.$data->id.'"><i class="fa fa-pen"></i></button>';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_educational_background" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
             return $html;
         })->make(true);
 
@@ -202,8 +202,8 @@ class employeeController extends Controller
         })
         ->addColumn('action', function($data){
             $html = '';
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-primary btn-xs edit_employee_emergency" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_employee_emergency" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>&nbsp;';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-primary btn-xs edit_employee_emergency" id="'.$data->id.'"><i class="fa fa-pen"></i></button>';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_employee_emergency" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
             return $html;
         })
         ->make(true);
@@ -223,8 +223,8 @@ class employeeController extends Controller
         })
         ->addColumn('action', function($data){
             $html = '';
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-primary btn-xs edit_employee_spouse" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_employee_spouse" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>&nbsp;';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-primary btn-xs edit_employee_spouse" id="'.$data->id.'"><i class="fa fa-pen"></i></button>';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_employee_spouse" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
             return $html;
         })
         ->make(true);
@@ -244,8 +244,8 @@ class employeeController extends Controller
         })
         ->addColumn('action', function($data){
             $html = '';
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-primary btn-xs edit_employee_child" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_employee_child" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>&nbsp;';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-primary btn-xs edit_employee_child" id="'.$data->id.'"><i class="fa fa-pen"></i></button>';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_employee_child" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
             return $html;
         })
         ->make(true);
@@ -315,7 +315,7 @@ class employeeController extends Controller
             }
             $employee_benefits->save();
         }
-
+        
         if($request->hasFile('picture')){
             $fileextension = $request->picture->getClientOriginalExtension();
             $encryption = sha1(time().$request->picture->getClientOriginalName());
