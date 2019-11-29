@@ -87,6 +87,15 @@
 
 <div class="tab-pane fade in" id="cash_disbursement_tab">
     
+    <form action="/excel_expense" method="POST">
+        @csrf
+        <input type="hidden" class="start_date_hidden" name="start_date_hidden" value="All">
+        <input type="hidden" class="end_date_hidden" name="end_date_hidden" value="All">
+        <input type="hidden" class="date_counter_hidden" name="date_counter_hidden" value="true">
+        <input type="hidden" class="branch_hidden" name="branch_hidden" value="All">
+        <input type="hidden" class="company_hidden" name="company_hidden" value="All">
+        <button type="submit" class="btn btn-md btn-default">Excel</button>
+    </form>
     <div style="overflow: auto; width: 100%;">
         <table id="cash_disbursement_table" class="table table-hover table-striped table-bordered">
 

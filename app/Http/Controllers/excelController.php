@@ -19,6 +19,8 @@ use App\class_students;
 use App\departure_year;
 use App\departure_month;
 use App\branch;
+use App\expense;
+use App\expense_type;
 
 class excelController extends Controller
 {
@@ -498,6 +500,337 @@ class excelController extends Controller
         //Using Styles -- END
 
         $filename = 'Summary.xlsx';
+
+        //redirect output to client
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="'.$filename.'"');
+        header('Cache-Control: max-age=0');
+
+        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+        ob_end_clean();
+        $writer->save('php://output');
+    }
+
+    public function excel_expense(Request $request){
+        $start_date = $request->start_date_hidden;
+        $end_date = $request->end_date_hidden;
+        $date_counter = $request->date_counter_hidden;
+        $branch = $request->branch_hidden;
+        $company = $request->company_hidden;
+        $expense_particular_type_total = [];
+        $x = 0;
+
+        //ALL DATA -- START
+
+        $total = expense::
+            when($company != 'All', function($query) use($company){
+                $query->where('lead_company_type_id', $company);
+            })
+            ->when($branch != 'All', function($query) use ($branch){
+                $query->where('branch_id', $branch);
+            })
+            ->when($date_counter == 'true', function($query) use($start_date, $end_date){
+                $query->whereBetween('date', [$start_date, $end_date]);
+            })->sum('amount');
+
+        $non_vat = expense::
+            when($company != 'All', function($query) use($company){
+                $query->where('lead_company_type_id', $company);
+            })
+            ->when($branch != 'All', function($query) use ($branch){
+                $query->where('branch_id', $branch);
+            })
+            ->when($date_counter == 'true', function($query) use($start_date, $end_date){
+                $query->whereBetween('date', [$start_date, $end_date]);
+            })->where('vat', 'NON-vat')->sum('amount');
+
+        $vat = expense::
+            when($company != 'All', function($query) use($company){
+                $query->where('lead_company_type_id', $company);
+            })
+            ->when($branch != 'All', function($query) use ($branch){
+                $query->where('branch_id', $branch);
+            })
+            ->when($date_counter == 'true', function($query) use($start_date, $end_date){
+                $query->whereBetween('date', [$start_date, $end_date]);
+            })->where('vat', 'VAT')->sum('amount');
+
+        $input_tax = expense::
+            when($company != 'All', function($query) use($company){
+                $query->where('lead_company_type_id', $company);
+            })
+            ->when($branch != 'All', function($query) use ($branch){
+                $query->where('branch_id', $branch);
+            })
+            ->when($date_counter == 'true', function($query) use($start_date, $end_date){
+                $query->whereBetween('date', [$start_date, $end_date]);
+            })->sum('input_tax');
+
+        $expense_type = expense_type::all();
+        $expense_type_count = $expense_type->count();
+
+        $expense = expense::with('particular')
+            ->when($company != 'All', function($query) use($company){
+                $query->where('lead_company_type_id', $company);
+            })
+            ->when($branch != 'All', function($query) use ($branch){
+                $query->where('branch_id', $branch);
+            })
+            ->when($date_counter == 'true', function($query) use($start_date, $end_date){
+                $query->whereBetween('date', [$start_date, $end_date]);
+            })->groupBy('expense_particular_id')->get();
+
+        foreach($expense_type as $et){
+            $et->expense_type_total = expense::where('expense_type_id', $et->id)
+                ->when($company != 'All', function($query) use($company){
+                    $query->where('lead_company_type_id', $company);
+                })
+                ->when($branch != 'All', function($query) use ($branch){
+                    $query->where('branch_id', $branch);
+                })
+                ->when($date_counter == 'true', function($query) use($start_date, $end_date){
+                    $query->whereBetween('date', [$start_date, $end_date]);
+                })->sum('amount');
+        }
+
+        foreach($expense as $e){
+            $e->total_invoice = expense::where('expense_particular_id', $e->expense_particular_id)
+                ->when($company != 'All', function($query) use($company){
+                    $query->where('lead_company_type_id', $company);
+                })
+                ->when($branch != 'All', function($query) use ($branch){
+                    $query->where('branch_id', $branch);
+                })
+                ->when($date_counter == 'true', function($query) use($start_date, $end_date){
+                    $query->whereBetween('date', [$start_date, $end_date]);
+                })->sum('amount');
+            
+            $e->non_vat_total = expense::where('expense_particular_id', $e->expense_particular_id)
+                ->when($company != 'All', function($query) use($company){
+                    $query->where('lead_company_type_id', $company);
+                })
+                ->when($branch != 'All', function($query) use ($branch){
+                    $query->where('branch_id', $branch);
+                })
+                ->when($date_counter == 'true', function($query) use($start_date, $end_date){
+                    $query->whereBetween('date', [$start_date, $end_date]);
+                })->where('vat', 'NON-VAT')->sum('amount');
+            
+            $e->vat_total = expense::where('expense_particular_id', $e->expense_particular_id)
+                ->when($company != 'All', function($query) use($company){
+                    $query->where('lead_company_type_id', $company);
+                })
+                ->when($branch != 'All', function($query) use ($branch){
+                    $query->where('branch_id', $branch);
+                })
+                ->when($date_counter == 'true', function($query) use($start_date, $end_date){
+                    $query->whereBetween('date', [$start_date, $end_date]);
+                })->where('vat', 'VAT')->sum('amount');
+            
+            $e->input_tax_total = expense::where('expense_particular_id', $e->expense_particular_id)
+                ->when($company != 'All', function($query) use($company){
+                    $query->where('lead_company_type_id', $company);
+                })
+                ->when($branch != 'All', function($query) use ($branch){
+                    $query->where('branch_id', $branch);
+                })
+                ->when($date_counter == 'true', function($query) use($start_date, $end_date){
+                    $query->whereBetween('date', [$start_date, $end_date]);
+                })->sum('input_tax');
+        }
+
+        foreach($expense as $e){
+            $y = 0;
+            foreach($expense_type as $et){
+                $expense_particular_type_total[$x][$y] = expense::where('expense_type_id', $et->id)
+                    ->where('expense_particular_id', $e->expense_particular_id)
+                    ->when($company != 'All', function($query) use($company){
+                        $query->where('lead_company_type_id', $company);
+                    })
+                    ->when($branch != 'All', function($query) use($branch){
+                        $query->where('branch_id', $branch);
+                    })
+                    ->when($date_counter == 'true', function($query) use($start_date, $end_date){
+                        $query->whereBetween('date', [$start_date, $end_date]);
+                    })->sum('amount');
+                $y++;
+            }
+            $x++;
+        }
+
+        //ALL DATA -- END
+
+        //STYLE -- START
+
+        $headerStyleArray = [
+            'borders' => [
+                'outline' => [
+                    'borderStyle' => Border::BORDER_THIN
+                ]
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+                'vertical' => Alignment::VERTICAL_CENTER,
+            ]
+        ];
+
+        $centerStyleArray = [
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+                'vertical' => Alignment::VERTICAL_CENTER,
+            ]
+        ];
+
+        $allStyleArray = [
+            'borders' => [
+                'outline' => [
+                    'borderStyle' => Border::BORDER_THIN
+                ]
+            ],
+            'alignment' => [
+                'vertical' => Alignment::VERTICAL_CENTER
+            ]
+        ];
+
+        //STYLE -- END
+
+        //Initialize Sheet
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        //Title
+        $sheet->setCellValue('A1', 'Company')->mergeCells('A1:E1');
+        $sheet->setCellValue('A2', 'Cash Disbursement Journal')->mergeCells('A2:E2');
+        $sheet->setCellValue('A3', 'Month / Year')->mergeCells('A3:E3');
+
+        //HEADER -- START
+
+        //Header Defaults -- START
+
+        $sheet->setCellValue('A5', 'Date')->mergeCells('A5:A6');
+        $sheet->setCellValue('B5', 'Check Voucher')->mergeCells('B5:B6');
+        $sheet->setCellValue('C5', 'Particulars')->mergeCells('C5:C6');
+        $sheet->setCellValue('D5', 'TIN Number')->mergeCells('D5:D6');
+        $sheet->setCellValue('E5', 'Address')->mergeCells('E5:E6');
+        $sheet->setCellValue('F5', 'Total Invoice')->setCellValue('F6', $total);
+        $sheet->setCellValue('G5', 'Non Vat')->setCellValue('G6', $non_vat);
+        $sheet->setCellValue('H5', 'Vatable Amount')->setCellValue('H6', $vat);
+        $sheet->setCellValue('I5', 'Input Tax')->setCellValue('I6', $input_tax);
+
+        //Header Defaults -- END
+
+        //Header Expense Types -- START
+
+        $x = 10;
+
+        foreach($expense_type as $et){
+            $sheet->setCellValueByColumnAndRow($x, 5, $et->name);
+            $sheet->setCellValueByColumnAndRow($x, 6, $et->expense_type_total);
+            $x++;
+        }
+
+        //Header Expense Types -- END
+
+        //HEADER -- END
+
+        //BODY -- START
+        
+        $row = 7;
+        $x = 0;
+        foreach($expense as $e){
+            $sheet->setCellValue('A'.$row, $e->date);
+            $sheet->setCellValue('B'.$row, $e->check_voucher);
+            $sheet->setCellValue('C'.$row, $e->particular->name);
+            $sheet->setCellValue('D'.$row, $e->particular->tin);
+            $sheet->setCellValue('E'.$row, $e->particular->address);
+            $sheet->setCellValue('F'.$row, $e->total_invoice);
+            $sheet->setCellValue('G'.$row, $e->non_vat_total);
+            $sheet->setCellValue('H'.$row, $e->vat_total);
+            $sheet->setCellValue('I'.$row, $e->input_tax_total);
+            for($col = 'A'; $col != 'F'; $col++){
+                $sheet->getStyle($col.$row)->getAlignment()->setWrapText(TRUE)->setVertical('center');
+            }
+
+            
+            for($y = 0, $z = 10, $col = 'F'; $y < $expense_type_count; $y++, $z++, $col++){
+                $sheet->setCellValueByColumnAndRow($z, $row, $expense_particular_type_total[$x][$y]);
+                $sheet->getStyle($col.$row)->getAlignment()->setVertical('center');
+            }
+            $row++; $x++;
+        }
+
+        //BODY -- END
+
+        $highestrow = $sheet->getHighestRow();
+        $highestcolumn = $sheet->getHighestColumn();
+        $highestcolumn++;
+        for($x = 5; $x <= $highestrow; $x++){
+            for($y = 'A'; $y != $highestcolumn; $y++){
+                $sheet->getStyle($y.$x)->applyFromArray($allStyleArray);
+            }
+        }
+
+        //FOOTER -- START
+        $row+=2;
+
+        $sheet->setCellValue('C'.$row, 'Expense Type')->getStyle('C'.$row)->getAlignment()->setHorizontal('center');
+        $sheet->setCellValue('D'.$row, 'Amount')->getStyle('D'.$row)->getAlignment()->setHorizontal('center');
+        $sheet->getStyle('C'.$row)->applyFromArray($allStyleArray);
+        $sheet->getStyle('D'.$row)->applyFromArray($allStyleArray);
+
+        $row++;
+
+        foreach($expense_type as $et){
+            $sheet->setCellValue('C'.$row, $et->name);
+            $sheet->setCellValue('D'.$row, $et->expense_type_total);
+            $sheet->getStyle('C'.$row)->getAlignment()->setVertical('center')->setWrapText(TRUE);
+            $sheet->getStyle('D'.$row)->getAlignment()->setVertical('center')->setWrapText(TRUE);
+            $sheet->getStyle('C'.$row)->applyFromArray($allStyleArray);
+            $sheet->getStyle('D'.$row)->applyFromArray($allStyleArray);
+            $row++;
+        }
+
+        $sheet->setCellValue('C'.$row, 'TOTAL')->getStyle('C'.$row)->getAlignment()->setHorizontal('right');
+        $sheet->setCellValue('D'.$row, $total);
+        $sheet->getStyle('C'.$row)->applyFromArray($allStyleArray);
+        $sheet->getStyle('D'.$row)->applyFromArray($allStyleArray);
+        
+        //FOOTER -- END
+
+        $sheet->freezePane('F7');
+
+        //Using Styles -- START
+
+        //Set Title
+        $sheet->getStyle('A1:A3')->getFont()->setSize(18);
+
+        $highestcolumn = $sheet->getHighestColumn();
+        $highestcolumn++;
+
+        for($x = 'F'; $x != $highestcolumn; $x++){
+            $sheet->getColumnDimension($x)->setWidth(15)->setAutoSize(FALSE);
+            $sheet->getStyle($x.'5')->getAlignment()->setWrapText(TRUE);
+        }
+
+        for($x = 'A'; $x != $highestcolumn; $x++){
+            $sheet->getStyle($x.'5')->applyFromArray($centerStyleArray);
+        }
+
+
+        $sheet->getColumnDimension('A')->setAutoSize(TRUE);
+        $sheet->getColumnDimension('B')->setAutoSize(TRUE);
+        $sheet->getColumnDimension('C')->setWidth(30)->setAutoSize(FALSE);
+        $sheet->getColumnDimension('D')->setWidth(20)->setAutoSize(FALSE);
+        $sheet->getColumnDimension('E')->setWidth(30)->setAutoSize(FALSE);
+
+        $highestrow = $sheet->getHighestRow()+1;
+
+
+
+        
+        //Using Styles -- END
+
+        $filename = 'Cash Disbursement.xlsx';
 
         //redirect output to client
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');

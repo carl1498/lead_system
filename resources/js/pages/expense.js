@@ -30,6 +30,7 @@ $(document).ready(function(){
     today_converted = yyyy + '-' + mm + '-' + dd;
     var start_date = today_converted;
     var end_date = today_converted;
+    $('.start_date_hidden, .end_date_hidden').val(today_converted);
 
     $('#daterange').daterangepicker({
         showDropdowns: true,
@@ -38,12 +39,15 @@ $(document).ready(function(){
         endDate: today,
     }, function(start, end){
         start_date = start.format('YYYY-MM-DD');
+        $('.start_date_hidden').val(start_date);
         end_date = end.format('YYYY-MM-DD');
+        $('.end_date_hidden').val(end_date);
         refresh();
     });
 
     $(document).on('change', '#date_counter', function(){
         date_counter = ($(this).is(':checked')) ? true : false;
+        $('.date_counter_hidden').val(date_counter);
         refresh();
     });
 
@@ -746,11 +750,13 @@ $(document).ready(function(){
 
     $(document).on('change', '#company_type_select', function(){
         company = $(this).val();
+        $('.company_hidden').val(company);
         refresh();
     });
 
     $(document).on('change', '#branch_select', function(){
         branch = $(this).val();
+        $('.branch_hidden').val(branch);
         refresh();
     });
 
@@ -873,12 +879,6 @@ $(document).ready(function(){
                 html += '</tbody>';
 
                 $('#cash_disbursement_table').append(html);
-
-                $("#cash_disbursement_table").tableExport({
-                    position: 'top',
-                    formats: ['xlsx'],
-                    bootstrap: true
-                });
 
                 enableTabs();
             }

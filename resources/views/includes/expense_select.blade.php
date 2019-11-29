@@ -25,8 +25,5 @@
         <option value="{{ $b->id }}">{{ $b->name }}</option>
         @endforeach
     </select>
-
-    &nbsp;&nbsp;&nbsp;&nbsp;
-    <a href="/files/Cash Disbursement Journal.xlsx" class="btn btn-md btn-info">Download Cash Disbursement Template</a>
 </div>
 <br>
