@@ -118,6 +118,24 @@
 
             <div class="row clearfix">
                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
+                        <label for="t_civil" class="pull-right">Civil Status</label>
+                </div>
+                <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
+                    <div class="form-group required">
+                        <select type="text" id="t_civil" name="t_civil" class="form-control select2 required" style="width: 100%;" required>
+                            <option value="">Select Civil Status</option>
+                            <option value="Single">Single</option>
+                            <option value="Married">Married</option>
+                            <option value="Divorced">Divorced</option>
+                            <option value="Separated">Separated</option>
+                            <option value="Widowed">Widowed</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row clearfix">
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
                         <label for="t_course" class="pull-right">Course</label>
                 </div>
                 <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">

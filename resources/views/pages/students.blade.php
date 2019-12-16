@@ -90,6 +90,9 @@
                             <b>Birthdate</b> <p id="p_birthdate" class="pull-right text-muted">-</p>
                         </li>
                         <li class="list-group-item">
+                            <b>Civil Status</b> <p id="p_civil" class="pull-right text-muted">-</p>
+                        </li>
+                        <li class="list-group-item">
                             <b>Gender</b> <p id="p_gender" class="pull-right text-muted">-</p>
                         </li>
                         <li class="list-group-item">

@@ -405,17 +405,17 @@ class studentController extends Controller
         // EDIT HISTORY -- START
 
         if(isset($edited_by)){
-            $edit_fields = ['First Name', 'Middle Name', 'Last Name', 'Birth Date', 'Contact #', 
+            $edit_fields = ['First Name', 'Middle Name', 'Last Name', 'Birth Date', 'Civil Status', 'Contact #', 
                 'Program', 'School', 'Benefactor', 'Address', 'Email', 'Referred By', 'Sign Up Date', 
                 'Medical Date', 'Completion Date', 'Gender', 'Branch', 'Course', 'Year', 'Month', 'Remarks'];
 
-            $student_fields = [$student->fname, $student->mname, $student->lname, $student->birthdate,
+            $student_fields = [$student->fname, $student->mname, $student->lname, $student->birthdate, $student->civil_status,
                 $student->contact, $student->program_id, $student->school_id, $student->benefactor_id, 
                 $student->address, $student->email, $student->referral_id, $student->date_of_signup, $student->date_of_medical, 
                 $student->date_of_completion, $student->gender, $student->branch_id, $student->course_id, 
                 $student->departure_year_id, $student->departure_month_id, $student->remarks];
 
-            $request_fields = [$request->fname, $request->mname, $request->lname, $request->birthdate,
+            $request_fields = [$request->fname, $request->mname, $request->lname, $request->birthdate, $request->civil,
                 $request->contact, $request->program, $request->school, $request->benefactor, 
                 $request->address, $request->email, $request->referral, $request->sign_up, 
                 $request->medical, $request->completion, $request->gender, $request->branch, 
@@ -428,6 +428,7 @@ class studentController extends Controller
         $student->mname = $request->mname;
         $student->lname = $request->lname;
         $student->birthdate = Carbon::parse($request->birthdate);
+        $student->civil_status = $request->civil;
         $student->contact = $request->contact;
         $student->program_id = $request->program;
         $student->school_id = $request->school;
@@ -596,18 +597,18 @@ class studentController extends Controller
         }
         
         if(isset($edited_by)){
-            $edit_fields = ['First Name', 'Middle Name', 'Last Name', 'Birth Date',
+            $edit_fields = ['First Name', 'Middle Name', 'Last Name', 'Birth Date', 'Civil Status',
                 'Contact #', 'Address', 'Email', 'Referred By', 'Sign Up Date',
                 'Gender', 'Branch', 'Course', 'Year', 'Remarks'];
 
             $student_fields = [$student->fname, $student->mname, $student->lname,
-                $student->birthdate, $student->contact, $student->address,
+                $student->birthdate, $student->civil_status, $student->contact, $student->address,
                 $student->email, $student->referral_id, $student->date_of_signup,
                 $student->gender, $student->branch_id, $student->course_id,
                 $student->departure_year_id, $student->remarks];
 
             $request_fields = [$request->l_fname, $request->l_mname, $request->l_lname,
-                $request->l_birthdate, $request->l_contact, $request->l_address,
+                $request->l_birthdate, $request->l_civil, $request->l_contact, $request->l_address,
                 $request->l_email, $request->l_referral, $request->l_sign_up, $request->l_gender, 
                 $request->l_branch, $request->l_course, $request->l_year, $request->l_remarks];
         }
@@ -616,6 +617,7 @@ class studentController extends Controller
         $student->mname = $request->l_mname;
         $student->lname = $request->l_lname;
         $student->birthdate = Carbon::parse($request->l_birthdate);
+        $student->civil_status = $request->l_civil;
         $student->contact = $request->l_contact;
 
         $program = program::where('name', 'Language Only')->first();
@@ -746,18 +748,18 @@ class studentController extends Controller
         }
 
         if(isset($edited_by)){
-            $edit_fields = ['First Name', 'Middle Name', 'Last Name', 'Birth Date',
+            $edit_fields = ['First Name', 'Middle Name', 'Last Name', 'Birth Date', 'Civil Status',
                 'Contact #', 'Program', 'Benefactor', 'Address', 'Email', 'Referred By', 
                 'Sign Up Date', 'Gender', 'Course', 'Year', 'Remarks'];
 
             $student_fields = [$student->fname, $student->mname, $student->lname,
-                $student->birthdate, $student->contact, $student->program_id,
+                $student->birthdate, $student->civil_status, $student->contact, $student->program_id,
                 $student->benefactor_id, $student->address, $student->email,
                 $student->referral_id, $student->date_of_signup, $student->gender,
                 $student->course_id, $student->departure_year_id, $student->remarks];
 
             $request_fields = [$request->s_fname, $request->s_mname, $request->s_lname,
-                $request->s_birthdate, $request->s_contact, $request->s_program,
+                $request->s_birthdate, $request->s_civil, $request->s_contact, $request->s_program,
                 $request->s_benefactor, $request->s_address, $request->s_email,
                 $request->s_referral, $request->s_sign_up, $request->s_gender,
                 $request->s_course, $request->s_year, $request->s_remarks];
@@ -767,6 +769,7 @@ class studentController extends Controller
         $student->mname = $request->s_mname;
         $student->lname = $request->s_lname;
         $student->birthdate = Carbon::parse($request->s_birthdate);
+        $student->civil_status = $request->s_civil;
         $student->contact = $request->s_contact;
         $student->program_id = $request->s_program;
         $student->benefactor_id = $request->s_benefactor;

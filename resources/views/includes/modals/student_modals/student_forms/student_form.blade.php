@@ -143,9 +143,32 @@
 
             <div class="row clearfix">
                 <div class="col-lg-4 col-md-4 col-sm-3 col-xs-3 form-control-label">
-                        <label for="course" class="pull-right">Course</label>
+                        <label for="civil" class="pull-right">Civil Status</label>
                 </div>
                 <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
+                    <div class="form-group required">
+                        <select type="text" id="civil" name="civil" class="form-control select2 required" style="width: 100%;" required>
+                            <option value="">Select Civil Status</option>
+                            <option value="Single">Single</option>
+                            <option value="Married">Married</option>
+                            <option value="Divorced">Divorced</option>
+                            <option value="Separated">Separated</option>
+                            <option value="Widowed">Widowed</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div class="col-md-6">
+
+            <div class="row clearfix">
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
+                        <label for="course" class="pull-right">Course</label>
+                </div>
+                <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
                     <div class="form-group required">
                         <select type="text" id="course" name="course" class="form-control select2 required" style="width: 100%;" required>
                             <option value="" disabled selected>Select Course</option>
@@ -156,11 +179,6 @@
                     </div>
                 </div>
             </div>
-
-        </div>
-
-        <!-- RIGHT COLUMN -->
-        <div class="col-md-6">
 
             <div class="row clearfix">
                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">

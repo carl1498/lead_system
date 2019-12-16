@@ -895,6 +895,7 @@ $(document).ready(function(){
                 $('#mname').val(data.mname);
                 $('#lname').val(data.lname);
                 $('#birthdate').val(data.birthdate);
+                $('#civil').val(data.civil_status).trigger('change');
                 $('#contact').val(data.contact);
 
                 if(data.program){
@@ -943,6 +944,7 @@ $(document).ready(function(){
                 $('#l_mname').val(data.mname);
                 $('#l_lname').val(data.lname);
                 $('#l_birthdate').val(data.birthdate);
+                $('#l_civil').val(data.civil_status).trigger('change');
                 $('#l_contact').val(data.contact);                    
                 $('#l_address').val(data.address);
                 $('#l_email').val(data.email);
@@ -977,6 +979,7 @@ $(document).ready(function(){
                 $('#s_mname').val(data.mname);
                 $('#s_lname').val(data.lname);
                 $('#s_birthdate').val(data.birthdate);
+                $('#s_civil').val(data.civil_status).trigger('change');
                 $('#s_contact').val(data.contact);      
                 if(data.program){
                     $('#s_program').val(data.program.id).trigger('change'); 
@@ -1023,6 +1026,7 @@ $(document).ready(function(){
                 $('#t_contact').val(data.contact);
                 $('#t_gender').val(data.gender).trigger('change');
                 $('#t_birthdate').val(data.birthdate);
+                $('#t_civil').val(data.civil_status).trigger('change');
                 $('#t_course').val(data.course.id).trigger('change');
                 $('#t_email').val(data.email);
                 $('#t_address').val(data.address);
@@ -1497,6 +1501,7 @@ $(document).ready(function(){
                 $('#p_benefactor').text(data.benefactor ? data.benefactor.name : '-');
                 $('#p_company').text(data.company ? data.company.name : '-');
                 $('#p_birthdate').text(data.birthdate + ' (' + data.age + ')');
+                $('#p_civil').text(data.civil_status);
                 $('#p_gender').text(data.gender);
                 $('#p_referral').text(data.referral.fname);
                 $('#p_sign_up').text(data.date_of_signup);
