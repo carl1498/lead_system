@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\student;
 use App\program;
@@ -548,6 +549,9 @@ class studentController extends Controller
         // EDIT HISTORY PT. 2 -- END
 
         if($request->hasFile('picture')){
+            if($student->picture != 'avatar5.png'){
+                Storage::delete('public/img/student/'.$student->picture);
+            }
             $fileextension = $request->picture->getClientOriginalExtension();
             $encryption = sha1(time().$request->picture->getClientOriginalName());
             $filename = $encryption.'.'.$fileextension;
@@ -710,6 +714,9 @@ class studentController extends Controller
         // EDIT HISTORY PT. 2 -- END
 
         if($request->hasFile('l_picture')){
+            if($student->picture != 'avatar5.png'){
+                Storage::delete('public/img/student/'.$student->picture);
+            }
             $fileextension = $request->l_picture->getClientOriginalExtension();
             $encryption = sha1(time().$request->l_picture->getClientOriginalName());
             $filename = $encryption.'.'.$fileextension;
@@ -866,6 +873,9 @@ class studentController extends Controller
         // EDIT HISTORY PT. 2 -- END
 
         if($request->hasFile('s_picture')){
+            if($student->picture != 'avatar5.png'){
+                Storage::delete('public/img/student/'.$student->picture);
+            }
             $fileextension = $request->s_picture->getClientOriginalExtension();
             $encryption = sha1(time().$request->s_picture->getClientOriginalName());
             $filename = $encryption.'.'.$fileextension;
@@ -1024,6 +1034,9 @@ class studentController extends Controller
         // EDIT HISTORY PT. 2 -- END
 
         if($request->hasFile('t_picture')){
+            if($student->picture != 'avatar5.png'){
+                Storage::delete('public/img/student/'.$student->picture);
+            }
             $fileextension = $request->s_picture->getClientOriginalExtension();
             $encryption = sha1(time().$request->t_picture->getClientOriginalName());
             $filename = $encryption.'.'.$fileextension;

@@ -317,6 +317,9 @@ class employeeController extends Controller
         }
         
         if($request->hasFile('picture')){
+            if($employee->picture != 'avatar5.png'){
+                Storage::delete('public/img/employee/'.$employee->picture);
+            }
             $fileextension = $request->picture->getClientOriginalExtension();
             $encryption = sha1(time().$request->picture->getClientOriginalName());
             $filename = $encryption.'.'.$fileextension;
