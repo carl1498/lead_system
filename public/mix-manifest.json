@@ -1,18 +1,18 @@
 {
     "/js/app.js": "/js/app.js?id=8c5e5d5425fcac26d372",
     "/css/app.css": "/css/app.css?id=fa94aa555cd36688def6",
-    "/js/pages/tuition.js": "/js/pages/tuition.js?id=fc24d4132531a3c03472",
-    "/js/pages/students.js": "/js/pages/students.js?id=6dcfc1f471fb621109c0",
+    "/js/pages/tuition.js": "/js/pages/tuition.js?id=49acfcd90ea64d389f4a",
+    "/js/pages/students.js": "/js/pages/students.js?id=6228bcfff4ea7b29e590",
     "/js/pages/student_settings.js": "/js/pages/student_settings.js?id=add1a871cd521bff3699",
     "/js/pages/student_edit_history.js": "/js/pages/student_edit_history.js?id=efcf34c3bf358e68dc99",
     "/js/pages/student_delete_history.js": "/js/pages/student_delete_history.js?id=31c32974c38f40d6d1b9",
-    "/js/pages/student_class.js": "/js/pages/student_class.js?id=c7f5c264b6942bbcc4bb",
+    "/js/pages/student_class.js": "/js/pages/student_class.js?id=bb4fefeed2eb0f86fde4",
     "/js/pages/student_add_history.js": "/js/pages/student_add_history.js?id=b2bcfbffae8109891599",
-    "/js/pages/order.js": "/js/pages/order.js?id=b136027ea54466665a90",
-    "/js/pages/invoice.js": "/js/pages/invoice.js?id=c8fad51f94cefa42edac",
-    "/js/pages/expense.js": "/js/pages/expense.js?id=d31aa0c1c6738ebac440",
-    "/js/pages/employees.js": "/js/pages/employees.js?id=163be0dd0be9728e5d9c",
+    "/js/pages/order.js": "/js/pages/order.js?id=db2e83965f71e9b2c130",
+    "/js/pages/invoice.js": "/js/pages/invoice.js?id=0a0fd72a12bcfdd50810",
+    "/js/pages/expense.js": "/js/pages/expense.js?id=6c2f5e35eebc0d53d421",
+    "/js/pages/employees.js": "/js/pages/employees.js?id=021fd4671cdf01043584",
     "/js/pages/dashboard.js": "/js/pages/dashboard.js?id=7d9c9a7a12ea520d40fc",
-    "/js/pages/client.js": "/js/pages/client.js?id=7163de284df2c094230b",
-    "/js/pages/book_management.js": "/js/pages/book_management.js?id=37b8a8f6ae71d5bfb7e2"
+    "/js/pages/client.js": "/js/pages/client.js?id=2a71c576411ac4f45871",
+    "/js/pages/book_management.js": "/js/pages/book_management.js?id=a42cbd57e7852b53d2cb"
 }

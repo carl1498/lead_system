@@ -710,7 +710,7 @@ $(document).ready(function(){
                 view_profile(data);
             },
             error: function(data){
-                swal("Error!", "Something went wrong, try again.", "error");
+                swal("Error!", "Something went wrong, please contact IT Officer.", "error");
                 button.disabled = false;
                 input.html('SAVE CHANGES');
             }
@@ -758,7 +758,7 @@ $(document).ready(function(){
                 view_profile(data);
             },
             error: function(data){
-                swal("Error!", "Something went wrong, try again.", "error");
+                swal("Error!", "Something went wrong, please contact IT Officer.", "error");
                 button.disabled = false;
                 input.html('SAVE CHANGES');
             }
@@ -806,7 +806,7 @@ $(document).ready(function(){
                 view_profile(data);
             },
             error: function(data){
-                swal("Error!", "Something went wrong, try again.", "error");
+                swal("Error!", "Something went wrong, please contact IT Officer.", "error");
                 button.disabled = false;
                 input.html('SAVE CHANGES');
             }
@@ -854,7 +854,7 @@ $(document).ready(function(){
                 view_profile(data);
             },
             error: function(data){
-                swal("Error!", "Something went wrong, try again.", "error");
+                swal("Error!", "Something went wrong, please contact IT Officer.", "error");
                 button.disabled = false;
                 input.html('SAVE CHANGES');
             }

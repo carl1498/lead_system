@@ -432,7 +432,7 @@ $(document).ready(function(){
                                     refresh();
                                 },
                                 error: function(data){
-                                    swal("Error!", "Something went wrong, try again.", "error");
+                                    swal("Error!", "Something went wrong, please contact IT Officer.", "error");
                                 }
                             });
                         }
@@ -484,7 +484,7 @@ $(document).ready(function(){
                                     refresh();
                                 },
                                 error: function(data){
-                                    swal("Error!", "Something went wrong, try again.", "error");
+                                    swal("Error!", "Something went wrong, please contact IT Officer.", "error");
                                 }
                             });
                         }
@@ -536,7 +536,7 @@ $(document).ready(function(){
                                     refresh();
                                 },
                                 error: function(data){
-                                    swal("Error!", "Something went wrong, try again.", "error");
+                                    swal("Error!", "Something went wrong, please contact IT Officer.", "error");
                                 }
                             });
                         }

@@ -377,7 +377,7 @@ $(document).ready(function(){
                 view_profile(data);
             },
             error: function(data){
-                swal("Error!", "Something went wrong, try again.", "error");
+                swal("Error!", "Something went wrong, please contact IT Officer.", "error");
                 button.disabled = false;
                 input.html('SAVE CHANGES');
             }
@@ -778,7 +778,7 @@ $(document).ready(function(){
                 refresh();
             },
             error: function(data){
-                swal("Error!", "Something went wrong, try again.", "error");
+                swal("Error!", "Something went wrong, please contact IT Officer.", "error");
                 button.disabled = false;
                 input.html('SAVE CHANGES');
             }
@@ -838,7 +838,7 @@ $(document).ready(function(){
                 notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
             },
             error: function(data){
-                swal("Error!", "Something went wrong, try again.", "error");
+                swal("Error!", "Something went wrong, please contact IT Officer.", "error");
                 button.disabled = false;
                 input.html('SAVE CHANGES');
             }
@@ -935,7 +935,7 @@ $(document).ready(function(){
                 notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
             },
             error: function(data){
-                swal("Error!", "Something went wrong, try again.", "error");
+                swal("Error!", "Something went wrong, please contact IT Officer.", "error");
                 button.disabled = false;
                 input.html('SAVE CHANGES');
             }
@@ -1013,7 +1013,7 @@ $(document).ready(function(){
                 $('#employee_family_modal .modal-title').text(data.employee.fname + ' ' + data.employee.lname);
             },
             error: function(data){
-                swal("Error!", "Something went wrong, try again.", "error");
+                swal("Error!", "Something went wrong, please contact IT Officer.", "error");
                 button.disabled = false;
                 input.html('SAVE CHANGES');
             }
@@ -1082,7 +1082,7 @@ $(document).ready(function(){
                 notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
             },
             error: function(data){
-                swal("Error!", "Something went wrong, try again.", "error");
+                swal("Error!", "Something went wrong, please contact IT Officer.", "error");
                 button.disabled = false;
                 input.html('SAVE CHANGES');
             }
@@ -1177,7 +1177,7 @@ $(document).ready(function(){
                 notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
             },
             error: function(data){
-                swal("Error!", "Something went wrong, try again.", "error");
+                swal("Error!", "Something went wrong, please contact IT Officer.", "error");
                 button.disabled = false;
                 input.html('SAVE CHANGES');
             }
@@ -1272,7 +1272,7 @@ $(document).ready(function(){
                 notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
             },
             error: function(data){
-                swal("Error!", "Something went wrong, try again.", "error");
+                swal("Error!", "Something went wrong, please contact IT Officer.", "error");
                 button.disabled = false;
                 input.html('SAVE CHANGES');
             }
