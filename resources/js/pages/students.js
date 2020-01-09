@@ -1310,6 +1310,13 @@ $(document).ready(function(){
         view_profile(id);
     });        
 
+    //Student Information -- START
+    $(document).on('click', '.info_student', function(){
+        $('#student_info_modal').modal('show');
+    });
+
+    //Student Information -- END
+
     //Course Select 2
     $('#course, #l_course, #s_course, #t_course').select2({
         placeholder: 'Select Course',

@@ -90,6 +90,8 @@ class studentController extends Controller
                 $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Back Out" class="btn btn-warning btn-xs backout_student" id="'.$data->id.'"><i class="fa fa-sign-out-alt"></i></button>';    
             }
 
+            /*$html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Other Info" class="btn btn-default btn-xs info_student" id="'.$data->id.'"><i class="fa fa-id-card"></i></button>';*/
+
             if(canAccessAll()){
                 $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_student" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';    
             }

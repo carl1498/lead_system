@@ -186,6 +186,7 @@
     <!-- MODALS -- START -->
     
     @include('includes.modals.student_modals.student_modal')
+    @include('includes.modals.student_modals.student_info_modal')
 
     <!-- MODALS -- END -->
 
