@@ -336,7 +336,11 @@ $fa-font-path: "../webfonts";
 #employees_branch_wrapper .dataTables_length, #expense_table_wrapper .dataTables_length,
 #type_table_wrapper .dataTables_length, #payment_table_wrapper .dataTables_length,
 #sec_bond_table_wrapper .dataTables_length, #student_table_wrapper .dataTables_length,
-#books_table_wrapper .dataTables_length{
+#books_table_wrapper .dataTables_length, #books_request_table_wrapper .dataTables_length, 
+#books_release_table_wrapper .dataTables_length, #books_assign_table_wrapper .dataTables_length, 
+#books_student_table_wrapper .dataTables_length, #books_ssw_student_table_wrapper .dataTables_length,
+#books_branch_table_wrapper .dataTables_length, #books_lost_table_wrapper .dataTables_length, 
+#books_return_table_wrapper .dataTables_length {
   float: right !important;
   margin-right: 25px;
 }
@@ -348,7 +352,11 @@ $fa-font-path: "../webfonts";
 #employees_branch_wrapper .dataTables_filter, #expense_table_wrapper .dataTables_filter,
 #type_table_wrapper .dataTables_filter, #payment_table_wrapper .dataTables_filter,
 #sec_bond_table_wrapper .dataTables_filter, #student_table_wrapper .dataTables_filter,
-#books_table_wrapper .dataTables_filter{ 
+#books_table_wrapper .dataTables_filter, #books_request_table_wrapper .dataTables_filter, 
+#books_release_table_wrapper .dataTables_filter, #books_assign_table_wrapper .dataTables_filter, 
+#books_student_table_wrapper .dataTables_filter, #books_ssw_student_table_wrapper .dataTables_filter,
+#books_branch_table_wrapper .dataTables_filter, #books_lost_table_wrapper .dataTables_filter, 
+#books_return_table_wrapper .dataTables_filter{ 
   float: right !important;
 }
 

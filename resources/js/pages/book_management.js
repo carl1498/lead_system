@@ -164,6 +164,7 @@ $(document).ready(function(){
             initComplete: function(settings, json) {
                 enableTabs();  
             },
+            dom: 'Bflrtip',
             processing: true,
             destroy: true,
             scrollX: true,
@@ -179,6 +180,13 @@ $(document).ready(function(){
                     branch_select: branch_select,
                 }
             },
+            buttons: [
+                {extend: 'excelHtml5', title: 'Books',
+                exportOptions: {
+                    columns: ':visible'
+                }},
+                'colvis'
+            ],
             columns: [
                 {data: 'id', name: 'id'},
                 {data: 'pending_request.branch.name', name: 'branch'},
@@ -212,6 +220,7 @@ $(document).ready(function(){
             initComplete: function(settings, json) {
                 enableTabs();  
             },
+            dom: 'Bflrtip',
             processing: true,
             destroy: true,
             scrollX: true,
@@ -227,6 +236,13 @@ $(document).ready(function(){
                     branch_select: branch_select,
                 }
             },
+            buttons: [
+                {extend: 'excelHtml5', title: 'Books',
+                exportOptions: {
+                    columns: ':visible'
+                }},
+                'colvis'
+            ],
             columns: [
                 {data: 'id', name: 'id'},
                 {data: 'pending_request.branch.name', name: 'branch'},
@@ -261,6 +277,7 @@ $(document).ready(function(){
             initComplete: function(settings, json) {
                 enableTabs();  
             },
+            dom: 'Bflrtip',
             processing: true,
             destroy: true,
             scrollX: true,
@@ -277,6 +294,13 @@ $(document).ready(function(){
                     invoice_select: invoice_select,
                 }
             },
+            buttons: [
+                {extend: 'excelHtml5', title: 'Books',
+                exportOptions: {
+                    columns: ':visible'
+                }},
+                'colvis'
+            ],
             columns: [
                 {data: 'student_name', name: 'name'},
                 {data: 'student.branch.name', name: 'branch'},
@@ -363,6 +387,7 @@ $(document).ready(function(){
             initComplete: function(settings, json) {
                 enableTabs();  
             },
+            dom: 'Bflrtip',
             processing: true,
             destroy: true,
             scrollX: true,
@@ -379,6 +404,13 @@ $(document).ready(function(){
                     branch_select: branch_select,
                 }
             },
+            buttons: [
+                {extend: 'excelHtml5', title: 'Books',
+                exportOptions: {
+                    columns: ':visible'
+                }},
+                'colvis'
+            ],
             columns: [
                 {data: 'student_name', name: 'student_name'},
                 {data: 'branch.name', name: 'branch'},
@@ -415,6 +447,7 @@ $(document).ready(function(){
             initComplete: function(settings, json) {
                 enableTabs();  
             },
+            dom: 'Bflrtip',
             processing: true,
             destroy: true,
             scrollX: true,
@@ -431,6 +464,13 @@ $(document).ready(function(){
                     branch_select: branch_select,
                 }
             },
+            buttons: [
+                {extend: 'excelHtml5', title: 'Books',
+                exportOptions: {
+                    columns: ':visible'
+                }},
+                'colvis'
+            ],
             columns: [
                 {data: 'student_name', name: 'student_name'},
                 {data: 'branch.name', name: 'branch'},
@@ -467,6 +507,7 @@ $(document).ready(function(){
             initComplete: function(settings, json) {
                 enableTabs();  
             },
+            dom: 'Bflrtip',
             processing: true,
             destroy: true,
             scrollX: true,
@@ -482,6 +523,13 @@ $(document).ready(function(){
                     invoice_select: invoice_select,
                 }
             },
+            buttons: [
+                {extend: 'excelHtml5', title: 'Books',
+                exportOptions: {
+                    columns: ':visible'
+                }},
+                'colvis'
+            ],
             columns: [
                 {data: 'name', name: 'branch'},
                 {data: 'book_1', name: 'book_1'},
@@ -513,6 +561,7 @@ $(document).ready(function(){
             initComplete: function(settings, json) {
                 enableTabs();  
             },
+            dom: 'Bflrtip',
             processing: true,
             scrollX: true,
             destroy: true,
@@ -529,6 +578,13 @@ $(document).ready(function(){
                     invoice_select: invoice_select,
                 }
             },
+            buttons: [
+                {extend: 'excelHtml5', title: 'Books',
+                exportOptions: {
+                    columns: ':visible'
+                }},
+                'colvis'
+            ],
             columns: [
                 {data: 'books.book_type.description', name: 'book'},
                 {data: 'books.name', name: 'book_no'},
@@ -558,6 +614,7 @@ $(document).ready(function(){
             initComplete: function(settings, json) {
                 enableTabs();  
             },
+            dom: 'Bflrtip',
             processing: true,
             destroy: true,
             scrollX: true,
@@ -574,6 +631,13 @@ $(document).ready(function(){
                     invoice_select: invoice_select,
                 }
             },
+            buttons: [
+                {extend: 'excelHtml5', title: 'Books',
+                exportOptions: {
+                    columns: ':visible'
+                }},
+                'colvis'
+            ],
             columns: [
                 {data: 'books.book_type.description', name: 'book'},
                 {data: 'books.name', name: 'book_no'},
