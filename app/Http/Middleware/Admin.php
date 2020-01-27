@@ -19,7 +19,8 @@ class Admin
     {
         $id = Auth::user()->id;
         $user = User::with('employee.role')->find($id);
-        $authorized = ['President', 'Finance Director', 'HR/Finance Head', 'IT Officer'];
+        $authorized = ['President', 'Finance Director', 'HR/Finance Head', 'Assistant Finance Officer',
+            'IT Officer'];
 
         foreach($authorized as $auth){
             if($user->employee->role->name == $auth && $user->employee->employment_status != 'Resigned'){

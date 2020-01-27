@@ -6,6 +6,7 @@
                 <span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title pull-left"><span class="title_name"></span> - <span class="title_status"></span></h4>&nbsp;
                 <div class="pull-right">
+                    <button data-container="body" data-toggle="tooltip" data-placement="left" title="Add Emergency Number" class="btn btn-danger btn-s add_emergency"><i class="fa fa-phone"></i></button>
                     <button data-container="body" data-toggle="tooltip" data-placement="left" title="Add Educational Background" class="btn btn-primary btn-s add_educational"><i class="fa fa-graduation-cap"></i></button>
                     <button data-container="body" data-toggle="tooltip" data-placement="left" title="Add Employment History" class="btn btn-success btn-s add_employment_history" style="margin-right: 20px;"><i class="fa fa-briefcase"></i></button>
                 </div>
