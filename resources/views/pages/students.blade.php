@@ -141,6 +141,12 @@
                             -
                             </p>
                         </li>
+                        <li class="list-group-item">
+                            <strong>In case of Emergency</strong>
+                            <p id="p_emergency" class="text-muted" style="word-wrap: break-word;">
+                            -
+                            </p>
+                        </li>
                     </ul>
                 </div>
                 <!-- /.box-body -->
@@ -187,6 +193,9 @@
     
     @include('includes.modals.student_modals.student_modal')
     @include('includes.modals.student_modals.student_info_modal')
+    @include('includes.modals.student_modals.student_emergency_modal')
+    @include('includes.modals.student_modals.student_emp_history_modal')
+    @include('includes.modals.student_modals.student_educational_background_modal')
 
     <!-- MODALS -- END -->
 

@@ -118,6 +118,30 @@ Route::group(['middleware' => ['auth', 'student_list']], function(){
 
     Route::get('/student_delete_history', 'studentLogsController@delete_history_page');
     Route::get('/student_delete_history_table', 'studentLogsController@delete_history_table');
+
+    //STUDENT INFO -- START
+    
+    Route::get('/get_student_info/{id}', 'studentController@get_student_info');
+
+    //Student Emergency
+    Route::get('/view_student_emergency/{id}', 'studentController@view_student_emergency');
+    Route::post('/save_student_emergency', 'studentController@save_student_emergency');
+    Route::get('/get_student_emergency/{id}', 'studentController@get_student_emergency');
+    Route::get('/delete_student_emergency', 'studentController@delete_student_emergency');
+
+    //Student Employment
+    Route::get('/view_student_employment/{id}', 'studentController@view_student_employment');
+    Route::post('/save_student_emp_history', 'studentController@save_student_emp_history');
+    Route::get('/get_student_emp_history/{id}', 'studentController@get_student_emp_history');
+    Route::get('/delete_student_emp_history', 'studentController@delete_student_emp_history');
+
+    //Student Educational Background
+    Route::get('/view_student_education/{id}', 'studentController@view_student_education');
+    Route::post('/save_student_education', 'studentController@save_student_education');
+    Route::get('/get_student_education/{id}', 'studentController@get_student_education');
+    Route::get('/delete_student_education', 'studentController@delete_student_education');
+
+    //STUDENT INFO -- END
 });
 
 Route::group(['middleware' => ['auth', 'student_settings']], function(){

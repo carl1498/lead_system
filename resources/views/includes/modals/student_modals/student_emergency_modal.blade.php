@@ -4,13 +4,13 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Add Employee Emergency Number</h4>
+                <h4 class="modal-title">Add Student Emergency Number</h4>
             </div>
             <form class="form-horizontal" id="emergency_form">
                 @csrf
                 <div class="modal-body clearfix">
                     <input type="hidden" name="e_id" id="e_id">
-                    <input type="hidden" name="e_emp_id" id="e_emp_id">
+                    <input type="hidden" name="e_stud_id" id="e_stud_id">
                     <input type="hidden" name="e_add_edit" id="e_add_edit">
 
                     <div class="col-md-12">
