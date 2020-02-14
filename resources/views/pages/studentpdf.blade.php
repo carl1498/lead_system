@@ -114,6 +114,101 @@
             <td><b>Kanji:</b> @if($student->kanji) #{{ $student->kanji }}@endif</td>
         </tr>
 
+        <tr>
+            <td></td>
+        </tr>
+        <hr>
+        <tr>
+            <td></td>
+        </tr>
+
+        <tr>
+            <td><h2>In Case of Emergency</h2></td>
+        </tr>
+
+        @if(count($student->emergency) >= 1)
+        <tr>
+            <th width="200px" style=" font-weight: bold;">Name</th>
+            <th width="150px" style="font-weight: bold;">Relationship</th>
+            <th width="180px" style="font-weight: bold;">Contact</th>
+        </tr>
+            @foreach($student->emergency as $e)
+            <tr>
+                <th width="200px">{{ $e->lname }}, {{ $e->fname }} {{ $e->mname }}</th>
+                <th width="150px">{{ $e->relationship }}</th>
+                <th width="180px">{{ $e->contact }}</th>
+            </tr>
+            @endforeach
+        @else
+            <tr>
+                <td><h3>N/A</h3></td>
+            </tr>
+        @endif
+
+        <tr>
+            <td></td>
+        </tr>
+        <hr>
+        <tr>
+            <td></td>
+        </tr>
+
+        <tr>
+            <td><h2>Employment History</h2></td>
+        </tr>
+
+        @if(count($student->employment) >= 1)
+        <tr>
+            <th width="200px" style=" font-weight: bold;">Company</th>
+            <th width="150px" style="font-weight: bold;">Position</th>
+            <th width="180px" style="font-weight: bold;">Employment Duration</th>
+        </tr>
+            @foreach($student->employment as $e)
+            <tr>
+                <th width="200px">{{ $e->name }}</th>
+                <th width="150px">{{ $e->position }}</th>
+                <th width="180px">{{ $e->start }} - {{ $e->finished }}</th>
+            </tr>
+            @endforeach
+        @else
+            <tr>
+                <td><h3>N/A</h3></td>
+            </tr>
+        @endif
+
+        <tr>
+            <td></td>
+        </tr>
+        <hr>
+        <tr>
+            <td></td>
+        </tr>
+
+        <tr>
+            <td><h2>Educational Background</h2></td>
+        </tr>
+
+        @if(count($student->education) >= 1)
+        <tr>
+            <th width="180px" style=" font-weight: bold;">School</th>
+            <th width="150px" style="font-weight: bold;">Course</th>
+            <th width="100px" style="font-weight: bold;">Level</th>
+            <th width="80px" style="font-weight: bold;">School Year</th>
+        </tr>
+            @foreach($student->education as $e)
+            <tr>
+                <th width="180px">{{ $e->name }}</th>
+                <th width="150px">{{ $e->course }}</th>
+                <th width="100px">{{ $e->level }}</th>
+                <th width="80px">{{ $e->start }} - {{ $e->end }}</th>
+            </tr>
+            @endforeach
+        @else
+            <tr>
+                <td><h3>N/A</h3></td>
+            </tr>
+        @endif
+
     </tbody>
 
 </table>

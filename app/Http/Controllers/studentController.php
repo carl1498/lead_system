@@ -17,6 +17,9 @@ use App\student_add_history;
 use App\student_edit_history;
 use App\student_delete_history;
 use App\company;
+use App\student_emergency;
+use App\student_emp_history;
+use App\student_educational_background;
 use Carbon\Carbon;
 use Auth;
 use Yajra\Datatables\Datatables;
@@ -90,7 +93,7 @@ class studentController extends Controller
                 $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Back Out" class="btn btn-warning btn-xs backout_student" id="'.$data->id.'"><i class="fa fa-sign-out-alt"></i></button>';    
             }
 
-            //$html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Other Info" class="btn btn-default btn-xs info_student" id="'.$data->id.'"><i class="fa fa-id-card"></i></button>';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Other Info" class="btn btn-default btn-xs info_student" id="'.$data->id.'"><i class="fa fa-id-card"></i></button>';
 
             if(canAccessAll()){
                 $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_student" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';    
@@ -1195,12 +1198,168 @@ class studentController extends Controller
 
     public function view_profile(Request $request){
         $id = $request->id;
-        $student = student::with('program', 'school', 'benefactor', 'company', 'referral', 'branch', 'course', 'departure_year', 'departure_month')->find($id);
+        $student = student::with('program', 'school', 'benefactor', 'company', 'referral', 'branch', 'course', 'departure_year', 'departure_month', 'emergency')->find($id);
         
         $birth = new Carbon($student->birthdate);
         $student->age = $birth->diffInYears(Carbon::now());
 
         return $student;
+    }
+
+    public function get_student_info(Request $request){
+        $id = $request->id;
+        
+        $student = student::find($id);
+        return $student;
+    }
+
+    public function get_student_emergency(Request $request){
+        return student_emergency::find($request->id);
+    }
+
+    public function get_student_emp_history(Request $request){
+        return student_emp_history::find($request->id);
+    }
+
+    public function get_student_education(Request $request){
+        return student_educational_background::find($request->id);
+    }
+
+    public function view_student_emergency(Request $request){
+        $id = $request->id;
+
+        $emergency = student_emergency::where('stud_id', $id)->get();
+
+        return Datatables::of($emergency)
+        ->addColumn('name', function($data){
+            return $data->lname.', '.$data->fname.' '.$data->mname;
+        })
+        ->addColumn('action', function($data){
+            $html = '';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_emergency" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
+            
+            if(canAccessAll()){
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_emergency" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
+            }
+
+            return $html;
+        })
+        ->make(true);
+    }
+
+    public function view_student_employment(Request $request){
+        $id = $request->id;
+
+        $employment = student_emp_history::where('stud_id', $id)->get();
+
+        return Datatables::of($employment)
+        ->addColumn('action', function($data){
+            $html = '';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_emp_history" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
+            
+            if(canAccessAll()){
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_emp_history" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
+            }
+
+            return $html;
+        })
+        ->make(true);
+    }
+
+    public function view_student_education(Request $request){
+        $id = $request->id;
+
+        $education = student_educational_background::where('stud_id', $id)->get();
+
+        return Datatables::of($education)
+        ->addColumn('action', function($data){
+            $html = '';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_education" id="'.$data->id.'"><i class="fa fa-pen"></i></button>';
+            
+            if(canAccessAll()){
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_education" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
+            }
+
+            return $html;
+        })
+        ->make(true);
+    }
+
+    public function save_student_emergency(Request $request){
+        if($request->e_add_edit == 'add'){
+            $emergency = new student_emergency;
+        }else{
+            $emergency = student_emergency::find($request->e_id);
+        }
+
+        $emergency->stud_id = $request->e_stud_id;
+        $emergency->fname = $request->e_fname;
+        $emergency->mname = $request->e_mname;
+        $emergency->lname = $request->e_lname;
+        $emergency->relationship = $request->e_relationship;
+        $emergency->contact = $request->e_contact;
+        $emergency->save();
+
+        return $request->e_stud_id;
+    }
+
+    public function save_student_emp_history(Request $request){
+        if($request->eh_add_edit == 'add'){
+            $history = new student_emp_history;
+        }else{
+            $history = student_emp_history::find($request->eh_id);
+        }
+
+        $history->stud_id = $request->eh_stud_id;
+        $history->name = $request->eh_company;
+        $history->position = $request->eh_position;
+        $history->start = $request->eh_started;
+        $history->finished = $request->eh_finished;
+        $history->save();
+
+        return $request->eh_stud_id;
+    }
+
+    public function save_student_education(Request $request){
+        if($request->eb_add_edit == 'add'){
+            $education = new student_educational_background;
+        }else{
+            $education = student_educational_background::find($request->eb_id);
+        }
+
+        $education->stud_id = $request->eb_stud_id;
+        $education->name = $request->eb_school;
+        $education->start = $request->eb_start;
+        $education->end = $request->eb_end;
+        $education->level = $request->eb_level;
+        $education->course = $request->eb_course;
+        $education->save();
+
+        return $request->eb_stud_id;
+    }
+
+    public function delete_student_emergency(Request $request){
+        $emergency = student_emergency::find($request->id);
+        $stud_id = $emergency->stud_id;
+        $emergency->delete();
+
+        return $stud_id;
+    }
+
+    public function delete_student_emp_history(Request $request){
+        $history = student_emp_history::find($request->id);
+        $stud_id = $history->stud_id;
+        $history->delete();
+
+        return $stud_id;
+    }
+
+    public function delete_student_education(Request $request){
+        $education = student_educational_background::find($request->id);
+        $stud_id = $education->stud_id;
+        $education->delete();
+
+        return $stud_id;
     }
 
     public function course_all(Request $request){

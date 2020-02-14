@@ -75,5 +75,17 @@ class student extends Model
         return $this->hasMany('App\tf_payment', 'stud_id', 'id')->where('tf_name_id', 3)->orderBy('date', 'asc');
     }
 
+    public function emergency(){
+        return $this->hasMany('App\student_emergency', 'stud_id', 'id');
+    }
+
+    public function employment(){
+        return $this->hasMany('App\student_emp_history', 'stud_id', 'id');
+    }
+
+    public function education(){
+        return $this->hasMany('App\student_educational_background', 'stud_id', 'id');
+    }
+
     public $timestamps = true;
 }

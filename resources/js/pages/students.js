@@ -82,6 +82,11 @@ $(document).ready(function(){
         modal_close = true;
     });
 
+    $('#emergency_modal, #emp_history_modal, #educational_background_modal').on('hidden.bs.modal', function(e){
+        $(this).find("input,textarea,select").val('').end();
+        setTimeout(function(){$('#student_info_modal').modal('show')}, 500);
+    })
+
     function student_modal_clear(){
         $('#student_form :input.required').each(function (){
             this.style.setProperty('border-color', 'green', 'important');
@@ -580,6 +585,59 @@ $(document).ready(function(){
             columnDefs: [{defaultContent: "", targets: "_all"}],
             columns: columns_titp_students,
             order: [[1,'asc']]
+        });
+    }
+
+    function refresh_student_info(id){
+        let student_emergency_table = $('#student_emergency_table').DataTable({
+            paging: false,
+            ordering: false,
+            info: false,
+            searching: false,
+            destroy: true,
+            ajax: '/view_student_emergency/'+id,
+            columns: [
+                {data: 'name', name: 'name'},
+                {data: 'contact', name: 'contact'},
+                {data: 'relationship', name: 'relationship'},
+                {data: "action", orderable:false,searchable:false}
+            ],
+            columnDefs: [{defaultContent: "", targets: "_all"}],
+        });
+
+        let student_employment_table = $('#student_employment_table').DataTable({
+            paging: false,
+            ordering: false,
+            info: false,
+            searching: false,
+            destroy: true,
+            ajax: '/view_student_employment/'+id,
+            columns: [
+                {data: 'name', name: 'name'},
+                {data: 'position', name: 'position'},
+                {data: 'start', name: 'start'},
+                {data: 'finished', name: 'finished'},
+                {data: "action", orderable:false,searchable:false}
+            ],
+            columnDefs: [{defaultContent: "", targets: "_all"}],
+        });
+
+        let student_educational_background_table = $('#student_educational_background_table').DataTable({
+            paging: false,
+            ordering: false,
+            info: false,
+            searching: false,
+            destroy: true,
+            ajax: '/view_student_education/'+id,
+            columns: [
+                {data: 'name', name: 'name'},
+                {data: 'course', name: 'course'},
+                {data: 'level', name: 'level'},
+                {data: 'start', name: 'start'},
+                {data: 'end', name: 'end'},
+                {data: "action", orderable:false,searchable:false}
+            ],
+            columnDefs: [{defaultContent: "", targets: "_all"}],
         });
     }
 
@@ -1313,6 +1371,398 @@ $(document).ready(function(){
     //Student Information -- START
     $(document).on('click', '.info_student', function(){
         $('#student_info_modal').modal('show');
+        var id = $(this).attr('id');
+        $.ajax({
+            url: '/get_student_info/'+id,
+            method: 'get',
+            dataType: 'json',
+            success:function(data){
+                $('#student_info_modal .title_name').text(data.lname + ', ' + data.fname);
+                $('.add_emergency, .add_educational, .add_employment_history').attr('id', data.id);
+                refresh_student_info(data.id);
+            }
+        });
+    });
+
+    $(document).on('click', '.add_emergency', function(){
+        var id = $(this).attr('id');
+        
+        $('#e_stud_id').val(id);
+        $('#e_add_edit').val('add');
+        $('#student_info_modal').modal('hide');
+        setTimeout(function(){$('#emergency_modal').modal('show')}, 500);
+    });
+
+    $(document).on('click', '.add_employment_history', function(){
+        var id = $(this).attr('id');
+
+        $('#eh_stud_id').val(id);
+        $('#eh_add_edit').val('add');
+        $('#student_info_modal').modal('hide');
+        setTimeout(function(){$('#emp_history_modal').modal('show')}, 500);
+    });
+
+    $(document).on('click', '.add_educational', function(){
+        var id = $(this).attr('id');
+
+        $('#eb_stud_id').val(id);
+        $('#eb_add_edit').val('add');
+        $('#student_info_modal').modal('hide');
+        setTimeout(function(){$('#educational_background_modal').modal('show')}, 500);
+    });
+
+    $(document).on('click', '.edit_emergency', function(){
+        var id = $(this).attr('id');
+
+        $.ajax({
+            headers: {
+                'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: '/get_student_emergency/'+id,
+            method: 'get',
+            dataType: 'json',
+            success:function(data){
+                $('#e_id').val(data.id);
+                $('#e_stud_id').val(data.stud_id);
+                $('#e_add_edit').val('edit');
+                $('#e_fname').val(data.fname);
+                $('#e_mname').val(data.mname);
+                $('#e_lname').val(data.lname);
+                $('#e_relationship').val(data.relationship);
+                $('#e_contact').val(data.contact);
+                $('#student_info_modal').modal('hide');
+                setTimeout(function(){$('#emergency_modal').modal('show')}, 500);
+            }
+        });
+    });
+
+    $(document).on('click', '.edit_emp_history', function(){
+        var id = $(this).attr('id');
+
+        $.ajax({
+            headers: {
+                'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: '/get_student_emp_history/'+id,
+            method: 'get',
+            dataType: 'json',
+            success:function(data){
+                $('#eh_id').val(data.id);
+                $('#eh_stud_id').val(data.stud_id);
+                $('#eh_add_edit').val('edit');
+                $('#eh_company').val(data.name);
+                $('#eh_position').val(data.position);
+                $('#eh_started').val(data.start);
+                $('#eh_finished').val(data.finished);
+                $('#student_info_modal').modal('hide');
+                setTimeout(function(){$('#emp_history_modal').modal('show')}, 500);
+            }
+        });
+    });
+
+    $(document).on('click', '.edit_education', function(){
+        var id = $(this).attr('id');
+
+        $.ajax({
+            headers: {
+                'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: '/get_student_education/'+id,
+            method: 'get',
+            dataType: 'json',
+            success:function(data){
+                $('#eb_id').val(data.id);
+                $('#eb_stud_id').val(data.stud_id);
+                $('#eb_add_edit').val('edit');
+                $('#eb_school').val(data.name);
+                $('#eb_start').val(data.start);
+                $('#eb_end').val(data.end);
+                $('#eb_level').val(data.level);
+                $('#eb_course').val(data.course);
+                $('#student_info_modal').modal('hide');
+                setTimeout(function(){$('#educational_background_modal').modal('show')}, 500);
+            }
+        });
+    });
+
+    $(document).on('click', '.delete_emergency', function(){
+        var id = $(this).attr('id');
+
+        swal.fire({
+            title: 'Confirm User',
+            text: 'For security purposes, input your password again.',
+            input: 'password',
+            inputAttributes: {
+                autocapitalize: 'off'
+            },
+            showCancelButton: true,
+            confirmButtonText: 'Confirm',
+            showLoaderOnConfirm: true,
+            preConfirm: (password) => {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: '/confirm_user',
+                    data: { password:password },
+                    method: 'POST',
+                    success: function(data){
+                        if(data == 0){
+                            swal('Password Incorrect!', 'Please try again', 'error');
+                            return;
+                        }
+                        else{
+                            swal({
+                                title: 'Are you sure?',
+                                text: 'You are about to delete an emergency contact.',
+                                type: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Yes, delete it!'
+                            }).then((result) => {
+                                if(result.value){
+                                    $.ajax({
+                                        headers: {
+                                            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                                        },
+                                        url: '/delete_student_emergency',
+                                        method: 'get',
+                                        data: {
+                                            id:id,
+                                            password:password
+                                        },
+                                        type: 'json',
+                                        success:function(data){
+                                            notif('Success!', 'This Data has been Deleted', 'success', 'glyphicon-ok');
+                    
+                                            refresh_student_info(data);
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    }
+                });
+            },
+        });
+    });
+
+    $(document).on('click', '.delete_emp_history', function(){
+        var id = $(this).attr('id');
+
+        swal.fire({
+            title: 'Confirm User',
+            text: 'For security purposes, input your password again.',
+            input: 'password',
+            inputAttributes: {
+                autocapitalize: 'off'
+            },
+            showCancelButton: true,
+            confirmButtonText: 'Confirm',
+            showLoaderOnConfirm: true,
+            preConfirm: (password) => {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: '/confirm_user',
+                    data: { password:password },
+                    method: 'POST',
+                    success: function(data){
+                        if(data == 0){
+                            swal('Password Incorrect!', 'Please try again', 'error');
+                            return;
+                        }
+                        else{
+                            swal({
+                                title: 'Are you sure?',
+                                type: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Yes, delete it!'
+                            }).then((result) => {
+                                if(result.value){
+                                    $.ajax({
+                                        headers: {
+                                            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                                        },
+                                        url: '/delete_student_emp_history',
+                                        method: 'get',
+                                        data: {
+                                            id:id,
+                                            password:password
+                                        },
+                                        type: 'json',
+                                        success:function(data){
+                                            notif('Success!', 'This Data has been Deleted', 'success', 'glyphicon-ok');
+                    
+                                            refresh_student_info(data);
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    }
+                });
+            },
+        });
+    });
+
+    $(document).on('click', '.delete_education', function(){
+        var id = $(this).attr('id');
+
+        swal.fire({
+            title: 'Confirm User',
+            text: 'For security purposes, input your password again.',
+            input: 'password',
+            inputAttributes: {
+                autocapitalize: 'off'
+            },
+            showCancelButton: true,
+            confirmButtonText: 'Confirm',
+            showLoaderOnConfirm: true,
+            preConfirm: (password) => {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: '/confirm_user',
+                    data: { password:password },
+                    method: 'POST',
+                    success: function(data){
+                        if(data == 0){
+                            swal('Password Incorrect!', 'Please try again', 'error');
+                            return;
+                        }
+                        else{
+                            swal({
+                                title: 'Are you sure?',
+                                type: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Yes, delete it!'
+                            }).then((result) => {
+                                if(result.value){
+                                    $.ajax({
+                                        headers: {
+                                            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                                        },
+                                        url: '/delete_student_education',
+                                        method: 'get',
+                                        data: {
+                                            id:id,
+                                            password:password
+                                        },
+                                        type: 'json',
+                                        success:function(data){
+                                            notif('Success!', 'This Data has been Deleted', 'success', 'glyphicon-ok');
+                    
+                                            refresh_student_info(data);
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    }
+                });
+            },
+        });
+    });
+
+    $(document).on('submit', '#emergency_form', function(e){
+        e.preventDefault();
+
+        var input = $('.save_emergency');
+        var button = document.getElementsByClassName("save_emergency")[0];
+
+        button.disabled = true;
+        input.html('SAVING...');
+
+        $.ajax({
+            headers: {
+                'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: '/save_student_emergency',
+            method: 'POST',
+            data: $(this).serialize(),
+            success:function(data){
+                $('#emergency_modal').modal('hide');
+                button.disabled = false;
+                input.html('SAVE CHANGES');
+                refresh_student_info(data);
+                notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
+            },
+            error: function(data){
+                swal("Error!", "Something went wrong, please contact IT Officer.", "error");
+                button.disabled = false;
+                input.html('SAVE CHANGES');
+            }
+        });
+    });
+
+    $(document).on('submit', '#emp_history_form', function(e){
+        e.preventDefault();
+
+        var input = $('.save_employment_history');
+        var button = document.getElementsByClassName("save_employment_history")[0];
+
+        button.disabled = true;
+        input.html('SAVING...');
+
+        $.ajax({
+            headers: {
+                'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: '/save_student_emp_history',
+            method: 'POST',
+            data: $(this).serialize(),
+            success:function(data){
+                $('#emp_history_modal').modal('hide');
+                button.disabled = false;
+                input.html('SAVE CHANGES');
+                refresh_student_info(data);
+                notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
+            },
+            error: function(data){
+                swal("Error!", "Something went wrong, please contact IT Officer.", "error");
+                button.disabled = false;
+                input.html('SAVE CHANGES');
+            }
+        });
+    });
+
+    $(document).on('submit', '#educational_background_form', function(e){
+        e.preventDefault();
+
+        var input = $('.save_educational_background');
+        var button = document.getElementsByClassName("save_educational_background")[0];
+
+        button.disabled = true;
+        input.html('SAVING...');
+
+        $.ajax({
+            headers: {
+                'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: '/save_student_education',
+            method: 'POST',
+            data: $(this).serialize(),
+            success:function(data){
+                $('#educational_background_modal').modal('hide');
+                button.disabled = false;
+                input.html('SAVE CHANGES');
+                refresh_student_info(data);
+                notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
+            },
+            error: function(data){
+                swal("Error!", "Something went wrong, please contact IT Officer.", "error");
+                button.disabled = false;
+                input.html('SAVE CHANGES');
+            }
+        });
     });
 
     //Student Information -- END
@@ -1523,6 +1973,14 @@ $(document).ready(function(){
                 $('#p_remarks').text(data.remarks ? data.remarks : '-');
                 $('.print_student_profile').attr('id', data.id);
                 $('.print_student_profile').removeAttr('disabled');
+
+                var emergency = (data.emergency.length != 0) ? '' : '-';
+                for(var x = 0; x < data.emergency.length; x++){
+                    let i = data.emergency[x];
+                    emergency += i.fname + ' ' + i.lname + '<br>' + i.relationship + '<br>' + i.contact;
+                    if(x != data.emergency.length-1){emergency += '<br><br>'}
+                }
+                $('#p_emergency').html(emergency);
             }
         });
     }
