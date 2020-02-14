@@ -1977,7 +1977,7 @@ $(document).ready(function(){
                 var emergency = (data.emergency.length != 0) ? '' : '-';
                 for(var x = 0; x < data.emergency.length; x++){
                     let i = data.emergency[x];
-                    emergency += i.fname + ' ' + i.lname + '<br>' + i.relationship + '<br>' + i.contact;
+                    emergency += i.fname + ' ' + i.lname + ' ' + i.mname + '<br>' + i.relationship + '<br>' + i.contact;
                     if(x != data.emergency.length-1){emergency += '<br><br>'}
                 }
                 $('#p_emergency').html(emergency);
