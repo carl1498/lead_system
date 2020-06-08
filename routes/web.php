@@ -51,6 +51,7 @@ Route::group(['middleware' => ['auth', 'student_list']], function(){
     Route::get('/all_student', 'studentController@all');
     Route::get('/ssw_student', 'studentController@ssw');
     Route::get('/titp_student', 'studentController@titp');
+    Route::get('/titp_student', 'studentController@intern');
     
     Route::get('/continue_student', 'studentController@continue_student');
     Route::get('/backout_student', 'studentController@backout_student');

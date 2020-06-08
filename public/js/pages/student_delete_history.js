@@ -1,1 +1,125 @@
-!function(e){var t={};function n(a){if(t[a])return t[a].exports;var r=t[a]={i:a,l:!1,exports:{}};return e[a].call(r.exports,r,r.exports,n),r.l=!0,r.exports}n.m=e,n.c=t,n.d=function(e,t,a){n.o(e,t)||Object.defineProperty(e,t,{configurable:!1,enumerable:!0,get:a})},n.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return n.d(t,"a",t),t},n.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},n.p="/",n(n.s=6)}({6:function(e,t,n){e.exports=n("NLGQ")},NLGQ:function(e,t){$(document).ready(function(){function e(){$("#student_delete_history").DataTable({destroy:!0,stateSave:!0,stateSaveCallback:function(e,t){localStorage.setItem("DataTables_"+e.sInstance,JSON.stringify(t))},stateLoadCallback:function(e){return JSON.parse(localStorage.getItem("DataTables_"+e.sInstance))},stateLoadParams:function(e,t){t.order&&delete t.order},ajax:"/student_delete_history_table",columns:[{data:"stud_id",name:"student"},{data:"deleted_by",name:"deleted_by"},{data:"created_at",name:"created_at"}],order:[[2,"desc"]]})}e(),setInterval(function(){e()},3e5),$(document).on("click",".refresh_table",function(){e()})})}});
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "/";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 6);
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ "./resources/js/pages/student_delete_history.js":
+/***/ (function(module, exports) {
+
+$(document).ready(function () {
+
+    //INITIALIZE -- START
+
+    //INITIALIZE -- END
+
+    //DATATABLES -- START
+
+    function load() {
+        var student_delete_history = $('#student_delete_history').DataTable({
+            destroy: true,
+            stateSave: true,
+            stateSaveCallback: function stateSaveCallback(settings, data) {
+                localStorage.setItem('DataTables_' + settings.sInstance, JSON.stringify(data));
+            },
+            stateLoadCallback: function stateLoadCallback(settings) {
+                return JSON.parse(localStorage.getItem('DataTables_' + settings.sInstance));
+            },
+            stateLoadParams: function stateLoadParams(settings, data) {
+                if (data.order) delete data.order;
+            },
+            ajax: '/student_delete_history_table',
+            columns: [{ data: 'stud_id', name: 'student' }, { data: 'deleted_by', name: 'deleted_by' }, { data: 'created_at', name: 'created_at' }],
+            order: [[2, 'desc']]
+        });
+    }
+
+    //DATATABLES -- END
+
+    //FUNCTIONS -- START
+
+    load();
+
+    setInterval(function () {
+        load();
+    }, 300000);
+
+    $(document).on('click', '.refresh_table', function () {
+        load();
+    });
+
+    //FUNCTIONS -- END
+});
+
+/***/ }),
+
+/***/ 6:
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__("./resources/js/pages/student_delete_history.js");
+
+
+/***/ })
+
+/******/ });

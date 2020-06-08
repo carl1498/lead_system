@@ -1,0 +1,15 @@
+<thead>
+    <tr>
+        <th>Name</th>
+        <th>Program</th>
+        <th>Contact</th>
+        <th>Benefactor</th>
+        <th>University</th>
+        <th>Gender</th>
+        <th>Birthdate</th>
+        <th>Course</th>
+        <th>Email</th>
+        <th>Remarks</th>
+        <th>Action</th>
+    </tr>
+</thead>

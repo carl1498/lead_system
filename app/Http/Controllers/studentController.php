@@ -385,6 +385,42 @@ class studentController extends Controller
             ->make(true);
     }
 
+    public function intern(Request $request){
+        $departure_year = $request->departure_year;
+        $departure_month = $request->departure_month;
+        $current_intern = $request->current_intern;
+
+        $intern = student::with('program', 'benefactor', 'university', 'course')
+            ->whereHas('program', function($query){
+                $query->where('name', 'Intern');
+            })->when($current_intern == 'Intern', function($query){
+                $query->where('status', 'Active');
+            })->when($current_intern == 'Back Out', function($query){
+                $query->where('status', 'Back Out');
+            })->when($departure_year != 'All', function($query) use($departure_year){
+                $query->where('departure_year_id', $departure_year);
+            })->when($departure_month != 'All', function($query) use($departure_month){
+                $query->where('departure_month_id', $departure_month);
+            })->get();
+
+        return Datatables::of($intern)
+            ->editColumn('name', function($data){
+                return $data->lname.', '.$data->fname.' '.$data->mname;
+            })
+            ->editColumn('birthdate', function($data){
+                return getAge($data->birthdate);
+            })
+            ->addColumn('action', function($data){
+                $html = '';
+
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-primary btn-xs view_profile" id="'.$data->id.'"><i class="fa fa-eye"></i></button>';
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_intern_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>';   
+
+                return $html;
+            })
+            ->make(true);
+    }
+
     public function save_student(Request $request){
         if($request->hasFile('picture')){
             $fileextension = $request->picture->getClientOriginalExtension();

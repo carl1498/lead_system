@@ -4,7 +4,7 @@ $(document).ready(function(){
 
     var current_branch = 'Makati';
     var current_status = '', current_result = '',
-    current_ssw = '', current_titp = '';
+    current_ssw = '', current_titp = '', current_intern = '';
     var departure_year, departure_month = $('#month_select').val();
     var get_year, get_month, get_departure;
     var current_tab = 'Branch';
@@ -100,6 +100,9 @@ $(document).ready(function(){
         $('#titp_student_form :input.required').each(function (){
             this.style.setProperty('border-color', 'green', 'important');
         });
+        $('#intern_student_form :input.required').each(function (){
+            this.style.setProperty('border-color', 'green', 'important');
+        });
         $('#student_modal').find("input,textarea,select").val('').end();
         $('.select2').trigger('change.select2');
     }
@@ -110,11 +113,13 @@ $(document).ready(function(){
 
     function disableTabs(){
         $(`li.branch_pick, li.status_pick, li.result_pick, 
-        li.language_pick, li.all_pick, li.ssw_pick, li.titp_pick`
+        li.language_pick, li.all_pick, li.ssw_pick, li.titp_pick,
+        li.intern_pick`
         ).addClass('disabled').css('cursor', 'not-allowed');
 
         $(`a.branch_pick, a.status_pick, a.result_pick,
-        a.language_pick, a.all_pick, a.ssw_pick, a.titp_pick`
+        a.language_pick, a.all_pick, a.ssw_pick, a.titp_pick,
+        a.intern_pick`
         ).addClass('disabled').css('pointer-events', 'none');
 
         $('.switch, .refresh_table').attr('disabled', true);
@@ -122,19 +127,22 @@ $(document).ready(function(){
 
     function enableTabs(){
         $(`li.branch_pick, li.status_pick, li.result_pick, 
-        li.language_pick, li.all_pick, li.ssw_pick, li.titp_pick`
+        li.language_pick, li.all_pick, li.ssw_pick, li.titp_pick,
+        li.intern_pick`
         ).removeClass('disabled').css('cursor', 'pointer');
         
         $(`a.branch_pick, a.status_pick, a.result_pick,
-        a.language_pick, a.all_pick, a.ssw_pick, a.titp_pick`
+        a.language_pick, a.all_pick, a.ssw_pick, a.titp_pick,
+        a.intern_pick`
         ).removeClass('disabled').css('pointer-events', 'auto');
 
         $('.refresh_table').attr('disabled', false);
         
         switch(current_switch){
-            case 'SSW'  : $('.switch_student, .switch_titp').attr('disabled', false); break;
-            case 'Student'  : $('.switch_ssw, .switch_titp').attr('disabled', false); break;
-            case 'TITP'  : $('.switch_student, .switch_ssw').attr('disabled', false); break;
+            case 'SSW'  : $('.switch_student, .switch_titp, .switch_intern').attr('disabled', false); break;
+            case 'Student'  : $('.switch_ssw, .switch_titp, .switch_intern').attr('disabled', false); break;
+            case 'TITP'  : $('.switch_student, .switch_ssw, .switch_intern').attr('disabled', false); break;
+            case 'Intern'  : $('.switch_student, .switch_ssw, .switch_titp').attr('disabled', false); break;
         }
     }
 
@@ -176,6 +184,7 @@ $(document).ready(function(){
             case 'Language' : refresh_language_student(); break;
             case 'SSW'      : refresh_ssw_student(); break;
             case 'TITP'     : refresh_titp_student(); break;
+            case 'Intern'     : refresh_intern_student(); break;
             case 'All'      : refresh_all_student(); break;
         }
     }
@@ -289,6 +298,33 @@ $(document).ready(function(){
         {data: "action", orderable:false,searchable:false}
     ]
 
+    var columns_ssw_students = [
+        {data: 'name', name: 'name'},
+        {data: 'contact', name: 'contact'},
+        {data: 'gender', name: 'gender'},
+        {data: 'birthdate', name: 'birthdate'},
+        {data: 'university', name: 'university'},
+        {data: 'benefactor.name', name: 'benefactor'},
+        {data: 'course.name', name: 'course'},
+        {data: 'email', name: 'email'},
+        {data: 'remarks', name: 'remarks'},
+        {data: "action", orderable:false,searchable:false}
+    ]
+
+    var columns_intern_students = [
+        {data: 'name', name: 'name'},
+        {data: 'program.name', name: 'program'},
+        {data: 'contact', name: 'contact'},
+        {data: 'benefactor.name', name: 'benefactor'},
+        {data: 'university.name', name: 'university'},
+        {data: 'gender', name: 'gender'},
+        {data: 'birthdate', name: 'birthdate'},
+        {data: 'course.name', name: 'course'},
+        {data: 'email', name: 'email'},,
+        {data: 'remarks', name: 'remarks'},
+        {data: "action", orderable:false,searchable:false}
+    ]
+
     //DATATABLES EXCEL
 
     function update_buttons(){
@@ -304,9 +340,14 @@ $(document).ready(function(){
                     case 'Back Out' : title = 'SSW ' + current_ssw; break;
                 }
             case 'TITP'  : 
-                switch(current_ssw){
-                    case 'TITP'  : title = current_ssw; break;
-                    case 'Back Out' : title = 'SSW ' + current_ssw; break;
+                switch(current_titp){
+                    case 'TITP'  : title = current_titp; break;
+                    case 'Back Out' : title = 'TITP ' + current_titp; break;
+                }
+            case 'Intern' :
+                switch(current_intern){
+                    case 'Intern'  : title = current_intern; break;
+                    case 'Back Out' : title = 'Intern ' + current_intern; break;
                 }
         }
 
@@ -587,6 +628,44 @@ $(document).ready(function(){
             order: [[1,'asc']]
         });
     }
+    
+    function refresh_intern_student(){
+        
+        departure_year = $('#year_select').val();
+        departure_month = $('#month_select').val();
+
+        intern_students = $('#intern_students').DataTable({
+            stateSave: true,
+            stateSaveCallback: function(settings,data) {
+                localStorage.setItem( 'DataTables_' + settings.sInstance, JSON.stringify(data) )
+            },
+            stateLoadCallback: function(settings) {
+                return JSON.parse( localStorage.getItem( 'DataTables_' + settings.sInstance ) )
+            },
+            initComplete: function(settings, json) {
+                enableTabs();  
+            },
+            dom: 'Bflrtip',
+            processing: true,
+            destroy: true,
+            scrollX: true,
+            scrollCollapse: true,
+            fixedColumns: true,
+            buttons: buttons_format,
+            responsive: true,
+            ajax: {
+                url: '/intern_student',
+                data: {
+                    departure_year: departure_year,
+                    departure_month: departure_month,
+                    current_intern: current_intern
+                }
+            },
+            columnDefs: [{defaultContent: "", targets: "_all"}],
+            columns: columns_intern_students,
+            order: [[1,'asc']]
+        });
+    }
 
     function refresh_student_info(id){
         let student_emergency_table = $('#student_emergency_table').DataTable({
@@ -647,22 +726,28 @@ $(document).ready(function(){
     
     $('.switch').on('click', function(){
         if($(this).find('.switch_name').text() == 'Student'){
-            $('.ssw_pick, .titp_pick').hide();
+            $('.ssw_pick, .titp_pick, .intern_pick').hide();
             $('.branch_pick, .status_pick, .result_pick, .language_pick').show();
             $('#student_list_tab #student_first').click();
             current_switch = 'Student';
         }
         else if($(this).find('.switch_name').text() == 'SSW'){
-            $('.branch_pick, .status_pick, .result_pick, .language_pick, .titp_pick').hide();
+            $('.branch_pick, .status_pick, .result_pick, .language_pick, .titp_pick, .intern_pick').hide();
             $('.ssw_pick').show();
             $('#student_list_tab #ssw_first').click();
             current_switch = 'SSW';
         }
         else if($(this).find('.switch_name').text() == 'TITP'){
-            $('.branch_pick, .status_pick, .result_pick, .language_pick, .ssw_pick').hide();
+            $('.branch_pick, .status_pick, .result_pick, .language_pick, .ssw_pick, .intern_pick').hide();
             $('.titp_pick').show();
             $('#student_list_tab #titp_first').click();
             current_switch = 'TITP';
+        }
+        else if($(this).find('.switch_name').text() == 'Intern'){
+            $('.branch_pick, .status_pick, .result_pick, .language_pick, .ssw_pick, .titp_pick').hide();
+            $('.intern_pick').show();
+            $('#student_list_tab #intern_first').click();
+            current_switch = 'Intern';
         }
         disableTabs();
     });
@@ -721,7 +806,15 @@ $(document).ready(function(){
 
             current_tab = 'TITP';
         }
-    })
+    });
+
+    $('.intern_pick').on('click', function(){
+        if(!$(this).hasClass('disabled')){
+            current_intern = $(this).text();
+
+            current_tab = 'Intern';
+        }
+    });
 
     $(document).on('change', '#year_select, #month_select', function(){
         refresh();

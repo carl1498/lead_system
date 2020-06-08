@@ -332,7 +332,7 @@ $fa-font-path: "../webfonts";
 #students_branch_wrapper .dataTables_length, #students_status_wrapper .dataTables_length,
 #students_result_wrapper .dataTables_length, #language_students_wrapper .dataTables_length,
 #all_students_wrapper .dataTables_length, #ssw_students_wrapper .dataTables_length,
-#trainee_students_wrapper .dataTables_length, #employees_all_wrapper .dataTables_length,
+#titp_students_wrapper .dataTables_length, #employees_all_wrapper .dataTables_length,
 #employees_branch_wrapper .dataTables_length, #expense_table_wrapper .dataTables_length,
 #type_table_wrapper .dataTables_length, #payment_table_wrapper .dataTables_length,
 #sec_bond_table_wrapper .dataTables_length, #student_table_wrapper .dataTables_length,
@@ -340,7 +340,7 @@ $fa-font-path: "../webfonts";
 #books_release_table_wrapper .dataTables_length, #books_assign_table_wrapper .dataTables_length, 
 #books_student_table_wrapper .dataTables_length, #books_ssw_student_table_wrapper .dataTables_length,
 #books_branch_table_wrapper .dataTables_length, #books_lost_table_wrapper .dataTables_length, 
-#books_return_table_wrapper .dataTables_length {
+#books_return_table_wrapper .dataTables_length, #intern_students_wrapper .dataTables_length {
   float: right !important;
   margin-right: 25px;
 }
@@ -348,7 +348,7 @@ $fa-font-path: "../webfonts";
 #students_branch_wrapper .dataTables_filter, #students_status_wrapper .dataTables_filter,
 #students_result_wrapper .dataTables_filter, #language_students_wrapper .dataTables_filter,
 #all_students_wrapper .dataTables_filter, #ssw_students_wrapper .dataTables_filter,
-#trainee_students_wrapper .dataTables_filter, #employees_all_wrapper .dataTables_filter,
+#titp_students_wrapper .dataTables_filter, #employees_all_wrapper .dataTables_filter,
 #employees_branch_wrapper .dataTables_filter, #expense_table_wrapper .dataTables_filter,
 #type_table_wrapper .dataTables_filter, #payment_table_wrapper .dataTables_filter,
 #sec_bond_table_wrapper .dataTables_filter, #student_table_wrapper .dataTables_filter,
@@ -356,7 +356,7 @@ $fa-font-path: "../webfonts";
 #books_release_table_wrapper .dataTables_filter, #books_assign_table_wrapper .dataTables_filter, 
 #books_student_table_wrapper .dataTables_filter, #books_ssw_student_table_wrapper .dataTables_filter,
 #books_branch_table_wrapper .dataTables_filter, #books_lost_table_wrapper .dataTables_filter, 
-#books_return_table_wrapper .dataTables_filter{ 
+#books_return_table_wrapper .dataTables_filter, #intern_students_wrapper .dataTables_filter{ 
   float: right !important;
 }
 

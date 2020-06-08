@@ -19,6 +19,9 @@
                 <button class="btn btn-secondary bg-red switch switch_titp" disabled>
                     <b class="switch_name">TITP</b>
                 </button>
+                <button class="btn btn-secondary bg-red switch switch_intern" disabled>
+                    <b class="switch_name">Intern</b>
+                </button>
             </div>
 
             <button data-container="body" data-toggle="tooltip" data-placement="left" title="Refresh Table" class="btn btn-secondary bg-red refresh_table" disabled>
@@ -158,6 +161,10 @@
         <div class="col-md-9 col-xl-10">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs" id="student_list_tab">
+                    <!-- Intern -->
+                    <li class="disabled intern_pick" style="display: none;"><a style="display: none;" id="intern_first" class="intern_pick" href="#intern_student_tab" data-toggle="tab">Intern</a></li>
+                    <li class="disabled intern_pick" style="display: none;"><a style="display: none;" class="intern_pick" href="#intern_student_tab" data-toggle="tab">Back Out</a></li>
+
                     <!-- TITP -->
                     <li class="disabled titp_pick" style="display: none;"><a style="display: none;" id="titp_first" class="titp_pick" href="#titp_student_tab" data-toggle="tab">TITP</a></li>
                     <li class="disabled titp_pick" style="display: none;"><a style="display: none;" class="titp_pick" href="#titp_student_tab" data-toggle="tab">Back Out</a></li>
