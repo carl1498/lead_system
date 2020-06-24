@@ -204,6 +204,8 @@ class studentController extends Controller
                 
             }
 
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Other Info" class="btn btn-default btn-xs info_student" id="'.$data->id.'"><i class="fa fa-id-card"></i></button>';
+
             return  $html;
         })
         ->make(true);
@@ -232,6 +234,7 @@ class studentController extends Controller
 
             $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-primary btn-xs view_profile" id="'.$data->id.'"><i class="fa fa-eye"></i></button>';
             $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_language_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Other Info" class="btn btn-default btn-xs info_student" id="'.$data->id.'"><i class="fa fa-id-card"></i></button>';
 
             if(canAccessAll()){
                 $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_student" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
@@ -269,6 +272,8 @@ class studentController extends Controller
             else{
                 $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>';
             }
+
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Other Info" class="btn btn-default btn-xs info_student" id="'.$data->id.'"><i class="fa fa-id-card"></i></button>';
 
             if(canAccessAll()){
                 $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_student" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
@@ -318,6 +323,11 @@ class studentController extends Controller
                     
                     $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Re Apply" class="btn btn-success btn-xs continue_student" id="'.$data->id.'"><i class="fa fa-sign-in-alt"></i></button>';
                 }
+            }
+
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Other Info" class="btn btn-default btn-xs info_student" id="'.$data->id.'"><i class="fa fa-id-card"></i></button>';
+
+            if(canAccessAll()){
                 $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_student" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
             }
             return  $html;
@@ -367,7 +377,7 @@ class studentController extends Controller
                     $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_titp_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>';   
     
                     if($data->coe_status == 'Approved' || $data->coe_status == 'Denied' || $data->status == 'Back Out'){
-                        $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Re Apply" class="btn btn-default btn-xs continue_student" id="'.$data->id.'"><i class="fa fa-step-backward"></i></button>';
+                        $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Re Apply" class="btn btn-warning btn-xs continue_student" id="'.$data->id.'"><i class="fa fa-step-backward"></i></button>';
                     }else{
                         if($data->coe_status != 'Approved'){
                             $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Passed" class="btn btn-success btn-xs approve_student" id="'.$data->id.'"><i class="fa fa-check"></i></button>';
@@ -379,6 +389,11 @@ class studentController extends Controller
                             $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Back Out" class="btn btn-warning btn-xs backout_student" id="'.$data->id.'"><i class="fa fa-sign-out-alt"></i></button>';
                         }
                     }
+                }
+
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Other Info" class="btn btn-default btn-xs info_student" id="'.$data->id.'"><i class="fa fa-id-card"></i></button>';
+
+                if(canAccessAll()){
                     $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_student" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
                 }
 
@@ -426,6 +441,11 @@ class studentController extends Controller
                         
                         $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Re Apply" class="btn btn-success btn-xs continue_student" id="'.$data->id.'"><i class="fa fa-sign-in-alt"></i></button>';
                     }
+                }
+
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Other Info" class="btn btn-default btn-xs info_student" id="'.$data->id.'"><i class="fa fa-id-card"></i></button>';
+
+                if(canAccessAll()){
                     $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_student" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
                 }
 

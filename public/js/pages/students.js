@@ -295,7 +295,7 @@ $(document).ready(function () {
 
     var columns_titp_students = [{ data: 'name', name: 'name' }, { data: 'program.name', name: 'program' }, { data: 'contact', name: 'contact' }, { data: 'company.name', name: 'company' }, { data: 'gender', name: 'gender' }, { data: 'birthdate', name: 'birthdate' }, { data: 'course.name', name: 'course' }, { data: 'email', name: 'email' }, { data: 'coe_status', name: 'coe_status' }, { data: 'remarks', name: 'remarks' }, { data: "action", orderable: false, searchable: false }];
 
-    var columns_intern_students = [{ data: 'name', name: 'name' }, { data: 'branch.name', name: 'branch' }, { data: 'program.name', name: 'program' }, { data: 'contact', name: 'contact' }, { data: 'benefactor.name', name: 'benefactor' }, { data: 'university.name', name: 'university' }, { data: 'gender', name: 'gender' }, { data: 'birthdate', name: 'birthdate' }, { data: 'course.name', name: 'course' }, { data: 'email', name: 'email' }, { data: 'remarks', name: 'remarks' }, { data: "action", orderable: false, searchable: false }];
+    var columns_intern_students = [{ data: 'name', name: 'name' }, { data: 'branch.name', name: 'branch' }, { data: 'contact', name: 'contact' }, { data: 'program.name', name: 'program' }, { data: 'benefactor.name', name: 'benefactor' }, { data: 'university.name', name: 'university' }, { data: 'gender', name: 'gender' }, { data: 'birthdate', name: 'birthdate' }, { data: 'course.name', name: 'course' }, { data: 'email', name: 'email' }, { data: 'remarks', name: 'remarks' }, { data: "action", orderable: false, searchable: false }];
 
     //DATATABLES EXCEL
 

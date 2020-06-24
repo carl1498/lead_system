@@ -301,8 +301,8 @@ $(document).ready(function(){
     var columns_intern_students = [
         {data: 'name', name: 'name'},
         {data: 'branch.name', name: 'branch'},
-        {data: 'program.name', name: 'program'},
         {data: 'contact', name: 'contact'},
+        {data: 'program.name', name: 'program'},
         {data: 'benefactor.name', name: 'benefactor'},
         {data: 'university.name', name: 'university'},
         {data: 'gender', name: 'gender'},
