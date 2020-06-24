@@ -16,6 +16,7 @@ use App\departure_month;
 use App\student_add_history;
 use App\student_edit_history;
 use App\student_delete_history;
+use App\university;
 use App\company;
 use App\student_emergency;
 use App\student_emp_history;
@@ -44,9 +45,10 @@ class studentController extends Controller
         $departure_year = departure_year::all();
         $departure_month = departure_month::all();
         $company = company::all();
+        $university = university::all();
 
         return view('pages.students', compact('program', 'school', 'benefactor', 
-        'employee', 'branch', 'course', 'departure_year', 'departure_month', 'company'));
+        'employee', 'branch', 'course', 'departure_year', 'departure_month', 'company', 'university'));
     }
 
     public function branch(Request $request){//Makati, Cebu, Davao
@@ -390,9 +392,9 @@ class studentController extends Controller
         $departure_month = $request->departure_month;
         $current_intern = $request->current_intern;
 
-        $intern = student::with('program', 'benefactor', 'university', 'course')
+        $intern = student::with('branch', 'program', 'benefactor', 'university', 'course')
             ->whereHas('program', function($query){
-                $query->where('name', 'Intern');
+                $query->where('name', 'Internship');
             })->when($current_intern == 'Intern', function($query){
                 $query->where('status', 'Active');
             })->when($current_intern == 'Back Out', function($query){
@@ -415,6 +417,17 @@ class studentController extends Controller
 
                 $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-primary btn-xs view_profile" id="'.$data->id.'"><i class="fa fa-eye"></i></button>';
                 $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_intern_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>';   
+                
+                if(canAccessAll()){
+                    if($data->status == 'Active'){
+                        $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Back Out" class="btn btn-warning btn-xs backout_student" id="'.$data->id.'"><i class="fa fa-sign-out-alt"></i></button>';
+                    }
+                    else if($data->status == 'Back Out'){
+                        
+                        $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Re Apply" class="btn btn-success btn-xs continue_student" id="'.$data->id.'"><i class="fa fa-sign-in-alt"></i></button>';
+                    }
+                    $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_student" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
+                }
 
                 return $html;
             })
@@ -1092,9 +1105,190 @@ class studentController extends Controller
         return $student->id;
     }
 
+    public function save_intern_student(Request $request){
+        if($request->hasFile('t_picture')){
+            $fileextension = $request->t_picture->getClientOriginalExtension();
+
+            if($fileextension != 'jpg' && $fileextension != 'png' && $fileextension != 'jpeg' && $fileextension != 'JPG'){
+                return false;
+            }
+        }
+        
+        $add_edit = $request->i_add_edit;
+
+        if($add_edit == 'add'){
+            $student = new student;
+            $student->status = 'Active';
+            $student->coe_status = 'TBA';
+            $added_by = Auth::user()->emp_id;
+        }
+        else{
+            $id = $request->t_id;
+            $student = student::find($id);
+            $edited_by = Auth::user()->emp_id;
+        }
+
+        if(isset($edited_by)){
+            $edit_fields = ['First Name', 'Middle Name', 'Last Name', 'Branch', 'University',
+                'Benefactor', 'Contact #', 'Gender', 'Birth Date', 'Civil Status', 'Course', 
+                'Email', 'Address', 'Referred By', 'Sign Up Date', 'Medical Date', 'Completion Date',
+                'Year', 'Month', 'Remarks'];
+
+            $student_fields = [$student->fname, $student->mname, $student->lname, $student->branch_id,
+                $student->university_id, $student->benefactor_id, $student->contact, $student->gender, $student->birthdate,
+                $student->civil_status, $student->course_id, $student->email, $student->address, $student->referral_id, 
+                $student->date_of_signup, $student->date_of_medical, $student->date_of_completion,
+                $student->departure_year_id, $student->departure_month_id, $student->remarks];
+
+            $request_fields = [$request->i_fname, $request->i_mname, $request->i_lname, $request->i_branch,
+                $request->i_university, $request->i_benefactor, $request->i_contact, $request->i_gender, $request->i_birthdate,
+                $request->i_civil, $request->i_course, $request->i_email, $request->i_address, $request->i_referral, 
+                $request->i_sign_up, $request->i_medical, $request->i_completion,
+                $request->i_year, $request->i_month, $request->i_remarks];
+        }
+
+        $student->fname = $request->i_fname;
+        $student->mname = $request->i_mname;
+        $student->lname = $request->i_lname;
+        $student->branch_id = $request->i_branch;
+
+        $program = program::where('name', 'Internship')->first();
+        $student->program_id = $program->id;
+
+        $student->university_id = $request->i_university;
+        $student->benefactor_id = $request->i_benefactor;
+        $student->contact = $request->i_contact;
+        $student->gender = $request->i_gender;
+        $student->birthdate = Carbon::parse($request->i_birthdate);
+        $student->civil_status = $request->i_civil;
+        $student->course_id = $request->i_course;
+        $student->email = $request->i_email;
+        $student->address = $request->i_address;
+        $student->referral_id = $request->i_referral;
+        $student->date_of_signup = $request->i_sign_up;
+        $student->date_of_medical = $request->i_medical ? Carbon::parse($request->i_medical) : null;
+        $student->date_of_completion = $request->i_completion ? Carbon::parse($request->i_completion) : null;
+        $student->departure_year_id = $request->i_year;
+        $student->departure_month_id = $request->i_month;
+        $student->remarks = $request->i_remarks;
+        $student->referral_id = $request->i_referral;
+        $student->branch_id = $request->i_branch;
+        $student->save();
+
+        // ADD HISTORY -- START
+
+        if(isset($added_by)){
+            $add_history = new student_add_history;
+            $add_history->stud_id = $student->id;
+            $add_history->type = 'Intern';
+            $add_history->added_by = $added_by;
+            $add_history->save();
+        }
+
+        // ADD HISTORY -- END
+
+        // EDIT HISTORY PT. 2 -- START
+
+        if(isset($edited_by)){
+            for($x = 0; $x<count($edit_fields); $x++){
+                if($student_fields[$x] != $request_fields[$x]){
+    
+                    $edit_history = new student_edit_history;
+                    $edit_history->stud_id = $student->id;
+                    $edit_history->field = $edit_fields[$x];
+                    if($edit_fields[$x] == 'Branch' || $edit_fields[$x] == 'University' || $edit_fields[$x] == 'Benefactor' || 
+                        $edit_fields[$x] == 'Course' || $edit_fields[$x] == 'Referred By' ||
+                        $edit_fields[$x] == 'Year' || $edit_fields[$x] == 'Month'){
+                        if($student_fields[$x] == null){
+                            $prev = 'N/A';
+                        }else{
+                            if($edit_fields[$x] == 'Branch'){
+                                $prev = branch::where('id', $student_fields[$x])->pluck('name');
+                            }
+                            else if($edit_fields[$x] == 'University'){
+                                $prev = university::where('id', $student_fields[$x])->pluck('name');
+                            }
+                            else if($edit_fields[$x] == 'Benefactor'){
+                                $prev = benefactor::where('id', $student_fields[$x])->pluck('name');
+                            }
+                            else if($edit_fields[$x] == 'Course'){
+                                $prev = course::where('id', $student_fields[$x])->pluck('name');
+                            }
+                            else if($edit_fields[$x] == 'Referred By'){
+                                $prev = employee::where('id', $student_fields[$x])->withTrashed()->pluck('fname');
+                            }
+                            else if($edit_fields[$x] == 'Year'){
+                                $prev = departure_year::where('id', $student_fields[$x])->pluck('name');
+                            }
+                            else if($edit_fields[$x] == 'Month'){
+                                $prev = departure_month::where('id', $student_fields[$x])->pluck('name');
+                            }
+                            $prev = $prev[0];
+                        }
+                        $edit_history->previous = $prev;
+    
+                        if($request_fields[$x] == null){
+                            $new = 'N/A';
+                        }else{
+                            if($edit_fields[$x] == 'Branch'){
+                                $new = branch::where('id', $student_fields[$x])->pluck('name');
+                            }
+                            else if($edit_fields[$x] == 'University'){
+                                $new = university::where('id', $student_fields[$x])->pluck('name');
+                            }
+                            else if($edit_fields[$x] == 'Benefactor'){
+                                $new = benefactor::where('id', $student_fields[$x])->pluck('name');
+                            }
+                            else if($edit_fields[$x] == 'Course'){
+                                $new = course::where('id', $student_fields[$x])->pluck('name');
+                            }
+                            else if($edit_fields[$x] == 'Referred By'){
+                                $new = employee::where('id', $student_fields[$x])->withTrashed()->pluck('fname');
+                            }
+                            else if($edit_fields[$x] == 'Year'){
+                                $new = departure_year::where('id', $student_fields[$x])->pluck('name');
+                            }
+                            else if($edit_fields[$x] == 'Month'){
+                                $new = departure_month::where('id', $student_fields[$x])->pluck('name');
+                            }
+                            $new = $new[0];
+                        }
+    
+                        $edit_history->new = $new;                  
+                    }
+                    else{
+                        $edit_history->previous = (isset($student_fields[$x])) ? (string) $student_fields[$x] : 'N/A';
+                        $edit_history->new = (isset($request_fields[$x])) ? (string) $request_fields[$x] : 'N/A';
+                    }
+                    $edit_history->edited_by = $edited_by;
+                    $edit_history->save();
+                }
+            }
+        }
+        
+        // EDIT HISTORY PT. 2 -- END
+
+        if($request->hasFile('t_picture')){
+            if($student->picture != 'avatar5.png'){
+                Storage::delete('public/img/student/'.$student->picture);
+            }
+            $fileextension = $request->s_picture->getClientOriginalExtension();
+            $encryption = sha1(time().$request->t_picture->getClientOriginalName());
+            $filename = $encryption.'.'.$fileextension;
+
+            $request->t_picture->storeAs('public/img/student', $filename);
+
+            $student->picture = $filename;
+
+            $student->save();
+        }
+
+        return $student->id;
+    }
+
     public function get_student(Request $request){
         $id = $request->id;
-        $student = student::with('program', 'school', 'benefactor', 'company', 'referral', 'branch', 'course', 'departure_year', 'departure_month')->find($id);
+        $student = student::with('program', 'school', 'benefactor', 'company', 'university', 'referral', 'branch', 'course', 'departure_year', 'departure_month')->find($id);
         
         return $student;
     }
@@ -1473,6 +1667,19 @@ class studentController extends Controller
 
         $array = [];
         foreach ($benefactor as $key => $value){
+            $array[] = [
+                'id' => $value['id'],
+                'text' => $value['name']
+            ];
+        }
+        return json_encode(['results' => $array]);
+    }
+
+    public function university_all(Request $request){
+        $university = university::where('name', 'LIKE', '%'.$request->name.'%')->get()->toArray();
+
+        $array = [];
+        foreach ($university as $key => $value){
             $array[] = [
                 'id' => $value['id'],
                 'text' => $value['name']

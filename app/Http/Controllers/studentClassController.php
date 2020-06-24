@@ -488,6 +488,7 @@ class studentClassController extends Controller
 
         $array = [];
         foreach ($student as $key => $value){
+            info($value['lname']);
             $array[] = [
                 'id' => $value['id'],
                 'text' => $value['lname'].', '.$value['fname'].' ('.$value['program']['name'].')'

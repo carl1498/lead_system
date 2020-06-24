@@ -184,7 +184,7 @@ $(document).ready(function(){
             case 'Language' : refresh_language_student(); break;
             case 'SSW'      : refresh_ssw_student(); break;
             case 'TITP'     : refresh_titp_student(); break;
-            case 'Intern'     : refresh_intern_student(); break;
+            case 'Intern'   : refresh_intern_student(); break;
             case 'All'      : refresh_all_student(); break;
         }
     }
@@ -298,21 +298,9 @@ $(document).ready(function(){
         {data: "action", orderable:false,searchable:false}
     ]
 
-    var columns_ssw_students = [
-        {data: 'name', name: 'name'},
-        {data: 'contact', name: 'contact'},
-        {data: 'gender', name: 'gender'},
-        {data: 'birthdate', name: 'birthdate'},
-        {data: 'university', name: 'university'},
-        {data: 'benefactor.name', name: 'benefactor'},
-        {data: 'course.name', name: 'course'},
-        {data: 'email', name: 'email'},
-        {data: 'remarks', name: 'remarks'},
-        {data: "action", orderable:false,searchable:false}
-    ]
-
     var columns_intern_students = [
         {data: 'name', name: 'name'},
+        {data: 'branch.name', name: 'branch'},
         {data: 'program.name', name: 'program'},
         {data: 'contact', name: 'contact'},
         {data: 'benefactor.name', name: 'benefactor'},
@@ -320,7 +308,7 @@ $(document).ready(function(){
         {data: 'gender', name: 'gender'},
         {data: 'birthdate', name: 'birthdate'},
         {data: 'course.name', name: 'course'},
-        {data: 'email', name: 'email'},,
+        {data: 'email', name: 'email'},
         {data: 'remarks', name: 'remarks'},
         {data: "action", orderable:false,searchable:false}
     ]
@@ -1012,6 +1000,54 @@ $(document).ready(function(){
         });
     });
 
+    $(document).on('submit', '#intern_student_form', function(e){
+        e.preventDefault();
+
+        var input = $('.save_intern_student');
+        var button = document.getElementsByClassName("save_intern_student")[0];
+
+        button.disabled = true;
+        input.html('SAVING...');
+
+        var formData = new FormData($(this)[0]);
+
+        $.ajax({
+            headers: {
+                'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: '/save_intern_student',
+            method: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(data){
+                if(data == false){
+                    swal('Error!', 'File/Image format must only be .jpg | .png | .jpeg', 'error');
+                    button.disabled = false;
+                    input.html('SAVE CHANGES');
+                    return;
+                }
+                if($('#add_continuous').is(':checked')){
+                    student_modal_clear();
+                    add_edit_init();
+                }
+                else{
+                    $('#student_modal').modal('hide')
+                }
+                notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
+                button.disabled = false;
+                input.html('SAVE CHANGES');
+                refresh();
+                view_profile(data);
+            },
+            error: function(data){
+                swal("Error!", "Something went wrong, please contact IT Officer.", "error");
+                button.disabled = false;
+                input.html('SAVE CHANGES');
+            }
+        });
+    });
+
     //Open Student Modal (ADD)
     $('.add_student').on('click', function(){
         modal_close = false;
@@ -1022,10 +1058,7 @@ $(document).ready(function(){
     });
 
     function add_edit_init(){
-        $('#add_edit').val('add');
-        $('#l_add_edit').val('add');
-        $('#s_add_edit').val('add');
-        $('#t_add_edit').val('add');
+        $('#add_edit, #l_add_edit, #s_add_edit, #t_add_edit, #i_add_edit').val('add');
     }
 
     //Open Student Modal (EDIT)
@@ -1184,6 +1217,46 @@ $(document).ready(function(){
                 $('#t_year').val(data.departure_year.id).trigger('change');
                 $('#t_month').val(data.departure_month.id).trigger('change');
                 $('#t_remarks').val(data.remarks);
+                $('#student_modal').modal('toggle');
+                $('#student_modal').modal('show');
+            }
+        });
+    });
+
+    //Open Intern Student Modal (EDIT)
+    $(document).on('click', '.edit_intern_student', function(){
+        modal_close = false;
+        $('#student_type_tab a[href="#intern_student_form"]').tab('show');
+        var id = $(this).attr('id');
+
+        $.ajax({
+            url: '/get_student',
+            method: 'get',
+            data: {id: id},
+            dataType: 'json',
+            success:function(data){
+                $('#i_add_edit').val('edit');
+                $('#i_id').val(data.id);
+                $('#i_fname').val(data.fname);
+                $('#i_mname').val(data.mname);
+                $('#i_lname').val(data.lname); 
+                $('#i_branch').val(data.branch.id).trigger('change');
+                $('#i_university').val(data.university.id).trigger('change');
+                $('#i_benefactor').val(data.benefactor.id).trigger('change');
+                $('#i_contact').val(data.contact);
+                $('#i_gender').val(data.gender).trigger('change');
+                $('#i_birthdate').val(data.birthdate);
+                $('#i_civil').val(data.civil_status).trigger('change');
+                $('#i_course').val(data.course.id).trigger('change');
+                $('#i_email').val(data.email);
+                $('#i_address').val(data.address);
+                $('#i_referral').val(data.referral.id).trigger('change');
+                $('#i_sign_up').val(data.date_of_signup);
+                $('#i_medical').val(data.date_of_medical);
+                $('#i_completion').val(data.date_of_completion);
+                $('#i_year').val(data.departure_year.id).trigger('change');
+                $('#i_month').val(data.departure_month.id).trigger('change');
+                $('#i_remarks').val(data.remarks);
                 $('#student_modal').modal('toggle');
                 $('#student_modal').modal('show');
             }
@@ -1972,8 +2045,31 @@ $(document).ready(function(){
         },
     });
 
+    //University Select 2
+    $('#i_university').select2({
+        allowClear: true,
+        placeholder: 'Select University',
+        ajax: {
+            url: "/universityAll",
+            dataType: 'json',
+
+            data: function (params){
+                return {
+                    name: params.term,
+                    page:params.page
+                }
+            },
+            
+            processResults: function (data){
+                return {
+                    results:data.results      
+                }
+            }
+        },
+    });
+
     //Benefactor Select 2
-    $('#benefactor, #s_benefactor').select2({
+    $('#benefactor, #s_benefactor, #i_benefactor').select2({
         allowClear: true,
         placeholder: 'Select Benefactor',
         ajax: {

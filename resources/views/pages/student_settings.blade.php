@@ -30,6 +30,7 @@
                     <li><a class="settings_pick" href="#student_settings_tab" data-toggle="tab">Year</a></li>
                     <li><a class="settings_pick" href="#student_settings_tab" data-toggle="tab">Month</a></li>
                     <li><a class="settings_pick" href="#student_settings_tab" data-toggle="tab">Course</a></li>
+                    <li><a class="settings_pick" href="#student_settings_tab" data-toggle="tab">University</a></li>
                 </ul>
 
                 <div class="tab-content">

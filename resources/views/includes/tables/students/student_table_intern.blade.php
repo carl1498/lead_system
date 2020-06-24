@@ -1,8 +1,9 @@
 <thead>
     <tr>
         <th>Name</th>
-        <th>Program</th>
+        <th>Branch</th>
         <th>Contact</th>
+        <th>Program</th>
         <th>Benefactor</th>
         <th>University</th>
         <th>Gender</th>

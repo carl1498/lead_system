@@ -10,6 +10,7 @@ use App\departure_year;
 use App\departure_month;
 use App\course;
 use App\company;
+use App\university;
 use Yajra\Datatables\Datatables;
 
 class studentSettingsController extends Controller
@@ -25,9 +26,9 @@ class studentSettingsController extends Controller
 
     public function view(Request $request){
         $current_settings = $request->current_settings;
-        $settings_type = ['Program', 'School', 'Benefactor', 'Year', 'Month', 'Course', 'Company'];
+        $settings_type = ['Program', 'School', 'Benefactor', 'Year', 'Month', 'Course', 'Company', 'University'];
         $get_settings = [program::all(), school::all(), benefactor::all(),
-            departure_year::all(), departure_month::all(), course::all(), company::all()];
+            departure_year::all(), departure_month::all(), course::all(), company::all(), university::all()];
 
         for($x = 0; $x < count($settings_type); $x++){
             if($current_settings == $settings_type[$x]){
@@ -52,15 +53,15 @@ class studentSettingsController extends Controller
     }
 
     public function store(Request $request){
+        info($request);
         $id = $request->id;
         $current_settings = $request->current_settings;
-        $settings_type = ['Program', 'School', 'Benefactor', 'Year', 'Month', 'Course', 'Company'];
+        $settings_type = ['Program', 'School', 'Benefactor', 'Year', 'Month', 'Course', 'Company', 'University'];
         $new_settings = [new program, new school, new benefactor, new departure_year,
-            new departure_month, new course, new company];
+            new departure_month, new course, new company, new university];
         $edit_settings = [program::find($id), school::find($id), benefactor::find($id),
             departure_year::find($id), departure_month::find($id),
-            course::find($id), company::find($id)];
-            info($request);
+            course::find($id), company::find($id), university::find($id)];
 
         if($request->add_edit == 'add'){
             for($x = 0; $x < count($settings_type); $x++){
@@ -87,10 +88,10 @@ class studentSettingsController extends Controller
     public function get_student_settings(Request $request){
         $id = $request->id;
         $current_settings = $request->current_settings;
-        $settings_type = ['Program', 'School', 'Benefactor', 'Year', 'Month', 'Course', 'Company'];
+        $settings_type = ['Program', 'School', 'Benefactor', 'Year', 'Month', 'Course', 'Company', 'University'];
         $get_settings = [program::find($id), school::find($id), benefactor::find($id),
             departure_year::find($id), departure_month::find($id),
-            course::find($id), company::find($id)];
+            course::find($id), company::find($id), university::find($id)];
 
         for($x = 0; $x < count($settings_type); $x++){
             if($current_settings == $settings_type[$x]){
@@ -105,10 +106,10 @@ class studentSettingsController extends Controller
     public function delete_student_settings(Request $request){
         $id = $request->id;
         $current_settings = $request->current_settings;
-        $settings_type = ['Program', 'School', 'Benefactor', 'Year', 'Month', 'Course', 'Company'];
+        $settings_type = ['Program', 'School', 'Benefactor', 'Year', 'Month', 'Course', 'Company', 'University'];
         $get_settings = [program::find($id), school::find($id), benefactor::find($id),
             departure_year::find($id), departure_month::find($id),
-            course::find($id), company::find($id)];
+            course::find($id), company::find($id), university::find($id)];
 
         for($x = 0; $x < count($settings_type); $x++){
             if($current_settings == $settings_type[$x]){
