@@ -395,4 +395,44 @@ class expenseController extends Controller
 
         echo json_encode($output);
     }
+
+    public function view_fiscal_year(Request $request){
+        $year = $request->year;
+        $company = $request->company;
+        $branch = $request->branch;
+        $expense_type_total = [];
+        $i = 0;
+        
+        $type = expense_type::all();
+
+        $expense_per_month = array();
+        $total_per_type = array();
+        $total_per_month = array();
+        $total_all = array();
+
+        foreach($type as $t){
+            for($x = 0; $x < 12; $x++){
+                $expense_per_month[$i][$x] = expense::where('expense_type_id', $t->id)->whereMonth('date', $x+1)
+                                                    ->whereYear('date', $year)->sum('amount');
+            }
+            $total_per_type[$i] = expense::where('expense_type_id', $t->id)->whereYear('date', $year)->sum('amount');
+            $i++;
+        }
+
+        for($x = 0; $x < 12; $x++){
+            $total_per_month[$x] = expense::whereMonth('date', $x+1)->whereYear('date', $year)->sum('amount');
+        }
+
+        $total_all = expense::whereYear('date', $year)->sum('amount');
+
+        $output = array(
+            'type' => $type,
+            'expense_per_month' => $expense_per_month,
+            'total_per_type' => $total_per_type,
+            'total_per_month' => $total_per_month,
+            'total_all' => $total_all
+        );
+
+        echo json_encode($output);
+    }
 }

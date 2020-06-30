@@ -8,6 +8,10 @@
 
     &nbsp;
 
+    <input type="text" class="form-control" id="yearpicker" style="width: 100px; display: none;"/>
+
+    &nbsp;
+
     <label class="company_type_select" style="display:none;">Company: </label>
     <select type="text" id="company_type_select" class="company_type_select form-control select2" style="width: 100px; display: none;">
         <option value="All">All</option>

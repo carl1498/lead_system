@@ -16693,12 +16693,14 @@ a.books_pick {
   background-color: #d3d3d3;
 }
 
-#cash_disbursement_table tr th {
+#cash_disbursement_table tr th,
+#fiscal_year_table tr th {
   text-align: center;
   vertical-align: middle;
 }
 
-#cash_disbursement_table tr td {
+#cash_disbursement_table tr td,
+#fiscal_year_table tr td {
   word-wrap: break-all;
 }
 
@@ -16706,7 +16708,8 @@ a.books_pick {
   width: 200px;
 }
 
-#cash_disbursement_table {
+#cash_disbursement_table,
+#fiscal_year_table {
   table-layout: fixed;
 }
 
@@ -16743,5 +16746,9 @@ a.books_pick {
 #all_fee_table .pay,
 #all_fee_table .bal {
   text-align: right;
+}
+
+.ui-datepicker-calendar {
+  display: none;
 }
 

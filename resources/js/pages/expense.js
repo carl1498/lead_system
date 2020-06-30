@@ -6,6 +6,9 @@ $(document).ready(function(){
     var date_counter = true; //True = base on date range | False = show all expense
     var branch = 'All';
     var company = 'All';
+    var year = (new Date().getFullYear()).toString();
+    var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
+                'August', 'September', 'October', 'November', 'December'];
 
     $(".datepicker").datepicker({
         format: 'yyyy-mm-dd',
@@ -30,6 +33,7 @@ $(document).ready(function(){
     today_converted = yyyy + '-' + mm + '-' + dd;
     var start_date = today_converted;
     var end_date = today_converted;
+    $('.year_hidden').val(year);
     $('.start_date_hidden, .end_date_hidden').val(today_converted);
 
     $('#daterange').daterangepicker({
@@ -43,6 +47,14 @@ $(document).ready(function(){
         end_date = end.format('YYYY-MM-DD');
         $('.end_date_hidden').val(end_date);
         refresh();
+    });
+    
+    $('#yearpicker').yearpicker({
+        hide: function(){
+            year = $(this).val();
+            $('.year_hidden').val(year);
+            refresh();
+        }
     });
 
     $(document).on('change', '#date_counter', function(){
@@ -109,10 +121,21 @@ $(document).ready(function(){
             refresh_type_table();
         }
         else if(current_tab == 'Particular'){//Particular
-            refresh_particular_table()
+            refresh_particular_table();
+        }
+        else if(current_tab == 'Fiscal Year'){
+            refresh_fiscal_year_table();
         }
         else{
             refresh_cash_disbursement_table();
+        }
+
+        if(current_tab == 'Fiscal Year'){
+            $('#yearpicker').show();
+            $('#daterange, #date_count, .toggle').hide();
+        }else{
+            $('#yearpicker').hide();
+            $('#daterange, #date_count, .toggle').show();
         }
     }
     
@@ -342,7 +365,7 @@ $(document).ready(function(){
 
     //FUNCTIONS -- START
 
-    $(document).on('click', '.expense_pick', function(){
+    $(document).on('click', '.expense_picked', function(){
         current_tab = $(this).text();
     });
 
@@ -879,6 +902,70 @@ $(document).ready(function(){
                 html += '</tbody>';
 
                 $('#cash_disbursement_table').append(html);
+
+                enableTabs();
+            }
+        });
+    }
+
+    function refresh_fiscal_year_table(){
+        $.ajax({
+            headers: {
+                'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: '/view_fiscal_year',
+            data: {
+                year,
+                branch,
+                company,
+            },
+            method: 'get',
+            dataType: 'json',
+            success:function(data){
+                $('#fiscal_year_table').empty();
+
+                let html = '';
+                let thead = '';
+
+                html += '<thead>';
+
+                thead += '<th style="width: 280px;">Description</th>';
+                for(let x = 0; x < months.length; x++){
+                    thead += '<th style="width: 110px;">'+months[x]+'</th>';
+                }
+                thead += '<th style="width: 110px;">TOTAL</th>';
+
+                html += '<tr>'+thead+'</tr>';
+                html += '</thead>';
+
+                html += '<tbody>';
+
+                for(let x = 0; x < data.type.length; x++){
+                    html += '<tr>';
+                    html += '<td>'+data.type[x].name+'</td>';
+                    
+                    for(let y = 0; y < 12; y++){
+                        html += '<td style="text-align: right">'+data.expense_per_month[x][y]+'</td>';
+                    }
+
+                    html += '<td style="text-align: right">'+data.total_per_type[x]+'<td>';
+                    
+                    html += '</tr>';
+                }
+
+                html += '<tr>';
+                html += '<td>TOTAL</td>';
+                
+                for(let x = 0; x < 12; x++){
+                    html += '<td style="text-align: right;">'+data.total_per_month[x]+'</td>';
+                }
+
+                html += '<td style="text-align: right;">'+data.total_all+'</td>';
+                html += '</tr>';
+
+                html += '</tbody>';
+                
+                $('#fiscal_year_table').append(html);
 
                 enableTabs();
             }

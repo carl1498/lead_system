@@ -841,4 +841,151 @@ class excelController extends Controller
         ob_end_clean();
         $writer->save('php://output');
     }
+
+    public function excel_fiscal_year(Request $request){
+        $year = $request->year_hidden;
+        $branch = $request->branch_hidden;
+        $company = $request->company_hidden;
+        $months = ['January', 'February', 'March', 'April', 'May', 'June',
+                    'July', 'August', 'September', 'October', 'November', 'December'];
+        $i = 0;
+        
+        //ALL DATA -- START
+
+        $type = expense_type::all();
+
+        $expense_per_month = array();
+        $total_per_type = array();
+        $total_per_month = array();
+        $total_all = 0;
+
+        foreach($type as $t){
+            for($x = 0; $x < 12; $x++){
+                $expense_per_month[$i][$x] = expense::where('expense_type_id', $t->id)->whereMonth('date', $x+1)
+                                                    ->whereYear('date', $year)->sum('amount');
+            }
+            $total_per_type[$i] = expense::where('expense_type_id', $t->id)->whereYear('date', $year)->sum('amount');
+            $i++;
+        }
+
+        for($x = 0; $x < 12; $x++){
+            $total_per_month[$x] = expense::whereMonth('date', $x+1)->whereYear('date', $year)->sum('amount');
+        }
+
+        $total_all = expense::whereYear('date', $year)->sum('amount');
+
+        //ALL DATA -- END
+
+        //STYLE -- START
+
+        $headerStyleArray = [
+            'borders' => [
+                'outline' => [
+                    'borderStyle' => Border::BORDER_THIN
+                ]
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+                'vertical' => Alignment::VERTICAL_CENTER,
+            ]
+        ];
+
+        $centerStyleArray = [
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+                'vertical' => Alignment::VERTICAL_CENTER,
+            ]
+        ];
+
+        $allStyleArray = [
+            'borders' => [
+                'outline' => [
+                    'borderStyle' => Border::BORDER_THIN
+                ]
+            ],
+            'alignment' => [
+                'vertical' => Alignment::VERTICAL_CENTER
+            ]
+        ];
+
+        //STYLE -- END
+
+        //Initialize Sheet
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        //TItle
+        $sheet->setCellValue('A1', 'FISCAL YEAR '.$year.' - LEAD GROUP OF COMPANIES')->mergeCells('A1:N1');
+
+        //HEADER -- START
+
+        $sheet->setCellValue('A3', 'Description')->getStyle('A3')->applyFromArray($headerStyleArray);
+
+        foreach(range('B', 'M') as $key => $col){
+            $sheet->setCellValue($col.'3', $months[$key])->getStyle($col.'3')->applyFromArray($headerStyleArray);
+        }
+
+        $sheet->setCellValue('N3', 'TOTAL')->getStyle('N3')->applyFromArray($headerStyleArray);
+
+        //HEADER -- END
+
+        //BODY -- START
+
+        $row = 4;
+        $x = 0;
+        foreach($type as $t){
+            $sheet->setCellValue('A'.$row, $t->name);
+            foreach(range('B', 'M') as $key => $col){
+                $sheet->setCellValue($col.$row, $expense_per_month[$x][$key]);
+            }
+            $sheet->setCellValue('N'.$row, $total_per_type[$x]);
+            $row++; $x++;
+        }
+
+        $sheet->setCellValue('A'.$row, 'TOTAL');
+
+        foreach(range('B', 'M') as $key => $col){
+            $sheet->setCellValue($col.$row, $total_per_month[$key]);
+        }
+
+        $sheet->setCellValue('N'.$row, $total_all);
+
+        //BODY -- END
+
+        $sheet->freezePane('B4');
+
+        //Using Styles -- START
+
+        $sheet->getStyle('A1')->getFont()->setSize(12)->applyFromArray($centerStyleArray);
+        $sheet->getStyle('A1')->applyFromArray($centerStyleArray);
+
+        $sheet->getColumnDimension('A')->setWidth(40)->setAutoSize(FALSE);
+        $sheet->getRowDimension('1')->setRowHeight(30);
+        $sheet->getRowDimension('3')->setRowHeight(20);
+
+        foreach(range('B', 'N') as $col){
+            $sheet->getColumnDimension($col)->setWidth(14)->setAutoSize(FALSE);
+        }
+
+        for($x = 4; $x <= $row; $x++){
+            foreach(range('A', 'N') as $col){
+                $sheet->getStyle($col.$x)->applyFromArray($allStyleArray);
+            }
+        }
+
+        //Uinsg Styles -- END
+
+
+
+        $filename = 'Fiscal Year - '.$year.'.xlsx';
+
+        //redirect output to client
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="'.$filename.'"');
+        header('Cache-Control: max-age=0');
+
+        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+        ob_end_clean();
+        $writer->save('php://output');
+    }
 }

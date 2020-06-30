@@ -26,12 +26,13 @@
         <div class="col-md-12">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
-                    <li class="active expense_pick"><a class="expense_pick" href="#expense_tab" data-toggle="tab">Expense</a></li>
+                    <li class="active expense_pick"><a class="expense_pick expense_picked" href="#expense_tab" data-toggle="tab">Expense</a></li>
                     @if(ExpenseHigherPermission())
-                    <li class="expense_pick"><a class="expense_pick" href="#type_tab" data-toggle="tab">Type</a></li>
-                    <li class="expense_pick"><a class="expense_pick" href="#particular_tab" data-toggle="tab">Particular</a></li>
+                    <li class="expense_pick"><a class="expense_pick expense_picked" href="#type_tab" data-toggle="tab">Type</a></li>
+                    <li class="expense_pick"><a class="expense_pick expense_picked" href="#particular_tab" data-toggle="tab">Particular</a></li>
                     @endif
-                    <li class="expense_pick"><a class="expense_pick" href="#cash_disbursement_tab" data-toggle="tab">Cash Disbursement Journal</a></li>
+                    <li class="expense_pick"><a class="expense_pick expense_picked" href="#cash_disbursement_tab" data-toggle="tab">Cash Disbursement Journal</a></li>
+                    <li class="expense_pick"><a class="expense_pick expense_picked" href="#fiscal_year_tab" data-toggle="tab">Fiscal Year</a></li>
                 </ul>
 
                 <div class="tab-content">

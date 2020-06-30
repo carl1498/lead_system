@@ -105,3 +105,24 @@
 </div>
 
 <!-- CASH DISBURSEMENT -- END -->
+
+<!-- CASH DISBURSEMENT -- START -->
+
+<div class="tab-pane fade in" id="fiscal_year_tab">
+    
+    <form action="/excel_fiscal_year" method="POST">
+        @csrf
+        <input type="hidden" class="year_hidden" name="year_hidden">
+        <input type="hidden" class="branch_hidden" name="branch_hidden" value="All">
+        <input type="hidden" class="company_hidden" name="company_hidden" value="All">
+        <button type="submit" class="btn btn-md btn-default">Excel</button>
+    </form>
+    <div style="overflow: auto; width: 100%;">
+        <table id="fiscal_year_table" class="table table-hover table-striped table-bordered">
+
+        </table>
+    </div>
+
+</div>
+
+<!-- CASH DISBURSEMENT -- END -->
