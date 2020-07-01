@@ -1013,6 +1013,10 @@ class excelController extends Controller
 
         //Uinsg Styles -- END
 
+        if($company == '(LEAD | MILA | ANK)'){
+            $company = '(LEAD - MILA - ANK)';
+        }
+
         $filename = 'Fiscal Year - '.$year.' '.$company.' - '.$branch.'.xlsx';
 
         //redirect output to client
