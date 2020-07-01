@@ -413,17 +413,40 @@ class expenseController extends Controller
         foreach($type as $t){
             for($x = 0; $x < 12; $x++){
                 $expense_per_month[$i][$x] = expense::where('expense_type_id', $t->id)->whereMonth('date', $x+1)
-                                                    ->whereYear('date', $year)->sum('amount');
+                                                    ->when($company != 'All', function($query) use($company){
+                                                        $query->where('lead_company_type_id', $company);
+                                                    })
+                                                    ->when($branch != 'All', function($query) use($branch){
+                                                        $query->where('branch_id', $branch);
+                                                    })->whereYear('date', $year)->sum('amount');
             }
-            $total_per_type[$i] = expense::where('expense_type_id', $t->id)->whereYear('date', $year)->sum('amount');
+            $total_per_type[$i] = expense::where('expense_type_id', $t->id)->whereYear('date', $year)
+                                            ->when($company != 'All', function($query) use($company){
+                                                $query->where('lead_company_type_id', $company);
+                                            })
+                                            ->when($branch != 'All', function($query) use($branch){
+                                                $query->where('branch_id', $branch);
+                                            })->sum('amount');
             $i++;
         }
 
         for($x = 0; $x < 12; $x++){
-            $total_per_month[$x] = expense::whereMonth('date', $x+1)->whereYear('date', $year)->sum('amount');
+            $total_per_month[$x] = expense::whereMonth('date', $x+1)->whereYear('date', $year)
+                                            ->when($company != 'All', function($query) use($company){
+                                                $query->where('lead_company_type_id', $company);
+                                            })
+                                            ->when($branch != 'All', function($query) use($branch){
+                                                $query->where('branch_id', $branch);
+                                            })->sum('amount');
         }
 
-        $total_all = expense::whereYear('date', $year)->sum('amount');
+        $total_all = expense::whereYear('date', $year)
+                            ->when($company != 'All', function($query) use($company){
+                                $query->where('lead_company_type_id', $company);
+                            })
+                            ->when($branch != 'All', function($query) use($branch){
+                                $query->where('branch_id', $branch);
+                            })->sum('amount');
 
         $output = array(
             'type' => $type,

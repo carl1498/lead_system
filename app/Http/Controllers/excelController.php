@@ -21,6 +21,7 @@ use App\departure_month;
 use App\branch;
 use App\expense;
 use App\expense_type;
+use App\lead_company_type;
 
 class excelController extends Controller
 {
@@ -862,17 +863,54 @@ class excelController extends Controller
         foreach($type as $t){
             for($x = 0; $x < 12; $x++){
                 $expense_per_month[$i][$x] = expense::where('expense_type_id', $t->id)->whereMonth('date', $x+1)
-                                                    ->whereYear('date', $year)->sum('amount');
+                                                    ->when($company != 'All', function($query) use($company){
+                                                        $query->where('lead_company_type_id', $company);
+                                                    })
+                                                    ->when($branch != 'All', function($query) use($branch){
+                                                        $query->where('branch_id', $branch);
+                                                    })->whereYear('date', $year)->sum('amount');
             }
-            $total_per_type[$i] = expense::where('expense_type_id', $t->id)->whereYear('date', $year)->sum('amount');
+            $total_per_type[$i] = expense::where('expense_type_id', $t->id)->whereYear('date', $year)
+                                        ->when($company != 'All', function($query) use($company){
+                                            $query->where('lead_company_type_id', $company);
+                                        })
+                                        ->when($branch != 'All', function($query) use($branch){
+                                            $query->where('branch_id', $branch);
+                                        })->sum('amount');
             $i++;
         }
 
         for($x = 0; $x < 12; $x++){
-            $total_per_month[$x] = expense::whereMonth('date', $x+1)->whereYear('date', $year)->sum('amount');
+            $total_per_month[$x] = expense::whereMonth('date', $x+1)->whereYear('date', $year)
+                                            ->when($company != 'All', function($query) use($company){
+                                                $query->where('lead_company_type_id', $company);
+                                            })
+                                            ->when($branch != 'All', function($query) use($branch){
+                                                $query->where('branch_id', $branch);
+                                            })->sum('amount');
         }
 
-        $total_all = expense::whereYear('date', $year)->sum('amount');
+        $total_all = expense::whereYear('date', $year)
+                            ->when($company != 'All', function($query) use($company){
+                                $query->where('lead_company_type_id', $company);
+                            })
+                            ->when($branch != 'All', function($query) use($branch){
+                                $query->where('branch_id', $branch);
+                            })->sum('amount');
+
+
+        if($branch == 'All'){
+            $branch = 'All Branches';
+        }else{
+            $branch = branch::find($branch);
+            $branch = $branch->name;
+        }
+        if($company == 'All'){
+            $company = '(LEAD | MILA | ANK)';
+        }else{
+            $company = lead_company_type::find($company);
+            $company = '('.$company->name.')';
+        }
 
         //ALL DATA -- END
 
@@ -915,7 +953,7 @@ class excelController extends Controller
         $sheet = $spreadsheet->getActiveSheet();
 
         //TItle
-        $sheet->setCellValue('A1', 'FISCAL YEAR '.$year.' - LEAD GROUP OF COMPANIES')->mergeCells('A1:N1');
+        $sheet->setCellValue('A1', 'FISCAL YEAR '.$year.' - LEAD GROUP OF COMPANIES '.$company.' - ' . $branch)->mergeCells('A1:N1');
 
         //HEADER -- START
 
@@ -975,9 +1013,7 @@ class excelController extends Controller
 
         //Uinsg Styles -- END
 
-
-
-        $filename = 'Fiscal Year - '.$year.'.xlsx';
+        $filename = 'Fiscal Year - '.$year.' '.$company.' - '.$branch.'.xlsx';
 
         //redirect output to client
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
