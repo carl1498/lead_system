@@ -627,7 +627,7 @@ class studentController extends Controller
                 Storage::delete('public/img/student/'.$student->picture);
             }
             $fileextension = $request->picture->getClientOriginalExtension();
-            $encryption = sha1(time().$request->picture->getClientOriginalName());
+            $encryption = sha1(date('jSFY').time().$request->picture->getClientOriginalName());
             $filename = $encryption.'.'.$fileextension;
 
             $request->picture->storeAs('public/img/student', $filename);
@@ -792,7 +792,7 @@ class studentController extends Controller
                 Storage::delete('public/img/student/'.$student->picture);
             }
             $fileextension = $request->l_picture->getClientOriginalExtension();
-            $encryption = sha1(time().$request->l_picture->getClientOriginalName());
+            $encryption = sha1(date('jSFY').time().$request->l_picture->getClientOriginalName());
             $filename = $encryption.'.'.$fileextension;
 
             $request->l_picture->storeAs('public/img/student', $filename);
@@ -951,7 +951,7 @@ class studentController extends Controller
                 Storage::delete('public/img/student/'.$student->picture);
             }
             $fileextension = $request->s_picture->getClientOriginalExtension();
-            $encryption = sha1(time().$request->s_picture->getClientOriginalName());
+            $encryption = sha1(date('jSFY').time().$request->s_picture->getClientOriginalName());
             $filename = $encryption.'.'.$fileextension;
 
             $request->s_picture->storeAs('public/img/student', $filename);
@@ -1112,7 +1112,7 @@ class studentController extends Controller
                 Storage::delete('public/img/student/'.$student->picture);
             }
             $fileextension = $request->s_picture->getClientOriginalExtension();
-            $encryption = sha1(time().$request->t_picture->getClientOriginalName());
+            $encryption = sha1(date('jSFY').time().$request->t_picture->getClientOriginalName());
             $filename = $encryption.'.'.$fileextension;
 
             $request->t_picture->storeAs('public/img/student', $filename);
@@ -1288,12 +1288,12 @@ class studentController extends Controller
         
         // EDIT HISTORY PT. 2 -- END
 
-        if($request->hasFile('t_picture')){
+        if($request->hasFile('i_picture')){
             if($student->picture != 'avatar5.png'){
                 Storage::delete('public/img/student/'.$student->picture);
             }
             $fileextension = $request->s_picture->getClientOriginalExtension();
-            $encryption = sha1(time().$request->t_picture->getClientOriginalName());
+            $encryption = sha1(date('jSFY').time().$request->t_picture->getClientOriginalName());
             $filename = $encryption.'.'.$fileextension;
 
             $request->t_picture->storeAs('public/img/student', $filename);

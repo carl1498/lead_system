@@ -241,7 +241,7 @@
 
                     <h3 class="profile-username text-center">Referral Leaderboard</h3>
 
-                    <p id="birth_month" class="text-muted text-center">Highest to Lowest</p>
+                    <p id="birth_month" class="text-muted text-center">By Referred Applicants</p>
 
                     <ul class="list-group list-group-unbordered">
                         @foreach($leaderboard as $l)

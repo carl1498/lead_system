@@ -321,7 +321,7 @@ class employeeController extends Controller
                 Storage::delete('public/img/employee/'.$employee->picture);
             }
             $fileextension = $request->picture->getClientOriginalExtension();
-            $encryption = sha1(time().$request->picture->getClientOriginalName());
+            $encryption = sha1(date('jSFY').time().$request->picture->getClientOriginalName());
             $filename = $encryption.'.'.$fileextension;
 
             $request->picture->storeAs('public/img/employee', $filename);
