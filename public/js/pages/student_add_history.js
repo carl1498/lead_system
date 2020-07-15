@@ -103,9 +103,9 @@ $(document).ready(function () {
 
     load();
 
-    setInterval(function () {
+    /*setInterval(function(){
         load();
-    }, 300000);
+    }, 300000);*/
 
     $(document).on('click', '.refresh_table', function () {
         load();
