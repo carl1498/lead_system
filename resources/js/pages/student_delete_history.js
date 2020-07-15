@@ -10,6 +10,7 @@ $(document).ready(function(){
         var student_delete_history = $('#student_delete_history').DataTable({
             destroy: true,
             stateSave: true,
+            lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, 'All']],
             stateSaveCallback: function(settings,data) {
                 localStorage.setItem( 'DataTables_' + settings.sInstance, JSON.stringify(data) )
             },
