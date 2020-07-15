@@ -92,7 +92,8 @@ $(document).ready(function(){
     //FUNCTIONS -- START
 
     $(document).on('click', '.edit_employee_salary', function(){
-        let id = $(this).attr('id')
+        let id = $(this).attr('id');
+        
     });
 
     //FUNCTIONS -- END
