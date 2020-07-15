@@ -341,6 +341,13 @@ Route::group(['middleware' => ['auth', 'admin']], function(){
     Route::post('/excel_tf_sb_summary', 'excelController@excel_tf_sb_summary');
 });
 
+//Salary Monitoring
+
+Route::group(['middleware' => ['auth', 'admin']], function(){
+    Route::get('/salary', 'salaryController@index');
+    Route::get('/view_employee_salary', 'salaryController@view_employee_salary');
+});
+
 //FINANCE ROUTES -- END
 
 //CLIENT ROUTES -- START

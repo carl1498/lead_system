@@ -179,6 +179,22 @@
 
                         <div class="row clearfix">
                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
+                                    <label for="company" class="pull-right">Company</label>
+                            </div>
+                            <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
+                                <div class="form-group required">
+                                    <select type="text" id="company" name="company" class="form-control select2 required" style="width: 100%;" required>
+                                        <option value="">Select Company Type</option>
+                                        @foreach($company_type as $key => $c)
+                                            <option value="{{ $c->id }}">{{ $c->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row clearfix">
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
                                     <label for="sss" class="pull-right">SSS</label>
                             </div>
                             <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
