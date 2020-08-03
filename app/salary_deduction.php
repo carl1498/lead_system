@@ -10,7 +10,7 @@ class salary_deduction extends Model
     protected $table = 'salary_deduction';
     protected $fillable = [
         'sal_mon_id', 'cash_advance', 'absence', 'late', 'sss', 'phic',
-        'hdmf', 'others', 'undertime', 'man_allocation'
+        'hdmf', 'others', 'undertime', 'man_allocation', 'wfh', 'tax'
     ];
 
     public $timestamps = true;

@@ -26,8 +26,8 @@
         <div class="col-md-12">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
-                    <li class="active salary_pick"><a class="salary_pick salary_picked" href="#employee_tab" data-toggle="tab">Employee</a></li>
-                    <li class="salary_pick"><a class="salary_pick" href="#salary_tab" data-toggle="tab">Salary</a></li>
+                    <li class="active tab_pick"><a class="tab_pick tab_picked" href="#emp_salary_tab" data-toggle="tab">Employee</a></li>
+                    <li class="tab_pick"><a class="tab_pick" href="#salary_tab" data-toggle="tab">Salary</a></li>
                 </ul>
 
                 <div class="tab-content">
@@ -41,6 +41,9 @@
     </div>
 
     <!-- MODALS -- START -->
+
+    @include('includes.modals.salary_modals.emp_salary_modal')
+    @include('includes.modals.salary_modals.salary_modal')
 
     <!-- MODALS -- END -->
 

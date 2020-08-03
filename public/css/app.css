@@ -16526,7 +16526,8 @@ readers do not read off random characters that represent icons */
 #books_branch_table_wrapper .dataTables_length,
 #books_lost_table_wrapper .dataTables_length,
 #books_return_table_wrapper .dataTables_length,
-#intern_students_wrapper .dataTables_length {
+#intern_students_wrapper .dataTables_length,
+#emp_salary_table_wrapper .dataTables_length {
   float: right !important;
   margin-right: 25px;
 }
@@ -16554,7 +16555,8 @@ readers do not read off random characters that represent icons */
 #books_branch_table_wrapper .dataTables_filter,
 #books_lost_table_wrapper .dataTables_filter,
 #books_return_table_wrapper .dataTables_filter,
-#intern_students_wrapper .dataTables_filter {
+#intern_students_wrapper .dataTables_filter,
+#emp_salary_table_wrapper .dataTables_filter {
   float: right !important;
 }
 
@@ -16750,5 +16752,9 @@ a.books_pick {
 
 .ui-datepicker-calendar {
   display: none;
+}
+
+.maoni {
+  color: #EF3A25;
 }
 

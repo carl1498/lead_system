@@ -11,6 +11,18 @@ class salary_monitoring extends Model
     protected $fillable = [
         'emp_id', 'sal_type', 'rate', 'daily', 'period_from', 'period_to', 'pay_day',
     ];
+    
+    public function income(){
+        return $this->hasOne('App\salary_income', 'sal_mon_id', 'id');
+    }
+
+    public function deduction(){
+        return $this->hasOne('App\salary_deduction', 'sal_mon_id', 'id');
+    }
+
+    public function employee(){
+        return $this->hasOne('App\employee', 'id', 'emp_id');
+    }
 
     public $timestamps = true;
 }

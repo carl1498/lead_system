@@ -346,6 +346,11 @@ Route::group(['middleware' => ['auth', 'admin']], function(){
 Route::group(['middleware' => ['auth', 'admin']], function(){
     Route::get('/salary', 'salaryController@index');
     Route::get('/view_employee_salary', 'salaryController@view_employee_salary');
+    Route::get('/view_salary', 'salaryController@view_salary');
+    Route::get('/get_emp_salary/{id}', 'salaryController@get_emp_salary');
+    Route::post('/save_emp_salary', 'salaryController@save_emp_salary');
+    Route::post('/save_salary', 'salaryController@save_salary');
+    Route::get('/emp_salary_select', 'salaryController@emp_salary_select');
 });
 
 //FINANCE ROUTES -- END
