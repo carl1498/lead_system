@@ -41,7 +41,6 @@ $(document).ready(function(){
         });
         $(this).find("input,textarea,select").val('').end();
         $('#emp_salary_form .select2, #salary_form .select2').trigger('change.select2');
-        console.log('mao ni');
     });
 
     function disableTabs(){
@@ -300,36 +299,37 @@ $(document).ready(function(){
     })
 
     $(document).on('change', '#emp', function(){
-        let id = $(this).val();
+        if($('#s_id').val() == ''){
+            let id = $(this).val();
 
-        $.ajax({
-            headers: {
-                'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-            },
-            url: '/get_emp_salary/'+id,
-            method: 'get',
-            dataType: 'json',
-            success: function(data){
-                $('#s_id').val(data.id);
-                $('#s_branch').val(data.employee.branch.name);
-                $('#s_company').val(data.employee.company_type.name);
-
-                $('#s_rate').val(data.rate);
-                if(data.sal_type != 'Yen'){
-                    $('#s_daily').val(parseFloat(data.daily).toFixed(2));
+            $.ajax({
+                headers: {
+                    'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '/get_emp_salary/'+id,
+                method: 'get',
+                dataType: 'json',
+                success: function(data){
+                    $('#s_branch').val(data.employee.branch.name);
+                    $('#s_company').val(data.employee.company_type.name);
+    
+                    $('#s_rate').val(data.rate);
+                    if(data.sal_type != 'Yen'){
+                        $('#s_daily').val(parseFloat(data.daily).toFixed(2));
+                    }
+                    $('#s_cola').val((data.cola == 0) ? '' : data.cola);
+                    $('#s_accom').val((data.acc_allowance == 0.) ? '' : data.acc_allowance);
+                    $('#s_transpo').val((data.transpo_allowance == 0) ? '' : data.transpo_allowance);
+                    $('#s_sss').val((data.sss == 0) ? '' : data.sss);
+                    $('#s_phic').val((data.phic == 0) ? '' : data.phic);
+                    $('#s_hdmf').val((data.hdmf == 0) ? '' : data.hdmf);
+                    $('#s_type').val(data.sal_type).trigger('change');
+                },
+                error: function(data){
+                    swal("Error!", "Something went wrong, please contact IT Officer.", "error");
                 }
-                $('#s_cola').val((data.cola == 0) ? '' : data.cola);
-                $('#s_accom').val((data.acc_allowance == 0.) ? '' : data.acc_allowance);
-                $('#s_transpo').val((data.transpo_allowance == 0) ? '' : data.transpo_allowance);
-                $('#s_sss').val((data.sss == 0) ? '' : data.sss);
-                $('#s_phic').val((data.phic == 0) ? '' : data.phic);
-                $('#s_hdmf').val((data.hdmf == 0) ? '' : data.hdmf);
-                $('#s_type').val(data.sal_type).trigger('change');
-            },
-            error: function(data){
-                swal("Error!", "Something went wrong, please contact IT Officer.", "error");
-            }
-        });
+            });
+        }
     });
 
     $(document).on('keyup', keyup, function(){
@@ -436,6 +436,118 @@ $(document).ready(function(){
         })
     });
 
+    $(document).on('click', '.edit_salary', function(){
+        let id = $(this).attr('id');
+
+        $.ajax({
+            url: '/get_sal_mon/'+id,
+            dataType: 'json',
+            success: function(data){
+                $('#s_id').val(data.id);
+                $('#emp').val(data.employee.id).trigger('change');
+                $('#s_branch').val(data.employee.branch.name);
+                $('#s_company').val(data.employee.company_type.name);
+                $('#s_rate').val(data.rate);
+                $('#s_daily').val(data.daily);
+                $('#cutoff_from').val(data.period_from);
+                $('#cutoff_to').val(data.period_to);
+                $('#release').val(data.pay_date);
+
+                $('#basic_days').val(data.income.basic);
+                $('#s_accom').val(data.income.acc_allowance);
+                $('#s_cola').val(data.income.cola);
+                $('#s_transpo').val(data.income.transpo_allowance);
+                $('#mktg_comm').val(data.income.market_comm);
+                $('#jap_comm').val(data.income.jap_comm);
+                $('#reg_ot_hours').val(data.income.reg_ot);
+                $('#thirteenth').val(data.income.thirteenth);
+                $('#leg_hol_hours').val(data.income.leg_hol);
+                $('#spcl_hol_hours').val(data.income.spcl_hol);
+                $('#leg_hol_ot_hours').val(data.income.leg_hol_ot);
+                $('#spcl_hol_ot_hours').val(data.income.spcl_hol_ot);
+                $('#adjustments').val(data.income.adjustments);
+
+                $('#cash_advance').val(data.deduction.cash_advance);
+                $('#absence_days').val(data.deduction.absence);
+                $('#late_hours').val(data.deduction.late);
+                $('#s_sss').val(data.deduction.sss);
+                $('#s_phic').val(data.deduction.phic);
+                $('#s_hdmf').val(data.deduction.hdmf);
+                $('#others').val(data.deduction.others);
+                $('#under_hours').val(data.deduction.undertime);
+                $('#tax').val(data.deduction.tax);
+                $('#man_allocation').val(data.deduction.man_allocation);
+                $('#wfh').val(data.deduction.wfh);
+
+                $('#s_type').val(data.sal_type).trigger('change'); // will trigger to calculate all
+
+                $('#salary_modal').modal('show');
+            }
+        });
+    });
+
+    $(document).on('click', '.delete_salary', function(){
+        let id = $(this).attr('id');
+
+        swal.fire({
+            title: 'Confirm User',
+            text: 'For security purposes, input your password again.',
+            input: 'password',
+            inputAttributes: {
+                autocapitalize: 'off'
+            },
+            showCancelButton: true,
+            confirmButtonText: 'Confirm',
+            showLoaderOnConfirm: true,
+            preConfirm: (password) => {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: '/confirm_user',
+                    data: { password:password },
+                    method: 'POST',
+                    success: function(data){
+                        if(data == 0){
+                            swal('Password Incorrect!', 'Please try again', 'error');
+                            return;
+                        }
+                        else{
+                            swal({
+                                title: 'Are you sure?',
+                                text: 'You are about to delete a salary. This may affect multiple rows',
+                                type: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Yes, delete it!'
+                            }).then((result) => {
+                                if(result.value){
+                                    $.ajax({
+                                        headers: {
+                                            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                                        },
+                                        url: '/delete_salary',
+                                        method: 'get',
+                                        data: {
+                                            id:id,
+                                            password:password
+                                        },
+                                        type: 'json',
+                                        success:function(data){
+                                            notif('Deleted!', 'This Salary has been Deleted', 'success', 'glyphicon-ok');
+                                            refresh();
+                                        }
+                                    })
+                                }
+                            });
+                        }
+                    }
+                });
+            },
+        });
+    });
+
     //SELECT 2
     $('#emp').select2({
         placeholder: 'Select Employee',
@@ -451,11 +563,11 @@ $(document).ready(function(){
                 }
             },
             
-            processResults: function (data){
+            /*processResults: function (data){
                 return {
                     results:data.results      
                 }
-            }
+            }*/
         },
         escapeMarkup: function(markup) {
             return markup;
@@ -463,7 +575,9 @@ $(document).ready(function(){
         templateResult: function(data) {
             return data.text;
         },
+        tags: true
     });
+
 
     //FUNCTIONS -- END
 })

@@ -9,6 +9,7 @@ use App\salary_monitoring;
 use App\salary_income;
 use App\salary_deduction;
 use Auth;
+use Illuminate\Support\Facades\Hash;
 use Yajra\Datatables\Datatables;
 
 class salaryController extends Controller
@@ -83,7 +84,6 @@ class salaryController extends Controller
         })
         ->addColumn('reg_ot', function($data){
             $reg_ot = $this->calculate_all('reg_ot', $data); //reg_ot_amount
-            info($reg_ot);
             return ($data->income->reg_ot) ? '('.$data->income->reg_ot.')'.' '.$reg_ot : '';
         })
         ->addColumn('spcl', function($data){
@@ -117,7 +117,8 @@ class salaryController extends Controller
         ->addColumn('action', function($data){
             $html = '';
 
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_salary" id="'.$data->id.'"><i class="fa fa-pen"></i></button>';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_salary" id="'.$data->id.'"><i class="fa fa-pen"></i></button>&nbsp;';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_salary" id="'.$data->id.'"><i class="fa fa-trash"></i></button>';
             return $html;
         })
         ->make(true);
@@ -224,7 +225,7 @@ class salaryController extends Controller
     }
 
     public function get_emp_salary(Request $request, $id){
-        $emp_salary = emp_salary::with('employee.company_type', 'employee.branch')->find($id);
+        $emp_salary = emp_salary::with('employee.company_type', 'employee.branch')->where('emp_id', $id)->first();
 
         return $emp_salary;
     }
@@ -244,7 +245,9 @@ class salaryController extends Controller
     }
 
     public function save_salary(Request $request){
-        $sal_mon = new salary_monitoring;
+        $s_id = $request->s_id;
+
+        $sal_mon = ($s_id != '') ? salary_monitoring::find($s_id) : new salary_monitoring;
         $sal_mon->emp_id = $request->emp;
         $sal_mon->sal_type = $request->s_type;
         $sal_mon->rate = $request->s_rate;
@@ -254,7 +257,7 @@ class salaryController extends Controller
         $sal_mon->pay_date = $request->release;
         $sal_mon->save();
 
-        $sal_inc = new salary_income;
+        $sal_inc = ($s_id != '') ? salary_income::where('sal_mon_id', $s_id)->first() : new salary_income;
         $sal_inc->sal_mon_id = $sal_mon->id;
         $sal_inc->basic = $request->basic_days;
         $sal_inc->cola = $request->s_cola;
@@ -271,7 +274,7 @@ class salaryController extends Controller
         $sal_inc->spcl_hol_ot = $request->spcl_hol_ot_hours;
         $sal_inc->save();
 
-        $sal_ded = new salary_deduction;
+        $sal_ded = ($s_id != '') ? salary_deduction::where('sal_mon_id', $s_id)->first() : new salary_deduction;
         $sal_ded->sal_mon_id = $sal_mon->id;
         $sal_ded->cash_advance = $request->cash_advance;
         $sal_ded->absence = $request->absence_days;
@@ -287,13 +290,22 @@ class salaryController extends Controller
         $sal_ded->save();
     }
 
+    public function get_sal_mon($id){
+        return salary_monitoring::with('employee.branch', 'employee.company_type', 'income', 'deduction')->where('id', $id)->first();
+    }
+
+    public function delete_salary(Request $request){
+        if(!Hash::check($request->password, Auth::user()->password)){
+            Auth::logout();
+            return Redirect::to('/');
+        }
+        $salary = salary_monitoring::find($request->id);
+        $salary->delete();
+    }
+
     public function emp_salary_select(Request $request){
-        info($request);
         $employee = employee::all();
         foreach($employee as $e){
-            info($request->date);
-            info($e->id);
-            
             $sal_mon = salary_monitoring::where('pay_date', $request->date)->where('emp_id', $e->id)->get();
             if($sal_mon->isNotEmpty()){
                 $e->pay_icon = '<i class="fa fa-check text-success"></i> ';

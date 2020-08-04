@@ -11,6 +11,36 @@
                 <div class="modal-body clearfix">
                     <input type="hidden" name="s_id" id="s_id">
 
+
+                    <div class="col-md-12">
+
+                        <div class="row clearfix">
+                            <div class="col-lg-2 col-md-2"></div>
+                            <div class="col-lg-1 col-md-1 col-sm-3 col-xs-3 form-control-label">
+                                    <label for="cutoff" class="pull-right">Cutoff</label>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-7 col-xs-7">
+                                <div class="form-group">
+                                    <input type="text" id="cutoff_from" name="cutoff_from" class="form-control datepicker required" placeholder="From: YYYY-MM-DD" required>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-7 col-xs-7">
+                                <div class="form-group">
+                                    <input type="text" id="cutoff_to" name="cutoff_to" class="form-control datepicker required" placeholder="To: YYYY-MM-DD" required>
+                                </div>
+                            </div>
+                            <div class="col-lg-1 col-md-1 col-sm-3 col-xs-3 form-control-label">
+                                    <label for="release" class="pull-right">Release</label>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-7 col-xs-7">
+                                <div class="form-group">
+                                    <input type="text" id="release" name="release" class="form-control datepicker required" placeholder="YYYY-MM-DD" required>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
                     <div class="col-md-12">
 
                         <div class="row clearfix">
@@ -20,7 +50,10 @@
                             <div class="col-lg-5 col-md-5 col-sm-7 col-xs-7">
                                 <div class="form-group required">
                                     <select type="text" id="emp" name="emp" class="form-control select2 required" style="width: 100%;" required>
-                                        
+                                        <option value="">Select Employee</option>
+                                        @foreach($emp_salary as $e)
+                                            <option value="{{ $e->employee->id }}">{{ $e->employee->lname }}, {{ $e->employee->fname }} {{ $e->employee->mname }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -80,37 +113,6 @@
                                             <option value="Yen">Yen</option>
                                         </select>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-
-                    <div class="col-md-12" style="margin-top: 10px;">
-
-                        <div class="row clearfix">
-                            <div class="col-lg-1 col-md-1"></div>
-                            <div class="col-lg-1 col-md-1 col-sm-3 col-xs-3 form-control-label">
-                                    <label for="cutoff" class="pull-right">Cutoff</label>
-                            </div>
-                            <div class="col-lg-2 col-md-2 col-sm-7 col-xs-7">
-                                <div class="form-group">
-                                    <input type="text" id="cutoff_from" name="cutoff_from" class="form-control datepicker required" placeholder="From: YYYY-MM-DD" required>
-                                </div>
-                            </div>
-                            <div class="col-lg-2 col-md-2 col-sm-7 col-xs-7">
-                                <div class="form-group">
-                                    <input type="text" id="cutoff_to" name="cutoff_to" class="form-control datepicker required" placeholder="To: YYYY-MM-DD" required>
-                                </div>
-                            </div>
-                            <div class="col-lg-1 col-md-1"></div>
-                            <div class="col-lg-1 col-md-1 col-sm-3 col-xs-3 form-control-label">
-                                    <label for="release" class="pull-right">Release</label>
-                            </div>
-                            <div class="col-lg-2 col-md-2 col-sm-7 col-xs-7">
-                                <div class="form-group">
-                                    <input type="text" id="release" name="release" class="form-control datepicker required" placeholder="YYYY-MM-DD" required>
                                 </div>
                             </div>
                         </div>

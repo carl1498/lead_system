@@ -351,6 +351,8 @@ Route::group(['middleware' => ['auth', 'admin']], function(){
     Route::post('/save_emp_salary', 'salaryController@save_emp_salary');
     Route::post('/save_salary', 'salaryController@save_salary');
     Route::get('/emp_salary_select', 'salaryController@emp_salary_select');
+    Route::get('/get_sal_mon/{id}', 'salaryController@get_sal_mon');
+    Route::get('/delete_salary', 'salaryController@delete_salary');
 });
 
 //FINANCE ROUTES -- END
