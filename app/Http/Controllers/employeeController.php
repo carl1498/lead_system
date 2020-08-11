@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\employee;
+use App\emp_salary;
+use App\lead_company_type;
 use App\branch;
 use App\role;
 use App\employee_benefits;
@@ -46,8 +48,9 @@ class employeeController extends Controller
         $role = role::all();
         $employee = employee::all();
         $course = course::all();
+        $company_type = lead_company_type::all();
         
-        return view('pages.employees', compact('branch', 'role', 'course'));
+        return view('pages.employees', compact('branch', 'role', 'course', 'company_type'));
     }
 
     public function branch(Request $request){
@@ -285,6 +288,7 @@ class employeeController extends Controller
         $employee->address = $request->address;
         $employee->branch_id = $request->branch;
         $employee->role_id = $request->role;
+        $employee->lead_company_type_id = $request->company;
         $employee->salary = $request->salary;
         $employee->save();
 
@@ -346,6 +350,20 @@ class employeeController extends Controller
             $user->username = strtolower($name.$employee->id);
             $user->password = bcrypt('lead123');
             $user->save();
+
+            //Create Salary Data
+            $emp_salary = new emp_salary;
+            $emp_salary->emp_id = $employee->id;
+            $emp_salary->sal_type = 'Monthly';
+            $emp_salary->rate = 0;
+            $emp_salary->daily = 0;
+            $emp_salary->cola = 0;
+            $emp_salary->acc_allowance = 0;
+            $emp_salary->transpo_allowance = 0;
+            $emp_salary->sss = 0;
+            $emp_salary->phic = 0;
+            $emp_salary->hdmf = 0;
+            $emp_salary->save();
         }
 
         return $employee->id;
@@ -632,7 +650,7 @@ class employeeController extends Controller
     public function view_profile(Request $request){
         $id = $request->id;
 
-        $employee = employee::with('benefits', 'branch', 'role', 'current_employment_status', 'employee_emergency')->find($id);
+        $employee = employee::with('benefits', 'branch', 'role', 'company_type', 'current_employment_status', 'employee_emergency')->find($id);
         
         $employment_history = $employee->current_employment_status;
 

@@ -30,12 +30,13 @@
             <div id="scroller-anchor"></div> 
             <div class="box box-primary" id="box-primary-fixed">
                 <div class="box-body box-profile">
-                    <div style="width: auto; height: 200px;">
+                    <div style="width: auto; height: 220px;">
                         <img id="p_picture" class="profile-user-img img-responsive img-rounded" src="./img/avatar5.png" alt="User Profile Picture" style="max-width: 97px; max-height: 97px;">
                         
                         <h4 id="p_emp_name" class="profile-username text-center">Employee Name</h4>
 
                         <p id="p_position" class="text-muted text-center">Position</p>
+                        <p id="p_company" class="text-muted text-center">Company</p>
                     </div>
 
                     <ul class="list-group list-group-unbordered">

@@ -341,6 +341,23 @@ Route::group(['middleware' => ['auth', 'admin']], function(){
     Route::post('/excel_tf_sb_summary', 'excelController@excel_tf_sb_summary');
 });
 
+//Salary Monitoring
+
+Route::group(['middleware' => ['auth', 'admin']], function(){
+    Route::get('/salary', 'salaryController@index');
+    Route::get('/view_employee_salary', 'salaryController@view_employee_salary');
+    Route::get('/view_salary', 'salaryController@view_salary');
+    Route::get('/get_emp_salary/{id}', 'salaryController@get_emp_salary');
+    Route::post('/save_emp_salary', 'salaryController@save_emp_salary');
+    Route::post('/save_salary', 'salaryController@save_salary');
+    Route::post('/bulk_save_salary', 'salaryController@bulk_save_salary');
+    Route::get('/emp_salary_select', 'salaryController@emp_salary_select');
+    Route::get('/salary_position_select', 'salaryController@salary_position_select');
+    Route::get('/get_sal_mon/{id}', 'salaryController@get_sal_mon');
+    Route::get('/delete_salary', 'salaryController@delete_salary');
+    Route::post('/excel_salary', 'excelController@excel_salary');
+});
+
 //FINANCE ROUTES -- END
 
 //CLIENT ROUTES -- START

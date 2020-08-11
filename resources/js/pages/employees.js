@@ -416,6 +416,7 @@ $(document).ready(function(){
                 $('#address').val(data.employee.address);
                 $('#branch').val(data.employee.branch_id).trigger('change');
                 $('#role').val(data.employee.role_id).trigger('change');
+                $('#company').val(data.employee.lead_company_type_id).trigger('change');
                 $('#salary').val(data.employee.salary);
                 $('#hired').val(data.employment_history.hired_date);
                 $('#sss').val(data.benefits[0].id_number);
@@ -1326,6 +1327,8 @@ $(document).ready(function(){
                 }
 
                 $('#p_position').text(data.role.name);
+
+                $('#p_company').text(data.company_type.name);
 
                 $('#p_business').text(data.contact_business ? data.contact_business : '-');
                 $('#p_personal').text(data.contact_personal ? data.contact_personal : '-');

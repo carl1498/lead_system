@@ -12,5 +12,9 @@ class role extends Model
         'name'
     ];
 
+    public function employee(){
+        return $this->hasMany('App\employee', 'role_id', 'id');
+    }
+
     public $timestamps = true;
 }

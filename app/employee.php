@@ -36,6 +36,10 @@ class employee extends Model
         return $this->hasOne('App\role', 'id', 'role_id');
     }
 
+    public function company_type(){
+        return $this->hasOne('App\lead_company_type', 'id', 'lead_company_type_id');
+    }
+
     public function benefits(){
         return $this->hasMany('App\employee_benefits', 'emp_id', 'id');
     }
@@ -50,6 +54,10 @@ class employee extends Model
 
     public function employee_emergency(){
         return $this->hasMany('App\employee_emergency', 'emp_id', 'id');
+    }
+
+    public function emp_salary(){
+        return $this->hasOne('App\emp_salary', 'emp_id', 'id');
     }
 
     public $timestamps = true;

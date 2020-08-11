@@ -75,6 +75,7 @@
 					<ul class="treeview-menu">
 						<li class="{{ (Request::path() == 'expense') ? 'active' : '' }}"><a href="/expense"><i class="fa fa-money-bill-alt"></i> Expense</a></li>
 						<li class="{{ (Request::path() == 'tuition') ? 'active' : '' }}"><a href="/tuition"><i class="fa fa-cash-register"></i> Tuition Fee</a></li>
+						<li class="{{ (Request::path() == 'salary') ? 'active' : '' }}"><a href="/salary"><i class="fa fa-hand-holding-usd"></i> Salary Monitoring</a></li>
 						<!--<li class=""><a href="/student_settings"><i class="fa fa-network-wired"></i> Referral Monitoring</a></li>
 						<li class=""><a href="/student_settings"><i class="fa fa-wallet"></i> Allowance Monitoring</a></li>-->
 					</ul>
