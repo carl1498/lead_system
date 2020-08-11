@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Traits\SalaryTraits;
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use App\student;
 use App\tf_payment;
@@ -22,9 +24,18 @@ use App\branch;
 use App\expense;
 use App\expense_type;
 use App\lead_company_type;
+use App\salary_monitoring;
+use Carbon\Carbon;
 
 class excelController extends Controller
 {
+    use SalaryTraits;
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function excel_tf_breakdown(Request $request){
 
         $class_select = $request->class_hidden;
@@ -1027,5 +1038,503 @@ class excelController extends Controller
         $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
         ob_end_clean();
         $writer->save('php://output');
+    }
+
+    public function excel_salary(Request $request){
+        $start_date = $request->start_date_hidden;
+        $end_date = $request->end_date_hidden;
+        $date_counter = $request->date_counter_hidden;
+        $branch = $request->branch_hidden;
+        $company = $request->company_hidden;
+        $status = $request->status_hidden;
+        $role = $request->role_hidden;
+        $months = ['January', 'February', 'March', 'April', 'May', 'June',
+                    'July', 'August', 'September', 'October', 'November', 'December'];
+
+        //ALL DATA -- START
+
+        $salary = salary_monitoring::with('income', 'deduction', 'employee.branch', 'employee.company_type', 'employee.role')
+                ->when($company != 'All', function($query) use($company) {
+                    $query->whereHas('employee', function($query) use($company) {
+                        $query->where('lead_company_type_id', $company);
+                    });
+                })->when($branch != 'All', function($query) use($branch) {
+                    $query->whereHas('employee', function($query) use($branch) {
+                        $query->where('branch_id', $branch);
+                    });
+                })->when($status != 'All', function($query) use($status) {
+                    $query->whereHas('employee', function($query) use($status) {
+                        $query->where('employment_status', $status);
+                    });
+                })->when($role, function($query) use($role) {
+                    $query->whereHas('employee', function($query) use($role) {
+                        $query->whereIn('role_id', $role);
+                    });
+                })->when($date_counter == 'true', function($query) use($start_date, $end_date) {
+                    $query->whereBetween('pay_date', [$start_date, $end_date]);
+                })->get();
+
+        //ALL DATA -- END
+
+        //STYLE -- START
+
+        $companyStyleArray = [
+            'font' => [
+                'bold' => true,
+                'size' => 10
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+                'vertical' => Alignment::VERTICAL_CENTER,   
+            ]
+        ];
+
+        $receiptStyleArray = [
+            'font' => [
+                'bold' => true,
+                'size' => 9
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+                'vertical' => Alignment::VERTICAL_CENTER,   
+            ]
+        ];
+
+        $numberStyleArray = [
+            'numberFormat' => [
+                'formatCode' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1,
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_RIGHT,
+            ]
+        ];
+
+        $headerStyleArray = [
+            'font' => [
+                'bold' => true,
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+                'vertical' => Alignment::VERTICAL_CENTER,   
+            ]
+        ];
+
+        $daysStyleArray = [
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+            ]
+        ];
+
+        $borderStyleArray = [
+            'borders' => [
+                'outline' => [
+                    'borderStyle' => Border::BORDER_THIN
+                ]
+            ]
+        ];
+
+        $borderMediumStyleArray = [
+            'borders' => [
+                'outline' => [
+                    'borderStyle' => Border::BORDER_MEDIUM
+                ]
+            ]
+        ];
+
+        //STYLE -- END
+
+        //Initialize Sheet
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $row = 1; $print_by_four = 0; $print_row = 0; $print_counter = 0;
+        $salary_count = count($salary);
+        $print_area = '';
+        
+        $sheet->getPageSetup()->setOrientation(PageSetup::ORIENTATION_PORTRAIT)
+        ->setPaperSize(PageSetup::PAPERSIZE_FOLIO);
+
+        $sheet->getPageMargins()->setTop(0.75);
+        $sheet->getPageMargins()->setRight(0.7);
+        $sheet->getPageMargins()->setLeft(0.25);
+        $sheet->getPageMargins()->setBottom(0.75);
+        $sheet->getColumnDimension('A')->setWidth(13);
+        $sheet->getColumnDimension('H')->setWidth(13);
+
+        foreach($salary as $s){
+            //DEFAULTS
+            $from = Carbon::parse($s->period_from)->format('F d, Y');
+            $to = Carbon::parse($s->period_to)->format('F d, Y');
+            $period = $from. ' - '. $to;
+            $print_counter++; $print_by_four++;
+            if($print_by_four == 1){
+                $print_row = $row;
+            }
+
+            //Title
+            switch($s->employee->company_type->name) {
+                case 'LEAD':
+                    $company_name = 'LEAD TRAINING AND BUSINESS SOLUTIONS';
+                    break;
+                case 'MILA':
+                    $company_name = 'MANILA KOKUSAI ACADEMY INC.';
+                    break;
+                case 'ANK':
+                    $company_name = 'ANK EDUCATION CONSULTANCY';
+                    break;
+            }
+
+            // COMPANY TITLE
+            $sheet->setCellValue('A'.$row, $company_name)->mergeCells('A'.$row.':F'.$row);
+            $sheet->setCellValue('H'.$row, '=A'.$row)->mergeCells('H'.$row.':M'.$row);
+            $sheet->getStyle('A'.$row)->applyFromArray($companyStyleArray);
+            $sheet->getStyle('H'.$row)->applyFromArray($companyStyleArray);
+            $row++;
+
+            // SALARY RECEIPT
+            $sheet->setCellValue('A'.$row, 'SALARY RECEIPT')->mergeCells('A'.$row.':F'.$row);
+            $sheet->setCellValue('H'.$row, '=A'.$row)->mergeCells('H'.$row.':M'.$row);
+            $sheet->getStyle('A'.$row)->applyFromArray($receiptStyleArray);
+            $sheet->getStyle('H'.$row)->applyFromArray($receiptStyleArray);
+            $row++;
+
+            // EMPLOYEE NAME & RATE
+            $name = $s->employee->lname . ', ' . $s->employee->fname . ' ' . $s->employee->mname;
+            $position = $s->employee->role->name;
+            $rate = $s->rate;
+            $sheet->setCellValue('A'.$row, 'NAME of Employee')->setCellValue('H'.$row, '=A'.$row);
+            $sheet->setCellValue('B'.$row, $name)->setCellValue('I'.$row, '=B'.$row);
+            $sheet->mergeCells('B'.$row.':D'.$row)->mergeCells('I'.$row.':K'.$row);
+            $sheet->getStyle('B'.$row.':D'.$row)->getBorders()->getBottom()->setBorderStyle(Border::BORDER_THIN);
+            $sheet->getStyle('I'.$row.':K'.$row)->getBorders()->getBottom()->setBorderStyle(Border::BORDER_THIN);
+            $sheet->setCellValue('E'.$row, 'Rate:')->setCellValue('L'.$row, 'Rate:');
+            $sheet->setCellValue('F'.$row, $rate)->setCellValue('M'.$row, '=F'.$row);
+            $sheet->getStyle('F'.$row)->applyFromArray($numberStyleArray);
+            $sheet->getStyle('M'.$row)->applyFromArray($numberStyleArray);
+            $font_starting_row = $row;
+            $row++;
+
+            // POSITION & DAILY
+            $daily = $s->daily;
+            $sheet->setCellValue('A'.$row, 'Position/Dept.:')->setCellValue('H'.$row, '=A'.$row);
+            $sheet->setCellValue('B'.$row, $position)->setCellValue('I'.$row, '=B'.$row);
+            $sheet->mergeCells('B'.$row.':D'.$row)->mergeCells('I'.$row.':K'.$row);
+            $sheet->getStyle('B'.$row.':D'.$row)->getBorders()->getBottom()->setBorderStyle(Border::BORDER_THIN);
+            $sheet->getStyle('I'.$row.':K'.$row)->getBorders()->getBottom()->setBorderStyle(Border::BORDER_THIN);
+            $sheet->setCellValue('E'.$row, 'Daily:')->setCellValue('L'.$row, '=E'.$row);
+            $sheet->setCellValue('F'.$row, $daily)->setCellValue('M'.$row, '=F'.$row);
+            $sheet->getStyle('F'.$row)->applyFromArray($numberStyleArray);
+            $sheet->getStyle('M'.$row)->applyFromArray($numberStyleArray);
+            $row++;
+
+            // PAY PERIOD
+            $sheet->setCellValue('A'.$row, 'Pay Period:')->setCellValue('H'.$row, '=A'.$row);
+            $sheet->mergeCells('B'.$row.':D'.$row)->mergeCells('I'.$row.':K'.$row);
+            $sheet->setCellValue('B'.$row, $period)->setCellValue('I'.$row, '=B'.$row);
+            $row++;
+            $starting_row = $row;
+
+            // HEADER
+            $sheet->setCellValue('A'.$row, 'Particulars')->setCellValue('H'.$row, '=A'.$row);
+            $sheet->setCellValue('B'.$row, 'No. of Days')->setCellValue('I'.$row, '=B'.$row);
+            $sheet->setCellValue('C'.$row, 'Amount')->setCellValue('J'.$row, '=C'.$row);
+            $sheet->setCellValue('D'.$row, 'Deductions')->setCellValue('K'.$row, '=D'.$row);
+            $sheet->mergeCells('D'.$row.':E'.$row)->mergeCells('K'.$row.':L'.$row);
+            $sheet->setCellValue('F'.$row, 'Amount')->setCellValue('M'.$row, '=F'.$row);
+            foreach(range('A', 'M') as $key => $col){
+                $sheet->getStyle($col.$row)->applyFromArray($headerStyleArray);
+            }
+            $body_starting_row = $row;
+            $row++;
+            $inc_ded_row = $row;
+            $inc_row = $row;
+            $ded_row = $row;
+
+            //INCOME -- START
+
+            // BASIC RATE
+            $basic_days = $s->income->basic;
+            $basic_amount = $this->calculate_all('basic', $s);
+            $sheet->setCellValue('A'.$inc_row, 'Basic Rate')->setCellValue('H'.$inc_row, '=A'.$inc_row);
+            $sheet->setCellValue('B'.$inc_row, $basic_days)->setCellValue('I'.$inc_row, '=B'.$inc_row);
+            $sheet->setCellValue('C'.$inc_row, $basic_amount)->setCellValue('J'.$inc_row, '=C'.$inc_row);
+            $row++; $inc_row++;
+
+            // ACCOMMODATION ALLOWANCE
+            $accom = $s->income->acc_allowance;
+            $sheet->setCellValue('A'.$inc_row, 'Accommodation Allowance')->setCellValue('H'.$inc_row, '=A'.$inc_row);
+            $sheet->setCellValue('C'.$inc_row, $accom)->setCellValue('J'.$inc_row, '=C'.$inc_row);
+            $row++; $inc_row++;
+
+            // TRANSPORATION ALLOWANCE
+            $transpo = $s->income->transpo_allowance;
+            if($transpo){
+                $sheet->setCellValue('A'.$inc_row, 'Transpo Allowance')->setCellValue('H'.$inc_row, '=A'.$inc_row);
+                $sheet->setCellValue('C'.$inc_row, $transpo)->setCellValue('J'.$inc_row, '=C'.$inc_row);
+                $row++; $inc_row++;
+            }
+
+            // COLA
+            $cola = $s->income->cola;
+            if($cola){
+                $sheet->setCellValue('A'.$inc_row, 'COLA')->setCellValue('H'.$inc_row, '=A'.$inc_row);
+                $sheet->setCellValue('C'.$inc_row, $cola)->setCellValue('J'.$inc_row, '=C'.$inc_row);
+                $row++; $inc_row++;
+            }
+
+            // MARKETING COMMISSION
+            $mktg = $s->income->market_comm;
+            if($mktg){
+                $sheet->setCellValue('A'.$inc_row, 'Marketing Commission')->setCellValue('H'.$inc_row, '=A'.$inc_row);
+                $sheet->setCellValue('C'.$inc_row, $mktg)->setCellValue('J'.$inc_row, '=C'.$inc_row);
+                $row++; $inc_row++;
+            }
+
+            // JAPAN COMMISSION
+            $jap = $s->income->jap_comm;
+            if($jap){
+                $sheet->setCellValue('A'.$inc_row, 'Japan Commission')->setCellValue('H'.$inc_row, '=A'.$inc_row);
+                $sheet->setCellValue('C'.$inc_row, $mktg)->setCellValue('J'.$inc_row, '=C'.$inc_row);
+                $row++; $inc_row++;
+            }
+
+            // REG OT
+            $reg_ot_hours = $s->income->reg_ot;
+            $reg_ot_amount = ($reg_ot_hours) ? $this->calculate_all('reg_ot', $s) : '';
+            $sheet->setCellValue('A'.$inc_row, 'Reg. OT')->setCellValue('H'.$inc_row, '=A'.$inc_row);
+            $sheet->setCellValue('B'.$inc_row, $reg_ot_hours)->setCellValue('I'.$inc_row, '=B'.$inc_row);
+            $sheet->setCellValue('C'.$inc_row, $reg_ot_amount)->setCellValue('J'.$inc_row, '=C'.$inc_row);
+            $row++; $inc_row++; 
+
+            // RD OT
+            $rd_ot_hours = $s->income->rd_ot;
+            $rd_ot_amount = ($rd_ot_hours) ? $this->calculate_all('rd_ot', $s) : '';
+            $sheet->setCellValue('A'.$inc_row, 'RD OT')->setCellValue('H'.$inc_row, '=A'.$inc_row);
+            $sheet->setCellValue('B'.$inc_row, $rd_ot_hours)->setCellValue('I'.$inc_row, '=B'.$inc_row);
+            $sheet->setCellValue('C'.$inc_row, $rd_ot_amount)->setCellValue('J'.$inc_row, '=C'.$inc_row);
+            $row++; $inc_row++;
+
+            //  THIRTEENTH MONTH
+            $thirteenth = $s->income->thirteenth;
+            $sheet->setCellValue('A'.$inc_row, '13th Month')->setCellValue('H'.$inc_row, '=A'.$inc_row);
+            $sheet->setCellValue('C'.$inc_row, $thirteenth)->setCellValue('J'.$inc_row, '=C'.$inc_row);
+            $row++; $inc_row++;
+
+            // ADJUSTMENTS
+            $adjustments = $s->income->adjustments;
+            if($jap){
+                $sheet->setCellValue('A'.$inc_row, 'Adjustments')->setCellValue('H'.$inc_row, '=A'.$inc_row);
+                $sheet->setCellValue('C'.$inc_row, $adjustments)->setCellValue('J'.$inc_row, '=C'.$inc_row);
+                $row++; $inc_row++;
+            }
+
+            // LEG HOLIDAY
+            $leg_hours = $s->income->leg_hol;
+            $leg_amount = ($leg_hours) ? $this->calculate_all('leg', $s) : '';
+            $sheet->setCellValue('A'.$inc_row, 'Leg Holiday')->setCellValue('H'.$inc_row, '=A'.$inc_row);
+            $sheet->setCellValue('B'.$inc_row, $leg_hours)->setCellValue('I'.$inc_row, '=B'.$inc_row);
+            $sheet->setCellValue('C'.$inc_row, $leg_amount)->setCellValue('J'.$inc_row, '=C'.$inc_row);
+            $row++; $inc_row++;
+
+            // SPCL HOLIDAY
+            $spcl_hours = $s->income->spcl_hol;
+            $spcl_amount = ($spcl_hours) ? $this->calculate_all('spcl', $s) : '';
+            $sheet->setCellValue('A'.$inc_row, 'Spcl Holiday')->setCellValue('H'.$inc_row, '=A'.$inc_row);
+            $sheet->setCellValue('B'.$inc_row, $spcl_hours)->setCellValue('I'.$inc_row, '=B'.$inc_row);
+            $sheet->setCellValue('C'.$inc_row, $spcl_amount)->setCellValue('J'.$inc_row, '=C'.$inc_row);
+            $row++; $inc_row++; 
+
+            // LEG HOLIDAY OT
+            $leg_ot_hours = $s->income->leg_hol_ot;
+            $leg_ot_amount = ($leg_ot_hours) ? $this->calculate_all('leg_ot', $s) : '';
+            $sheet->setCellValue('A'.$inc_row, 'Leg Hol OT')->setCellValue('H'.$inc_row, '=A'.$inc_row);
+            $sheet->setCellValue('B'.$inc_row, $leg_ot_hours)->setCellValue('I'.$inc_row, '=B'.$inc_row);
+            $sheet->setCellValue('C'.$inc_row, $leg_ot_amount)->setCellValue('J'.$inc_row, '=C'.$inc_row);
+            $row++; $inc_row++; 
+
+            // SPCL HOLIDAY OT
+            $spcl_ot_hours = $s->income->spcl_hol_ot;
+            $spcl_ot_amount = ($spcl_ot_hours) ? $this->calculate_all('spcl_ot', $s) : '';
+            $sheet->setCellValue('A'.$inc_row, 'Spcl Hol OT')->setCellValue('H'.$inc_row, '=A'.$inc_row);
+            $sheet->setCellValue('B'.$inc_row, $spcl_ot_hours)->setCellValue('I'.$inc_row, '=B'.$inc_row);
+            $sheet->setCellValue('C'.$inc_row, $spcl_ot_amount)->setCellValue('J'.$inc_row, '=C'.$inc_row);
+            $row++; $inc_row++;
+            
+            // GROSS PAY
+            $sheet->setCellValue('A'.$inc_row, 'Gross Pay')->setCellValue('H'.$inc_row, '=A'.$inc_row);
+            $sheet->setCellValue('C'.$inc_row, '=sum(C'.$inc_ded_row.':C'.($inc_row-1).')')->setCellValue('J'.$inc_row, '=C'.$inc_row);
+
+            // INCOME -- END
+
+            // DEDUCTION -- START
+
+            // CASH ADVANCE
+            $cash_advance = $s->deduction->cash_advance;
+            $sheet->setCellValue('D'.$ded_row, 'Cash Advance')->setCellValue('K'.$ded_row, '=D'.$ded_row);
+            $sheet->setCellValue('E'.$ded_row, '')->setCellValue('L'.$ded_row, '=E'.$ded_row);
+            $sheet->setCellValue('F'.$ded_row, $cash_advance)->setCellValue('M'.$ded_row, '=F'.$ded_row);
+            $ded_row++;
+
+            // ABSENCE
+            $absence_days = $s->deduction->absence;
+            $absence_amount = ($absence_days) ? $this->calculate_all('absence', $s) : '';
+            $sheet->setCellValue('D'.$ded_row, 'Absence')->setCellValue('K'.$ded_row, '=D'.$ded_row);
+            $sheet->setCellValue('E'.$ded_row, $absence_days)->setCellValue('L'.$ded_row, '=E'.$ded_row);
+            $sheet->setCellValue('F'.$ded_row, $absence_amount)->setCellValue('M'.$ded_row, '=F'.$ded_row);
+            $ded_row++;
+
+            // LATE
+            $late_hours = $s->deduction->late;
+            $late_amount = ($late_hours) ? $this->calculate_all('late', $s) : '';
+            $sheet->setCellValue('D'.$ded_row, 'Late')->setCellValue('K'.$ded_row, '=D'.$ded_row);
+            $sheet->setCellValue('E'.$ded_row, $late_hours)->setCellValue('L'.$ded_row, '=E'.$ded_row);
+            $sheet->setCellValue('F'.$ded_row, $late_amount)->setCellValue('M'.$ded_row, '=F'.$ded_row);
+            $ded_row++;
+
+            // SSS
+            $sss = $s->deduction->sss;
+            $sheet->setCellValue('D'.$ded_row, 'SSS')->setCellValue('K'.$ded_row, '=D'.$ded_row);
+            //$sheet->mergeCells('D'.$ded_row.':E'.$ded_row)->mergeCells('K'.$ded_row.':L'.$ded_row);
+            $sheet->setCellValue('F'.$ded_row, $sss)->setCellValue('M'.$ded_row, '=F'.$ded_row);
+            $ded_row++;
+
+            // PHIC
+            $phic = $s->deduction->phic;
+            $sheet->setCellValue('D'.$ded_row, 'PHIC')->setCellValue('K'.$ded_row, '=D'.$ded_row);
+            //$sheet->mergeCells('D'.$ded_row.':E'.$ded_row)->mergeCells('K'.$ded_row.':L'.$ded_row);
+            $sheet->setCellValue('F'.$ded_row, $phic)->setCellValue('M'.$ded_row, '=F'.$ded_row);
+            $ded_row++;
+
+            // HDMF
+            $hdmf = $s->deduction->hdmf;
+            $sheet->setCellValue('D'.$ded_row, 'HDMF')->setCellValue('K'.$ded_row, '=D'.$ded_row);
+            ///$sheet->mergeCells('D'.$ded_row.':E'.$ded_row)->mergeCells('K'.$ded_row.':L'.$ded_row);
+            $sheet->setCellValue('F'.$ded_row, $hdmf)->setCellValue('M'.$ded_row, '=F'.$ded_row);
+            $ded_row++;
+
+            // UNDERTIME
+            $undertime_hours = $s->deduction->undertime;
+            $undertime_amount = ($undertime_hours) ? $this->calculate_all('undertime', $s) : '';
+            $sheet->setCellValue('D'.$ded_row, 'Undertime')->setCellValue('K'.$ded_row, '=D'.$ded_row);
+            $sheet->setCellValue('E'.$ded_row, $undertime_hours)->setCellValue('L'.$ded_row, '=E'.$ded_row);
+            $sheet->setCellValue('F'.$ded_row, $undertime_amount)->setCellValue('M'.$ded_row, '=F'.$ded_row);
+            $ded_row++;
+
+            // OTHERS
+            $others = $s->deduction->others;
+            $sheet->setCellValue('D'.$ded_row, 'Others')->setCellValue('K'.$ded_row, '=D'.$ded_row);
+            $sheet->mergeCells('D'.$ded_row.':E'.$ded_row)->mergeCells('K'.$ded_row.':L'.$ded_row);
+            $sheet->setCellValue('F'.$ded_row, $others)->setCellValue('M'.$ded_row, '=F'.$ded_row);
+            $ded_row++;
+
+            // MANDATORY ALLOCATION
+            $man_al = $s->deduction->man_allocation;
+            $sheet->setCellValue('D'.$ded_row, 'Mandatory Allocation')->setCellValue('K'.$ded_row, '=D'.$ded_row);
+            $sheet->mergeCells('D'.$ded_row.':E'.$ded_row)->mergeCells('K'.$ded_row.':L'.$ded_row);
+            $sheet->setCellValue('F'.$ded_row, $man_al)->setCellValue('M'.$ded_row, '=F'.$ded_row);
+            $ded_row++;
+
+            // TAX
+            $tax = $s->deduction->tax;
+            if($tax){
+                $sheet->setCellValue('D'.$ded_row, 'Tax')->setCellValue('K'.$ded_row, '=D'.$ded_row);
+                $sheet->mergeCells('D'.$ded_row.':E'.$ded_row)->mergeCells('K'.$ded_row.':L'.$ded_row);
+                $sheet->setCellValue('F'.$ded_row, $tax)->setCellValue('M'.$ded_row, '=F'.$ded_row);
+                $ded_row++;
+            }
+
+            // TOTAL DEDUCTIONS
+            $sheet->setCellValue('D'.$ded_row, 'Total Deduction')->setCellValue('K'.$ded_row, '=D'.$ded_row);
+            $sheet->mergeCells('D'.$ded_row.':E'.$ded_row)->mergeCells('K'.$ded_row.':L'.$ded_row);
+            $sheet->setCellValue('F'.$ded_row, '=sum(F'.$inc_ded_row.':F'.($ded_row-1).')')->setCellValue('M'.$ded_row, '=F'.$ded_row);
+
+            // DEDUCTION -- END
+
+            for($x = $ded_row; $x < $inc_row; $x++){
+                $sheet->mergeCells('D'.$x.':E'.$x)->mergeCells('K'.$x.':L'.$x);
+            }
+
+            // NET PAY
+            $sheet->setCellValue('D'.$inc_row, 'Net Pay')->setCellValue('K'.$inc_row, '=D'.$inc_row);
+            $sheet->mergeCells('D'.$inc_row.':E'.$inc_row)->mergeCells('K'.$inc_row.':L'.$inc_row);
+            if($s->deduction->wfh){
+                $wfh = $s->deduction->wfh / 100;
+                $net = '=(C'.$inc_row.' - F'.$ded_row.') * '.$wfh;
+            }else{
+                $net = '=C'.$inc_row.' - F'.$ded_row;
+            }
+            $sheet->setCellValue('F'.$inc_row, $net)->setCellValue('M'.$inc_row, '=F'.$inc_row);
+            
+            $footer_row = $inc_row;
+            $row++; $footer_row++;
+            
+            $net = number_format($sheet->getCell('F'.$inc_row)->getCalculatedValue(), 2, '.', '');
+            $received = 'Received the amount of '.$net.' pesos as my salary for the period of';
+            $sheet->setCellValue('A'.$footer_row, $received)->setCellValue('H'.$footer_row, '=A'.$footer_row);
+            $row++; $footer_row++;
+
+            $release = Carbon::parse($s->pay_date)->format('F d, Y');
+            $date_release = $period.' this '.$release;
+            $sheet->setCellValue('A'.$footer_row, $date_release)->setCellValue('H'.$footer_row, '=A'.$footer_row);;
+            $row++; $footer_row++;
+
+            $sheet->setCellValue('E'.$footer_row, 'Received By:')->setCellValue('L'.$footer_row, 'Received By:');
+            $row++; $footer_row++;
+            $sheet->getStyle('E'.$footer_row.':F'.$footer_row)->getBorders()->getBottom()->setBorderStyle(Border::BORDER_THIN);
+            $sheet->getStyle('L'.$footer_row.':M'.$footer_row)->getBorders()->getBottom()->setBorderStyle(Border::BORDER_THIN);
+
+            $row += 2;
+
+            // STYLES -- START
+
+            for($x = $body_starting_row; $x <= $inc_row; $x++){
+                foreach(range('A', 'F') as $key => $col){
+                    $sheet->getStyle($col.$x)->applyFromArray($borderStyleArray);
+                }
+                foreach(range('H', 'M') as $key => $col){
+                    $sheet->getStyle($col.$x)->applyFromArray($borderStyleArray);
+                }
+            }
+
+            $sheet->getStyle('A'.$body_starting_row.':F'.$inc_row)->applyFromArray($borderMediumStyleArray);
+            $sheet->getStyle('H'.$body_starting_row.':M'.$inc_row)->applyFromArray($borderMediumStyleArray);
+
+            $sheet->getStyle('A'.$font_starting_row.':M'.($footer_row-2))->getFont()->setSize(8);
+
+            $sheet->getStyle('C'.$inc_ded_row.':C'.$inc_row)->applyFromArray($numberStyleArray);
+            $sheet->getStyle('F'.$inc_ded_row.':F'.$inc_row)->applyFromArray($numberStyleArray);
+            $sheet->getStyle('J'.$inc_ded_row.':J'.$inc_row)->applyFromArray($numberStyleArray);
+            $sheet->getStyle('M'.$inc_ded_row.':M'.$inc_row)->applyFromArray($numberStyleArray);
+
+            $sheet->getStyle('B'.$inc_ded_row.':B'.$inc_row)->applyFromArray($daysStyleArray);
+            $sheet->getStyle('E'.$inc_ded_row.':E'.$inc_row)->applyFromArray($daysStyleArray);
+            $sheet->getStyle('I'.$inc_ded_row.':I'.$inc_row)->applyFromArray($daysStyleArray);
+            $sheet->getStyle('L'.$inc_ded_row.':L'.$inc_row)->applyFromArray($daysStyleArray);
+
+            // STYLES -- END
+
+            // PRINT
+
+            if($print_by_four == 4 || $print_counter == $salary_count){
+                $print_area .= 'A'.$print_row.':M'.($row-1);
+                if($print_counter != $salary_count){
+                    $print_area .= ',';
+                }
+                $print_by_four = 0;
+            }
+        }
+
+        $sheet->getPageSetup()->setPrintArea($print_area);
+
+        $filename = 'Payslip.xlsx';
+        
+        //redirect output to client
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="'.$filename.'"');
+        header('Cache-Control: max-age=0');
+
+        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+        ob_end_clean();
+        $writer->save('php://output');
+
     }
 }

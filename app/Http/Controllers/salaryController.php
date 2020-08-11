@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Traits\SalaryTraits;
 
 use Illuminate\Http\Request;
 use App\employee;
@@ -8,12 +9,16 @@ use App\emp_salary;
 use App\salary_monitoring;
 use App\salary_income;
 use App\salary_deduction;
+use App\lead_company_type;
+use App\branch;
+use App\role;
 use Auth;
 use Illuminate\Support\Facades\Hash;
 use Yajra\Datatables\Datatables;
 
 class salaryController extends Controller
 {
+    use SalaryTraits;
 
     public function __construct()
     {
@@ -28,28 +33,86 @@ class salaryController extends Controller
     public function index()
     {
         $emp_salary = emp_salary::with('employee')->get();
+        $lead_company_type = lead_company_type::all();
+        $branch = branch::all();
+        $role = role::all();
 
-        return view('pages.salary', compact('emp_salary'));
+        return view('pages.salary', compact('emp_salary', 'lead_company_type', 'branch', 'role'));
     }
 
-    public function view_employee_salary(){
-        $emp_salary = emp_salary::with('employee.company_type', 'employee.branch')->get();
+    public function view_employee_salary(Request $request){
+        $company = $request->company;
+        $branch = $request->branch;
+        $status = $request->status;
+        $role = $request->role;
+
+        $emp_salary = emp_salary::with('employee.company_type', 'employee.branch', 'employee.role')
+                    ->when($company != 'All', function($query) use($company) {
+                        $query->whereHas('employee', function($query) use($company) {
+                            $query->where('lead_company_type_id', $company);
+                        });
+                    })->when($branch != 'All', function($query) use($branch) {
+                        $query->whereHas('employee', function($query) use($branch) {
+                            $query->where('branch_id', $branch);
+                        });
+                    })->when($status != 'All', function($query) use($status) {
+                        $query->whereHas('employee', function($query) use($status) {
+                            $query->where('employment_status', $status);
+                        });
+                    })->when($role, function($query) use($role) {
+                        $query->whereHas('employee', function($query) use($role) {
+                            $query->whereIn('role_id', $role);
+                        });
+                    })->get();
 
         return Datatables::of($emp_salary)
         ->addColumn('name', function($data){
             return $data->employee->lname . ', ' . $data->employee->fname . ' ' . $data->employee->mname;
         })
+        ->editColumn('daily', function($data){
+            if($data->sal_type == 'Monthly' || $data->sal_type == 'Daily'){
+                return number_format($data->daily, 2, '.', '');
+            }
+            return $data->daily;
+        })
         ->addColumn('action', function($data){
             $html = '';
 
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_employee_salary" id="'.$data->id.'"><i class="fa fa-pen"></i></button>';
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_employee_salary" id="'.$data->emp_id.'"><i class="fa fa-pen"></i></button>';
             return $html;
         })
         ->make(true);
     }
 
-    public function view_salary(){
-        $salary = salary_monitoring::with('income', 'deduction', 'employee.branch', 'employee.company_type')->get();
+    public function view_salary(Request $request){
+        $company = $request->company;
+        $branch = $request->branch;
+        $status = $request->status;
+        $role = $request->role;
+        $date_counter = $request->date_counter;
+        $start_date = $request->start_date;
+        $end_date = $request->end_date;
+
+        $salary = salary_monitoring::with('income', 'deduction', 'employee.branch', 'employee.company_type', 'employee.role')
+                ->when($company != 'All', function($query) use($company) {
+                    $query->whereHas('employee', function($query) use($company) {
+                        $query->where('lead_company_type_id', $company);
+                    });
+                })->when($branch != 'All', function($query) use($branch) {
+                    $query->whereHas('employee', function($query) use($branch) {
+                        $query->where('branch_id', $branch);
+                    });
+                })->when($status != 'All', function($query) use($status) {
+                    $query->whereHas('employee', function($query) use($status) {
+                        $query->where('employment_status', $status);
+                    });
+                })->when($role, function($query) use($role) {
+                    $query->whereHas('employee', function($query) use($role) {
+                        $query->whereIn('role_id', $role);
+                    });
+                })->when($date_counter == 'true', function($query) use($start_date, $end_date) {
+                    $query->whereBetween('pay_date', [$start_date, $end_date]);
+                })->get();
 
         return Datatables::of($salary)
         ->addColumn('name', function($data){
@@ -85,6 +148,10 @@ class salaryController extends Controller
         ->addColumn('reg_ot', function($data){
             $reg_ot = $this->calculate_all('reg_ot', $data); //reg_ot_amount
             return ($data->income->reg_ot) ? '('.$data->income->reg_ot.')'.' '.$reg_ot : '';
+        })
+        ->addColumn('rd_ot', function($data){
+            $rd_ot = $this->calculate_all('rd_ot', $data); //rd_ot_amount
+            return ($data->income->rd_ot) ? '('.$data->income->rd_ot.')'.' '.$rd_ot : '';
         })
         ->addColumn('spcl', function($data){
             $spcl = $this->calculate_all('spcl', $data); //spcl_hol_amount
@@ -124,107 +191,7 @@ class salaryController extends Controller
         ->make(true);
     }
 
-    public function calculate_all($type, $d){
-        $rate = $d->rate;
-        $sal_type = $d->sal_type;
-        $daily = $d->daily;
-
-        $income_arr = ['basic', 'gross', 'reg_ot', 'spcl', 'leg',
-                        'spcl_ot', 'leg_ot', 'net',];
-
-        $deduction_arr = ['deduction', 'absence', 'late', 'undertime',
-                            'net'];
-
-        if(in_array($type, $income_arr)){
-            $inc = $d->income;
-            $gross = 0;
-
-            if($d->sal_type == 'Monthly'){
-                $gross += $rate / 2;
-            }
-            else if($d->sal_type == 'Daily'){
-                $basic_days = $inc->basic;
-                $gross += $daily * $basic_days; 
-            }
-
-            if($type == 'basic'){
-                return $gross;
-            }
-            
-            $gross += $inc->cola;
-            $gross += $inc->acc_allowance;
-            $gross += $inc->adjustments;
-            $gross += $inc->transpo_allowance;
-            $gross += $inc->market_comm;
-            $gross += $inc->jap_comm;
-            $gross += $inc->thirteenth;
-            
-            $ot_hours = [$inc->reg_ot, $inc->leg_hol, 
-            $inc->spcl_hol, $inc->leg_hol_ot, $inc->spcl_hol_ot];
-
-            $ot = ['reg', 'leg', 'spcl', 'leg_ot', 'spcl_ot'];
-
-            for($x = 0; $x < count($ot); $x++){
-                $amount = ($daily / 8) * $ot_hours[$x];
-
-                if($ot[$x] == 'reg'){
-                    $amount = number_format($amount * 1.25, 2, '.', '');
-                    if($type == 'reg_ot') return $amount;
-                }
-                else if($ot[$x] == 'spcl' || $ot[$x] == 'spcl_ot'){
-                    $amount = number_format($amount + ($amount *0.3), 2, '.', '');
-                    if($type == 'spcl') return $amount;
-                    if($type == 'spcl_ot') return $amount;
-                }
-                else if($ot[$x] == 'leg' || $ot[$x] == 'leg_ot'){
-                    $amount = number_format($amount * 2, 2, '.', '');
-                    if($type == 'leg') return $amount;
-                    if($type == 'leg_ot') return $amount;
-                }
-
-                $gross += $amount;
-            }
-
-            if($type == 'gross'){
-                return number_format($gross, 2, '.', '');
-            }
-        }
-        if(in_array($type, $deduction_arr)){
-            $ded = $d->deduction;
-            $deduction = 0;
-
-            $deduction += $ded->cash_advance;
-            $deduction += $ded->sss;
-            $deduction += $ded->phic;
-            $deduction += $ded->hdmf;
-            $deduction += $ded->others;
-            $deduction += $ded->tax;
-            $deduction += $ded->man_allocation;
-
-            $absence = number_format($daily * $ded->absence, 2, '.', '');
-            if($type == 'absence') return $absence;
-            $late = number_format(($daily / 8) * $ded->late, 2, '.', '');
-            if($type == 'late') return $late;
-            $undertime = number_format(($daily / 8) * $ded->undertime, 2, '.', '');
-            if($type == 'undertime') return $undertime;
-            
-            $deduction += $absence + $late + $undertime;
-
-            if($type == 'deduction'){
-                return number_format($deduction, 2, '.', '');
-            }
-        }
-        if($type == 'net'){
-            $net = $gross - $deduction;
-            if($d->deduction->wfh && $d->deduction->wfh > 0){
-                $net = $net * ($d->deduction->wfh / 100);
-            }
-
-            return number_format($net, 2, '.', '');
-        }
-    }
-
-    public function get_emp_salary(Request $request, $id){
+    public function get_emp_salary($id){
         $emp_salary = emp_salary::with('employee.company_type', 'employee.branch')->where('emp_id', $id)->first();
 
         return $emp_salary;
@@ -267,6 +234,7 @@ class salaryController extends Controller
         $sal_inc->market_comm = $request->mktg_comm;
         $sal_inc->jap_comm = $request->jap_comm;
         $sal_inc->reg_ot = $request->reg_ot_hours;
+        $sal_inc->rd_ot = $request->rd_ot_hours;
         $sal_inc->thirteenth = $request->thirteenth;
         $sal_inc->leg_hol = $request->leg_hol_hours;
         $sal_inc->spcl_hol = $request->spcl_hol_hours;
@@ -290,6 +258,36 @@ class salaryController extends Controller
         $sal_ded->save();
     }
 
+    public function bulk_save_salary(Request $request){
+        foreach($request->b_emp as $id){
+            $emp_sal = emp_salary::where('emp_id', $id)->first();
+        
+            $sal_mon = new salary_monitoring;
+            $sal_mon->emp_id = $id;
+            $sal_mon->rate = $emp_sal->rate;
+            $sal_mon->daily = $emp_sal->daily;
+            $sal_mon->sal_type = $emp_sal->sal_type;
+            $sal_mon->period_from = $request->b_cutoff_from;
+            $sal_mon->period_to = $request->b_cutoff_to;
+            $sal_mon->pay_date = $request->b_release;
+            $sal_mon->save();
+            $sal_inc = new salary_income;
+            $sal_inc->sal_mon_id = $sal_mon->id;
+            $sal_inc->basic = $request->b_basic_days;
+            $sal_inc->cola = $emp_sal->cola;
+            $sal_inc->acc_allowance = $emp_sal->acc_allowance;
+            $sal_inc->transpo_allowance = $emp_sal->transpo_allowance;
+            $sal_inc->save();
+            $sal_ded = new salary_deduction;
+            $sal_ded->sal_mon_id = $sal_mon->id;
+            $sal_ded->sss = $emp_sal->sss;
+            $sal_ded->phic = $emp_sal->phic;
+            $sal_ded->hdmf = $emp_sal->hdmf;
+            $sal_ded->wfh = $request->b_wfh;
+            $sal_ded->save();
+        }
+    }
+
     public function get_sal_mon($id){
         return salary_monitoring::with('employee.branch', 'employee.company_type', 'income', 'deduction')->where('id', $id)->first();
     }
@@ -304,7 +302,21 @@ class salaryController extends Controller
     }
 
     public function emp_salary_select(Request $request){
-        $employee = employee::all();
+        $role = $request->role;
+        $status = $request->status;
+
+        $employee = employee::where(function ($query) use($request){
+            $query->where('lname', 'like', '%'.$request->name.'%')
+            ->orWhere('fname', 'like', '%'.$request->name.'%')
+            ->orWhere('mname', 'like', '%'.$request->name.'%');
+        })
+        ->when($role != 'All', function($query) use($role){
+            $query->where('role_id', $role);
+        })
+        ->when($status != 'All', function($query) use($status){
+            $query->where('employment_status', $status);
+        })->get();
+
         foreach($employee as $e){
             $sal_mon = salary_monitoring::where('pay_date', $request->date)->where('emp_id', $e->id)->get();
             if($sal_mon->isNotEmpty()){
@@ -321,6 +333,55 @@ class salaryController extends Controller
                 'id' => $value['id'],
                 'text' => $value['pay_icon'].$value['lname'].', '.$value['fname'].' '.$value['mname'],
                 'title' => $value['lname'].', '.$value['fname'].' '.$value['mname']
+            ];
+        }
+        return json_encode(['results' => $array]);
+    }
+
+    public function salary_position_select(Request $request){
+        $status = $request->status;
+        $name = $request->name;
+
+        $role = role::with('employee')
+        ->when($name != '', function($query) use($name){
+            $query->Where('name', $name);
+        })
+        ->when($status != 'All', function($query) use($name, $status){
+            $query->whereHas('employee', function($query) use($status){
+                $query->Where('employment_status', $status);
+            });
+        })->get();
+
+        foreach($role as $r){
+            $id = $r->id;
+
+            $sal_mon = salary_monitoring::with('employee_many')
+            ->where('pay_date', $request->date)
+            ->whereHas('employee', function($query) use($id, $status){
+                $query->where('role_id', $id)
+                ->when($status != '', function($query) use($status){
+                    $query->where('employment_status', $status);
+                });
+            })->groupBy('emp_id')->count();
+            
+            if($sal_mon == count($r->employee)){
+                $r->pay_icon = '<i class="fa fa-check text-success"></i> ';
+            }else{
+                $r->pay_icon = '<i class="fa fa-minus text-danger"></i> ';
+            } 
+        }
+
+        $array = [];
+        $array[] = [
+            'id' => 'All',
+            'text' => 'All',
+            'title' => 'All'
+        ];
+        foreach ($role as $key => $value){
+            $array[] = [
+                'id' => $value['id'],
+                'text' => $value['pay_icon'].' '.$value['name'],
+                'title' => $value['name']
             ];
         }
         return json_encode(['results' => $array]);

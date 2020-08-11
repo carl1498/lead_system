@@ -45,12 +45,45 @@
 
                         <div class="row clearfix">
                             <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3 form-control-label">
+                                    <label for="position" class="pull-right">Position</label>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-7 col-xs-7">
+                                <div class="form-group">
+                                    <select type="text" id="position" class="form-control select2" style="width: 100%;">
+                                        <option value="All">All</option>
+                                        @foreach($role as $r)
+                                            <option value="{{ $r->id }}">{{ $r->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3"></div>
+                            <div class="col-lg-1 col-md-1 col-sm-3 col-xs-3 form-control-label">
+                                    <label for="status" class="pull-right">Status</label>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-7 col-xs-7">
+                                <div class="form-group">
+                                    <select type="text" id="status" class="form-control select2" style="width: 100%;">
+                                        <option value="Active">Active</option>
+                                        <option value="Resigned">Resigned</option>
+                                        <option value="All">All</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-12">
+
+                        <div class="row clearfix">
+                            <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3 form-control-label">
                                     <label for="emp" class="pull-right">Employee</label>
                             </div>
                             <div class="col-lg-5 col-md-5 col-sm-7 col-xs-7">
                                 <div class="form-group required">
                                     <select type="text" id="emp" name="emp" class="form-control select2 required" style="width: 100%;" required>
-                                        <option value="">Select Employee</option>
+                                        <option value="" >Select Employee</option>
                                         @foreach($emp_salary as $e)
                                             <option value="{{ $e->employee->id }}">{{ $e->employee->lname }}, {{ $e->employee->fname }} {{ $e->employee->mname }}</option>
                                         @endforeach
@@ -212,6 +245,22 @@
                             <div class="col-lg-4 col-md-4 col-sm-7 col-xs-7">
                                 <div class="form-group">
                                     <input type="number" step="any" id="reg_ot_amount" name="reg_ot_amount" class="form-control" placeholder="Reg. OT Amount" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row clearfix">
+                            <div class="col-lg-5 col-md-5 col-sm-3 col-xs-3 form-control-label">
+                                    <label for="rd_ot_hours" class="pull-right">RD OT</label>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-7 col-xs-7">
+                                <div class="form-group">
+                                    <input type="number" step="any" id="rd_ot_hours" name="rd_ot_hours" class="form-control" placeholder="Hours">
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-7 col-xs-7">
+                                <div class="form-group">
+                                    <input type="number" step="any" id="rd_ot_amount" name="rd_ot_amount" class="form-control" placeholder="RD OT Amount" readonly>
                                 </div>
                             </div>
                         </div>
@@ -470,6 +519,14 @@
                         </div>
 
                         <div class="row clearfix">
+                            <div class="col-lg-6 col-md-6 col-sm-7 col-xs-7">
+                                <div class="form-group" style="visibility: hidden;">
+                                    <input type="number" class="form-control" placeholder="Blank" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row clearfix">
                             <div class="col-lg-5 col-md-5 col-sm-3 col-xs-3 form-control-label">
                                     <label for="wfh" class="pull-right">WFH</label>
                             </div>
@@ -497,7 +554,7 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary save_salary">Save changes</button>
+                    <button type="submit" class="btn btn-primary save_salary">SAVE CHANGES</button>
                 </div>
             </form>
         </div>

@@ -8,6 +8,7 @@
                 <th>Name</th>
                 <th>Branch</th>
                 <th>Company</th>
+                <th>Position</th>
                 <th>Salary Type</th>
                 <th>Rate</th>
                 <th>Daily</th>
@@ -20,7 +21,7 @@
                 <th>Action</th>
             </tr>
         </thead>
-        <tfoot>
+        <!--<tfoot>
             <tr>
                 <th></th>
                 <th></th>
@@ -36,7 +37,7 @@
                 <th></th>
                 <th></th>
             </tr>
-        </tfoot>
+        </tfoot>-->
     </table>
 
 </div>
@@ -53,6 +54,7 @@
                 <th>Name</th>
                 <th>Branch</th>
                 <th>Company</th>
+                <th>Position</th>
                 <th>Salary Type</th>
                 <th>Rate</th>
                 <th>Daily</th>
@@ -71,6 +73,7 @@
                 <th>Marketing Commission</th>
                 <th>Japan Commission</th>
                 <th>Reg OT</th>
+                <th>RD OT</th>
                 <th>Leg Hol</th>
                 <th>Spcl Hol</th>
                 <th>Leg Hol OT</th>
@@ -90,6 +93,9 @@
         </thead>
         <tfoot>
             <tr>
+                <th></th>
+                <th></th>
+                <th></th>
                 <th></th>
                 <th></th>
                 <th></th>

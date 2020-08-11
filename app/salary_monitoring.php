@@ -24,5 +24,9 @@ class salary_monitoring extends Model
         return $this->hasOne('App\employee', 'id', 'emp_id');
     }
 
+    public function employee_many(){
+        return $this->hasMany('App\employee', 'role_id', 'id');
+    }
+
     public $timestamps = true;
 }

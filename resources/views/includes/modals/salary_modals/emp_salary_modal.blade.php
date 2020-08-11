@@ -78,7 +78,7 @@
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-7 col-xs-7">
                                 <div class="form-group">
-                                    <input type="text" id="cola" name="cola" class="form-control required" placeholder="Enter COLA" required>
+                                    <input type="text" id="cola" name="cola" class="form-control" placeholder="Enter COLA">
                                 </div>
                             </div>
                         </div>
@@ -89,7 +89,7 @@
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-7 col-xs-7">
                                 <div class="form-group">
-                                    <input type="text" id="accom" name="accom" class="form-control required" placeholder="Enter Accommodation" required>
+                                    <input type="text" id="accom" name="accom" class="form-control" placeholder="Enter Accommodation">
                                 </div>
                             </div>
                         </div>
@@ -100,7 +100,7 @@
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-7 col-xs-7">
                                 <div class="form-group">
-                                    <input type="text" id="transpo" name="transpo" class="form-control required" placeholder="Enter Transporation" required>
+                                    <input type="text" id="transpo" name="transpo" class="form-control" placeholder="Enter Transporation">
                                 </div>
                             </div>
                         </div>
@@ -124,7 +124,7 @@
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-7 col-xs-7">
                                 <div class="form-group">
-                                    <input type="text" id="sss" name="sss" class="form-control required" placeholder="Enter SSS" required>
+                                    <input type="text" id="sss" name="sss" class="form-control" placeholder="Enter SSS">
                                 </div>
                             </div>
                         </div>
@@ -135,7 +135,7 @@
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-7 col-xs-7">
                                 <div class="form-group">
-                                    <input type="text" id="phic" name="phic" class="form-control required" placeholder="Enter Philhealth" required>
+                                    <input type="text" id="phic" name="phic" class="form-control" placeholder="Enter Philhealth">
                                 </div>
                             </div>
                         </div>
@@ -146,7 +146,7 @@
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-7 col-xs-7">
                                 <div class="form-group">
-                                    <input type="text" id="hdmf" name="hdmf" class="form-control required" placeholder="Enter Philhealth" required>
+                                    <input type="text" id="hdmf" name="hdmf" class="form-control" placeholder="Enter Philhealth">
                                 </div>
                             </div>
                         </div>

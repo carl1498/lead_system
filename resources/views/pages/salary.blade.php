@@ -14,6 +14,9 @@
             <button data-container="body" data-toggle="tooltip" data-placement="left" title="Add" class="btn btn-secondary bg-red add_salary">
                 <i class="fa fa-plus-square"></i>
             </button>
+            <button data-container="body" data-toggle="tooltip" data-placement="left" title="Bulk Add" class="btn btn-secondary bg-red bulk_add_salary">
+                <i class="fa fa-plus-circle"></i>
+            </button>
         </li>
     </ol>
 </section>
@@ -32,6 +35,7 @@
 
                 <div class="tab-content">
                     
+                    @include('includes.salary_select')
                     @include('includes.tabs.salary_tabs')
 
                 </div>
@@ -42,8 +46,10 @@
 
     <!-- MODALS -- START -->
 
+    @include('includes.modals.salary_modals.filter_modal')
     @include('includes.modals.salary_modals.emp_salary_modal')
     @include('includes.modals.salary_modals.salary_modal')
+    @include('includes.modals.salary_modals.bulk_salary_modal')
 
     <!-- MODALS -- END -->
 
