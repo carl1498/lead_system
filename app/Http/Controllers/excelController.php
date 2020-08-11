@@ -1171,6 +1171,7 @@ class excelController extends Controller
             }
 
             //Title
+            info($s->employee->company_type);
             switch($s->employee->company_type->name) {
                 case 'LEAD':
                     $company_name = 'LEAD TRAINING AND BUSINESS SOLUTIONS';
@@ -1523,7 +1524,9 @@ class excelController extends Controller
             }
         }
 
-        $sheet->getPageSetup()->setPrintArea($print_area);
+        if($print_area != ''){
+            $sheet->getPageSetup()->setPrintArea($print_area);
+        }
 
         $filename = 'Payslip.xlsx';
         
