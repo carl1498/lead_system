@@ -1171,7 +1171,6 @@ class excelController extends Controller
             }
 
             //Title
-            info($s->employee->company_type);
             switch($s->employee->company_type->name) {
                 case 'LEAD':
                     $company_name = 'LEAD TRAINING AND BUSINESS SOLUTIONS';
