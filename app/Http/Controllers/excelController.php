@@ -1267,8 +1267,12 @@ class excelController extends Controller
 
             // TRANSPORATION ALLOWANCE
             $transpo = $s->income->transpo_allowance;
+            $transpo_days = $s->income->transpo_days;
+            $transpo_allowance = $s->income->transpo_allowance;
+            $transpo = $transpo_days * $transpo_allowance;
             if($transpo){
                 $sheet->setCellValue('A'.$inc_row, 'Transpo Allowance')->setCellValue('H'.$inc_row, '=A'.$inc_row);
+                $sheet->setCellValue('B'.$inc_row, $transpo_days)->setCellValue('I'.$inc_row, '=B'.$inc_row);
                 $sheet->setCellValue('C'.$inc_row, $transpo)->setCellValue('J'.$inc_row, '=C'.$inc_row);
                 $row++; $inc_row++;
             }
