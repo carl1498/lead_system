@@ -202,11 +202,21 @@
 
                         <div class="row clearfix">
                             <div class="col-lg-5 col-md-5 col-sm-3 col-xs-3 form-control-label">
-                                    <label for="s_transpo" class="pull-right">Transporation</label>
+                                    <label for="transpo_days" class="pull-right">Transporation</label>
                             </div>
-                            <div class="col-lg-6 col-md-6 col-sm-7 col-xs-7">
+                            <div class="col-lg-2 col-md-2 col-sm-7 col-xs-7">
                                 <div class="form-group">
-                                    <input type="number" step="any" id="s_transpo" name="s_transpo" class="form-control" placeholder="Enter Transporation">
+                                    <input type="number" step="any" id="transpo_days" name="transpo_days" class="form-control" placeholder="Days">
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-7 col-xs-7">
+                                <div class="form-group">
+                                    <input type="number" step="any" id="s_transpo" name="s_transpo" class="form-control" placeholder="Amount" style="padding-right: 0;">
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-7 col-xs-7">
+                                <div class="form-group">
+                                    <input type="number" step="any" id="s_transpo_amount" name="s_transpo_amount" class="form-control" placeholder="Total" readonly style="padding-right: 0;">
                                 </div>
                             </div>
                         </div>

@@ -15,12 +15,12 @@ $(document).ready(function(){
     var ot_type = ['#reg_ot_amount', '#rd_ot_amount', '#spcl_hol_amount', '#spcl_hol_ot_amount', '#leg_hol_amount', '#leg_hol_ot_amount'];
     
     var income_all = ['#basic_amount', '#s_accom', '#s_cola', 
-                    '#s_transpo', '#mktg_comm', '#jap_comm', '#reg_ot_amount', '#rd_ot_amount',
+                    '#s_transpo_amount', '#mktg_comm', '#jap_comm', '#reg_ot_amount', '#rd_ot_amount',
                     '#leg_hol_amount', '#leg_hol_ot_amount', '#spcl_hol_amount',
                     '#spcl_hol_ot_amount', '#adjustments', '#thirteenth'];
     var deduction_all = ['#cash_advance', '#absence_amount', '#late_amount', '#s_sss', '#s_phic',
                         '#s_hdmf', '#others', '#under_amount', '#tax', '#man_allocation']
-    var keyup = `#s_rate, #s_daily, #basic_days, #s_accom, #s_cola, #s_transpo, #mktg_comm, #jap_comm, 
+    var keyup = `#s_rate, #s_daily, #basic_days, #s_accom, #s_cola, #transpo_days, #s_transpo, #mktg_comm, #jap_comm, 
                 #reg_ot_hours, #rd_ot_hours, #leg_hol_hours, #spcl_hol_hours, #leg_hol_ot_hours, #spcl_hol_ot_hours,
                 #thirteenth, #adjustments, #cash_advance, #absence_days, #late_hours, #s_sss, #s_phic,
                 #s_hdmf, #others, #under_hours, #tax, #man_allocation, #wfh`;
@@ -74,8 +74,8 @@ $(document).ready(function(){
         });
         $(this).find("input,textarea,select").val('').end();
         $('#emp_salary_form .select2, #salary_form .select2, #bulk_salary_form .select2').trigger('change.select2');
-        $('#b_position').val('All').trigger('change.select2');
-        $('#b_status').val('Active').trigger('change.select2');
+        $('#position, #b_position').val('All').trigger('change.select2');
+        $('#status, #b_status').val('Active').trigger('change.select2');
     });
 
     $("#filter_modal").on("hidden.bs.modal", function(e){
@@ -233,7 +233,7 @@ $(document).ready(function(){
                 {data: 'basic', name: 'basic'},
                 {data: 'income.cola', name: 'cola'},
                 {data: 'income.acc_allowance', name: 'accomm'},
-                {data: 'income.transpo_allowance', name: 'transpo'},
+                {data: 'transpo', name: 'transpo'},
                 {data: 'income.thirteenth', name: 'thirteenth'},
                 {data: 'income.adjustments', name: 'adjustment'},
                 {data: 'income.market_comm', name: 'market_comm'},
@@ -480,6 +480,10 @@ $(document).ready(function(){
             $('#basic_amount').val((daily * basic_days).toFixed(2)).trigger('change');
         }
 
+        let transpo_days = $('#transpo_days').val();
+        let transpo_allowance = $('#s_transpo').val();
+        $('#s_transpo_amount').val((transpo_days * transpo_allowance).toFixed(2));
+
         for(let x = 0; x < ot_hours.length; x++){
             let amount = (daily / 8) * $(ot_hours[x]).val();
 
@@ -584,6 +588,7 @@ $(document).ready(function(){
                 $('#basic_days').val(data.income.basic);
                 $('#s_accom').val(data.income.acc_allowance);
                 $('#s_cola').val(data.income.cola);
+                $('#transpo_days').val(data.income.transpo_days);
                 $('#s_transpo').val(data.income.transpo_allowance);
                 $('#mktg_comm').val(data.income.market_comm);
                 $('#jap_comm').val(data.income.jap_comm);

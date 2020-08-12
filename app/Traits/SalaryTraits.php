@@ -7,7 +7,7 @@ trait SalaryTraits {
         $sal_type = $d->sal_type;
         $daily = $d->daily;
 
-        $income_arr = ['basic', 'gross', 'reg_ot', 'rd_ot', 'spcl', 'leg',
+        $income_arr = ['basic', 'transpo', 'gross', 'reg_ot', 'rd_ot', 'spcl', 'leg',
                         'spcl_ot', 'leg_ot', 'net'];
 
         $deduction_arr = ['deduction', 'absence', 'late', 'undertime',
@@ -26,13 +26,19 @@ trait SalaryTraits {
             }
 
             if($type == 'basic'){
-                return $gross;
+                return number_format($gross, 2, '.', '');
+            }
+
+            $transpo_amount = $inc->transpo_days * $inc->transpo_allowance;
+            $transpo_amount = number_format($transpo_amount, 2, '.', '');
+            if($type == 'transpo'){
+                return $transpo_amount;
             }
             
             $gross += $inc->cola;
             $gross += $inc->acc_allowance;
             $gross += $inc->adjustments;
-            $gross += $inc->transpo_allowance;
+            $gross += $transpo_amount;
             $gross += $inc->market_comm;
             $gross += $inc->jap_comm;
             $gross += $inc->thirteenth;

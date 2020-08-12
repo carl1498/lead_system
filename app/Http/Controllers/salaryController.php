@@ -145,6 +145,10 @@ class salaryController extends Controller
             $basic = $this->calculate_all('basic', $data); //basic_amount
             return '('.$data->income->basic.')'.' '.$basic;
         })
+        ->addColumn('transpo', function($data){
+            $transpo = $this->calculate_all('transpo', $data); //transpo_amount
+            return ($data->income->transpo_days) ? '('.$data->income->transpo_days.')'.' '.$transpo : '';
+        })
         ->addColumn('reg_ot', function($data){
             $reg_ot = $this->calculate_all('reg_ot', $data); //reg_ot_amount
             return ($data->income->reg_ot) ? '('.$data->income->reg_ot.')'.' '.$reg_ot : '';
@@ -231,6 +235,7 @@ class salaryController extends Controller
         $sal_inc->acc_allowance = $request->s_accom;
         $sal_inc->adjustments = $request->adjustments;
         $sal_inc->transpo_allowance = $request->s_transpo;
+        $sal_inc->transpo_days = $request->transpo_days;
         $sal_inc->market_comm = $request->mktg_comm;
         $sal_inc->jap_comm = $request->jap_comm;
         $sal_inc->reg_ot = $request->reg_ot_hours;
@@ -276,6 +281,9 @@ class salaryController extends Controller
             $sal_inc->basic = $request->b_basic_days;
             $sal_inc->cola = $emp_sal->cola;
             $sal_inc->acc_allowance = $emp_sal->acc_allowance;
+            if($emp_sal->transpo_allowance){
+                $sal_inc->transpo_days = $request->b_basic_days;
+            }
             $sal_inc->transpo_allowance = $emp_sal->transpo_allowance;
             $sal_inc->save();
             $sal_ded = new salary_deduction;
