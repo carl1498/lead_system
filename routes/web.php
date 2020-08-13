@@ -79,38 +79,9 @@ Route::group(['middleware' => ['auth', 'student_list']], function(){
     Route::get('/get_student', 'studentController@get_student');
     Route::get('/delete_student', 'studentController@delete_student')->middleware('student_high');
 
-    //Student Class
-    Route::get('/classes', 'studentClassController@index');
-    Route::get('/get_class/{current_class_tab}', 'studentClassController@get_class');
-    Route::get('/senseiClass/{completeCheck}', 'studentClassController@sensei_class');
-    Route::get('/dateClass', 'studentClassController@date_class');
-    Route::get('/studentClass', 'studentClassController@student_class');
-    Route::get('/check_student_class/{student}', 'studentClassController@check_student_class');
-    Route::get('/class_students', 'studentClassController@class_students');
-    Route::get('/no_class_students', 'studentClassController@no_class_students');
-    Route::get('/with_class_students', 'studentClassController@with_class_students');
-    Route::get('/get_class_settings/{current_class_select}', 'studentClassController@get_class_settings');
-    Route::get('/all_class_students', 'studentClassController@all_class_students');
-    Route::get('/view_student_class_history/{id}', 'studentClassController@view_student_class_history');
-    Route::get('/student_class_name/{id}', 'studentClassController@student_class_name');
-
     //PDF
     Route::get('/studentPDF/{id}', 'pdfController@studentPDF');
 
-    //Student Class Higher
-    Route::group(['middleware' => ['student_class_add']], function(){
-        Route::post('/add_class', 'studentClassController@add_class');
-        Route::get('/assign_student_class', 'studentClassController@assign_student_class');
-
-        Route::group(['middleware' => ['student_class_high']], function(){
-            Route::get('/delete_class', 'studentClassController@delete_class');
-            Route::get('/get_student_date/{id}', 'studentClassController@get_student_date');
-            Route::post('/edit_student_date', 'studentClassController@edit_student_date');
-            Route::get('/remove_student_class/{id}', 'studentClassController@remove_student_class');
-            Route::get('/end_class', 'studentClassController@end_class');
-            Route::post('/edit_class', 'studentClassController@edit_class')->middleware('student_class_high');
-        });
-    });
 
     //Student Logs
     Route::get('/student_add_history', 'studentLogsController@add_history_page');
@@ -145,6 +116,40 @@ Route::group(['middleware' => ['auth', 'student_list']], function(){
     Route::get('/delete_student_education', 'studentController@delete_student_education');
 
     //STUDENT INFO -- END
+});
+
+
+//STUDENT CLASS
+Route::group(['middleware' => ['auth', 'student_class_page']], function(){
+    //Student Class
+    Route::get('/classes', 'studentClassController@index');
+    Route::get('/get_class/{current_class_tab}', 'studentClassController@get_class');
+    Route::get('/senseiClass/{completeCheck}', 'studentClassController@sensei_class');
+    Route::get('/dateClass', 'studentClassController@date_class');
+    Route::get('/studentClass', 'studentClassController@student_class');
+    Route::get('/check_student_class/{student}', 'studentClassController@check_student_class');
+    Route::get('/class_students', 'studentClassController@class_students');
+    Route::get('/no_class_students', 'studentClassController@no_class_students');
+    Route::get('/with_class_students', 'studentClassController@with_class_students');
+    Route::get('/get_class_settings/{current_class_select}', 'studentClassController@get_class_settings');
+    Route::get('/all_class_students', 'studentClassController@all_class_students');
+    Route::get('/view_student_class_history/{id}', 'studentClassController@view_student_class_history');
+    Route::get('/student_class_name/{id}', 'studentClassController@student_class_name');
+
+    //Student Class Higher
+    Route::group(['middleware' => ['student_class_add']], function(){
+        Route::post('/add_class', 'studentClassController@add_class');
+        Route::get('/assign_student_class', 'studentClassController@assign_student_class');
+
+        Route::group(['middleware' => ['student_class_high']], function(){
+            Route::get('/delete_class', 'studentClassController@delete_class');
+            Route::get('/get_student_date/{id}', 'studentClassController@get_student_date');
+            Route::post('/edit_student_date', 'studentClassController@edit_student_date');
+            Route::get('/remove_student_class/{id}', 'studentClassController@remove_student_class');
+            Route::get('/end_class', 'studentClassController@end_class');
+            Route::post('/edit_class', 'studentClassController@edit_class')->middleware('student_class_high');
+        });
+    });
 });
 
 Route::group(['middleware' => ['auth', 'student_settings']], function(){

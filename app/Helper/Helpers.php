@@ -78,7 +78,7 @@ function canAccessStudentList(){
     $id = Auth::user()->id;
     $user = \App\User::with('employee.role')->find($id);
     $authorized = ['Admin', 'Branch Manager', 'OIC', 'HR/Finance Officer', 'Marketing Manager', 'Marketing Head', 
-        'Marketing Officer', 'Documentation Head', 'Documentation Officer', 'Language Head', 'Language Teacher',
+        'Marketing Officer', 'Documentation Head', 'Documentation Officer', 'Language Head',
         'Liaison Officer', 'Intern', 'Assistant Finance Officer'];
 
     foreach($authorized as $auth){

@@ -397,7 +397,7 @@
 
                         <div class="row clearfix">
                             <div class="col-lg-5 col-md-5 col-sm-3 col-xs-3 form-control-label">
-                                    <label for="absence_days" class="pull-right">Absence</label>
+                                    <label for="absence_days" class="pull-right">Absent</label>
                             </div>
                             <div class="col-lg-2 col-md-2 col-sm-7 col-xs-7">
                                 <div class="form-group">
@@ -406,7 +406,7 @@
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-7 col-xs-7">
                                 <div class="form-group">
-                                    <input type="number" step="any" id="absence_amount" name="absence_amount" class="form-control" placeholder="Absence Amount" readonly>
+                                    <input type="number" step="any" id="absence_amount" name="absence_amount" class="form-control" placeholder="Absent Amount" readonly>
                                 </div>
                             </div>
                         </div>

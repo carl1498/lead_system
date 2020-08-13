@@ -1373,10 +1373,10 @@ class excelController extends Controller
             $sheet->setCellValue('F'.$ded_row, $cash_advance)->setCellValue('M'.$ded_row, '=F'.$ded_row);
             $ded_row++;
 
-            // ABSENCE
+            // ABSENT
             $absence_days = $s->deduction->absence;
             $absence_amount = ($absence_days) ? $this->calculate_all('absence', $s) : '';
-            $sheet->setCellValue('D'.$ded_row, 'Absence')->setCellValue('K'.$ded_row, '=D'.$ded_row);
+            $sheet->setCellValue('D'.$ded_row, 'Absent')->setCellValue('K'.$ded_row, '=D'.$ded_row);
             $sheet->setCellValue('E'.$ded_row, $absence_days)->setCellValue('L'.$ded_row, '=E'.$ded_row);
             $sheet->setCellValue('F'.$ded_row, $absence_amount)->setCellValue('M'.$ded_row, '=F'.$ded_row);
             $ded_row++;
