@@ -1445,9 +1445,11 @@ class excelController extends Controller
                 $ded_row++;
             }
 
-            if($inc_row >= $ded_row){
+            if($inc_row <= $ded_row){
                 $inc_row = $ded_row+1;
                 $higher_row = $ded_row+1;
+            }else{
+                $higher_row = $inc_row;
             }
 
             // GROSS PAY
