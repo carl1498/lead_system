@@ -1424,18 +1424,22 @@ class excelController extends Controller
             $ded_row++;
 
             // OTHERS
-            $others = $s->deduction->others;
-            $sheet->setCellValue('D'.$ded_row, 'Others')->setCellValue('K'.$ded_row, '=D'.$ded_row);
-            $sheet->mergeCells('D'.$ded_row.':E'.$ded_row)->mergeCells('K'.$ded_row.':L'.$ded_row);
-            $sheet->setCellValue('F'.$ded_row, $others)->setCellValue('M'.$ded_row, '=F'.$ded_row);
-            $ded_row++;
+                $others = $s->deduction->others;
+            if($others){
+                $sheet->setCellValue('D'.$ded_row, 'Others')->setCellValue('K'.$ded_row, '=D'.$ded_row);
+                $sheet->mergeCells('D'.$ded_row.':E'.$ded_row)->mergeCells('K'.$ded_row.':L'.$ded_row);
+                $sheet->setCellValue('F'.$ded_row, $others)->setCellValue('M'.$ded_row, '=F'.$ded_row);
+                $ded_row++;
+            }
 
             // MANDATORY ALLOCATION
             $man_al = $s->deduction->man_allocation;
-            $sheet->setCellValue('D'.$ded_row, 'Mandatory Allocation')->setCellValue('K'.$ded_row, '=D'.$ded_row);
-            $sheet->mergeCells('D'.$ded_row.':E'.$ded_row)->mergeCells('K'.$ded_row.':L'.$ded_row);
-            $sheet->setCellValue('F'.$ded_row, $man_al)->setCellValue('M'.$ded_row, '=F'.$ded_row);
-            $ded_row++;
+            if($man_al){
+                $sheet->setCellValue('D'.$ded_row, 'Mandatory Allocation')->setCellValue('K'.$ded_row, '=D'.$ded_row);
+                $sheet->mergeCells('D'.$ded_row.':E'.$ded_row)->mergeCells('K'.$ded_row.':L'.$ded_row);
+                $sheet->setCellValue('F'.$ded_row, $man_al)->setCellValue('M'.$ded_row, '=F'.$ded_row);
+                $ded_row++;
+            }
 
             // TAX
             $tax = $s->deduction->tax;
