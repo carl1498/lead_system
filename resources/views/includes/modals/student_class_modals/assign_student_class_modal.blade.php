@@ -44,10 +44,10 @@
                         </div>
 
                         <div class="row clearfix">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 form-control-label">
+                            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-4 form-control-label">
                                     <label for="date_class" class="pull-right">Class</label>
                             </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                            <div class="col-lg-6 col-md-6 col-sm-4 col-xs-4">
                                 <div class="form-group required">
                                     <select type="text" id="date_class" name="date_class" class="form-control select2 required" style="width: 100%;" disabled required>
                                         <!-- Controller: studentClassController@date_class -->

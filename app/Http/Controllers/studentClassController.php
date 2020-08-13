@@ -476,7 +476,7 @@ class studentClassController extends Controller
         foreach ($class_settings as $key => $value){
             $array[] = [
                 'id' => $value['id'],
-                'text' => $value['start_date'].' ~ '.$value['end_date']
+                'text' => 'Class ID: ' . $value['id'] . ' | ' . $value['start_date'].' ~ '.$value['end_date']
             ];
         }
         return json_encode(['results' => $array]);
