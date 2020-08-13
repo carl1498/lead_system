@@ -1325,11 +1325,9 @@ class excelController extends Controller
 
             // ADJUSTMENTS
             $adjustments = $s->income->adjustments;
-            if($jap){
-                $sheet->setCellValue('A'.$inc_row, 'Adjustments')->setCellValue('H'.$inc_row, '=A'.$inc_row);
-                $sheet->setCellValue('C'.$inc_row, $adjustments)->setCellValue('J'.$inc_row, '=C'.$inc_row);
-                $row++; $inc_row++;
-            }
+            $sheet->setCellValue('A'.$inc_row, 'Adjustments')->setCellValue('H'.$inc_row, '=A'.$inc_row);
+            $sheet->setCellValue('C'.$inc_row, $adjustments)->setCellValue('J'.$inc_row, '=C'.$inc_row);
+            $row++; $inc_row++;
 
             // LEG HOLIDAY
             $leg_hours = $s->income->leg_hol;
@@ -1363,9 +1361,6 @@ class excelController extends Controller
             $sheet->setCellValue('C'.$inc_row, $spcl_ot_amount)->setCellValue('J'.$inc_row, '=C'.$inc_row);
             $row++; $inc_row++;
             
-            // GROSS PAY
-            $sheet->setCellValue('A'.$inc_row, 'Gross Pay')->setCellValue('H'.$inc_row, '=A'.$inc_row);
-            $sheet->setCellValue('C'.$inc_row, '=sum(C'.$inc_ded_row.':C'.($inc_row-1).')')->setCellValue('J'.$inc_row, '=C'.$inc_row);
 
             // INCOME -- END
 
@@ -1424,7 +1419,7 @@ class excelController extends Controller
             $ded_row++;
 
             // OTHERS
-                $others = $s->deduction->others;
+            $others = $s->deduction->others;
             if($others){
                 $sheet->setCellValue('D'.$ded_row, 'Others')->setCellValue('K'.$ded_row, '=D'.$ded_row);
                 $sheet->mergeCells('D'.$ded_row.':E'.$ded_row)->mergeCells('K'.$ded_row.':L'.$ded_row);
@@ -1450,6 +1445,15 @@ class excelController extends Controller
                 $ded_row++;
             }
 
+            if($inc_row >= $ded_row){
+                $inc_row = $ded_row+1;
+                $higher_row = $ded_row+1;
+            }
+
+            // GROSS PAY
+            $sheet->setCellValue('A'.$inc_row, 'Gross Pay')->setCellValue('H'.$inc_row, '=A'.$inc_row);
+            $sheet->setCellValue('C'.$inc_row, '=sum(C'.$inc_ded_row.':C'.($inc_row-1).')')->setCellValue('J'.$inc_row, '=C'.$inc_row);
+
             // TOTAL DEDUCTIONS
             $sheet->setCellValue('D'.$ded_row, 'Total Deduction')->setCellValue('K'.$ded_row, '=D'.$ded_row);
             $sheet->mergeCells('D'.$ded_row.':E'.$ded_row)->mergeCells('K'.$ded_row.':L'.$ded_row);
@@ -1457,7 +1461,7 @@ class excelController extends Controller
 
             // DEDUCTION -- END
 
-            for($x = $ded_row; $x < $inc_row; $x++){
+            for($x = $ded_row; $x < $higher_row; $x++){
                 $sheet->mergeCells('D'.$x.':E'.$x)->mergeCells('K'.$x.':L'.$x);
             }
 
@@ -1494,7 +1498,7 @@ class excelController extends Controller
 
             // STYLES -- START
 
-            for($x = $body_starting_row; $x <= $inc_row; $x++){
+            for($x = $body_starting_row; $x <= $higher_row; $x++){
                 foreach(range('A', 'F') as $key => $col){
                     $sheet->getStyle($col.$x)->applyFromArray($borderStyleArray);
                 }
@@ -1503,20 +1507,20 @@ class excelController extends Controller
                 }
             }
 
-            $sheet->getStyle('A'.$body_starting_row.':F'.$inc_row)->applyFromArray($borderMediumStyleArray);
-            $sheet->getStyle('H'.$body_starting_row.':M'.$inc_row)->applyFromArray($borderMediumStyleArray);
+            $sheet->getStyle('A'.$body_starting_row.':F'.$higher_row)->applyFromArray($borderMediumStyleArray);
+            $sheet->getStyle('H'.$body_starting_row.':M'.$higher_row)->applyFromArray($borderMediumStyleArray);
 
             $sheet->getStyle('A'.$font_starting_row.':M'.($footer_row-2))->getFont()->setSize(8);
 
-            $sheet->getStyle('C'.$inc_ded_row.':C'.$inc_row)->applyFromArray($numberStyleArray);
-            $sheet->getStyle('F'.$inc_ded_row.':F'.$inc_row)->applyFromArray($numberStyleArray);
-            $sheet->getStyle('J'.$inc_ded_row.':J'.$inc_row)->applyFromArray($numberStyleArray);
-            $sheet->getStyle('M'.$inc_ded_row.':M'.$inc_row)->applyFromArray($numberStyleArray);
+            $sheet->getStyle('C'.$inc_ded_row.':C'.$higher_row)->applyFromArray($numberStyleArray);
+            $sheet->getStyle('F'.$inc_ded_row.':F'.$higher_row)->applyFromArray($numberStyleArray);
+            $sheet->getStyle('J'.$inc_ded_row.':J'.$higher_row)->applyFromArray($numberStyleArray);
+            $sheet->getStyle('M'.$inc_ded_row.':M'.$higher_row)->applyFromArray($numberStyleArray);
 
-            $sheet->getStyle('B'.$inc_ded_row.':B'.$inc_row)->applyFromArray($daysStyleArray);
-            $sheet->getStyle('E'.$inc_ded_row.':E'.$inc_row)->applyFromArray($daysStyleArray);
-            $sheet->getStyle('I'.$inc_ded_row.':I'.$inc_row)->applyFromArray($daysStyleArray);
-            $sheet->getStyle('L'.$inc_ded_row.':L'.$inc_row)->applyFromArray($daysStyleArray);
+            $sheet->getStyle('B'.$inc_ded_row.':B'.$higher_row)->applyFromArray($daysStyleArray);
+            $sheet->getStyle('E'.$inc_ded_row.':E'.$higher_row)->applyFromArray($daysStyleArray);
+            $sheet->getStyle('I'.$inc_ded_row.':I'.$higher_row)->applyFromArray($daysStyleArray);
+            $sheet->getStyle('L'.$inc_ded_row.':L'.$higher_row)->applyFromArray($daysStyleArray);
 
             // STYLES -- END
 
