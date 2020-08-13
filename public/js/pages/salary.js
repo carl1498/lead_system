@@ -17318,6 +17318,7 @@ $(document).ready(function () {
         $('#emp_salary_form .select2, #salary_form .select2, #bulk_salary_form .select2').trigger('change.select2');
         $('#position, #b_position').val('All').trigger('change.select2');
         $('#status, #b_status').val('Active').trigger('change.select2');
+        $('#allowance_counter').prop('checked', false);
     });
 
     $("#filter_modal").on("hidden.bs.modal", function (e) {

@@ -91,13 +91,13 @@
 
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-4">
 
                         <div class="row clearfix">
-                            <div class="col-lg-5 col-md-5 col-sm-3 col-xs-3 form-control-label">
+                            <div class="col-lg-6 col-md-6 col-sm-3 col-xs-3 form-control-label">
                                     <label for="b_basic_days" class="pull-right">Days Rendered</label>
                             </div>
-                            <div class="col-lg-6 col-md-6 col-sm-7 col-xs-7">
+                            <div class="col-lg-4 col-md-4 col-sm-7 col-xs-7">
                                 <div class="form-group">
                                     <input type="number" step="any" id="b_basic_days" name="b_basic_days" class="form-control required" placeholder="Days" required>
                                 </div>
@@ -106,13 +106,26 @@
 
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-3">
 
                         <div class="row clearfix">
-                            <div class="col-lg-4 col-md-4 col-sm-3 col-xs-3 form-control-label">
+                            <div class="col-lg-1 col-md-1 col-sm-7 col-xs-7"></div>
+                            <div class="col-lg-6 col-md-6 col-sm-7 col-xs-7">
+                                <div class="form-group">
+                                <label><input type="checkbox" name="allowance_counter" id="allowance_counter"> Allowance</label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <div class="row clearfix">
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
                                     <label for="b_wfh" class="pull-right">WFH</label>
                             </div>
-                            <div class="col-lg-6 col-md-6 col-sm-7 col-xs-7">
+                            <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
                                 <div class="form-group">
                                     <input type="number" step="any" id="b_wfh" name="b_wfh" class="form-control" placeholder="Enter WFH in % (1-100)">
                                 </div>

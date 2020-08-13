@@ -280,7 +280,9 @@ class salaryController extends Controller
             $sal_inc->sal_mon_id = $sal_mon->id;
             $sal_inc->basic = $request->b_basic_days;
             $sal_inc->cola = $emp_sal->cola;
-            $sal_inc->acc_allowance = $emp_sal->acc_allowance;
+            if($request->allowance_counter){
+                $sal_inc->acc_allowance = $emp_sal->acc_allowance;
+            }
             if($emp_sal->transpo_allowance){
                 $sal_inc->transpo_days = $request->b_basic_days;
             }
