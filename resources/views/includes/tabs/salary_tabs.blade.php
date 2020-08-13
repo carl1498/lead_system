@@ -79,7 +79,7 @@
                 <th>Leg Hol OT</th>
                 <th>Spcl Hol OT</th>
                 <th>Cash Advance</th>
-                <th>Adsence</th>
+                <th>Absence</th>
                 <th>Late</th>
                 <th>SSS</th>
                 <th>PHIC</th>
