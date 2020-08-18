@@ -1038,6 +1038,7 @@ $(document).ready(function () {
             data: { id: id },
             dataType: 'json',
             success: function success(data) {
+                console.log(data.course.id);
                 $('#add_edit').val('edit');
                 $('#id').val(data.id);
                 $('#fname').val(data.fname);
@@ -1906,7 +1907,7 @@ $(document).ready(function () {
     //Student Information -- END
 
     //Course Select 2
-    $('#course, #l_course, #s_course, #t_course').select2({
+    $('#course, #l_course, #s_course, #t_course, #i_course').select2({
         placeholder: 'Select Course',
         ajax: {
             url: "/courseAll",

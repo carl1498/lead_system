@@ -82,7 +82,10 @@ class studentController extends Controller
         ->addColumn('action', function($data){
             $html = '';
 
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-primary btn-xs view_profile" id="'.$data->id.'"><i class="fa fa-eye"></i></button>';
+            if(StudentHigherPermission()){
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-primary btn-xs view_profile" id="'.$data->id.'"><i class="fa fa-eye"></i></button>';
+            }
+            
             $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>';
 
             if(canAccessAll() || canEditFinalSchool()){
@@ -95,7 +98,9 @@ class studentController extends Controller
                 $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Back Out" class="btn btn-warning btn-xs backout_student" id="'.$data->id.'"><i class="fa fa-sign-out-alt"></i></button>';    
             }
 
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Other Info" class="btn btn-default btn-xs info_student" id="'.$data->id.'"><i class="fa fa-id-card"></i></button>';
+            if(StudentHigherPermission()){
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Other Info" class="btn btn-default btn-xs info_student" id="'.$data->id.'"><i class="fa fa-id-card"></i></button>';
+            }
 
             if(canAccessAll()){
                 $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_student" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';    
@@ -139,7 +144,9 @@ class studentController extends Controller
         ->addColumn('action', function($data){
             $html = '';
 
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-primary btn-xs view_profile" id="'.$data->id.'"><i class="fa fa-eye"></i></button>';
+            if(StudentHigherPermission()){
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-primary btn-xs view_profile" id="'.$data->id.'"><i class="fa fa-eye"></i></button>';
+            }
             $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>';   
 
             if(canAccessAll() || canEditFinalSchool()){
@@ -188,7 +195,9 @@ class studentController extends Controller
         ->addColumn('action', function($data){
             $html = '';
 
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-primary btn-xs view_profile" id="'.$data->id.'"><i class="fa fa-eye"></i></button>';
+            if(StudentHigherPermission()){
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-primary btn-xs view_profile" id="'.$data->id.'"><i class="fa fa-eye"></i></button>';
+            }
 
             if(canAccessAll()){
                 $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Re Apply" class="btn btn-info btn-xs continue_student" id="'.$data->id.'"><i class="fa fa-step-backward"></i></button>';
@@ -204,7 +213,9 @@ class studentController extends Controller
                 
             }
 
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Other Info" class="btn btn-default btn-xs info_student" id="'.$data->id.'"><i class="fa fa-id-card"></i></button>';
+            if(StudentHigherPermission()){
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Other Info" class="btn btn-default btn-xs info_student" id="'.$data->id.'"><i class="fa fa-id-card"></i></button>';
+            }
 
             return  $html;
         })
@@ -232,9 +243,14 @@ class studentController extends Controller
         })->addColumn('action', function($data){
             $html = '';
 
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-primary btn-xs view_profile" id="'.$data->id.'"><i class="fa fa-eye"></i></button>';
+            if(StudentHigherPermission()){
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-primary btn-xs view_profile" id="'.$data->id.'"><i class="fa fa-eye"></i></button>';
+            }
             $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_language_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>';
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Other Info" class="btn btn-default btn-xs info_student" id="'.$data->id.'"><i class="fa fa-id-card"></i></button>';
+            
+            if(StudentHigherPermission()){
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Other Info" class="btn btn-default btn-xs info_student" id="'.$data->id.'"><i class="fa fa-id-card"></i></button>';
+            }
 
             if(canAccessAll()){
                 $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_student" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
@@ -256,7 +272,9 @@ class studentController extends Controller
         })->addColumn('action', function($data){
             $html = '';
 
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-primary btn-xs view_profile" id="'.$data->id.'"><i class="fa fa-eye"></i></button>';
+            if(StudentHigherPermission()){
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-primary btn-xs view_profile" id="'.$data->id.'"><i class="fa fa-eye"></i></button>';
+            }
             
             if(isset($data->program)){
                 if($data->program->name == 'SSW (Careworker)' || $data->program->name == 'SSW (Hospitality)'){
@@ -273,7 +291,9 @@ class studentController extends Controller
                 $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>';
             }
 
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Other Info" class="btn btn-default btn-xs info_student" id="'.$data->id.'"><i class="fa fa-id-card"></i></button>';
+            if(StudentHigherPermission()){
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Other Info" class="btn btn-default btn-xs info_student" id="'.$data->id.'"><i class="fa fa-id-card"></i></button>';
+            }
 
             if(canAccessAll()){
                 $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_student" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
@@ -312,7 +332,9 @@ class studentController extends Controller
         })->addColumn('action', function($data){
             $html = '';
 
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-primary btn-xs view_profile" id="'.$data->id.'"><i class="fa fa-eye"></i></button>';
+            if(StudentHigherPermission()){
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-primary btn-xs view_profile" id="'.$data->id.'"><i class="fa fa-eye"></i></button>';
+            }
             $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_ssw_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>';
 
             if(canAccessAll()){
@@ -325,7 +347,9 @@ class studentController extends Controller
                 }
             }
 
-            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Other Info" class="btn btn-default btn-xs info_student" id="'.$data->id.'"><i class="fa fa-id-card"></i></button>';
+            if(StudentHigherPermission()){
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Other Info" class="btn btn-default btn-xs info_student" id="'.$data->id.'"><i class="fa fa-id-card"></i></button>';
+            }
 
             if(canAccessAll()){
                 $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_student" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
@@ -391,7 +415,9 @@ class studentController extends Controller
                     }
                 }
 
-                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Other Info" class="btn btn-default btn-xs info_student" id="'.$data->id.'"><i class="fa fa-id-card"></i></button>';
+                if(StudentHigherPermission()){
+                    $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Other Info" class="btn btn-default btn-xs info_student" id="'.$data->id.'"><i class="fa fa-id-card"></i></button>';
+                }
 
                 if(canAccessAll()){
                     $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_student" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';
@@ -430,7 +456,9 @@ class studentController extends Controller
             ->addColumn('action', function($data){
                 $html = '';
 
-                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-primary btn-xs view_profile" id="'.$data->id.'"><i class="fa fa-eye"></i></button>';
+                if(StudentHigherPermission()){
+                    $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-primary btn-xs view_profile" id="'.$data->id.'"><i class="fa fa-eye"></i></button>';
+                }
                 $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_intern_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>';   
                 
                 if(canAccessAll()){
@@ -443,7 +471,9 @@ class studentController extends Controller
                     }
                 }
 
-                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Other Info" class="btn btn-default btn-xs info_student" id="'.$data->id.'"><i class="fa fa-id-card"></i></button>';
+                if(StudentHigherPermission()){
+                    $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Other Info" class="btn btn-default btn-xs info_student" id="'.$data->id.'"><i class="fa fa-id-card"></i></button>';
+                }
 
                 if(canAccessAll()){
                     $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_student" id="'.$data->id.'"><i class="fa fa-trash-alt"></i></button>';

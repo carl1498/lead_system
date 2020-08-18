@@ -10,6 +10,7 @@ use App\class_students;
 use App\time;
 use App\class_day;
 use Carbon\Carbon;
+use App\User;
 use Auth;
 use Yajra\Datatables\Datatables;
 use Illuminate\Support\Facades\Hash;
@@ -198,50 +199,12 @@ class studentClassController extends Controller
         $class_settings->remarks = $request->remarks;
         $class_settings->save();
         
-        foreach($add_start_time as $s){
-            if($s != null){
-                $get_time = time::where('name', $s);
-                if(empty($get_time)){
-                    $time = new time;
-                    $time->name = $s;
-                    $time->save();
-                }
-            }
-        }
-
         for($x = 0; $x < 6; $x++){
             $class_day = new class_day;
             $class_day->class_settings_id = $class_settings->id;
             $class_day->day_name_id = $x+1;
-
-            $get_time = time::where('name', $add_start_time[$x])->first();
-            if(empty($get_time)){
-                if($add_start_time[$x] != null){
-                    $time = new time;
-                    $time->name = $add_start_time[$x];
-                    $time->save();
-                    $class_day->start_time_id = $time->id;
-                }else{
-                    $class_day->start_time_id = null;
-                }
-            }else{
-                $class_day->start_time_id = $get_time->id;
-            }
-            
-            $get_time = time::where('name', $add_end_time[$x])->first();
-            if(empty($get_time)){
-                if($add_end_time[$x] != null){
-                    $time = new time;
-                    $time->name = $add_end_time[$x];
-                    $time->save();
-                    $class_day->end_time_id = $time->id;
-                }else{
-                    $class_day->end_time_id = null;
-                }
-            }else{
-                $class_day->end_time_id = $get_time->id;
-            }
-
+            $class_day->start_time = $add_start_time[$x];
+            $class_day->end_time = $add_end_time[$x];
             $class_day->save();
         }
     }
@@ -255,52 +218,14 @@ class studentClassController extends Controller
         $class_settings->start_date = $request->e_start_date;
         $class_settings->end_date = $request->e_end_date;
         $class_settings->remarks = $request->e_remarks;
-        
-        foreach($edit_start_time as $s){
-            if($s != null){
-                $get_time = time::where('name', $s);
-                if(empty($get_time)){
-                    $time = new time;
-                    $time->name = $s;
-                    $time->save();
-                }
-            }
-        }
+        $class_settings->save();
 
         for($x = 0; $x < 6; $x++){
             $class_day = class_day::find($class_settings->class_day[$x]->id);
-            $get_time = time::where('name', $edit_start_time[$x])->first();
-            if(empty($get_time)){
-                if($edit_start_time[$x] != null){
-                    $time = new time;
-                    $time->name = $edit_start_time[$x];
-                    $time->save();
-                    $class_day->start_time_id = $time->id;
-                }else{
-                    $class_day->start_time_id = null;
-                }
-            }else{
-                $class_day->start_time_id = $get_time->id;
-            }
-
-            $get_time = time::where('name', $edit_end_time[$x])->first();
-            if(empty($get_time)){
-                if($edit_end_time[$x] != null){
-                    $time = new time;
-                    $time->name = $edit_end_time[$x];
-                    $time->save();
-                    $class_day->end_time_id = $time->id;
-                }else{
-                    $class_day->end_time_id = null;
-                }
-            }else{
-                $class_day->end_time_id = $get_time->id;
-            }
-
+            $class_day->start_time = $edit_start_time[$x];
+            $class_day->end_time = $edit_end_time[$x];
             $class_day->save();
         }
-
-        $class_settings->save();
     }
 
     public function delete_class(Request $request){
@@ -362,31 +287,48 @@ class studentClassController extends Controller
     }
 
     public function get_class(Request $request){
+        $user = User::with('employee.role')->where('id', Auth::user()->id)->first();
+
         $current_tab = $request->current_class_tab;
 
-        $class_settings = class_settings::with('sensei', 'class_day.day_name', 
-            'class_day.start_time', 'class_day.end_time')->orderBy('start_date')->get();
+        $class_settings = class_settings::with('sensei', 'class_day.day_name', 'class_day')
+            ->when($user->employee->role->name == 'Language Teacher', function($query) use($user){
+                $query->where('sensei_id', $user->employee->id);
+            });
 
-        $check_on_going = class_students::whereNull('end_date')->groupBy('class_settings_id')->pluck('class_settings_id')->toArray();
-        $check_no_students = class_students::groupBy('class_settings_id')->pluck('class_settings_id');
-        $check_no_students = class_settings::whereNotIn('id', $check_no_students)->pluck('id')->toArray();
+
+        $class_students = class_students::with('current_class', 'current_class.sensei')
+            ->when($user->employee->role->name == 'Language Teacher', function($query) use($user){
+                $query->whereHas('current_class', function($query) use($user){
+                    $query->where('sensei_id', $user->employee->id);
+                });
+            });
+
+        $class_settings_temp = clone $class_settings;
+        $class_students_temp = clone $class_students;
+
+
+        $check_on_going = $class_students_temp->whereNull('end_date')->groupBy('class_settings_id')->pluck('class_settings_id')->toArray();
+        $check_no_students = class_students::groupBy('class_settings_id')->pluck('class_settings_id')->toArray();
+        $check_no_students = $class_settings_temp->whereNotIn('id', $check_no_students)->pluck('id')->toArray();
+        
+        $class_settings_temp = clone $class_settings;
+        $class_students_temp = clone $class_students;
         
         $on_going = array_unique(array_merge($check_on_going, $check_no_students));
 
-        $completed = class_settings::whereNotIn('id', $on_going)->pluck('id');
-        $completed_count = class_settings::whereNotIn('id', $on_going)->count();
+        $completed = $class_settings_temp->whereNotIn('id', $on_going)->pluck('id');
+        $completed_count = $class_settings->whereNotIn('id', $on_going)->count();
         $on_going_count = count($on_going);
         $all = $completed_count + $on_going_count;
         
         switch($current_tab){
             case 'Ongoing':
-                $class_settings = class_settings::with('sensei', 'class_day.day_name', 
-                'class_day.start_time', 'class_day.end_time')->whereIn('id', $on_going)
+                $class_settings = class_settings::with('sensei', 'class_day.day_name', 'class_day')->whereIn('id', $on_going)
                 ->orderBy('start_date')->get();
                 break;
             case 'Complete':
-                $class_settings = class_settings::with('sensei', 'class_day.day_name', 
-                'class_day.start_time', 'class_day.end_time')->whereIn('id', $completed)
+                $class_settings = class_settings::with('sensei', 'class_day.day_name', 'class_day')->whereIn('id', $completed)
                 ->orderBy('start_date')->get();
                 break;
             case 'All':
@@ -488,7 +430,6 @@ class studentClassController extends Controller
 
         $array = [];
         foreach ($student as $key => $value){
-            info($value['lname']);
             $array[] = [
                 'id' => $value['id'],
                 'text' => $value['lname'].', '.$value['fname'].' ('.$value['program']['name'].')'
@@ -538,7 +479,7 @@ class studentClassController extends Controller
     }
 
     public function get_class_settings(Request $request){
-        $class_settings = class_settings::with('class_day', 'class_day.start_time', 'class_day.end_time')
+        $class_settings = class_settings::with('class_day', 'class_day')
             ->find($request->current_class_select);
 
         return $class_settings;

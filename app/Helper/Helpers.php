@@ -78,7 +78,7 @@ function canAccessStudentList(){
     $id = Auth::user()->id;
     $user = \App\User::with('employee.role')->find($id);
     $authorized = ['Admin', 'Branch Manager', 'OIC', 'HR/Finance Officer', 'Marketing Manager', 'Marketing Head', 
-        'Marketing Officer', 'Documentation Head', 'Documentation Officer', 'Language Head',
+        'Marketing Officer', 'Documentation Head', 'Documentation Officer', 'Language Head', 'Language Teacher',
         'Liaison Officer', 'Intern', 'Assistant Finance Officer'];
 
     foreach($authorized as $auth){
@@ -96,6 +96,20 @@ function canEditFinalSchool(){
 
     foreach($authorized as $auth){
         if($user->employee->fname == $auth){
+            return true;
+        }
+    }
+    return false;
+}
+
+function StudentHigherPermission(){
+    $id = Auth::user()->id;
+    $user = \App\User::with('employee.role')->find($id);
+    $authorized = ['President', 'Finance Director', 'HR/Finance Head', 'Language Head', 'IT Officer', 'Marketing Officer',
+        'Marketing Head', 'Marketing Manager', 'Documentation Head'];
+
+    foreach($authorized as $auth){
+        if($user->employee->role->name == $auth){
             return true;
         }
     }

@@ -503,6 +503,7 @@ $(document).ready(function () {
                 html += '<ul class="list-group list-group-unbordered">';
 
                 for (var x = 0; x < data.class_settings.length; x++) {
+                    console.log(data.class_settings[x]);
                     var counter = true;
                     var days = '';
                     for (var y = 0; y < 6; y++) {
@@ -510,7 +511,7 @@ $(document).ready(function () {
                             if (counter == false) {
                                 days += ' • ';
                             }
-                            days += '<span data-container="body" data-toggle="tooltip" \n                            data-placement="top"\n                            title="' + data.class_settings[x].class_day[y].start_time.name + ' ~ ' + (data.class_settings[x].class_day[y].end_time ? data.class_settings[x].class_day[y].end_time.name : 'TBD') + '">' + data.class_settings[x].class_day[y].day_name.abbrev + '</span>';
+                            days += '<span data-container="body" data-toggle="tooltip" \n                            data-placement="top"\n                            title="' + data.class_settings[x].class_day[y].start_time + ' ~ ' + (data.class_settings[x].class_day[y].end_time ? data.class_settings[x].class_day[y].end_time : 'TBD') + '">' + data.class_settings[x].class_day[y].day_name.abbrev + '</span>';
 
                             counter = false;
                         }
@@ -544,13 +545,13 @@ $(document).ready(function () {
                 $('#edit_class_id').val(data.id);
 
                 for (var x = 0; x < 6; x++) {
-                    if (data.class_day[x].start_time_id) {
+                    if (data.class_day[x].start_time) {
                         $($('.editCheck')[x]).prop('checked', true);
                         $($('.edit_start_time')[x]).prop('readonly', false);
                         $($('.edit_end_time')[x]).prop('readonly', false);
-                        $($('.edit_start_time')[x]).val(data.class_day[x].start_time.name);
+                        $($('.edit_start_time')[x]).val(data.class_day[x].start_time);
                         if (data.class_day[x].end_time) {
-                            $($('.edit_end_time')[x]).val(data.class_day[x].end_time.name);
+                            $($('.edit_end_time')[x]).val(data.class_day[x].end_time);
                         }
                     }
                 }
