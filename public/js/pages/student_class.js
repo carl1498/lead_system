@@ -503,7 +503,6 @@ $(document).ready(function () {
                 html += '<ul class="list-group list-group-unbordered">';
 
                 for (var x = 0; x < data.class_settings.length; x++) {
-                    console.log(data.class_settings[x]);
                     var counter = true;
                     var days = '';
                     for (var y = 0; y < 6; y++) {

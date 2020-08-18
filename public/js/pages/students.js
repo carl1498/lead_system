@@ -1038,7 +1038,6 @@ $(document).ready(function () {
             data: { id: id },
             dataType: 'json',
             success: function success(data) {
-                console.log(data.course.id);
                 $('#add_edit').val('edit');
                 $('#id').val(data.id);
                 $('#fname').val(data.fname);
