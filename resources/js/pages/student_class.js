@@ -466,7 +466,6 @@ $(document).ready(function(){
 
 
                 for(let x = 0; x < data.class_settings.length; x++){
-                    console.log(data.class_settings[x]);
                     let counter = true;
                     let days = '';
                     for(let y = 0; y < 6; y++){
