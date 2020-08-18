@@ -318,7 +318,8 @@ class studentClassController extends Controller
         $on_going = array_unique(array_merge($check_on_going, $check_no_students));
 
         $completed = $class_settings_temp->whereNotIn('id', $on_going)->pluck('id');
-        $completed_count = $class_settings->whereNotIn('id', $on_going)->count();
+        $class_settings_temp = clone $class_settings;
+        $completed_count = $class_settings_temp->whereNotIn('id', $on_going)->count();
         $on_going_count = count($on_going);
         $all = $completed_count + $on_going_count;
         
@@ -332,6 +333,7 @@ class studentClassController extends Controller
                 ->orderBy('start_date')->get();
                 break;
             case 'All':
+                $class_settings = $class_settings->orderBy('start_date')->get();
                 break;
             default:
                 break;
