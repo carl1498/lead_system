@@ -5,7 +5,7 @@ $(document).ready(function(){
     var current_branch = 'Makati';
     var current_status = '', current_result = '',
     current_ssw = '', current_titp = '', current_intern = '';
-    var departure_year, departure_month = $('#month_select').val();
+    var departure_year, departure_month = $('#month_select').val(), batch = 'All';
     var get_year, get_month, get_departure;
     var current_tab = 'Branch';
     var current_switch = 'Student';
@@ -168,6 +168,7 @@ $(document).ready(function(){
             $('.select_description').text('');
         }else if(current_tab == 'SSW'){
             showYearSelect();
+            showBatchSelect();
             $('.month_select').hide();
             $('#month_select').next(".select2-container").hide();
             $('.select_description').text('Year:');
@@ -175,6 +176,10 @@ $(document).ready(function(){
             showYearSelect();
             showMonthSelect();
             $('.select_description').text('Departure:');
+        }
+        
+        if(current_tab != 'SSW'){
+            hideBatchSelect();
         }
         
         switch(current_tab){
@@ -274,6 +279,7 @@ $(document).ready(function(){
         {data: 'contact', name: 'contact'},
         {data: 'gender', name: 'gender'},
         {data: 'birthdate', name: 'birthdate'},
+        {data: 'batch', name: 'batch'},
         {data: 'program.name', name: 'program'},
         {data: 'benefactor.name', name: 'benefactor'},
         {data: 'course.name', name: 'course'},
@@ -546,6 +552,7 @@ $(document).ready(function(){
     function refresh_ssw_student(){
         
         departure_year = $('#year_select').val();
+        let batch = $('#batch_select').val();
 
         ssw_students = $('#ssw_students').DataTable({
             stateSave: true,
@@ -570,7 +577,8 @@ $(document).ready(function(){
                 url: '/ssw_student',
                 data: {
                     departure_year: departure_year,
-                    current_ssw: current_ssw
+                    current_ssw: current_ssw,
+                    batch: batch
                 }
             },
             columnDefs: [{defaultContent: "", targets: "_all"}],
@@ -737,6 +745,7 @@ $(document).ready(function(){
             $('#student_list_tab #intern_first').click();
             current_switch = 'Intern';
         }
+
         disableTabs();
     });
 
@@ -749,6 +758,18 @@ $(document).ready(function(){
         $('.month_select').show();
         $('#month_select').next(".select2-container").show();
         $('.select_description').text('Departure:');
+    }
+
+    function showBatchSelect(){
+        $('#batch_select').show();
+        $('#batch_select').next(".select2-container").show();
+        $('.batch_description').text('Batch:');
+    }
+
+    function hideBatchSelect(){
+        $('#batch_select').hide();
+        $('#batch_select').next(".select2-container").hide();
+        $('.batch_description').text('');
     }
 
     $('.branch_pick').on('click', function(){
@@ -804,7 +825,7 @@ $(document).ready(function(){
         }
     });
 
-    $(document).on('change', '#year_select, #month_select', function(){
+    $(document).on('change', '#year_select, #month_select, #batch_select', function(){
         refresh();
     });
 
@@ -1178,6 +1199,7 @@ $(document).ready(function(){
                 $('#s_gender').val(data.gender).trigger('change');
                 $('#s_branch').val(data.branch.id).trigger('change');
                 $('#s_course').val(data.course.id).trigger('change');
+                $('#s_batch').val(data.batch).trigger('change');
                 $('#s_year').val(data.departure_year.id).trigger('change');
                 $('#s_remarks').val(data.remarks);
                 $('#student_modal').modal('toggle');
@@ -2142,6 +2164,7 @@ $(document).ready(function(){
                 }
 
                 $('#p_contact').text(data.contact);
+                $('#p_batch').text(data.batch ? data.batch : '-');
                 $('#p_program').text(data.program ? data.program.name : '-');
                 $('#p_school').text(data.school ? data.school.name : '-');
                 $('#p_benefactor').text(data.benefactor ? data.benefactor.name : '-');
@@ -2163,11 +2186,13 @@ $(document).ready(function(){
                 $('.print_student_profile').attr('id', data.id);
                 $('.print_student_profile').removeAttr('disabled');
 
-                var emergency = (data.emergency.length != 0) ? '' : '-';
-                for(var x = 0; x < data.emergency.length; x++){
-                    let i = data.emergency[x];
-                    emergency += i.fname + ' ' + i.lname + ' ' + i.mname + '<br>' + i.relationship + '<br>' + i.contact;
-                    if(x != data.emergency.length-1){emergency += '<br><br>'}
+                var emergency = (data.emergency) ? ((data.emergency.length != 0) ? '' : '-') : '-';
+                if(data.emergency){
+                    for(var x = 0; x < data.emergency.length; x++){
+                        let i = data.emergency[x];
+                        emergency += i.fname + ' ' + i.lname + ' ' + i.mname + '<br>' + i.relationship + '<br>' + i.contact;
+                        if(x != data.emergency.length-1){emergency += '<br><br>'}
+                    }
                 }
                 $('#p_emergency').html(emergency);
             }

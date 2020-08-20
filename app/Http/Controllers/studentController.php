@@ -46,8 +46,9 @@ class studentController extends Controller
         $departure_month = departure_month::all();
         $company = company::all();
         $university = university::all();
+        $batch = student::whereNotNull('batch')->orderBy('batch')->groupBy('batch')->pluck('batch');
 
-        return view('pages.students', compact('program', 'school', 'benefactor', 
+        return view('pages.students', compact('program', 'school', 'benefactor', 'batch', 
         'employee', 'branch', 'course', 'departure_year', 'departure_month', 'company', 'university'));
     }
 
@@ -307,6 +308,8 @@ class studentController extends Controller
     public function ssw(Request $request){
         $departure_year = $request->departure_year;
         $current_ssw = $request->current_ssw;
+        $batch = $request->batch;
+        info($batch);
 
         $ssw = student::with('program', 'benefactor', 'referral', 'course', 'departure_year')
             ->whereHas('program', function($query) use ($request) {
@@ -314,6 +317,9 @@ class studentController extends Controller
             })
             ->when($departure_year != 'All', function($query) use($departure_year){
                 $query->where('departure_year_id', $departure_year);
+            })
+            ->when($batch != 'All', function($query) use($batch){
+                $query->where('batch', $batch);
             })->get();
 
         if($current_ssw == 'SSW'){
@@ -860,17 +866,17 @@ class studentController extends Controller
 
         if(isset($edited_by)){
             $edit_fields = ['First Name', 'Middle Name', 'Last Name', 'Birth Date', 'Civil Status',
-                'Contact #', 'Program', 'Benefactor', 'Address', 'Email', 'Referred By', 
+                'Contact #', 'Batch', 'Program', 'Benefactor', 'Address', 'Email', 'Referred By', 
                 'Sign Up Date', 'Gender', 'Course', 'Year', 'Remarks'];
 
-            $student_fields = [$student->fname, $student->mname, $student->lname,
-                $student->birthdate, $student->civil_status, $student->contact, $student->program_id,
+            $student_fields = [$student->fname, $student->mname, $student->lname, $student->birthdate,
+                $student->civil_status, $student->contact, $student->batch, $student->program_id,
                 $student->benefactor_id, $student->address, $student->email,
                 $student->referral_id, $student->date_of_signup, $student->gender,
                 $student->course_id, $student->departure_year_id, $student->remarks];
 
-            $request_fields = [$request->s_fname, $request->s_mname, $request->s_lname,
-                $request->s_birthdate, $request->s_civil, $request->s_contact, $request->s_program,
+            $request_fields = [$request->s_fname, $request->s_mname, $request->s_lname, $request->s_birthdate,
+                $request->s_civil, $request->s_contact, $request->s_batch, $request->s_program,
                 $request->s_benefactor, $request->s_address, $request->s_email,
                 $request->s_referral, $request->s_sign_up, $request->s_gender,
                 $request->s_course, $request->s_year, $request->s_remarks];
@@ -882,6 +888,7 @@ class studentController extends Controller
         $student->birthdate = Carbon::parse($request->s_birthdate);
         $student->civil_status = $request->s_civil;
         $student->contact = $request->s_contact;
+        $student->batch = $request->s_batch;
         $student->program_id = $request->s_program;
         $student->benefactor_id = $request->s_benefactor;
         $student->address = $request->s_address;
@@ -1478,10 +1485,18 @@ class studentController extends Controller
 
     public function view_profile(Request $request){
         $id = $request->id;
-        $student = student::with('program', 'school', 'benefactor', 'company', 'referral', 'branch', 'course', 'departure_year', 'departure_month', 'emergency')->find($id);
         
+        if(!StudentHigherPermission()){
+            $student = student::with('program', 'referral', 'branch', 'course', 'departure_year', 'departure_month')->find($id);
+            $student->contact = '-';
+        }else{
+            $student = student::with('program', 'school', 'benefactor', 'company', 'referral', 'branch', 'course', 'departure_year', 'departure_month', 'emergency')->find($id);
+        }
+
         $birth = new Carbon($student->birthdate);
         $student->age = $birth->diffInYears(Carbon::now());
+
+
 
         return $student;
     }

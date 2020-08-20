@@ -217,6 +217,17 @@
 
             <div class="row clearfix">
                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
+                        <label for="s_batch" class="pull-right">Batch</label>
+                </div>
+                <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
+                    <div class="form-group required">
+                    <input type="text" id="s_batch" name="s_batch" class="form-control" placeholder="Enter Batch">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row clearfix">
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
                         <label for="s_year" class="pull-right">Year</label>
                 </div>
                 <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">

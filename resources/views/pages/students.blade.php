@@ -46,10 +46,12 @@
             <div class="box box-primary" id="box-primary-fixed">
                 <div class="box-body box-profile">
                     <div style="width: auto; height: 200px;">
+                        @if(studentHigherPermission())
                         <button disabled class="btn btn-primary btn-sm print_student_profile"
                             style="position: absolute; right: 20px; z-index: 1000;">
                             <i class="fa fa-print"></i>
                         </button>
+                        @endif
 
                         <img id="p_picture" class="profile-user-img img-responsive img-rounded" src="./img/avatar5.png" alt="Student Profile Picture" style="max-width: 97px; max-height: 97px;">
 
@@ -65,6 +67,12 @@
                             -
                             </p>
                         </li>
+                        <li class="list-group-item">
+                            <strong>Batch (SSW)</strong>
+                            <p id="p_batch" class="text-muted">
+                            -
+                            </p>   
+                        </li> 
                         <li class="list-group-item">
                             <strong>Program</strong>
                             <p id="p_program" class="text-muted">
@@ -199,10 +207,12 @@
     <!-- MODALS -- START -->
     
     @include('includes.modals.student_modals.student_modal')
-    @include('includes.modals.student_modals.student_info_modal')
-    @include('includes.modals.student_modals.student_emergency_modal')
-    @include('includes.modals.student_modals.student_emp_history_modal')
-    @include('includes.modals.student_modals.student_educational_background_modal')
+    @if(studentHigherPermission())
+        @include('includes.modals.student_modals.student_info_modal')
+        @include('includes.modals.student_modals.student_emergency_modal')
+        @include('includes.modals.student_modals.student_emp_history_modal')
+        @include('includes.modals.student_modals.student_educational_background_modal')
+    @endif
 
     <!-- MODALS -- END -->
 

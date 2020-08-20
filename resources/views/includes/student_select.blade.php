@@ -10,5 +10,12 @@
     <option value="{{ $m->id }}">{{ $m->name }}</option>
     @endforeach
     <option value="All">All</option>
+</select>&nbsp;
+<label class="batch_description"></label>
+<select type="text" id="batch_select" class="form-control select2" style="width: 120px; display:none;">
+    <option value="All">All</option>
+    @foreach($batch as $b)
+    <option value="{{ $b }}">{{ $b }}</option>
+    @endforeach
 </select>
 <br><br>

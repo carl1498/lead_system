@@ -4,6 +4,7 @@
         <th>Contact</th>
         <th>Gender</th>
         <th>Birthdate</th>
+        <th>Batch</th>
         <th>Program</th>
         <th>Benefactor</th>
         <th>Course</th>
