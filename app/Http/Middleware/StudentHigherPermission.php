@@ -20,7 +20,7 @@ class StudentHigherPermission
         $id = Auth::user()->id;
         $user = User::with('employee.role')->find($id);
         $authorized = ['OIC', 'President', 'Finance Director', 'HR/Finance Head', 'IT Officer', 'Marketing Officer',
-            'Marketing Head', 'Marketing Manager'];
+            'Marketing Head', 'Marketing Manager', 'Documentation Head', 'Documentation Officer'];
 
         foreach($authorized as $auth){
             if($user->employee->role->name == $auth && $user->employee->employment_status != 'Resigned'){
