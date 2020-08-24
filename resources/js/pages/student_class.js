@@ -336,13 +336,6 @@ $(document).ready(function(){
                 $('#student_name_temp').val(data.student.lname + ', ' + data.student.fname);
                 $('#e_student_start_date').val(data.start_date);
                 $('#e_student_end_date').val(data.end_date);
-                if(data.end_date){
-                    $('#e_student_end_date').attr('required', true);
-                    $('#e_student_end_date').addClass('required');
-                }else{
-                    $('#e_student_end_date').attr('required', false);
-                    $('#e_student_end_date').removeClass('required');
-                }
 
                 $('#edit_student_date_modal').modal('toggle');
                 $('#edit_student_date_modal').modal('show');

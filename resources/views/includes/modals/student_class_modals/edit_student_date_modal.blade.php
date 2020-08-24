@@ -41,7 +41,7 @@
                             </div>
                             <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
                                 <div class="form-group">
-                                    <input type="text" id="e_student_end_date" name="e_student_end_date" class="form-control datepicker required" placeholder="End Date: YYYY-MM-DD" required>
+                                    <input type="text" id="e_student_end_date" name="e_student_end_date" class="form-control datepicker" placeholder="End Date: YYYY-MM-DD">
                                 </div>
                         </div>
 

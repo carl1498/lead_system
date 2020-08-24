@@ -458,19 +458,19 @@ class studentClassController extends Controller
         $start_date = class_settings::find($request->date_class);
         $sensei_class = $request->sensei_class;
 
-        if(isset($request->current_end_date)){
-            $student_exist = class_students::with('current_class')->where('id', $request->class_students_id)
-                ->whereHas('current_class', function($query) use($sensei_class){
-                    $query->where('sensei_id', $sensei_class);
-                })->whereNull('end_date')->first();
-
-            if(!empty($student_exist)){
-                return 'assigned';
-            }
-
+        /*if(isset($request->current_end_date)){
             $end_date = class_students::find($request->class_students_id);
             $end_date->end_date = Carbon::parse($request->current_end_date);
             $end_date->save();
+        }*/
+
+        $student_exist = class_students::with('current_class')->where('id', $request->class_students_id)
+            ->whereHas('current_class', function($query) use($sensei_class){
+                $query->where('sensei_id', $sensei_class);
+            })->whereNull('end_date')->first();
+
+        if(!empty($student_exist)){
+            return 'assigned';
         }
 
         $class_students = new class_students;

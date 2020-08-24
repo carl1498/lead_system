@@ -83,18 +83,18 @@
                             </div>
                         </div>
 
-                        <div class="row clearfix">
+                        <!--<div class="row clearfix">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 form-control-label">
                                     <label for="current_end_date" class="pull-right">End Date</label>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                                 <div class="form-group required">
-                                    <input type="text" id="current_end_date" name="current_end_date" class="form-control datepicker required" placeholder="End Date: YYYY-MM-DD" 
+                                    <input type="text" id="current_end_date" name="current_end_date" class="form-control datepicker" placeholder="End Date: YYYY-MM-DD" 
                                     data-container="body" data-toggle="tooltip" data-placement="top" title="End the student's on-going class(if any)"
-                                    style="width: 100%;" disabled required>
+                                    style="width: 100%;" disabled>
                                 </div>
                             </div>
-                        </div>
+                        </div>-->
 
                     </div>
 
