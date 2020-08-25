@@ -26,6 +26,7 @@ use Auth;
 use Yajra\Datatables\Datatables;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Redirect;
+use Intervention\Image\ImageManagerStatic as Image;
 
 class studentController extends Controller
 {
@@ -54,22 +55,10 @@ class studentController extends Controller
 
     public function branch(Request $request){//Makati, Cebu, Davao
         $current_branch = $request->current_branch;
-        $departure_year = $request->departure_year;
-        $departure_month = $request->departure_month;
-        $except = ['Language Only', 'TITP', 'TITP (Careworker)', 'SSW (Careworker)', 'SSW (Hospitality)'];
-        $except = program::whereIn('name', $except)->pluck('id');
+        $dep_year = $request->departure_year;
+        $dep_month = $request->departure_month;
 
-        $branch = student::with('program', 'school', 'benefactor', 'referral', 
-        'branch', 'course', 'departure_year', 'departure_month')
-        ->where(function ($query) use($except){
-            $query->whereNotIn('program_id', $except)->orWhereNull('program_id');
-        })
-        ->when($departure_year != 'All', function($query) use($departure_year){
-            $query->where('departure_year_id', $departure_year);
-        })
-        ->when($departure_month != 'All', function($query) use($departure_month){
-            $query->where('departure_month_id', $departure_month);
-        })->orderBy('school_id')->get();
+        $branch = student::student($dep_year, $dep_month)->get();
 
         $branch = $branch->where('branch.name', $current_branch)->whereIn('status', ['Active', 'Final School']);
 
@@ -77,15 +66,23 @@ class studentController extends Controller
         ->editColumn('name', function($data){
             return $data->lname.', '.$data->fname.' '.$data->mname;
         })
+        ->editColumn('school', function($data){
+            if(StudentHigherPermission()){
+                return ($data->school) ? $data->school->name : '';
+            }
+        })
+        ->editColumn('benefactor', function($data){
+            if(StudentHigherPermission()){
+                return ($data->benefactor) ? $data->benefactor->name : '';
+            }
+        })
         ->editColumn('birthdate', function($data){
             return getAge($data->birthdate);
         })
         ->addColumn('action', function($data){
             $html = '';
 
-            if(StudentHigherPermission()){
-                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-primary btn-xs view_profile" id="'.$data->id.'"><i class="fa fa-eye"></i></button>';
-            }
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-primary btn-xs view_profile" id="'.$data->id.'"><i class="fa fa-eye"></i></button>';
             
             $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>';
 
@@ -113,31 +110,31 @@ class studentController extends Controller
 
     public function status(Request $request){//Final School, Back Out / Cancelled
         $current_status = $request->current_status;
-        $departure_year = $request->departure_year;
-        $departure_month = $request->departure_month;
+        $dep_year = $request->departure_year;
+        $dep_month = $request->departure_month;
         $except = ['Language Only', 'TITP', 'TITP (Careworker)', 'SSW (Careworker)', 'SSW (Hospitality)'];
         $except = program::whereIn('name', $except)->pluck('id');
 
-        $status = student::with('program', 'school', 'benefactor', 'referral', 
-        'branch', 'course', 'departure_year', 'departure_month')
-        ->where(function ($query) use($except){
-            $query->whereNotIn('program_id', $except)->orWhereNull('program_id');
-        })
-        ->when($departure_year != 'All', function($query) use($departure_year){
-            $query->where('departure_year_id', $departure_year);
-        })
-        ->when($departure_month != 'All', function($query) use($departure_month){
-            $query->where('departure_month_id', $departure_month);
-        })
+        $status = student::student($dep_year, $dep_month)
         ->when($current_status == 'Back Out / Cancelled', function($query) use($current_status){
             $query->whereIn('status', ['Back Out', 'Cancelled']);
         }, function($query) use($current_status){
             $query->where('status', $current_status);
-        })->orderBy('school_id')->get();
+        })->get();
         
         return Datatables::of($status)
         ->editColumn('name', function($data){
             return $data->lname.', '.$data->fname.' '.$data->mname;
+        })
+        ->editColumn('school', function($data){
+            if(StudentHigherPermission()){
+                return ($data->school) ? $data->school->name : '';
+            }
+        })
+        ->editColumn('benefactor', function($data){
+            if(StudentHigherPermission()){
+                return ($data->benefactor) ? $data->benefactor->name : '';
+            }
         })
         ->editColumn('birthdate', function($data){
             return getAge($data->birthdate);
@@ -145,9 +142,7 @@ class studentController extends Controller
         ->addColumn('action', function($data){
             $html = '';
 
-            if(StudentHigherPermission()){
-                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-primary btn-xs view_profile" id="'.$data->id.'"><i class="fa fa-eye"></i></button>';
-            }
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-primary btn-xs view_profile" id="'.$data->id.'"><i class="fa fa-eye"></i></button>';
             $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>';   
 
             if(canAccessAll() || canEditFinalSchool()){
@@ -169,26 +164,20 @@ class studentController extends Controller
     }
 
     public function result(Request $request){//Result Monitoring
-        $departure_year = $request->departure_year;
-        $departure_month = $request->departure_month;
-        $except = ['Language Only', 'TITP', 'TITP (Careworker)', 'SSW (Careworker)', 'SSW (Hospitality)'];
-        $except = program::whereIn('name', $except)->pluck('id');
+        $dep_year = $request->departure_year;
+        $dep_month = $request->departure_month;
 
-        $result = student::with('program', 'school', 'referral', 
-        'branch', 'course', 'departure_year', 'departure_month')
-        ->where(function ($query) use($except){
-            $query->whereNotIn('program_id', $except)->orWhereNull('program_id');
-        })
-        ->when($departure_year != 'All', function($query) use($departure_year){
-            $query->where('departure_year_id', $departure_year);
-        })
-        ->when($departure_month != 'All', function($query) use($departure_month){
-            $query->where('departure_month_id', $departure_month);
-        })->whereIn('status', ['Final School', 'Cancelled'])->orderBy('school_id')->get();
+        $result = student::student($dep_year, $dep_month)
+        ->whereIn('status', ['Final School', 'Cancelled'])->get();
 
         return Datatables::of($result)
         ->editColumn('name', function($data){
             return $data->lname.', '.$data->fname.' '.$data->mname;
+        })
+        ->editColumn('school', function($data){
+            if(StudentHigherPermission()){
+                return ($data->school) ? $data->school->name : '';
+            }
         })
         ->editColumn('birthdate', function($data){
             return getAge($data->birthdate);
@@ -196,9 +185,7 @@ class studentController extends Controller
         ->addColumn('action', function($data){
             $html = '';
 
-            if(StudentHigherPermission()){
-                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-primary btn-xs view_profile" id="'.$data->id.'"><i class="fa fa-eye"></i></button>';
-            }
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-primary btn-xs view_profile" id="'.$data->id.'"><i class="fa fa-eye"></i></button>';
 
             if(canAccessAll()){
                 $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Re Apply" class="btn btn-info btn-xs continue_student" id="'.$data->id.'"><i class="fa fa-step-backward"></i></button>';
@@ -224,14 +211,14 @@ class studentController extends Controller
     }
 
     public function language(Request $request){//Language Only
-        $departure_year = $request->departure_year;
+        $dep_year = $request->departure_year;
 
         $language = student::with('program', 'referral', 'branch', 'course', 'departure_year')
         ->whereHas('program', function($query){
             $query->where('name', 'Language Only');
         })
-        ->when($departure_year != 'All', function($query) use($departure_year){
-            $query->where('departure_year_id', $departure_year);
+        ->when($departure_year != 'All', function($query) use($dep_year){
+            $query->where('departure_year_id', $dep_year);
         })
         ->get();
 
@@ -244,9 +231,7 @@ class studentController extends Controller
         })->addColumn('action', function($data){
             $html = '';
 
-            if(StudentHigherPermission()){
-                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-primary btn-xs view_profile" id="'.$data->id.'"><i class="fa fa-eye"></i></button>';
-            }
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-primary btn-xs view_profile" id="'.$data->id.'"><i class="fa fa-eye"></i></button>';
             $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_language_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>';
             
             if(StudentHigherPermission()){
@@ -268,14 +253,22 @@ class studentController extends Controller
         ->editColumn('name', function($data){
             return $data->lname.', '.$data->fname.' '.$data->mname;
         })
+        ->editColumn('school', function($data){
+            if(StudentHigherPermission()){
+                return ($data->school) ? $data->school->name : '';
+            }
+        })
+        ->editColumn('benefactor', function($data){
+            if(StudentHigherPermission()){
+                return ($data->benefactor) ? $data->benefactor->name : '';
+            }
+        })
         ->editColumn('birthdate', function($data){
             return getAge($data->birthdate);
         })->addColumn('action', function($data){
             $html = '';
 
-            if(StudentHigherPermission()){
-                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-primary btn-xs view_profile" id="'.$data->id.'"><i class="fa fa-eye"></i></button>';
-            }
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-primary btn-xs view_profile" id="'.$data->id.'"><i class="fa fa-eye"></i></button>';
             
             if(isset($data->program)){
                 if($data->program->name == 'SSW (Careworker)' || $data->program->name == 'SSW (Hospitality)'){
@@ -309,7 +302,6 @@ class studentController extends Controller
         $departure_year = $request->departure_year;
         $current_ssw = $request->current_ssw;
         $batch = $request->batch;
-        info($batch);
 
         $ssw = student::with('program', 'benefactor', 'referral', 'course', 'departure_year')
             ->whereHas('program', function($query) use ($request) {
@@ -333,14 +325,17 @@ class studentController extends Controller
         ->editColumn('name', function($data){
             return $data->lname.', '.$data->fname.' '.$data->mname;
         })
+        ->editColumn('benefactor', function($data){
+            if(StudentHigherPermission()){
+                return ($data->benefactor) ? $data->benefactor->name : '';
+            }
+        })
         ->editColumn('birthdate', function($data){
             return getAge($data->birthdate);
         })->addColumn('action', function($data){
             $html = '';
 
-            if(StudentHigherPermission()){
-                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-primary btn-xs view_profile" id="'.$data->id.'"><i class="fa fa-eye"></i></button>';
-            }
+            $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-primary btn-xs view_profile" id="'.$data->id.'"><i class="fa fa-eye"></i></button>';
             $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_ssw_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>';
 
             if(canAccessAll()){
@@ -387,6 +382,11 @@ class studentController extends Controller
         return Datatables::of($titp)
             ->editColumn('name', function($data){
                 return $data->lname.', '.$data->fname.' '.$data->mname;
+            })
+            ->editColumn('company', function($data){
+                if(StudentHigherPermission()){
+                    return ($data->company) ? $data->company->name : '';
+                }
             })
             ->editColumn('birthdate', function($data){
                 return getAge($data->birthdate);
@@ -456,15 +456,18 @@ class studentController extends Controller
             ->editColumn('name', function($data){
                 return $data->lname.', '.$data->fname.' '.$data->mname;
             })
+            ->editColumn('benefactor', function($data){
+                if(StudentHigherPermission()){
+                    return ($data->benefactor) ? $data->benefactor->name : '';
+                }
+            })
             ->editColumn('birthdate', function($data){
                 return getAge($data->birthdate);
             })
             ->addColumn('action', function($data){
                 $html = '';
 
-                if(StudentHigherPermission()){
-                    $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-primary btn-xs view_profile" id="'.$data->id.'"><i class="fa fa-eye"></i></button>';
-                }
+                $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-primary btn-xs view_profile" id="'.$data->id.'"><i class="fa fa-eye"></i></button>';
                 $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_intern_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>';   
                 
                 if(canAccessAll()){
@@ -662,15 +665,13 @@ class studentController extends Controller
             if($student->picture != 'avatar5.png'){
                 Storage::delete('public/img/student/'.$student->picture);
             }
-            $fileextension = $request->picture->getClientOriginalExtension();
             $encryption = sha1(date('jSFY').time().$request->picture->getClientOriginalName());
-            $filename = $encryption.'.'.$fileextension;
+            $filename = $encryption.'.jpg';
 
-            $request->picture->storeAs('public/img/student', $filename);
+            $target = public_path().'/storage/img/student/'.$filename;
+            Image::make($request->file('picture'))->save($target, 60, 'jpg');
 
-            $prev = $student->picture;
             $student->picture = $filename;
-
             $student->save();
 
             if(isset($edited_by)){
@@ -827,15 +828,24 @@ class studentController extends Controller
             if($student->picture != 'avatar5.png'){
                 Storage::delete('public/img/student/'.$student->picture);
             }
-            $fileextension = $request->l_picture->getClientOriginalExtension();
             $encryption = sha1(date('jSFY').time().$request->l_picture->getClientOriginalName());
-            $filename = $encryption.'.'.$fileextension;
+            $filename = $encryption.'.jpg';
 
-            $request->l_picture->storeAs('public/img/student', $filename);
+            $target = public_path().'/storage/img/student/'.$filename;
+            Image::make($request->file('l_picture'))->save($target, 60, 'jpg');
 
             $student->picture = $filename;
-
             $student->save();
+
+            if(isset($edited_by)){
+                $edit_history = new student_edit_history;
+                $edit_history->stud_id = $student->id;
+                $edit_history->field = 'Picture';
+                $edit_history->previous = 'Uploaded';
+                $edit_history->new = 'New Picture';
+                $edit_history->edited_by = $edited_by;
+                $edit_history->save();
+            }
         }
 
         return $student->id;
@@ -987,15 +997,24 @@ class studentController extends Controller
             if($student->picture != 'avatar5.png'){
                 Storage::delete('public/img/student/'.$student->picture);
             }
-            $fileextension = $request->s_picture->getClientOriginalExtension();
             $encryption = sha1(date('jSFY').time().$request->s_picture->getClientOriginalName());
-            $filename = $encryption.'.'.$fileextension;
+            $filename = $encryption.'.jpg';
 
-            $request->s_picture->storeAs('public/img/student', $filename);
+            $target = public_path().'/storage/img/student/'.$filename;
+            Image::make($request->file('s_picture'))->save($target, 60, 'jpg');
 
             $student->picture = $filename;
-
             $student->save();
+
+            if(isset($edited_by)){
+                $edit_history = new student_edit_history;
+                $edit_history->stud_id = $student->id;
+                $edit_history->field = 'Picture';
+                $edit_history->previous = 'Uploaded';
+                $edit_history->new = 'New Picture';
+                $edit_history->edited_by = $edited_by;
+                $edit_history->save();
+            }
         }
 
         return $student->id;
@@ -1026,17 +1045,17 @@ class studentController extends Controller
 
         if(isset($edited_by)){
             $edit_fields = ['First Name', 'Middle Name', 'Last Name', 'Program', 'Company',
-                'Contact #', 'Gender', 'Birth Date', 'Course', 'Email', 'Address',
+                'Contact #', 'Gender', 'Birth Date', 'Civil Status', 'Course', 'Email', 'Address',
                 'Year', 'Month', 'Remarks'];
 
             $student_fields = [$student->fname, $student->mname, $student->lname, $student->program_id,
                 $student->company_id, $student->contact, $student->gender, $student->birthdate,
-                $student->course_id, $student->email, $student->address, $student->departure_year_id,
-                $student->departure_month_id, $student->remarks];
+                $student->civil_status, $student->course_id, $student->email, $student->address,
+                $student->departure_year_id, $student->departure_month_id, $student->remarks];
 
             $request_fields = [$request->t_fname, $request->t_mname, $request->t_lname, $request->t_program,
                 $request->t_company, $request->t_contact, $request->t_gender, $request->t_birthdate,
-                $request->t_course, $request->t_email, $request->t_address, $request->t_year,
+                $request->t_civil, $request->t_course, $request->t_email, $request->t_address, $request->t_year,
                 $request->t_month, $request->t_remarks];
         }
 
@@ -1048,6 +1067,7 @@ class studentController extends Controller
         $student->contact = $request->t_contact;
         $student->gender = $request->t_gender;
         $student->birthdate = Carbon::parse($request->t_birthdate);
+        $student->civil_status = $request->t_civil;
         $student->course_id = $request->t_course;
         $student->email = $request->t_email;
         $student->address = $request->t_address;
@@ -1148,15 +1168,24 @@ class studentController extends Controller
             if($student->picture != 'avatar5.png'){
                 Storage::delete('public/img/student/'.$student->picture);
             }
-            $fileextension = $request->s_picture->getClientOriginalExtension();
             $encryption = sha1(date('jSFY').time().$request->t_picture->getClientOriginalName());
-            $filename = $encryption.'.'.$fileextension;
+            $filename = $encryption.'.jpg';
 
-            $request->t_picture->storeAs('public/img/student', $filename);
+            $target = public_path().'/storage/img/student/'.$filename;
+            Image::make($request->file('t_picture'))->save($target, 60, 'jpg');
 
             $student->picture = $filename;
-
             $student->save();
+
+            if(isset($edited_by)){
+                $edit_history = new student_edit_history;
+                $edit_history->stud_id = $student->id;
+                $edit_history->field = 'Picture';
+                $edit_history->previous = 'Uploaded';
+                $edit_history->new = 'New Picture';
+                $edit_history->edited_by = $edited_by;
+                $edit_history->save();
+            }
         }
 
         return $student->id;
@@ -1329,15 +1358,24 @@ class studentController extends Controller
             if($student->picture != 'avatar5.png'){
                 Storage::delete('public/img/student/'.$student->picture);
             }
-            $fileextension = $request->s_picture->getClientOriginalExtension();
-            $encryption = sha1(date('jSFY').time().$request->t_picture->getClientOriginalName());
-            $filename = $encryption.'.'.$fileextension;
+            $encryption = sha1(date('jSFY').time().$request->picture->getClientOriginalName());
+            $filename = $encryption.'.jpg';
 
-            $request->t_picture->storeAs('public/img/student', $filename);
+            $target = public_path().'/storage/img/student/'.$filename;
+            Image::make($request->file('i_picture'))->save($target, 60, 'jpg');
 
             $student->picture = $filename;
-
             $student->save();
+
+            if(isset($edited_by)){
+                $edit_history = new student_edit_history;
+                $edit_history->stud_id = $student->id;
+                $edit_history->field = 'Picture';
+                $edit_history->previous = 'Uploaded';
+                $edit_history->new = 'New Picture';
+                $edit_history->edited_by = $edited_by;
+                $edit_history->save();
+            }
         }
 
         return $student->id;
@@ -1488,15 +1526,13 @@ class studentController extends Controller
         
         if(!StudentHigherPermission()){
             $student = student::with('program', 'referral', 'branch', 'course', 'departure_year', 'departure_month')->find($id);
-            $student->contact = '-';
+            //$student->contact = '-';
         }else{
             $student = student::with('program', 'school', 'benefactor', 'company', 'referral', 'branch', 'course', 'departure_year', 'departure_month', 'emergency')->find($id);
         }
 
         $birth = new Carbon($student->birthdate);
         $student->age = $birth->diffInYears(Carbon::now());
-
-
 
         return $student;
     }

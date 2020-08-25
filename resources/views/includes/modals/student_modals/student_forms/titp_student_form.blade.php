@@ -118,7 +118,7 @@
 
             <div class="row clearfix">
                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
-                        <label for="t_civil" class="pull-right">Civil Status</label>
+                        <label for="t_civil" class="text-right">Civil Status</label>
                 </div>
                 <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
                     <div class="form-group required">
@@ -206,11 +206,11 @@
 
             <div class="row clearfix">
                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
-                        <label for="tt_picture" class="pull-right">Picture</label>
+                        <label for="t_picture" class="pull-right">Picture</label>
                 </div>
                 <div class="col-lg-9 col-md-9 col-sm-7 col-xs-7">
                     <div class="form-group">
-                        <input type="file" id="tt_picture" name="tt_picture" class="form-control inputFile">
+                        <input type="file" id="t_picture" name="t_picture" class="form-control inputFile">
                     </div>
                 </div>
             </div>
