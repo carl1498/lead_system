@@ -133,10 +133,7 @@ class salaryController extends Controller
             return $this->calculate_all('deduction', $data);
         })
         ->addColumn('wfh', function($data){
-            return ($data->deduction->wfh) 
-            ? ($data->deduction->wfh == floor($data->deduction->wfh) 
-                ? floor($data->deduction->wfh).'%' : $data->deduction->wfh.'%') 
-            : '';
+            return $this->calculate_all('wfh', $data);
         })
         ->addColumn('cutoff', function($data){
             return $data->period_from.' - '.$data->period_to;

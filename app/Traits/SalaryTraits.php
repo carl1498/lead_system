@@ -8,9 +8,9 @@ trait SalaryTraits {
         $daily = $d->daily;
 
         $income_arr = ['basic', 'transpo', 'gross', 'reg_ot', 'rd_ot', 'spcl', 'leg',
-                        'spcl_ot', 'leg_ot', 'net'];
+                        'spcl_ot', 'leg_ot', 'wfh', 'deduction', 'net']; //included deduction for WFH
 
-        $deduction_arr = ['deduction', 'absence', 'late', 'undertime',
+        $deduction_arr = ['deduction', 'absence', 'late', 'undertime', 'wfh',
                             'net'];
 
         if(in_array($type, $income_arr)){
@@ -98,15 +98,23 @@ trait SalaryTraits {
             
             $deduction += $absence + $late + $undertime;
 
+            if($type == 'deduction' || $type == 'wfh' || $type == 'net'){
+                $wfh = 0;
+                $wfh = number_format(($gross - $deduction) * ((100 - $ded->wfh) / 100), 2, '.', '');
+                if($ded->wfh) {
+                    $ded->wfh = ($ded->wfh == floor($ded->wfh)) ? floor($ded->wfh) : $ded->wfh;
+                    return '('.$ded->wfh.'%) '.$wfh;
+                }
+    
+                $deduction += $wfh; // OVERALL DEDUCTION
+            }
+
             if($type == 'deduction'){
                 return number_format($deduction, 2, '.', '');
             }
         }
         if($type == 'net'){
             $net = $gross - $deduction;
-            if($d->deduction->wfh && $d->deduction->wfh > 0){
-                $net = $net * ($d->deduction->wfh / 100);
-            }
 
             return number_format($net, 2, '.', '');
         }

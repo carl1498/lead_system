@@ -518,20 +518,30 @@ $(document).ready(function(){
         $('#late_amount').val(((daily / 8) * $('#late_hours').val()).toFixed(2));
         $('#under_amount').val(((daily / 8) * $('#under_hours').val()).toFixed(2));
 
+        let wfh_deduction = 0;
+        if($('#wfh').val() != '' && $('#wfh').val() > 0){
+            for(let x = 0; x < deduction_all.length; x++){
+                if($(deduction_all[x]).val() != ''){
+                    wfh_deduction += parseFloat($(deduction_all[x]).val());
+                }
+            }
+
+            wfh_deduction = (gross - wfh_deduction) * ((100 - $('#wfh').val())/100);
+        }
+        $('#wfh_amount').val(wfh_deduction.toFixed(2));
+
         let deduction = 0;
         for(let x = 0; x < deduction_all.length; x++){
             if($(deduction_all[x]).val() != ''){
                 deduction += parseFloat($(deduction_all[x]).val());
             }
         }
+        deduction += parseFloat($('#wfh_amount').val());
         $('#deduction').val(deduction.toFixed(2));
         //DEDUCTIONS -- END
 
         //NET PAY -- START
         let net = gross - deduction;
-        if($('#wfh').val() != '' || $('#wfh').val() > 0){
-            net = net * ($('#wfh').val() / 100);
-        }
         $('#net').val(net.toFixed(2));
         //NET PAY -- END
     }

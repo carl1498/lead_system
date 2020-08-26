@@ -511,6 +511,22 @@
 
                         <div class="row clearfix">
                             <div class="col-lg-5 col-md-5 col-sm-3 col-xs-3 form-control-label">
+                                    <label for="wfh" class="pull-right">WFH</label>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-7 col-xs-7">
+                                <div class="form-group">
+                                    <input type="number" step="any" id="wfh" name="wfh" class="form-control" placeholder="%">
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-7 col-xs-7">
+                                <div class="form-group">
+                                    <input type="number" step="any" id="wfh_amount" name="wfh_amount" class="form-control" placeholder="WFH Amount" style="padding-right: 0;" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row clearfix">
+                            <div class="col-lg-5 col-md-5 col-sm-3 col-xs-3 form-control-label">
                                     <label for="deduction" class="pull-right">Total Deduction</label>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-7 col-xs-7">
@@ -532,17 +548,6 @@
                             <div class="col-lg-6 col-md-6 col-sm-7 col-xs-7">
                                 <div class="form-group" style="visibility: hidden;">
                                     <input type="number" class="form-control" placeholder="Blank" readonly>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row clearfix">
-                            <div class="col-lg-5 col-md-5 col-sm-3 col-xs-3 form-control-label">
-                                    <label for="wfh" class="pull-right">WFH</label>
-                            </div>
-                            <div class="col-lg-6 col-md-6 col-sm-7 col-xs-7">
-                                <div class="form-group">
-                                    <input type="number" step="any" id="wfh" name="wfh" class="form-control" placeholder="Enter WFH in % (1-100)">
                                 </div>
                             </div>
                         </div>

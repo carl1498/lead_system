@@ -17680,20 +17680,30 @@ $(document).ready(function () {
         $('#late_amount').val((daily / 8 * $('#late_hours').val()).toFixed(2));
         $('#under_amount').val((daily / 8 * $('#under_hours').val()).toFixed(2));
 
+        var wfh_deduction = 0;
+        if ($('#wfh').val() != '' && $('#wfh').val() > 0) {
+            for (var _x2 = 0; _x2 < deduction_all.length; _x2++) {
+                if ($(deduction_all[_x2]).val() != '') {
+                    wfh_deduction += parseFloat($(deduction_all[_x2]).val());
+                }
+            }
+
+            wfh_deduction = (gross - wfh_deduction) * ((100 - $('#wfh').val()) / 100);
+        }
+        $('#wfh_amount').val(wfh_deduction.toFixed(2));
+
         var deduction = 0;
-        for (var _x2 = 0; _x2 < deduction_all.length; _x2++) {
-            if ($(deduction_all[_x2]).val() != '') {
-                deduction += parseFloat($(deduction_all[_x2]).val());
+        for (var _x3 = 0; _x3 < deduction_all.length; _x3++) {
+            if ($(deduction_all[_x3]).val() != '') {
+                deduction += parseFloat($(deduction_all[_x3]).val());
             }
         }
+        deduction += parseFloat($('#wfh_amount').val());
         $('#deduction').val(deduction.toFixed(2));
         //DEDUCTIONS -- END
 
         //NET PAY -- START
         var net = gross - deduction;
-        if ($('#wfh').val() != '' || $('#wfh').val() > 0) {
-            net = net * ($('#wfh').val() / 100);
-        }
         $('#net').val(net.toFixed(2));
         //NET PAY -- END
     }

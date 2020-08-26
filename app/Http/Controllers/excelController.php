@@ -1444,8 +1444,11 @@ class excelController extends Controller
                 $sheet->setCellValue('F'.$ded_row, $tax)->setCellValue('M'.$ded_row, '=F'.$ded_row);
                 $ded_row++;
             }
-
-            if($inc_row <= $ded_row){
+            
+            if($inc_row <= $ded_row && $s->deduction->wfh){
+                $inc_row = $ded_row+2;
+                $higher_row = $ded_row+2;
+            }else if($inc_row <= $ded_row && $s->deduction->wfh){
                 $inc_row = $ded_row+1;
                 $higher_row = $ded_row+1;
             }else{
@@ -1456,12 +1459,28 @@ class excelController extends Controller
             $sheet->setCellValue('A'.$inc_row, 'Gross Pay')->setCellValue('H'.$inc_row, '=A'.$inc_row);
             $sheet->setCellValue('C'.$inc_row, '=sum(C'.$inc_ded_row.':C'.($inc_row-1).')')->setCellValue('J'.$inc_row, '=C'.$inc_row);
 
+            // WFH
+            if($s->deduction->wfh){
+                $wfh = $s->deduction->wfh;
+                $sheet->setCellValue('D'.$ded_row, 'WFH')->setCellValue('K'.$ded_row, '=D'.$ded_row);
+                $sheet->setCellValue('E'.$ded_row, $wfh)->setCellValue('L'.$ded_row, '=E'.$ded_row);
+                $sheet->setCellValue('F'.$ded_row, '=(C'.$inc_row.' - sum(F'.$inc_ded_row.':F'.($ded_row-1).')) * .'.(100-$wfh))->setCellValue('M'.$ded_row, '=F'.$ded_row);
+                $ded_row++;
+            }
+
             // TOTAL DEDUCTIONS
             $sheet->setCellValue('D'.$ded_row, 'Total Deduction')->setCellValue('K'.$ded_row, '=D'.$ded_row);
             $sheet->mergeCells('D'.$ded_row.':E'.$ded_row)->mergeCells('K'.$ded_row.':L'.$ded_row);
             $sheet->setCellValue('F'.$ded_row, '=sum(F'.$inc_ded_row.':F'.($ded_row-1).')')->setCellValue('M'.$ded_row, '=F'.$ded_row);
 
             // DEDUCTION -- END
+
+            if($inc_row <= $ded_row){
+                $inc_row = $ded_row+1;
+                $higher_row = $ded_row+1;
+            }else{
+                $higher_row = $inc_row;
+            }
 
             for($x = $ded_row; $x < $higher_row; $x++){
                 $sheet->mergeCells('D'.$x.':E'.$x)->mergeCells('K'.$x.':L'.$x);
@@ -1470,12 +1489,7 @@ class excelController extends Controller
             // NET PAY
             $sheet->setCellValue('D'.$inc_row, 'Net Pay')->setCellValue('K'.$inc_row, '=D'.$inc_row);
             $sheet->mergeCells('D'.$inc_row.':E'.$inc_row)->mergeCells('K'.$inc_row.':L'.$inc_row);
-            if($s->deduction->wfh){
-                $wfh = $s->deduction->wfh / 100;
-                $net = '=(C'.$inc_row.' - F'.$ded_row.') * '.$wfh;
-            }else{
-                $net = '=C'.$inc_row.' - F'.$ded_row;
-            }
+            $net = '=C'.$inc_row.' - F'.$ded_row;
             $sheet->setCellValue('F'.$inc_row, $net)->setCellValue('M'.$inc_row, '=F'.$inc_row);
             
             $footer_row = $inc_row;
