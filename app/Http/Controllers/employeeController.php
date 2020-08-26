@@ -324,14 +324,13 @@ class employeeController extends Controller
             if($employee->picture != 'avatar5.png'){
                 Storage::delete('public/img/employee/'.$employee->picture);
             }
-            $fileextension = $request->picture->getClientOriginalExtension();
             $encryption = sha1(date('jSFY').time().$request->picture->getClientOriginalName());
-            $filename = $encryption.'.'.$fileextension;
+            $filename = $encryption.'.jpg';
 
-            $request->picture->storeAs('public/img/employee', $filename);
+            $target = storage_path('app/public/img/employee/'.$filename);
+            Image::make($request->file('picture'))->save($target, 60, 'jpg');
 
             $employee->picture = $filename;
-
             $employee->save();
         }
 
