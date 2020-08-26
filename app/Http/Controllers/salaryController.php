@@ -364,8 +364,6 @@ class salaryController extends Controller
                 $query->where('employment_status', $status);
             });
         })->get();
-        info($name);
-        info($role);
 
         foreach($role as $r){
             $id = $r->id;
