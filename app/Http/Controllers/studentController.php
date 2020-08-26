@@ -668,7 +668,7 @@ class studentController extends Controller
             $encryption = sha1(date('jSFY').time().$request->picture->getClientOriginalName());
             $filename = $encryption.'.jpg';
 
-            $target = storage_path().'/storage/img/student/'.$filename;
+            $target = storage_path().'/public/img/student/'.$filename;
             Image::make($request->file('picture'))->save($target, 60, 'jpg');
 
             $student->picture = $filename;
@@ -831,7 +831,7 @@ class studentController extends Controller
             $encryption = sha1(date('jSFY').time().$request->l_picture->getClientOriginalName());
             $filename = $encryption.'.jpg';
 
-            $target = storage_path().'/storage/img/student/'.$filename;
+            $target = storage_path().'/public/img/student/'.$filename;
             Image::make($request->file('l_picture'))->save($target, 60, 'jpg');
 
             $student->picture = $filename;
@@ -1171,7 +1171,7 @@ class studentController extends Controller
             $encryption = sha1(date('jSFY').time().$request->t_picture->getClientOriginalName());
             $filename = $encryption.'.jpg';
 
-            $target = storage_path().'/storage/img/student/'.$filename;
+            $target = storage_path().'/public/img/student/'.$filename;
             Image::make($request->file('t_picture'))->save($target, 60, 'jpg');
 
             $student->picture = $filename;
@@ -1361,7 +1361,7 @@ class studentController extends Controller
             $encryption = sha1(date('jSFY').time().$request->picture->getClientOriginalName());
             $filename = $encryption.'.jpg';
 
-            $target = storage_path().'/storage/img/student/'.$filename;
+            $target = storage_path().'/public/img/student/'.$filename;
             Image::make($request->file('i_picture'))->save($target, 60, 'jpg');
 
             $student->picture = $filename;
