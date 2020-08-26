@@ -349,15 +349,23 @@ class salaryController extends Controller
         $status = $request->status;
         $name = $request->name;
 
+        /*$role = role::with('employee')
+        ->when($name != '', function($query) use($name){
+            $query->where('name', $name);
+        })
+        ->get();*/
+
         $role = role::with('employee')
         ->when($name != '', function($query) use($name){
-            $query->Where('name', $name);
+            $query->where('name', 'LIKE', '%'.$name.'%');
         })
         ->when($status != 'All', function($query) use($name, $status){
             $query->whereHas('employee', function($query) use($status){
-                $query->Where('employment_status', $status);
+                $query->where('employment_status', $status);
             });
         })->get();
+        info($name);
+        info($role);
 
         foreach($role as $r){
             $id = $r->id;

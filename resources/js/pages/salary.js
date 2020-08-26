@@ -10,6 +10,7 @@ $(document).ready(function(){
     var status = 'Active';
     var role = [];
     var date_counter = true;
+    var from_date, to_date, release_date;
 
     var ot_hours = ['#reg_ot_hours', '#rd_ot_hours', '#spcl_hol_hours', '#spcl_hol_ot_hours', '#leg_hol_hours', '#leg_hol_ot_hours'];
     var ot_type = ['#reg_ot_amount', '#rd_ot_amount', '#spcl_hol_amount', '#spcl_hol_ot_amount', '#leg_hol_amount', '#leg_hol_ot_amount'];
@@ -69,14 +70,8 @@ $(document).ready(function(){
     });
 
     $("#emp_salary_modal, #salary_modal, #bulk_salary_modal").on("hidden.bs.modal", function(e){
-        $('#emp_salary_form :input.required, #salary_form :input.required, #bulk_salary_form :input.required').each(function (){
-            this.style.setProperty('border-color', 'green', 'important');
-        });
-        $(this).find("input,textarea,select").val('').end();
-        $('#emp_salary_form .select2, #salary_form .select2, #bulk_salary_form .select2').trigger('change.select2');
-        $('#position, #b_position').val('All').trigger('change.select2');
-        $('#status, #b_status').val('Active').trigger('change.select2');
-        $('#allowance_counter').prop('checked', false);
+        salary_modal_clear();
+        $('#salary_continuous, #bulk_salary_continuous').bootstrapToggle('off');
     });
 
     $("#filter_modal").on("hidden.bs.modal", function(e){
@@ -86,6 +81,30 @@ $(document).ready(function(){
         button.disabled = false;
         input.html('SAVE CHANGES');
     });
+    
+    function salary_modal_clear(){
+        $("#emp_salary_modal").find("input,textarea,select").val('').end();
+        $("#salary_modal").find("input,textarea,select").val('').end();
+        $("#bulk_salary_modal").find("input,textarea,select").val('').end();
+        $('#emp_salary_form .select2, #salary_form .select2, #bulk_salary_form .select2').trigger('change.select2');
+        $('#position, #b_position').val('All').trigger('change.select2');
+        $('#status, #b_status').val('Active').trigger('change.select2');
+        $('#allowance_counter').prop('checked', false);
+    }
+
+    function copy_date(from, to, release){
+        from_date = $(from).val();
+        to_date = $(to).val();
+        release_date = $(release).val();
+    }
+
+    function paste_date(from, to, release){
+        $(from).val(from_date);
+        $(to).val(to_date);
+        $(release).val(release_date);
+    }
+    
+    $('#salary_continuous, #bulk_salary_continuous').bootstrapToggle('off');
 
     function disableTabs(){
         $(`li.tab_pick`).addClass('disabled').css('cursor', 'not-allowed');
@@ -563,7 +582,13 @@ $(document).ready(function(){
             method: 'POST',
             data: $(this).serialize(),
             success:function(data){
-                $('#salary_modal').modal('hide');
+                if($('#salary_continuous').is(':checked')){
+                    copy_date('#cutoff_from', '#cutoff_to', '#release');
+                    salary_modal_clear();
+                    paste_date('#cutoff_from', '#cutoff_to', '#release');
+                }else{
+                    $('#salary_modal').modal('hide');
+                }
                 notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
                 button.disabled = false;
                 input.html('SAVE CHANGES');
@@ -714,7 +739,13 @@ $(document).ready(function(){
             method: 'POST',
             data: $(this).serialize(),
             success:function(data){
-                $('#bulk_salary_modal').modal('hide');
+                if($('#bulk_salary_continuous').is(':checked')){
+                    copy_date('#b_cutoff_from', '#b_cutoff_to', '#b_release');
+                    salary_modal_clear();
+                    paste_date('#b_cutoff_from', '#b_cutoff_to', '#b_release');
+                }else{
+                    $('#bulk_salary_modal').modal('hide');
+                }
                 notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
                 button.disabled = false;
                 input.html('SAVE CHANGES');
@@ -730,7 +761,7 @@ $(document).ready(function(){
 
     //SELECT 2
     $('#emp').select2({
-        placeholder: 'Select Employee',
+        //placeholder: 'Select Employee',
         ajax: {
             url: "/emp_salary_select",
             dataType: 'json',
@@ -761,7 +792,7 @@ $(document).ready(function(){
 
     $('#b_emp').select2({
         closeOnSelect: false,
-        placeholder: 'Select Employee',
+        //placeholder: 'Select Employee',
         ajax: {
             url: "/emp_salary_select",
             dataType: 'json',

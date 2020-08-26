@@ -100,10 +100,12 @@ trait SalaryTraits {
 
             if($type == 'deduction' || $type == 'wfh' || $type == 'net'){
                 $wfh = 0;
-                $wfh = number_format(($gross - $deduction) * ((100 - $ded->wfh) / 100), 2, '.', '');
-                if($ded->wfh && $type == 'wfh') {
-                    $ded->wfh = ($ded->wfh == floor($ded->wfh)) ? floor($ded->wfh) : $ded->wfh;
-                    return '('.$ded->wfh.'%) '.$wfh;
+                if($ded->wfh && $ded->wfh > 0) {
+                    $wfh = number_format(($gross - $deduction) * ((100 - $ded->wfh) / 100), 2, '.', '');
+                    if($type == 'wfh'){
+                        $ded->wfh = ($ded->wfh == floor($ded->wfh)) ? floor($ded->wfh) : $ded->wfh;
+                        return '('.$ded->wfh.'%) '.$wfh;
+                    }
                 }
     
                 $deduction += $wfh; // OVERALL DEDUCTION

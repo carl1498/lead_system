@@ -1460,7 +1460,7 @@ class excelController extends Controller
             $sheet->setCellValue('C'.$inc_row, '=sum(C'.$inc_ded_row.':C'.($inc_row-1).')')->setCellValue('J'.$inc_row, '=C'.$inc_row);
 
             // WFH
-            if($s->deduction->wfh){
+            if($s->deduction->wfh && $s->deduction->wfh > 0){
                 $wfh = $s->deduction->wfh;
                 $sheet->setCellValue('D'.$ded_row, 'WFH')->setCellValue('K'.$ded_row, '=D'.$ded_row);
                 $sheet->setCellValue('E'.$ded_row, $wfh)->setCellValue('L'.$ded_row, '=E'.$ded_row);
