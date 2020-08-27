@@ -349,12 +349,6 @@ class salaryController extends Controller
         $status = $request->status;
         $name = $request->name;
 
-        /*$role = role::with('employee')
-        ->when($name != '', function($query) use($name){
-            $query->where('name', $name);
-        })
-        ->get();*/
-
         $role = role::with('employee')
         ->when($name != '', function($query) use($name){
             $query->where('name', 'LIKE', '%'.$name.'%');
@@ -375,13 +369,13 @@ class salaryController extends Controller
                 ->when($status != '', function($query) use($status){
                     $query->where('employment_status', $status);
                 });
-            })->groupBy('emp_id')->count();
+            })->distinct('emp_id')->count();
             
             if($sal_mon == count($r->employee)){
                 $r->pay_icon = '<i class="fa fa-check text-success"></i> ';
             }else{
                 $r->pay_icon = '<i class="fa fa-minus text-danger"></i> ';
-            } 
+            }
         }
 
         $array = [];
