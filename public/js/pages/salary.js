@@ -17469,12 +17469,12 @@ $(document).ready(function () {
                 };
 
                 // Total over all pages
-                total = api.column(6).data().reduce(function (a, b) {
+                total = api.column(7).data().reduce(function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0);
 
                 // Update footer
-                $(api.column(6).footer()).html('₱' + total.toFixed(2));
+                $(api.column(7).footer()).html('₱' + total.toFixed(2));
             }
         });
     }
