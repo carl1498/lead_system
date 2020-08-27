@@ -355,6 +355,11 @@ class salaryController extends Controller
                 $query->where('employment_status', $status);
             });
         }])
+        ->whereHas('employee', function($query) use($status){
+            $query->when($status != 'All', function($query) use($status){
+                $query->where('employment_status', $status);
+            });
+        })
         ->when($name != '', function($query) use($name){
             $query->where('name', 'LIKE', '%'.$name.'%');
         })->get();
