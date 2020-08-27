@@ -109,6 +109,22 @@
 
                         <div class="row clearfix">
                             <div class="col-lg-4 col-md-4 col-sm-3 col-xs-3 form-control-label">
+                                    <label for="type" class="pull-right">Employment</label>
+                            </div>
+                            <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
+                                <div class="form-group required">
+                                    <select type="text" id="type" name="type" class="form-control select2 required" style="width: 100%;" required>
+                                        <option value="">Select Employment Type</option>
+                                        <option value="Regular">Regular</option>
+                                        <option value="Probationary">Probationary</option>
+                                        <option value="Part-time">Part-time</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row clearfix">
+                            <div class="col-lg-4 col-md-4 col-sm-3 col-xs-3 form-control-label">
                                     <label for="picture" class="pull-right">Picture</label>
                             </div>
                             <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">

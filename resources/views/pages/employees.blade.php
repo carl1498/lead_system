@@ -72,9 +72,12 @@
                             <p id="p_status" class="text-muted" style="word-wrap: break-word;">
                             -
                             </p>
-                            <p id="p_probationary" class="text-muted" style="word-wrap: break-word;">
+                            <!--<p id="p_probationary" class="text-muted" style="word-wrap: break-word;">
                             -
-                            </p>
+                            </p>-->
+                        </li>
+                        <li class="list-group-item">
+                            <b>Employment Type</b> <p id="p_emp_type" class="pull-right text-muted">-</p>
                         </li>
                         <li class="list-group-item">
                             <b>Hired Date</b> <p id="p_hired" class="pull-right text-muted">-</p>

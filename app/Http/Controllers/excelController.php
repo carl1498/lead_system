@@ -1048,9 +1048,7 @@ class excelController extends Controller
         $company = $request->company_hidden;
         $status = $request->status_hidden;
         $role = $request->role_hidden;
-        $months = ['January', 'February', 'March', 'April', 'May', 'June',
-                    'July', 'August', 'September', 'October', 'November', 'December'];
-
+       
         //ALL DATA -- START
 
         $salary = salary_monitoring::with('income', 'deduction', 'employee.branch', 'employee.company_type', 'employee.role')
@@ -1327,6 +1325,7 @@ class excelController extends Controller
             $adjustments = $s->income->adjustments;
             $sheet->setCellValue('A'.$inc_row, 'Adjustments')->setCellValue('H'.$inc_row, '=A'.$inc_row);
             $sheet->setCellValue('C'.$inc_row, $adjustments)->setCellValue('J'.$inc_row, '=C'.$inc_row);
+            $adjustment_cell = 'C'.$inc_row;
             $row++; $inc_row++;
 
             // LEG HOLIDAY
@@ -1464,7 +1463,7 @@ class excelController extends Controller
                 $wfh = $s->deduction->wfh;
                 $sheet->setCellValue('D'.$ded_row, 'WFH')->setCellValue('K'.$ded_row, '=D'.$ded_row);
                 $sheet->setCellValue('E'.$ded_row, $wfh)->setCellValue('L'.$ded_row, '=E'.$ded_row);
-                $sheet->setCellValue('F'.$ded_row, '=(C'.$inc_row.' - sum(F'.$inc_ded_row.':F'.($ded_row-1).')) * .'.(100-$wfh))->setCellValue('M'.$ded_row, '=F'.$ded_row);
+                $sheet->setCellValue('F'.$ded_row, '=(C'.$inc_row.' - sum(F'.$inc_ded_row.':F'.($ded_row-1).') - '.$adjustment_cell.') * .'.(100-$wfh))->setCellValue('M'.$ded_row, '=F'.$ded_row);
                 $ded_row++;
             }
 
@@ -1565,6 +1564,156 @@ class excelController extends Controller
         $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
         ob_end_clean();
         $writer->save('php://output');
+    }
 
+    
+    public function excel_salary_summary(Request $request){
+        $start_date = $request->s_start_date_hidden;
+        $end_date = $request->s_end_date_hidden;
+        $date_counter = $request->s_date_counter_hidden;
+        $branch = $request->s_branch_hidden;
+        $company = $request->s_company_hidden;
+        $status = $request->s_status_hidden;
+        $role = $request->s_role_hidden;
+
+        //ALL DATA -- START
+
+        $salary = salary_monitoring::with('income', 'deduction', 'employee.branch', 'employee.company_type', 'employee.role')
+                ->when($company != 'All', function($query) use($company) {
+                    $query->whereHas('employee', function($query) use($company) {
+                        $query->where('lead_company_type_id', $company);
+                    });
+                })->when($branch != 'All', function($query) use($branch) {
+                    $query->whereHas('employee', function($query) use($branch) {
+                        $query->where('branch_id', $branch);
+                    });
+                })->when($status != 'All', function($query) use($status) {
+                    $query->whereHas('employee', function($query) use($status) {
+                        $query->where('employment_status', $status);
+                    });
+                })->when($role, function($query) use($role) {
+                    $query->whereHas('employee', function($query) use($role) {
+                        $query->whereIn('role_id', $role);
+                    });
+                })->when($date_counter == 'true', function($query) use($start_date, $end_date) {
+                    $query->whereBetween('pay_date', [$start_date, $end_date]);
+                })->get();
+
+        //ALL DATA -- END
+        
+        //STYLE -- START
+
+        $companyStyleArray = [
+            'font' => [
+                'bold' => true,
+                'size' => 10
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+                'vertical' => Alignment::VERTICAL_CENTER,   
+            ]
+        ];
+
+        $receiptStyleArray = [
+            'font' => [
+                'bold' => true,
+                'size' => 9
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+                'vertical' => Alignment::VERTICAL_CENTER,   
+            ]
+        ];
+
+        $numberStyleArray = [
+            'numberFormat' => [
+                'formatCode' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1,
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_RIGHT,
+            ]
+        ];
+
+        $headerStyleArray = [
+            'font' => [
+                'bold' => true,
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+                'vertical' => Alignment::VERTICAL_CENTER,   
+            ]
+        ];
+
+        $daysStyleArray = [
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+            ]
+        ];
+
+        $borderStyleArray = [
+            'borders' => [
+                'outline' => [
+                    'borderStyle' => Border::BORDER_THIN
+                ]
+            ]
+        ];
+
+        $borderMediumStyleArray = [
+            'borders' => [
+                'outline' => [
+                    'borderStyle' => Border::BORDER_MEDIUM
+                ]
+            ]
+        ];
+        
+        //STYLE -- END
+
+        //Initialize Sheet
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $row = 1; $print_by_four = 0; $print_row = 0; $print_counter = 0;
+        $salary_count = count($salary);
+        $print_area = '';
+        
+        $sheet->getPageSetup()->setOrientation(PageSetup::ORIENTATION_LANDSCAPE)
+        ->setPaperSize(PageSetup::PAPERSIZE_FOLIO);
+        
+        $sheet->getPageMargins()->setTop(0.75);
+        $sheet->getPageMargins()->setRight(0.7);
+        $sheet->getPageMargins()->setLeft(0.25);
+        $sheet->getPageMargins()->setBottom(0.75);
+
+        //HEADER
+        $sheet->setCellValue('A1', 'Company')->mergeCells('A1'.':AC1');
+        $sheet->getStyle('A1')->applyFromArray($companyStyleArray);
+        
+        $sheet->setCellValue('A2', 'PAYROLL MONITORING FORM')->mergeCells('A2'.':AC2');
+        $sheet->getStyle('A2')->applyFromArray($companyStyleArray);
+
+        $sheet->setCellValue('B3', 'DATE COVERED:');
+        $sheet->setCellValue('B4', 'DATE PREPARED:');
+
+        $sheet->setCellValue('A6', 'No.')->mergeCells('A6'.':A7');
+        $sheet->setCellValue('B6', 'Name of Employee')->mergeCells('B6'.':B7');
+        $sheet->setCellValue('C6', 'Branch')->mergeCells('C6'.':C7');
+        $sheet->setCellValue('D6', 'Mode of')->setCellValue('D7', 'Salary');
+        $sheet->setCellValue('E6', 'Mode of')->setCellValue('E7', 'Employment');
+        $sheet->setCellValue('F6', 'Daily Rate')->mergeCells('F6'.':F7');
+        $sheet->setCellValue('G6', 'Monthly')->setCellValue('G7', 'Rate');
+        $sheet->setCellValue('H6', 'Days')->setCellValue('H7', 'Worked');
+        $sheet->setCellValue('I6', 'Total')->mergeCells('I6'.':I7');
+        $sheet->setCellValue('J6', 'Regular OT')->mergeCells('J6'.':K6');
+        $sheet->setCellValue('J7', 'Hrs')->setCellValue('K7', 'Amt');
+
+        $filename = 'Payroll Summary.xlsx';
+        
+        //redirect output to client
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="'.$filename.'"');
+        header('Cache-Control: max-age=0');
+
+        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+        ob_end_clean();
+        $writer->save('php://output');
     }
 }

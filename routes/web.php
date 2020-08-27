@@ -361,6 +361,7 @@ Route::group(['middleware' => ['auth', 'admin']], function(){
     Route::get('/get_sal_mon/{id}', 'salaryController@get_sal_mon');
     Route::get('/delete_salary', 'salaryController@delete_salary');
     Route::post('/excel_salary', 'excelController@excel_salary');
+    Route::post('/excel_salary_summary', 'excelController@excel_salary_summary');
 });
 
 //FINANCE ROUTES -- END

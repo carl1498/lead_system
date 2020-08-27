@@ -423,6 +423,7 @@ $(document).ready(function () {
                 $('#personal_no').val(data.employee.contact_personal);
                 $('#business_no').val(data.employee.contact_business);
                 $('#email').val(data.employee.email);
+                $('#type').val(data.employee.employment_type).trigger('change');
                 $('#address').val(data.employee.address);
                 $('#branch').val(data.employee.branch_id).trigger('change');
                 $('#role').val(data.employee.role_id).trigger('change');
@@ -1365,7 +1366,8 @@ $(document).ready(function () {
                 $('#p_gender').text(data.gender);
                 $('#p_branch').text(data.branch.name);
                 $('#p_status').text(data.employment_status + ' ' + data.leaves);
-                $('#p_probationary').text(data.probationary);
+                $('#p_emp_type').text(data.employment_type);
+                //$('#p_probationary').text(data.probationary);
                 $('#p_hired').text(data.current_employment_status.hired_date ? data.current_employment_status.hired_date : '-');
                 var months = data.months ? data.months : '';
                 $('#p_until').text(data.current_employment_status.until ? data.current_employment_status.until + ' (' + months + ')' : 'Present (' + data.months + ')');

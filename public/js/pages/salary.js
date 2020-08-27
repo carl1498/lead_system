@@ -17701,13 +17701,14 @@ $(document).ready(function () {
 
         var wfh_deduction = 0;
         if ($('#wfh').val() != '' && $('#wfh').val() > 0) {
+            var adjustments = $('#adjustments').val();
             for (var _x2 = 0; _x2 < deduction_all.length; _x2++) {
                 if ($(deduction_all[_x2]).val() != '') {
                     wfh_deduction += parseFloat($(deduction_all[_x2]).val());
                 }
             }
 
-            wfh_deduction = (gross - wfh_deduction) * ((100 - $('#wfh').val()) / 100);
+            wfh_deduction = (gross - wfh_deduction - adjustments) * ((100 - $('#wfh').val()) / 100);
         }
         $('#wfh_amount').val(wfh_deduction.toFixed(2));
 

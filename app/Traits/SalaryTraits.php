@@ -38,6 +38,7 @@ trait SalaryTraits {
             $gross += $inc->cola;
             $gross += $inc->acc_allowance;
             $gross += $inc->adjustments;
+            $adjustments = $inc->adjustments;
             $gross += $transpo_amount;
             $gross += $inc->market_comm;
             $gross += $inc->jap_comm;
@@ -101,7 +102,7 @@ trait SalaryTraits {
             if($type == 'deduction' || $type == 'wfh' || $type == 'net'){
                 $wfh = 0;
                 if($ded->wfh && $ded->wfh > 0) {
-                    $wfh = number_format(($gross - $deduction) * ((100 - $ded->wfh) / 100), 2, '.', '');
+                    $wfh = number_format(($gross - $deduction - $adjustments) * ((100 - $ded->wfh) / 100), 2, '.', '');
                     if($type == 'wfh'){
                         $ded->wfh = ($ded->wfh == floor($ded->wfh)) ? floor($ded->wfh) : $ded->wfh;
                         return '('.$ded->wfh.'%) '.$wfh;

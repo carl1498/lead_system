@@ -539,13 +539,14 @@ $(document).ready(function(){
 
         let wfh_deduction = 0;
         if($('#wfh').val() != '' && $('#wfh').val() > 0){
+            let adjustments = $('#adjustments').val();
             for(let x = 0; x < deduction_all.length; x++){
                 if($(deduction_all[x]).val() != ''){
                     wfh_deduction += parseFloat($(deduction_all[x]).val());
                 }
             }
 
-            wfh_deduction = (gross - wfh_deduction) * ((100 - $('#wfh').val())/100);
+            wfh_deduction = (gross - wfh_deduction - adjustments) * ((100 - $('#wfh').val())/100);
         }
         $('#wfh_amount').val(wfh_deduction.toFixed(2));
 

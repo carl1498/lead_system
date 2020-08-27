@@ -285,6 +285,7 @@ class employeeController extends Controller
         $employee->contact_personal = $request->personal_no;
         $employee->contact_business = $request->business_no;
         $employee->email = $request->email;
+        $employee->employment_type = $request->type;
         $employee->address = $request->address;
         $employee->branch_id = $request->branch;
         $employee->role_id = $request->role;
