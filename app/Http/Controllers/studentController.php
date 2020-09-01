@@ -217,7 +217,7 @@ class studentController extends Controller
         ->whereHas('program', function($query){
             $query->where('name', 'Language Only');
         })
-        ->when($departure_year != 'All', function($query) use($dep_year){
+        ->when($dep_year != 'All', function($query) use($dep_year){
             $query->where('departure_year_id', $dep_year);
         })
         ->get();
