@@ -158,11 +158,17 @@ $(document).ready(function () {
     });
 
     $('#emergency_modal, #emp_history_modal, #educational_background_modal').on('hidden.bs.modal', function (e) {
-        $(this).find("input,textarea,select").val('').end();
+        student_other_modal_clear();
         setTimeout(function () {
             $('#student_info_modal').modal('show');
         }, 500);
+        $('#emp_continuous, #emergency_continuous, #educ_continuous').bootstrapToggle('off');
     });
+
+    function student_other_modal_clear() {
+        $('#emergency_modal, #emp_history_modal, #educational_background_modal').find("input,textarea,select").val('').end();
+        $('#eb_add_edit, #e_add_edit, #eh_add_edit').val('add');
+    }
 
     function student_modal_clear() {
         $('#student_form :input.required').each(function () {
@@ -184,7 +190,7 @@ $(document).ready(function () {
         $('.select2').trigger('change.select2');
     }
 
-    $('#add_continuous').bootstrapToggle('off');
+    $('#add_continuous, #emp_continuous, #emergency_continuous, #educ_continuous').bootstrapToggle('off');
 
     $('input, select').attr('autocomplete', 'off');
 
@@ -1849,7 +1855,13 @@ $(document).ready(function () {
             method: 'POST',
             data: $(this).serialize(),
             success: function success(data) {
-                $('#emergency_modal').modal('hide');
+                if ($('#emergency_continuous').is(':checked')) {
+                    var id = $('#e_stud_id').val();
+                    student_other_modal_clear();
+                    $('#e_stud_id').val(id);
+                } else {
+                    $('#emergency_modal').modal('hide');
+                }
                 button.disabled = false;
                 input.html('SAVE CHANGES');
                 refresh_student_info(data);
@@ -1880,7 +1892,13 @@ $(document).ready(function () {
             method: 'POST',
             data: $(this).serialize(),
             success: function success(data) {
-                $('#emp_history_modal').modal('hide');
+                if ($('#emp_continuous').is(':checked')) {
+                    var id = $('#eh_stud_id').val();
+                    student_other_modal_clear();
+                    $('#eh_stud_id').val(id);
+                } else {
+                    $('#emp_history_modal').modal('hide');
+                }
                 button.disabled = false;
                 input.html('SAVE CHANGES');
                 refresh_student_info(data);
@@ -1911,7 +1929,13 @@ $(document).ready(function () {
             method: 'POST',
             data: $(this).serialize(),
             success: function success(data) {
-                $('#educational_background_modal').modal('hide');
+                if ($('#educ_continuous').is(':checked')) {
+                    var id = $('#eb_stud_id').val();
+                    student_other_modal_clear();
+                    $('#eb_stud_id').val(id);
+                } else {
+                    $('#educational_background_modal').modal('hide');
+                }
                 button.disabled = false;
                 input.html('SAVE CHANGES');
                 refresh_student_info(data);
