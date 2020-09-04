@@ -1599,6 +1599,10 @@ class excelController extends Controller
                     $query->whereBetween('pay_date', [$start_date, $end_date]);
                 })->get();
 
+        $no_salary = 
+
+        
+
         //ALL DATA -- END
         
         //STYLE -- START
@@ -1607,17 +1611,6 @@ class excelController extends Controller
             'font' => [
                 'bold' => true,
                 'size' => 10
-            ],
-            'alignment' => [
-                'horizontal' => Alignment::HORIZONTAL_CENTER,
-                'vertical' => Alignment::VERTICAL_CENTER,   
-            ]
-        ];
-
-        $receiptStyleArray = [
-            'font' => [
-                'bold' => true,
-                'size' => 9
             ],
             'alignment' => [
                 'horizontal' => Alignment::HORIZONTAL_CENTER,
@@ -1640,13 +1633,20 @@ class excelController extends Controller
             ],
             'alignment' => [
                 'horizontal' => Alignment::HORIZONTAL_CENTER,
-                'vertical' => Alignment::VERTICAL_CENTER,   
+                'vertical' => Alignment::VERTICAL_CENTER,  
+                'wrapText' => true,   
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => Border::BORDER_MEDIUM
+                ]
             ]
         ];
 
-        $daysStyleArray = [
+        $centerStyleArray = [
             'alignment' => [
                 'horizontal' => Alignment::HORIZONTAL_CENTER,
+                'vertical' => Alignment::VERTICAL_CENTER,   
             ]
         ];
 
@@ -1654,14 +1654,6 @@ class excelController extends Controller
             'borders' => [
                 'outline' => [
                     'borderStyle' => Border::BORDER_THIN
-                ]
-            ]
-        ];
-
-        $borderMediumStyleArray = [
-            'borders' => [
-                'outline' => [
-                    'borderStyle' => Border::BORDER_MEDIUM
                 ]
             ]
         ];
@@ -1683,27 +1675,106 @@ class excelController extends Controller
         $sheet->getPageMargins()->setLeft(0.25);
         $sheet->getPageMargins()->setBottom(0.75);
 
-        //HEADER
-        $sheet->setCellValue('A1', 'Company')->mergeCells('A1'.':AC1');
+        //HEADER -- START
+        $sheet->setCellValue('A1', 'Company')->mergeCells('A1'.':AQ1');
         $sheet->getStyle('A1')->applyFromArray($companyStyleArray);
         
-        $sheet->setCellValue('A2', 'PAYROLL MONITORING FORM')->mergeCells('A2'.':AC2');
+        $sheet->setCellValue('A2', 'PAYROLL MONITORING FORM')->mergeCells('A2'.':AQ2');
         $sheet->getStyle('A2')->applyFromArray($companyStyleArray);
 
         $sheet->setCellValue('B3', 'DATE COVERED:');
         $sheet->setCellValue('B4', 'DATE PREPARED:');
 
-        $sheet->setCellValue('A6', 'No.')->mergeCells('A6'.':A7');
-        $sheet->setCellValue('B6', 'Name of Employee')->mergeCells('B6'.':B7');
-        $sheet->setCellValue('C6', 'Branch')->mergeCells('C6'.':C7');
-        $sheet->setCellValue('D6', 'Mode of')->setCellValue('D7', 'Salary');
-        $sheet->setCellValue('E6', 'Mode of')->setCellValue('E7', 'Employment');
-        $sheet->setCellValue('F6', 'Daily Rate')->mergeCells('F6'.':F7');
-        $sheet->setCellValue('G6', 'Monthly')->setCellValue('G7', 'Rate');
-        $sheet->setCellValue('H6', 'Days')->setCellValue('H7', 'Worked');
-        $sheet->setCellValue('I6', 'Total')->mergeCells('I6'.':I7');
-        $sheet->setCellValue('J6', 'Regular OT')->mergeCells('J6'.':K6');
+        $sheet->setCellValue('A6', 'No.')->mergeCells('A6:A7');
+        $sheet->setCellValue('B6', 'Name of Employee')->mergeCells('B6:B7');
+        $sheet->setCellValue('C6', 'Branch')->mergeCells('C6:C7');
+        $sheet->setCellValue('D6', 'Mode of Salary')->mergeCells('D6:D7');
+        $sheet->setCellValue('E6', 'Mode of Employment')->mergeCells('E6:E7');
+        $sheet->setCellValue('F6', 'Daily Rate')->mergeCells('F6:F7');
+        $sheet->setCellValue('G6', 'Monthly Rate')->mergeCells('G6:G7');
+        $sheet->setCellValue('H6', 'Days Worked')->mergeCells('H6:H7');
+        $sheet->setCellValue('I6', 'Total')->mergeCells('I6:I7');
+        $sheet->setCellValue('J6', 'Regular OT')->mergeCells('J6:K6');
         $sheet->setCellValue('J7', 'Hrs')->setCellValue('K7', 'Amt');
+        $sheet->setCellValue('L6', 'RD OT')->mergeCells('L6:M6');
+        $sheet->setCellValue('L7', 'Hrs')->setCellValue('M7', 'Amt');
+        $sheet->setCellValue('N6', 'Spcl Hol')->mergeCells('N6:O6');
+        $sheet->setCellValue('N7', 'Hrs')->setCellValue('O7', 'Amt');
+        $sheet->setCellValue('P6', 'Spcl Hol OT')->mergeCells('P6:Q6');
+        $sheet->setCellValue('P7', 'Hrs')->setCellValue('Q7', 'Amt');
+        $sheet->setCellValue('R6', 'Legal Hol')->mergeCells('R6'.':S6');
+        $sheet->setCellValue('R7', 'Hrs')->setCellValue('S7', 'Amt');
+        $sheet->setCellValue('T6', 'Legal Hol OT')->mergeCells('T6:U6');
+        $sheet->setCellValue('T7', 'Hrs')->setCellValue('U7', 'Amt');
+        $sheet->setCellValue('V6', 'Accommodation Allowance')->mergeCells('V6:V7');
+        $sheet->setCellValue('W6', 'Transpo Allowance')->mergeCells('W6:W7');
+        $sheet->setCellValue('X6', 'COLA')->mergeCells('X6:X7');
+        $sheet->setCellValue('Y6', 'Mktg Comm')->mergeCells('Y6:Y7');
+        $sheet->setCellValue('Z6', 'Japan Comm')->mergeCells('Z6:Z7');
+        $sheet->setCellValue('AA6', '13th Month')->mergeCells('AA6:AA7');
+        $sheet->setCellValue('AB6', 'Adjustments')->mergeCells('AB6:AB7');
+        $sheet->setCellValue('AC6', 'Gross Salary')->mergeCells('AC6:AC7');
+        $sheet->setCellValue('AD6', 'Statutory Deductions')->mergeCells('AD6:AH6');
+        $sheet->setCellValue('AD7', 'SSS')->setCellValue('AE7', 'PHIC');
+        $sheet->setCellValue('AF7', 'HDMF')->setCellValue('AG7', 'Tax')->setCellValue('AH7', 'CA');
+        $sheet->setCellValue('AI6', 'Other Deductions')->mergeCells('AI6:AM6');
+        $sheet->setCellValue('AI7', 'Mandatory')->setCellValue('AJ7', 'UT');
+        $sheet->setCellValue('AK7', 'Absent')->setCellValue('AL7', 'Late')->setCellValue('AM7', 'Others');
+        $sheet->setCellValue('AN6', 'WFH')->mergeCells('AN6:AN7');
+        $sheet->setCellValue('AO6', 'Total Deductions')->mergeCells('AO6:AO7');
+        $sheet->setCellValue('AP6', 'Net Salary')->mergeCells('AP6:AP7');
+        $sheet->setCellValue('AQ6', 'Remarks')->mergeCells('AQ6:AQ7');
+
+        //HEADER -- END
+
+        //BODY -- START
+
+        $no = 1;
+
+        //BODY -- END
+
+
+        // STYLES -- START
+
+        $sheet->freezePane('C8');
+        $sheet->setCellValue('B8', 'Jumilla -Señoron, Irish Mae'); // sample
+        $highest = $sheet->getHighestRow();
+        $sheet->getStyle('A6:AQ7')->applyFromArray($headerStyleArray);
+        $sheet->getStyle('A8:A'.$highest)->applyFromArray($centerStyleArray);
+        $sheet->getStyle('A1:AQ'.$highest)->getFont()->setSize(9)->setName('Arial Narrow');
+
+        //Column Sizes
+        $sheet->getColumnDimension('A')->setWidth(4); // No.
+        $sheet->getColumnDimension('B')->setWidth(19); // Name of Employee
+        $sheet->getColumnDimension('C')->setWidth(6); // Branch
+        $sheet->getColumnDimension('D')->setWidth(6.5); // Mode of Salary
+        $sheet->getColumnDimension('E')->setWidth(9.5); // Mode of Employment
+        $sheet->getColumnDimension('F')->setWidth(8); // Daily Rate
+        $sheet->getColumnDimension('G')->setWidth(9); // Monthly Rate
+        $sheet->getColumnDimension('H')->setWidth(6); // Days Worked
+        $sheet->getColumnDimension('J')->setWidth(4); // Reg OT
+        $sheet->getColumnDimension('L')->setWidth(4); // RD OT
+        $sheet->getColumnDimension('N')->setWidth(4); // Spcl
+        $sheet->getColumnDimension('P')->setWidth(4); // Spcl OT
+        $sheet->getColumnDimension('R')->setWidth(4); // Legal
+        $sheet->getColumnDimension('T')->setWidth(4); // Legal OT
+        $sheet->getColumnDimension('V')->setWidth(12); // Acccommodation Allowance
+        $sheet->getColumnDimension('X')->setWidth(7); // COLA
+        $sheet->getColumnDimension('Y')->setWidth(7); // Mktg Comm
+        $sheet->getColumnDimension('Z')->setWidth(7); // Japan Comm
+        $sheet->getColumnDimension('AA')->setWidth(7); // 13th Month
+        $sheet->getColumnDimension('AD')->setWidth(6); // SSS
+        $sheet->getColumnDimension('AE')->setWidth(6); // PHIC
+        $sheet->getColumnDimension('AF')->setWidth(6); // HDMF
+        $sheet->getColumnDimension('AG')->setWidth(6); // Tax
+        $sheet->getColumnDimension('AH')->setWidth(6); // CA
+        $sheet->getColumnDimension('AJ')->setWidth(6); // Undertime
+        $sheet->getColumnDimension('AK')->setWidth(6); // Absent
+        $sheet->getColumnDimension('AL')->setWidth(6); // Late
+        $sheet->getColumnDimension('AM')->setWidth(6); // Others
+        $sheet->getColumnDimension('AN')->setWidth(6); // WFH
+
+        // STYLES -- END
 
         $filename = 'Payroll Summary.xlsx';
         

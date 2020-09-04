@@ -27,10 +27,11 @@
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
                     <li class="disabled client_pick active"><a class="client_pick" href="#client_tab" data-toggle="tab">Japanese School</a></li>
-                    <li class="disabled client_pick"><a class="client_pick" href="#client_tab" data-toggle="tab">Medical Facility</a></li>
-                    <li class="disabled client_pick"><a class="client_pick" href="#client_tab" data-toggle="tab">Manpower Agency</a></li>
-                    <li class="disabled client_pick"><a class="client_pick" href="#client_tab" data-toggle="tab">Benefactor</a></li>
-                    <li class="disabled client_pick"><a class="client_pick" href="#client_tab" data-toggle="tab">FTS</a></li>
+                    <li class="disabled client_pick"><a class="client_pick" href="#client_tab" data-toggle="tab">POEA Agency</a></li>
+                    <li class="disabled client_pick"><a class="client_pick" href="#client_tab" data-toggle="tab">SSW Benefactor</a></li>
+                    <li class="disabled client_pick"><a class="client_pick" href="#client_tab" data-toggle="tab">TITP</a></li>
+                    <li class="disabled client_pick"><a class="client_pick" href="#client_tab" data-toggle="tab">RSO</a></li>
+                    <li class="disabled client_pick"><a class="client_pick" href="#client_tab" data-toggle="tab">Others</a></li>
                 </ul>
 
                 <div class="tab-content">
