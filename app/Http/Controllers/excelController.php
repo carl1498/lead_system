@@ -10,6 +10,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use App\student;
@@ -24,6 +25,7 @@ use App\branch;
 use App\expense;
 use App\expense_type;
 use App\lead_company_type;
+use App\emp_salary;
 use App\salary_monitoring;
 use Carbon\Carbon;
 
@@ -1578,30 +1580,26 @@ class excelController extends Controller
 
         //ALL DATA -- START
 
-        $salary = salary_monitoring::with('income', 'deduction', 'employee.branch', 'employee.company_type', 'employee.role')
-                ->when($company != 'All', function($query) use($company) {
-                    $query->whereHas('employee', function($query) use($company) {
-                        $query->where('lead_company_type_id', $company);
-                    });
-                })->when($branch != 'All', function($query) use($branch) {
-                    $query->whereHas('employee', function($query) use($branch) {
-                        $query->where('branch_id', $branch);
-                    });
-                })->when($status != 'All', function($query) use($status) {
-                    $query->whereHas('employee', function($query) use($status) {
-                        $query->where('employment_status', $status);
-                    });
-                })->when($role, function($query) use($role) {
-                    $query->whereHas('employee', function($query) use($role) {
-                        $query->whereIn('role_id', $role);
-                    });
-                })->when($date_counter == 'true', function($query) use($start_date, $end_date) {
-                    $query->whereBetween('pay_date', [$start_date, $end_date]);
-                })->get();
-
-        $no_salary = 
-
-        
+        $salary = emp_salary::
+        join('employees', 'emp_salary.emp_id', '=', 'employees.id')->orderBy('role_id', 'asc')->orderBy('branch_id', 'asc')
+        ->with('monitoring.income', 'monitoring.deduction', 'employee.branch', 'employee.company_type','employee.role')
+        ->when($company != 'All', function($query) use($company) {
+            $query->whereHas('employee', function($query) use($company) {
+                $query->where('lead_company_type_id', $company);
+            });
+        })->when($branch != 'All', function($query) use($branch) {
+            $query->whereHas('employee', function($query) use($branch) {
+                $query->where('branch_id', $branch);
+            });
+        })->when($status != 'All', function($query) use($status) {
+            $query->whereHas('employee', function($query) use($status) {
+                $query->where('employment_status', $status);
+            });
+        })->when($role, function($query) use($role) {
+            $query->whereHas('employee', function($query) use($role) {
+                $query->whereIn('role_id', $role);
+            });
+        })->get();
 
         //ALL DATA -- END
         
@@ -1652,8 +1650,16 @@ class excelController extends Controller
 
         $borderStyleArray = [
             'borders' => [
-                'outline' => [
+                'allBorders' => [
                     'borderStyle' => Border::BORDER_THIN
+                ]
+            ]
+        ];
+
+        $highlightStyleArray = [
+            'borders' => [
+                'outline' => [
+                    'borderStyle' => Border::BORDER_MEDIUM
                 ]
             ]
         ];
@@ -1676,7 +1682,27 @@ class excelController extends Controller
         $sheet->getPageMargins()->setBottom(0.75);
 
         //HEADER -- START
-        $sheet->setCellValue('A1', 'Company')->mergeCells('A1'.':AQ1');
+        //Title
+
+        if($company != 'All'){
+            $company = lead_company_type::find($company);
+            switch($company->name) {
+                case 'LEAD':
+                    $company = 'LEAD TRAINING AND BUSINESS SOLUTIONS';
+                    break;
+                case 'MILA':
+                    $company = 'MANILA KOKUSAI ACADEMY INC.';
+                    break;
+                case 'ANK':
+                    $company = 'ANK EDUCATION CONSULTANCY';
+                    break;
+            }
+        }else{
+            $company = 'LEAD GROUP OF COMPANIES';
+        }
+
+
+        $sheet->setCellValue('A1', $company)->mergeCells('A1'.':AQ1');
         $sheet->getStyle('A1')->applyFromArray($companyStyleArray);
         
         $sheet->setCellValue('A2', 'PAYROLL MONITORING FORM')->mergeCells('A2'.':AQ2');
@@ -1730,6 +1756,222 @@ class excelController extends Controller
         //BODY -- START
 
         $no = 1;
+        $row = 8;
+
+        $rd_counter = false;
+        $spcl_counter = false;
+        $spcl_ot_counter = false;
+        $legal_counter = false;
+        $legal_ot_counter = false;
+        $cola_counter = false;
+        $mktg_counter = false;
+        $jap_counter = false;
+
+
+        foreach($salary as $s){
+            $monitoring_counter = false;
+            if($s->monitoring->isNotEmpty()){
+                if($date_counter == 'true'){//check if pay date is in date range
+                    foreach($s->monitoring as $m){
+                        $start = Carbon::parse($start_date);
+                        $end = Carbon::parse($end_date);
+                        $pay_date = Carbon::parse($m->pay_date);
+                        if($pay_date->between($start, $end)){
+                            $monitoring_counter = true;
+                        }
+                        if($m->income->rd_ot){$rd_counter = true;}
+                        if($m->income->spcl_hol){$spcl_counter = true;}
+                        if($m->income->spcl_hol_ot){$spcl_ot_counter = true;}
+                        if($m->income->leg_hol){$legal_counter = true;}
+                        if($m->income->leg_hol_ot){$legal_ot_counter = true;}
+                        if($m->income->cola){$cola_counter = true;}
+                        if($m->income->market_comm){$mktg_counter = true;}
+                        if($m->income->jap_comm){$jap_counter = true;}
+                    }
+                }
+                if($monitoring_counter == true){
+                    foreach($s->monitoring as $m){
+                        if($date_counter == 'true'){
+                            $start = Carbon::parse($start_date);
+                            $end = Carbon::parse($end_date);
+                            $pay_date = Carbon::parse($m->pay_date);
+                            if(!$pay_date->between($start, $end)){
+                                continue;
+                            }
+                        }
+                        $sheet->setCellValue('A'.$row, $no);
+                        $sheet->setCellValue('B'.$row, $s->employee->lname.', '.$s->employee->fname);
+                        $sheet->setCellValue('C'.$row, $s->employee->branch->name);
+                        $sheet->setCellValue('D'.$row, $s->sal_type);
+                        $sheet->setCellValue('E'.$row, $s->employee->employment_type);
+                        $sheet->setCellValue('F'.$row, $m->daily);
+                        $sheet->setCellValue('G'.$row, $m->rate);
+                        $sheet->setCellValue('H'.$row, $m->income->basic);
+                        if($m->sal_type == 'Monthly'){
+                            $sheet->setCellValue('I'.$row, '=round(G'.$row.'/2, 2)');
+                        }else if($m->sal_type == 'Daily'){
+                            $sheet->setCellValue('I'.$row, '=round(F'.$row.'*H'.$row.', 2)');
+                        }
+                        $sheet->setCellValue('J'.$row, $m->income->reg_ot);
+                        $sheet->setCellValue('K'.$row, '=round(F'.$row.'/8*1.25*J'.$row.', 2)');
+                        $sheet->setCellValue('L'.$row, $m->income->rd_ot);
+                        $sheet->setCellValue('M'.$row, '=round(F'.$row.'/8*1.3*L'.$row.', 2)');
+                        $sheet->setCellValue('N'.$row, $m->income->spcl_hol);
+                        $sheet->setCellValue('O'.$row, '=round((F'.$row.'/8*N'.$row.')+(F'.$row.'/8*0.3*N'.$row.'), 2)');
+                        $sheet->setCellValue('P'.$row, $m->income->spcl_hol_ot);
+                        $sheet->setCellValue('Q'.$row, '=round((F'.$row.'/8*P'.$row.')+(F'.$row.'/8*0.3*P'.$row.'), 2)');
+                        $sheet->setCellValue('R'.$row, $m->income->leg_hol);
+                        $sheet->setCellValue('S'.$row, '=round(F'.$row.'/8*2*R'.$row.', 2)');
+                        $sheet->setCellValue('T'.$row, $m->income->leg_hol_ot);
+                        $sheet->setCellValue('U'.$row, '=round(F'.$row.'/8*2*T'.$row.', 2)');
+                        $sheet->setCellValue('V'.$row, $m->income->acc_allowance);
+                        if($m->income->transpo_days){
+                            $sheet->setCellValue('W'.$row, $m->income->transpo_allowance * $m->income->transpo_days);
+                        }
+                        $sheet->setCellValue('X'.$row, $m->income->cola);
+                        $sheet->setCellValue('Y'.$row, $m->income->market_comm);
+                        $sheet->setCellValue('Z'.$row, $m->income->jap_comm);
+                        $sheet->setCellValue('AA'.$row, $m->income->thirteenth);
+                        $sheet->setCellValue('AB'.$row, $m->income->adjustments);
+                        $gross = '=round(sum(I'.$row.',K'.$row.',M'.$row.',O'.$row.',Q'.$row.',S'.$row
+                        .',U'.$row.',V'.$row.':AB'.$row.'), 2)';
+                        $sheet->setCellValue('AC'.$row, $gross);
+                        
+                        $sheet->setCellValue('AD'.$row, $m->deduction->sss);
+                        $sheet->setCellValue('AE'.$row, $m->deduction->phic);
+                        $sheet->setCellValue('AF'.$row, $m->deduction->hdmf);
+                        $sheet->setCellValue('AG'.$row, $m->deduction->tax);
+                        $sheet->setCellValue('AH'.$row, $m->deduction->cash_advance);
+                        $sheet->setCellValue('AI'.$row, $m->deduction->man_allocation);
+                        if($m->deduction->undertime){
+                            $undertime = number_format($m->deduction->undertime * ($m->daily/8), 2, '.', '');
+                            $sheet->setCellValue('AJ'.$row, $undertime);
+                        }
+                        if($m->deduction->absence){
+                            $absence = number_format($m->deduction->absence * $m->daily, 2, '.', '');
+                            $sheet->setCellValue('AK'.$row, $absence);
+                        }
+                        if($m->deduction->late){
+                            $late = number_format($m->deduction->late * ($m->daily/8), 2, '.', '');
+                            $sheet->setCellValue('AL'.$row, $late);
+                        }
+                        $sheet->setCellValue('AM'.$row, $m->deduction->others);
+                        if($m->deduction->wfh){
+                            $wfh = '=round((AC'.$row.'-AB'.$row.'-sum(AD'.$row.':AM'.$row.'))*'.((100 - $m->deduction->wfh)/100).', 2)';
+                            $sheet->setCellValue('AN'.$row, $wfh);
+                        }
+                        $sheet->setCellValue('AO'.$row, '=round(sum(AD'.$row.':AN'.$row.'), 2)');
+                        $sheet->setCellValue('AP'.$row, '=round(AC'.$row.'-AO'.$row.', 2)');
+                        $no++; $row++;
+                    }
+                }
+            }
+            if($monitoring_counter == false){
+                if($s->employee->id == 2){
+                    continue;
+                }
+                $sheet->setCellValue('A'.$row, $no);
+                $sheet->setCellValue('B'.$row, $s->employee->lname.', '.$s->employee->fname);
+                $sheet->setCellValue('C'.$row, $s->employee->branch->name);
+                $sheet->setCellValue('D'.$row, $s->sal_type);
+                $sheet->setCellValue('E'.$row, $s->employee->employment_type);
+                $sheet->setCellValue('F'.$row, $s->daily);
+                $sheet->setCellValue('G'.$row, $s->rate);
+                $sheet->setCellValue('H'.$row, 0);
+                $sheet->setCellValue('I'.$row, 0);
+                $sheet->setCellValue('K'.$row, '=round(F'.$row.'/8*1.25*J'.$row.', 2)');
+                $sheet->setCellValue('M'.$row, '=round(F'.$row.'/8*1.3*L'.$row.', 2)');
+                $sheet->setCellValue('O'.$row, '=round((F'.$row.'/8*N'.$row.')+(F'.$row.'/8*0.3*N'.$row.'), 2)');
+                $sheet->setCellValue('Q'.$row, '=round((F'.$row.'/8*P'.$row.')+(F'.$row.'/8*0.3*P'.$row.'), 2)');
+                $sheet->setCellValue('S'.$row, '=round(F'.$row.'/8*2*R'.$row.', 2)');
+                $sheet->setCellValue('U'.$row, '=round(F'.$row.'/8*2*T'.$row.', 2)');
+                $gross = '=round(sum(I'.$row.',K'.$row.',M'.$row.',O'.$row.',Q'.$row.',S'.$row
+                .',U'.$row.',V'.$row.':AB'.$row.'), 2)';
+                $sheet->setCellValue('AC'.$row, $gross);
+                $sheet->setCellValue('AO'.$row, '=round(sum(AD'.$row.':AN'.$row.'), 2)');
+                $sheet->setCellValue('AP'.$row, '=round(AC'.$row.'-AO'.$row.', 2)');
+                $no++; $row++;
+            }
+        }
+        
+        $last_row = $row-1;
+        $total_row = $row;
+
+        $sheet->setCellValue('A'.$row, 'TOTAL')->mergeCells('A'.$row.':B'.$row);
+        $sheet->setCellValue('G'.$row, '=sum(G8:G'.$last_row.')');
+        $sheet->setCellValue('I'.$row, '=sum(I8:I'.$last_row.')');
+        $sheet->setCellValue('K'.$row, '=sum(K8:K'.$last_row.')');
+        $sheet->setCellValue('M'.$row, '=sum(M8:M'.$last_row.')');
+        $sheet->setCellValue('O'.$row, '=sum(O8:O'.$last_row.')');
+        $sheet->setCellValue('Q'.$row, '=sum(Q8:Q'.$last_row.')');
+        $sheet->setCellValue('S'.$row, '=sum(S8:S'.$last_row.')');
+        $sheet->setCellValue('U'.$row, '=sum(U8:U'.$last_row.')');
+        $letter = 'V';
+        while($letter !== 'AQ'){
+            $sheet->setCellValue($letter.$row, '=sum('.$letter.'8:'.$letter.$last_row.')');
+            $letter++;
+        }
+
+        $row+=2; $no = 1;
+
+        $sheet->setCellValue('C'.$row, 'Note: 1 MINUTE IS EQUAL TO 30 MINUTES');
+        $row++;
+        $late_start_row = $row;
+        $sheet->setCellValue('A'.$row, 'No');
+        $sheet->setCellValue('B'.$row, 'Employee')->mergeCells('B'.$row.':D'.$row);
+        $sheet->setCellValue('E'.$row, 'No. of Hrs.');
+        $sheet->setCellValue('F'.$row, 'Amount');
+        $row++;
+
+        foreach($salary as $s){
+            $monitoring_counter = false;
+            if($s->monitoring->isNotEmpty()){
+                if($date_counter == 'true'){//check if pay date is in date range
+                    foreach($s->monitoring as $m){
+                        $start = Carbon::parse($start_date);
+                        $end = Carbon::parse($end_date);
+                        $pay_date = Carbon::parse($m->pay_date);
+                        if($pay_date->between($start, $end)){
+                            $monitoring_counter = true;
+                            break;
+                        }
+                    }
+                }
+                if($monitoring_counter == true){
+                    foreach($s->monitoring as $m){
+                        if($date_counter == 'true'){
+                            $start = Carbon::parse($start_date);
+                            $end = Carbon::parse($end_date);
+                            $pay_date = Carbon::parse($m->pay_date);
+                            if(!$pay_date->between($start, $end)){
+                                continue;
+                            }
+                        }
+                        $sheet->setCellValue('A'.$row, $no);
+                        $sheet->setCellValue('B'.$row, $s->employee->lname.', '.$s->employee->fname)
+                            ->mergeCells('B'.$row.':D'.$row);
+                        if($m->deduction->late){
+                            $late = number_format($m->deduction->late * ($m->daily/8), 2, '.', '');
+                            $sheet->setCellValue('E'.$row, $m->deduction->late);
+                            $sheet->setCellValue('F'.$row, $late);
+                        }
+                    }
+                    $no++; $row++;
+                }
+            }
+            if($monitoring_counter == false){
+                if($s->employee->id == 2){
+                    continue;
+                }
+                $sheet->setCellValue('A'.$row, $no);
+                $sheet->setCellValue('B'.$row, $s->employee->lname.', '.$s->employee->fname)
+                    ->mergeCells('B'.$row.':D'.$row);
+
+                $no++; $row++;
+            }
+        }
+        $late_end_row = $row-1;
+
 
         //BODY -- END
 
@@ -1737,11 +1979,68 @@ class excelController extends Controller
         // STYLES -- START
 
         $sheet->freezePane('C8');
-        $sheet->setCellValue('B8', 'Jumilla -Señoron, Irish Mae'); // sample
         $highest = $sheet->getHighestRow();
+        $sheet->getStyle('A6:AQ'.$total_row)->applyFromArray($borderStyleArray);
+        $sheet->getStyle('A'.$late_start_row.':F'.$late_end_row)->applyFromArray($borderStyleArray);
+        $sheet->getStyle('A6:AQ'.$total_row)->applyFromArray($highlightStyleArray);
+        $sheet->getStyle('A'.$total_row.':AQ'.$total_row)->getBorders()->getTop()->setBorderStyle(Border::BORDER_DOUBLE);
         $sheet->getStyle('A6:AQ7')->applyFromArray($headerStyleArray);
         $sheet->getStyle('A8:A'.$highest)->applyFromArray($centerStyleArray);
-        $sheet->getStyle('A1:AQ'.$highest)->getFont()->setSize(9)->setName('Arial Narrow');
+        $sheet->getStyle('A1')->getFont()->setSize(12)->setName('Arial Narrow');
+        $sheet->getStyle('A2')->getFont()->setSize(14)->setName('Arial Narrow');
+        $sheet->getStyle('A3:AQ'.$highest)->getFont()->setSize(9)->setName('Arial Narrow');
+
+        $twoDecimal = ['F', 'G', 'I', 'I', 'K', 'M', 'O', 'Q', 'S', 'U'];
+        foreach($twoDecimal as $t){
+            $sheet->getStyle($t.'8:'.$t.$total_row)->applyFromArray($numberStyleArray);
+        }
+        $sheet->getStyle('V8:AP'.$total_row)->applyFromArray($numberStyleArray);
+
+        $daysHoursCenter = ['H', 'J', 'L', 'N', 'P', 'R', 'T'];
+        foreach($daysHoursCenter as $d){
+            $sheet->getStyle($d.'8:'.$d.$total_row)->applyFromArray($centerStyleArray);
+        }
+
+        $mediumBorder = ['I', 'AC', 'AO', 'AP'];
+        foreach($mediumBorder as $m){
+            $sheet->getStyle($m.'8:'.$m.$total_row)->applyFromArray($highlightStyleArray);
+        }
+
+
+        $sheet->getStyle('I6:I'.$total_row)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FFFFF2CC');
+        $sheet->getStyle('AC6:AC'.$total_row)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FFFCE4D6');
+        $sheet->getStyle('AO6:AO'.$total_row)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FFE2EFDA');
+        $sheet->getStyle('AP6:AP'.$total_row)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FFF8CBAD');
+
+        if($rd_counter == false){
+            $sheet->getColumnDimension('L')->setVisible(false);
+            $sheet->getColumnDimension('M')->setVisible(false);
+        }
+        if($spcl_counter == false){
+            $sheet->getColumnDimension('N')->setVisible(false);
+            $sheet->getColumnDimension('O')->setVisible(false);
+        }
+        if($spcl_ot_counter == false){
+            $sheet->getColumnDimension('P')->setVisible(false);
+            $sheet->getColumnDimension('Q')->setVisible(false);
+        }
+        if($legal_counter == false){
+            $sheet->getColumnDimension('R')->setVisible(false);
+            $sheet->getColumnDimension('S')->setVisible(false);
+        }
+        if($legal_ot_counter == false){
+            $sheet->getColumnDimension('T')->setVisible(false);
+            $sheet->getColumnDimension('U')->setVisible(false);
+        }
+        if($cola_counter == false){
+            $sheet->getColumnDimension('X')->setVisible(false);
+        }
+        if($mktg_counter == false){
+            $sheet->getColumnDimension('Y')->setVisible(false);
+        }
+        if($jap_counter == false){
+            $sheet->getColumnDimension('Z')->setVisible(false);
+        }
 
         //Column Sizes
         $sheet->getColumnDimension('A')->setWidth(4); // No.
@@ -1772,7 +2071,7 @@ class excelController extends Controller
         $sheet->getColumnDimension('AK')->setWidth(6); // Absent
         $sheet->getColumnDimension('AL')->setWidth(6); // Late
         $sheet->getColumnDimension('AM')->setWidth(6); // Others
-        $sheet->getColumnDimension('AN')->setWidth(6); // WFH
+        $sheet->getColumnDimension('AN')->setWidth(8); // WFH
 
         // STYLES -- END
 

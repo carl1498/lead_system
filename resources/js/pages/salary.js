@@ -40,8 +40,8 @@ $(document).ready(function(){
     today_converted = yyyy + '-' + mm + '-' + dd;
     var start_date = today_converted;
     var end_date = today_converted;
-    $('.start_date_hidden').val(start_date);
-    $('.end_date_hidden').val(end_date);
+    $('.start_date_hidden, .s_start_date_hidden').val(start_date);
+    $('.end_date_hidden, .s_end_date_hidden').val(end_date);
 
     $('#daterange').daterangepicker({
         showDropdowns: true,
@@ -50,9 +50,9 @@ $(document).ready(function(){
         endDate: today,
     }, function(start, end){
         start_date = start.format('YYYY-MM-DD');
-        $('.start_date_hidden').val(start_date);
+        $('.start_date_hidden, .s_start_date_hidden').val(start_date);
         end_date = end.format('YYYY-MM-DD');
-        $('.end_date_hidden').val(end_date);
+        $('.end_date_hidden, .s_end_date_hidden').val(end_date);
         refresh();
     });
     
@@ -333,16 +333,16 @@ $(document).ready(function(){
         input.html('FILTERING...');
         
         branch = $('#branch_filter').val();
-        $('.branch_hidden').val(branch);
+        $('.branch_hidden, .s_branch_hidden').val(branch);
         company = $('#company_type_filter').val();
-        $('.company_hidden').val(company);
+        $('.company_hidden, .s_company_hidden').val(company);
         status = $('#status_filter').val();
-        $('.status_hidden').val(status);
+        $('.status_hidden, .s_status_hidden').val(status);
         role = $('#position_filter').val();
-        $('.role_hidden').val('').trigger('change');
+        $('.role_hidden, .s_role_hidden').val('').trigger('change');
 
         for(let x = 0; x < role.length; x++){
-            $('.role_hidden option[value="'+role[x]+'"]').prop('selected', true);
+            $('.role_hidden option[value="'+role[x]+'"], .s_role_hidden option[value="'+role[x]+'"]').prop('selected', true);
         }
 
         refresh();
@@ -351,7 +351,7 @@ $(document).ready(function(){
     
     $(document).on('change', '#date_counter', function(){
         date_counter = ($(this).is(':checked')) ? true : false;
-        $('.date_counter_hidden').val(date_counter);
+        $('.date_counter_hidden, .s_date_counter_hidden').val(date_counter);
         refresh();
     });
 

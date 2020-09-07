@@ -26,21 +26,21 @@
         <button type="submit" class="btn btn-md btn-primary"><i class="fa fa-file-invoice-dollar"></i> Payslip</button>
     </form>
 
-    <!--<form action="/excel_salary_summary" method="POST" style="display: inline-block; margin-left: 10px;">
+    <form action="/excel_salary_summary" method="POST" style="display: inline-block; margin-left: 10px;">
         @csrf
         <input type="hidden" class="s_start_date_hidden" name="s_start_date_hidden" value="">
         <input type="hidden" class="s_end_date_hidden" name="s_end_date_hidden" value="">
         <input type="hidden" class="s_date_counter_hidden" name="s_date_counter_hidden" value="true">
         <input type="hidden" class="s_branch_hidden" name="s_branch_hidden" value="All">
         <input type="hidden" class="s_company_hidden" name="s_company_hidden" value="All">
-        <input type="hidden" class="s_status_hidden" name="s_status_hidden" value="All">
+        <input type="hidden" class="s_status_hidden" name="s_status_hidden" value="Active">
         <select type="hidden" class="s_role_hidden" name="s_role_hidden[]" multiple="multiple" class="form-control" style="display:none;">
             @foreach($role as $r)
                 <option value="{{ $r->id }}">{{ $r->name }}</option>
             @endforeach
         </select>
         <button type="submit" class="btn btn-md btn-info"><i class="fa fa-clipboard-list"></i> Summary</button>
-    </form>-->
+    </form>
 
 </div>
 <br>
