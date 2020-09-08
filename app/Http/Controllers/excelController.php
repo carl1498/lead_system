@@ -1581,7 +1581,7 @@ class excelController extends Controller
         //ALL DATA -- START
 
         $salary = emp_salary::
-        join('employees', 'emp_salary.emp_id', '=', 'employees.id')->orderBy('role_id', 'asc')->orderBy('branch_id', 'asc')
+        join('employees', 'emp_salary.emp_id', '=', 'employees.id')->orderBy('branch_id', 'asc')->orderBy('role_id', 'asc')
         ->with('monitoring.income', 'monitoring.deduction', 'employee.branch', 'employee.company_type','employee.role')
         ->when($company != 'All', function($query) use($company) {
             $query->whereHas('employee', function($query) use($company) {
