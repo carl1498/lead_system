@@ -1580,9 +1580,15 @@ class excelController extends Controller
 
         //ALL DATA -- START
 
+        $branch_query = branch::orderBy('name', 'asc')->get();
+
         $salary = emp_salary::
-        join('employees', 'emp_salary.emp_id', '=', 'employees.id')->orderBy('branch_id', 'asc')->orderBy('role_id', 'asc')
-        ->with('monitoring.income', 'monitoring.deduction', 'employee.branch', 'employee.company_type','employee.role')
+        join('employees', 'employees.id', '=', 'emp_salary.emp_id')
+        ->join('branches', 'branches.id', '=', 'employees.branch_id')->orderBy('branches.name', 'asc')->orderBy('role_id', 'asc')
+        ->with('monitoring.income', 'monitoring.deduction', 'employee.branch', 'employee.company_type', 'employee.role')
+        /*with(['employee.role' => function($q){
+            $q->orderBy('name', 'asc');
+        }])*/
         ->when($company != 'All', function($query) use($company) {
             $query->whereHas('employee', function($query) use($company) {
                 $query->where('lead_company_type_id', $company);
