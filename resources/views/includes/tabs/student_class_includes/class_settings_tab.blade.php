@@ -1,6 +1,6 @@
 <form class="form-horizontal" id="edit_class_form">
     @csrf
-    <div class="modal-body">
+    <div class="modal-body clearfix">
 
         <div class="col-md-1"></div>
 

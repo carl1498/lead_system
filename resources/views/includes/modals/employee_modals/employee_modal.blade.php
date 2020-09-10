@@ -8,7 +8,7 @@
             </div>
             <form class="form-horizontal" id="employee_form" enctype="multipart/form-data">
                 @csrf
-                <div class="modal-body">
+                <div class="modal-body clearfix">
                     <input type="hidden" name="id" id="id">
                     <input type="hidden" name="add_edit" id="add_edit">
 

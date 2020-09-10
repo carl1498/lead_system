@@ -11,7 +11,7 @@
                     <button data-container="body" data-toggle="tooltip" data-placement="left" title="Add Child" class="btn btn-primary btn-s add_child" style="margin-right: 20px;"><i class="fa fa-child"></i></button>
                 </div>
             </div>
-            <div class="modal-body">
+            <div class="modal-body clearfix">
 
                 <h4 class="title_probationary">In case of Emergency</h4>
 

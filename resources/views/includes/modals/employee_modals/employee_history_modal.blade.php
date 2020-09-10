@@ -11,7 +11,7 @@
                     <button data-container="body" data-toggle="tooltip" data-placement="left" title="Add Employment History" class="btn btn-success btn-s add_employment_history" style="margin-right: 20px;"><i class="fa fa-briefcase"></i></button>
                 </div>
             </div>
-            <div class="modal-body">
+            <div class="modal-body clearfix">
 
                 <h4 class="title_probationary"></h4>
 

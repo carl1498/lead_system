@@ -1,6 +1,6 @@
 <form class="form-horizontal tab-pane fade in" id="ssw_student_form">
     @csrf
-    <div class="modal-body">
+    <div class="modal-body clearfix">
         <input type="hidden" name="s_id" id="s_id">
         <input type="hidden" name="s_add_edit" id="s_add_edit">
 
