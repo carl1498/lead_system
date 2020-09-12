@@ -17417,7 +17417,32 @@ $(document).ready(function () {
             },
             columns: [{ data: 'name', name: 'name' }, { data: 'employee.branch.name', name: 'branch' }, { data: 'employee.company_type.name', name: 'company' }, { data: 'employee.role.name', name: 'role' }, { data: 'sal_type', name: 'salary_type' }, { data: 'rate', name: 'rate' }, { data: 'daily', name: 'daily' }, { data: 'cola', name: 'cola' }, { data: 'acc_allowance', name: 'acc_allowance' }, { data: 'transpo_allowance', name: 'transpo_allowance' }, { data: 'sss', name: 'ssss' }, { data: 'phic', name: 'phic' }, { data: 'hdmf', name: 'hdmf' }, { data: 'action', orderable: false, searchable: false }],
             order: [[3, 'asc']],
-            columnDefs: [{ defaultContent: "", targets: "_all" }, { className: "text-right", targets: [5, 6, 7, 8, 9, 10, 11, 12] }]
+            columnDefs: [{ defaultContent: "", targets: "_all" }, { className: "text-right", targets: [5, 6, 7, 8, 9, 10, 11, 12] }],
+            footerCallback: function footerCallback(row, data, start, end, display) {
+                var api = this.api(),
+                    data;
+
+                // Remove the formatting to get integer data for summation
+                var intVal = function intVal(i) {
+                    return typeof i === 'string' ? i.replace(/[\$,]/g, '') * 1 : typeof i === 'number' ? i : 0;
+                };
+
+                // Total over all pages
+                total = api.column(5).data().reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0);
+
+                // Update footer
+                $(api.column(5).footer()).html('₱' + total.toFixed(2));
+
+                // Total over all pages
+                total = api.column(6).data().reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0);
+
+                // Update footer
+                $(api.column(6).footer()).html('₱' + total.toFixed(2));
+            }
         });
     }
 

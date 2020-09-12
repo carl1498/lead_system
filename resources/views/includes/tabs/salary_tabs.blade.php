@@ -21,7 +21,7 @@
                 <th>Action</th>
             </tr>
         </thead>
-        <!--<tfoot>
+        <tfoot>
             <tr>
                 <th></th>
                 <th></th>
@@ -36,8 +36,9 @@
                 <th></th>
                 <th></th>
                 <th></th>
+                <th></th>
             </tr>
-        </tfoot>-->
+        </tfoot>
     </table>
 
 </div>
