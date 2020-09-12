@@ -208,32 +208,24 @@ $(document).ready(function(){
                         typeof i === 'number' ?
                             i : 0;
                 };
+
+                let col_total = [5, 7, 8, 9, 10, 11, 12];
+
+                for(let x = 0; x < col_total.length; x++){
+                    // Total over all pages
+                    total = api
+                        .column( col_total[x] )
+                        .data()
+                        .reduce( function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0 );
+        
+                    // Update footer
+                    $( api.column( col_total[x] ).footer() ).html(
+                        (x < 3 && x < 7) ? '₱' + total.toFixed(2) : '₱' + total.toFixed(2) + ' (' + (total*2).toFixed(2) + ')'
+                    );
+                }
                 
-                // Total over all pages
-                total = api
-                    .column( 5 )
-                    .data()
-                    .reduce( function (a, b) {
-                        return intVal(a) + intVal(b);
-                    }, 0 );
-     
-                // Update footer
-                $( api.column( 5 ).footer() ).html(
-                    '₱' + total.toFixed(2)
-                );
-                
-                // Total over all pages
-                total = api
-                    .column( 6 )
-                    .data()
-                    .reduce( function (a, b) {
-                        return intVal(a) + intVal(b);
-                    }, 0 );
-     
-                // Update footer
-                $( api.column( 6 ).footer() ).html(
-                    '₱' + total.toFixed(2)
-                );
             }
         });
     }
