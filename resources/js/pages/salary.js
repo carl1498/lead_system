@@ -222,7 +222,7 @@ $(document).ready(function(){
         
                     // Update footer
                     $( api.column( col_total[x] ).footer() ).html(
-                        (x < 3 && x < 7) ? '₱' + total.toFixed(2) : '₱' + total.toFixed(2) + ' (' + (total*2).toFixed(2) + ')'
+                        (x < 4 && x < 7) ? '₱' + total.toFixed(2) : '₱' + total.toFixed(2) + ' (' + (total*2).toFixed(2) + ')'
                     );
                 }
                 
@@ -324,18 +324,35 @@ $(document).ready(function(){
                         typeof i === 'number' ?
                             i : 0;
                 };
+
+                let col_total = [5, 7, 14, 15, 30, 31, 32];
+
+                for(let x = 0; x < col_total.length; x++){
+                    // Total over all pages
+                    total = api
+                        .column( col_total[x] )
+                        .data()
+                        .reduce( function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0 );
+        
+                    // Update footer
+                    $( api.column( col_total[x] ).footer() ).html(
+                        '₱' + total.toFixed(2)
+                    );
+                }
+
+                let transpo = api.column(16).data();
+                let transpo_total = 0;
+                for(let x = 0; x < transpo.length; x++){
+                    split = transpo[x].split(' ');
+                    if(split != ''){
+                        transpo_total = parseFloat(transpo_total) + parseFloat(split[1]);
+                    }
+                }
                 
-                // Total over all pages
-                total = api
-                    .column( 7 )
-                    .data()
-                    .reduce( function (a, b) {
-                        return intVal(a) + intVal(b);
-                    }, 0 );
-     
-                // Update footer
-                $( api.column( 7 ).footer() ).html(
-                    '₱' + total.toFixed(2)
+                $( api.column( 16 ).footer() ).html(
+                    '₱' + transpo_total.toFixed(2)
                 );
             }
         });

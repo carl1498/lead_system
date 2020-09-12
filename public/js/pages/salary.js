@@ -17436,7 +17436,7 @@ $(document).ready(function () {
                     }, 0);
 
                     // Update footer
-                    $(api.column(col_total[x]).footer()).html(x < 3 && x < 7 ? '₱' + total.toFixed(2) : '₱' + total.toFixed(2) + ' (' + (total * 2).toFixed(2) + ')');
+                    $(api.column(col_total[x]).footer()).html(x < 4 && x < 7 ? '₱' + total.toFixed(2) : '₱' + total.toFixed(2) + ' (' + (total * 2).toFixed(2) + ')');
                 }
             }
         });
@@ -17489,13 +17489,28 @@ $(document).ready(function () {
                     return typeof i === 'string' ? i.replace(/[\$,]/g, '') * 1 : typeof i === 'number' ? i : 0;
                 };
 
-                // Total over all pages
-                total = api.column(7).data().reduce(function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0);
+                var col_total = [5, 7, 14, 15, 30, 31, 32];
 
-                // Update footer
-                $(api.column(7).footer()).html('₱' + total.toFixed(2));
+                for (var x = 0; x < col_total.length; x++) {
+                    // Total over all pages
+                    total = api.column(col_total[x]).data().reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                    // Update footer
+                    $(api.column(col_total[x]).footer()).html('₱' + total.toFixed(2));
+                }
+
+                var transpo = api.column(16).data();
+                var transpo_total = 0;
+                for (var _x = 0; _x < transpo.length; _x++) {
+                    split = transpo[_x].split(' ');
+                    if (split != '') {
+                        transpo_total = parseFloat(transpo_total) + parseFloat(split[1]);
+                    }
+                }
+
+                $(api.column(16).footer()).html('₱' + transpo_total.toFixed(2));
             }
         });
     }
@@ -17707,9 +17722,9 @@ $(document).ready(function () {
         }
 
         var gross = 0;
-        for (var _x = 0; _x < income_all.length; _x++) {
-            if ($(income_all[_x]).val() != '') {
-                gross += parseFloat($(income_all[_x]).val());
+        for (var _x2 = 0; _x2 < income_all.length; _x2++) {
+            if ($(income_all[_x2]).val() != '') {
+                gross += parseFloat($(income_all[_x2]).val());
             }
         }
         $('#gross').val(gross.toFixed(2));
@@ -17723,9 +17738,9 @@ $(document).ready(function () {
         var wfh_deduction = 0;
         if ($('#wfh').val() != '' && $('#wfh').val() > 0) {
             var adjustments = $('#adjustments').val();
-            for (var _x2 = 0; _x2 < deduction_all.length; _x2++) {
-                if ($(deduction_all[_x2]).val() != '') {
-                    wfh_deduction += parseFloat($(deduction_all[_x2]).val());
+            for (var _x3 = 0; _x3 < deduction_all.length; _x3++) {
+                if ($(deduction_all[_x3]).val() != '') {
+                    wfh_deduction += parseFloat($(deduction_all[_x3]).val());
                 }
             }
 
@@ -17734,9 +17749,9 @@ $(document).ready(function () {
         $('#wfh_amount').val(wfh_deduction.toFixed(2));
 
         var deduction = 0;
-        for (var _x3 = 0; _x3 < deduction_all.length; _x3++) {
-            if ($(deduction_all[_x3]).val() != '') {
-                deduction += parseFloat($(deduction_all[_x3]).val());
+        for (var _x4 = 0; _x4 < deduction_all.length; _x4++) {
+            if ($(deduction_all[_x4]).val() != '') {
+                deduction += parseFloat($(deduction_all[_x4]).val());
             }
         }
         deduction += parseFloat($('#wfh_amount').val());
