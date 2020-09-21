@@ -681,6 +681,7 @@ $(document).ready(function(){
                 {data: 'name', name: 'name'},
                 {data: 'contact', name: 'contact'},
                 {data: 'relationship', name: 'relationship'},
+                {data: 'address', name: 'address'},
                 {data: "action", orderable:false,searchable:false}
             ],
             columnDefs: [{defaultContent: "", targets: "_all"}],
@@ -1624,6 +1625,7 @@ $(document).ready(function(){
                 $('#e_lname').val(data.lname);
                 $('#e_relationship').val(data.relationship);
                 $('#e_contact').val(data.contact);
+                $('#e_address').val(data.address);
                 $('#student_info_modal').modal('hide');
                 setTimeout(function(){$('#emergency_modal').modal('show')}, 500);
             }
@@ -2214,7 +2216,7 @@ $(document).ready(function(){
                 if(data.emergency){
                     for(var x = 0; x < data.emergency.length; x++){
                         let i = data.emergency[x];
-                        emergency += i.fname + ' ' + i.lname + ' ' + i.mname + '<br>' + i.relationship + '<br>' + i.contact;
+                        emergency += i.fname + ' ' + i.lname + ' ' + i.mname + '<br>' + i.relationship + '<br>' + i.contact + '<br>' + i.address;
                         if(x != data.emergency.length-1){emergency += '<br><br>'}
                     }
                 }

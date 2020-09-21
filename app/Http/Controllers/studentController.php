@@ -1629,6 +1629,7 @@ class studentController extends Controller
         $emergency->lname = $request->e_lname;
         $emergency->relationship = $request->e_relationship;
         $emergency->contact = $request->e_contact;
+        $emergency->address = $request->e_address;
         $emergency->save();
 
         return $request->e_stud_id;

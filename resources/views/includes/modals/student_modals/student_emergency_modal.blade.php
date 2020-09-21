@@ -62,6 +62,17 @@
                                 </div>
                             </div>
                         </div>
+                        
+                        <div class="row clearfix">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 form-control-label">
+                                <label for="e_address" class="pull-right">Address</label>
+                            </div>
+                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                                <div class="form-group">
+                                    <input type="text" id="e_address" name="e_address" class="form-control" placeholder="Address">
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="row clearfix">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 form-control-label">

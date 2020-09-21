@@ -23,6 +23,7 @@
                             <th>Name</th>
                             <th>Contact</th>
                             <th>Relationship</th>
+                            <th>Address</th>
                             <th>Action</th>
                         </tr>
                     </thead>
