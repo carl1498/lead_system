@@ -128,15 +128,17 @@
 
         @if(count($student->emergency) >= 1)
         <tr>
-            <th width="200px" style=" font-weight: bold;">Name</th>
-            <th width="150px" style="font-weight: bold;">Relationship</th>
-            <th width="180px" style="font-weight: bold;">Contact</th>
+            <th width="180px" style=" font-weight: bold;">Name</th>
+            <th width="100px" style="font-weight: bold;">Relationship</th>
+            <th width="100px" style="font-weight: bold;">Contact</th>
+            <th width="100px" style="font-weight: bold;">Address</th>
         </tr>
             @foreach($student->emergency as $e)
             <tr>
-                <th width="200px">{{ $e->lname }}, {{ $e->fname }} {{ $e->mname }}</th>
-                <th width="150px">{{ $e->relationship }}</th>
-                <th width="180px">{{ $e->contact }}</th>
+                <th width="180px">{{ $e->lname }}, {{ $e->fname }} {{ $e->mname }}</th>
+                <th width="100px">{{ $e->relationship }}</th>
+                <th width="100px">{{ $e->contact }}</th>
+                <th width="180px">{{ $e->address }}</th>
             </tr>
             @endforeach
         @else
