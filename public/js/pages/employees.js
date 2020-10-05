@@ -309,7 +309,7 @@ $(document).ready(function () {
             searching: false,
             destroy: true,
             ajax: '/view_employee_emergency/' + id,
-            columns: [{ data: 'name', name: 'name' }, { data: 'contact', name: 'contact' }, { data: 'relationship', name: 'relationship' }, { data: "action", orderable: false, searchable: false }],
+            columns: [{ data: 'name', name: 'name' }, { data: 'contact', name: 'contact' }, { data: 'relationship', name: 'relationship' }, { data: 'address', name: 'address' }, { data: "action", orderable: false, searchable: false }],
             columnDefs: [{ defaultContent: "", targets: "_all" }]
         });
 
@@ -1072,6 +1072,7 @@ $(document).ready(function () {
                 $('#e_lname').val(data.lname);
                 $('#e_relationship').val(data.relationship);
                 $('#e_contact').val(data.contact);
+                $('#e_address').val(data.address);
                 $('#employee_family_modal').modal('hide');
                 setTimeout(function () {
                     $('#emergency_modal').modal('show');
@@ -1378,7 +1379,7 @@ $(document).ready(function () {
                 var html = data.employee_emergency.length != 0 ? '' : '-';
                 for (var x = 0; x < data.employee_emergency.length; x++) {
                     i = data.employee_emergency[x];
-                    html += i.fname + ' ' + i.lname + '<br>' + i.relationship + '<br>' + i.contact;
+                    html += i.fname + ' ' + i.lname + '<br>' + i.relationship + '<br>' + i.contact + '<br>' + i.address;
                     if (x != data.employee_emergency.length - 1) {
                         html += '<br><br>';
                     }

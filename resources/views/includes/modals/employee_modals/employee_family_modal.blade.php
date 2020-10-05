@@ -18,9 +18,10 @@
                 <table id="employee_emergency_table" class="table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                     <thead>
                         <tr>
-                            <th width="200px">Name</th>
+                            <th width="150px">Name</th>
                             <th width="100px">Contact #</th>
-                            <th width="100px">Relationship</th>
+                            <th width="50px">Relationship</th>
+                            <th width="100px">Address</th>
                             <th width="50px">Action</th>
                         </tr>
                     </thead>

@@ -427,6 +427,7 @@ class employeeController extends Controller
         $employee_emergency->lname = $request->e_lname;
         $employee_emergency->relationship = $request->e_relationship;
         $employee_emergency->contact = $request->e_contact;
+        $employee_emergency->address = $request->e_address;
         $employee_emergency->save();
 
         return $employee_emergency->emp_id;
