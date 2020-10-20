@@ -17,11 +17,11 @@ class soa extends Model
         return $this->hasOne('App\student', 'id', 'stud_id');
     }
 
-    public function soa_fees(){
+    public function description(){
         return $this->hasOne('App\soa_fees', 'id', 'soa_fees_id');
     }
 
-    public function employee(){
+    public function verified(){
         return $this->hasOne('App\employee', 'id', 'emp_id');
     }
     

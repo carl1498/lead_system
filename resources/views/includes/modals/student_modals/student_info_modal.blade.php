@@ -1,5 +1,5 @@
 <div class="modal fade" id="student_info_modal">
-    <div class="modal-dialog" style="width: 100%; max-width: 900px; overflow-y: auto;">
+    <div class="modal-dialog" style="width: 100%; max-width: 1000px; overflow-y: auto;">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -9,7 +9,6 @@
                     <button data-container="body" data-toggle="tooltip" data-placement="left" title="Add Emergency Number" class="btn btn-danger btn-s add_emergency"><i class="fa fa-phone"></i></button>
                     <button data-container="body" data-toggle="tooltip" data-placement="left" title="Add Employment History" class="btn btn-success btn-s add_employment_history"><i class="fa fa-briefcase"></i></button>
                     <button data-container="body" data-toggle="tooltip" data-placement="left" title="Add Educational Background" class="btn btn-primary btn-s add_educational"><i class="fa fa-graduation-cap"></i></button>
-                    <button data-container="body" data-toggle="tooltip" data-placement="left" title="Create SOA" class="btn btn-warning btn-s create_soa" style="margin-right: 20px;"><i class="fa fa-file-invoice"></i></button>
                 </div>
             </div>
             <div class="modal-body">
@@ -65,20 +64,38 @@
 
                 <br>
 
-                <h4>Educational Background</h4>
+                <div>
+                    <h4 class="pull-left">Statement of Account</h4>
+                    <div class="pull-right">
+                        <button data-container="body" data-toggle="tooltip" data-placement="left" title="Create SOA" class="btn btn-warning btn-sm create_soa"><i class="fa fa-file-invoice"></i></button>
+                        <button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit SOA" class="btn btn-info btn-sm edit_soa"><i class="fa fa-pen"></i></button>
+                        <button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete SOA" class="btn btn-danger btn-sm delete_soa"><i class="fa fa-trash-alt"></i></button>
+                    </div>
+                </div>
 
                 <table id="student_soa_table" class="table table-hover table-striped table-bordered responsive nowrap" width="100%">
                     <thead>
                         <tr>
-                            <th width="200px">Description</th>
-                            <th width="100px">Amount Due</th>
-                            <th width="100px">Amount Paid</th>
+                            <th width="180px">Description</th>
+                            <th width="900px">Amount Due</th>
+                            <th width="900px">Amount Paid</th>
                             <th width="50px">Payment Date</th>
                             <th width="50px">Balance Due</th>
                             <th width="10px">Verified By</th>
-                            <th width="10px">Remarks</th>
+                            <th width="40px">Remarks</th>
                         </tr>
                     </thead>
+                    <tfoot>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
                 </table>
 
             </div>
