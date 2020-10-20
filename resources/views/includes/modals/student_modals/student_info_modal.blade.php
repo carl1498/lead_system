@@ -8,7 +8,8 @@
                 <div class="pull-right">
                     <button data-container="body" data-toggle="tooltip" data-placement="left" title="Add Emergency Number" class="btn btn-danger btn-s add_emergency"><i class="fa fa-phone"></i></button>
                     <button data-container="body" data-toggle="tooltip" data-placement="left" title="Add Employment History" class="btn btn-success btn-s add_employment_history"><i class="fa fa-briefcase"></i></button>
-                    <button data-container="body" data-toggle="tooltip" data-placement="left" title="Add Educational Background" class="btn btn-primary btn-s add_educational" style="margin-right: 20px;"><i class="fa fa-graduation-cap"></i></button>
+                    <button data-container="body" data-toggle="tooltip" data-placement="left" title="Add Educational Background" class="btn btn-primary btn-s add_educational"><i class="fa fa-graduation-cap"></i></button>
+                    <button data-container="body" data-toggle="tooltip" data-placement="left" title="Create SOA" class="btn btn-warning btn-s create_soa" style="margin-right: 20px;"><i class="fa fa-file-invoice"></i></button>
                 </div>
             </div>
             <div class="modal-body">
@@ -58,6 +59,24 @@
                             <th width="50px">Start</th>
                             <th width="50px">End</th>
                             <th width="10px">Action</th>
+                        </tr>
+                    </thead>
+                </table>
+
+                <br>
+
+                <h4>Educational Background</h4>
+
+                <table id="student_soa_table" class="table table-hover table-striped table-bordered responsive nowrap" width="100%">
+                    <thead>
+                        <tr>
+                            <th width="200px">Description</th>
+                            <th width="100px">Amount Due</th>
+                            <th width="100px">Amount Paid</th>
+                            <th width="50px">Payment Date</th>
+                            <th width="50px">Balance Due</th>
+                            <th width="10px">Verified By</th>
+                            <th width="10px">Remarks</th>
                         </tr>
                     </thead>
                 </table>

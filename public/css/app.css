@@ -16756,3 +16756,8 @@ a.books_pick {
   display: none;
 }
 
+.soa_width {
+  width: 130px !important;
+  margin-right: 10px;
+}
+

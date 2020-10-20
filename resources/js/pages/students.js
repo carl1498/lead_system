@@ -1606,6 +1606,16 @@ $(document).ready(function(){
         setTimeout(function(){$('#educational_background_modal').modal('show')}, 500);
     });
 
+    $(document).on('click', '.create_soa', function(){
+        //var id = $(this).attr('id');
+
+        //$('#eb_stud_id').val(id);
+        //$('#eb_add_edit').val('add');
+        //$('#student_info_modal').modal('hide');
+        //setTimeout(function(){$('#soa_modal').modal('show')}, 500);
+        $('#soa_modal').modal('show')
+    });
+
     $(document).on('click', '.edit_emergency', function(){
         var id = $(this).attr('id');
 
