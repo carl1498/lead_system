@@ -11,6 +11,19 @@ $(document).ready(function(){
     var current_switch = 'Student';
     var modal_close = true;
     var title;
+    var employees = '';
+
+    $.ajax({
+        headers: {
+            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+        },
+        url: '/get_employee_first',
+        method: 'get',
+        dataType: 'json',
+        success: function(data){
+            employees = data;
+        }
+    });
 
     $.ajax({
         headers: {
@@ -68,7 +81,7 @@ $(document).ready(function(){
         trigger : 'hover'
     });
 
-    $('[data-toggle="tooltip"]').click(function () {
+    $('[data-toggle="tooltip"]').on('click', function () {
         $('[data-toggle="tooltip"]').tooltip("hide");
     });
 
@@ -82,15 +95,16 @@ $(document).ready(function(){
         modal_close = true;
     });
 
-    $('#emergency_modal, #emp_history_modal, #educational_background_modal').on('hidden.bs.modal', function(e){
+    $('#emergency_modal, #emp_history_modal, #educational_background_modal, #soa_modal').on('hidden.bs.modal', function(e){
         student_other_modal_clear();
         setTimeout(function(){$('#student_info_modal').modal('show')}, 500);
         $('#emp_continuous, #emergency_continuous, #educ_continuous').bootstrapToggle('off');
+        $('.soa_others').html('');
     });
 
     function student_other_modal_clear(){
-        $('#emergency_modal, #emp_history_modal, #educational_background_modal').find("input,textarea,select").val('').end();
-        $('#eb_add_edit, #e_add_edit, #eh_add_edit').val('add');
+        $('#emergency_modal, #emp_history_modal, #educational_background_modal, #soa_modal').find("input,textarea,select").val('').end();
+        $('#eb_add_edit, #e_add_edit, #eh_add_edit, #soa_add_edit').val('add');
     }
 
     function student_modal_clear(){
@@ -670,7 +684,7 @@ $(document).ready(function(){
     }
 
     function refresh_student_info(id){
-        let student_emergency_table = $('#student_emergency_table').DataTable({
+        $('#student_emergency_table').DataTable({
             paging: false,
             ordering: false,
             info: false,
@@ -687,7 +701,7 @@ $(document).ready(function(){
             columnDefs: [{defaultContent: "", targets: "_all"}],
         });
 
-        let student_employment_table = $('#student_employment_table').DataTable({
+        $('#student_employment_table').DataTable({
             paging: false,
             ordering: false,
             info: false,
@@ -704,7 +718,7 @@ $(document).ready(function(){
             columnDefs: [{defaultContent: "", targets: "_all"}],
         });
 
-        let student_educational_background_table = $('#student_educational_background_table').DataTable({
+        $('#student_educational_background_table').DataTable({
             paging: false,
             ordering: false,
             info: false,
@@ -720,6 +734,65 @@ $(document).ready(function(){
                 {data: "action", orderable:false,searchable:false}
             ],
             columnDefs: [{defaultContent: "", targets: "_all"}],
+        });
+
+        $('.create_soa, .edit_soa, .delete_soa').hide();
+        $('#student_soa_table').DataTable({
+            paging: false,
+            ordering: false,
+            info: false,
+            searching: false,
+            destroy: true,
+            ajax: '/view_student_soa/'+id,
+            columns: [
+                {data: 'description.name'},
+                {data: 'amount_due'},
+                {data: 'amount_paid'},
+                {data: 'payment_date'},
+                {data: 'balance'},
+                {data: 'verified.fname'},
+                {data: 'remarks'},
+            ],
+            columnDefs: [
+                {defaultContent: "", targets: "_all"},
+                {
+                    className: "text-right", 
+                    targets: [1, 2, 4]
+                }],
+            initComplete: function(settings, json) {
+                if(json.data.length != 0){
+                    $('.edit_soa, .delete_soa').show();
+                }else{
+                    $('.create_soa').show();
+                }
+            },
+            footerCallback: function ( row, data, start, end, display ) {
+                var api = this.api(), data;
+     
+                // Remove the formatting to get integer data for summation
+                var intVal = function ( i ) {
+                    return typeof i === 'string' ?
+                        i.replace(/[\$,]/g, '')*1 :
+                        typeof i === 'number' ?
+                            i : 0;
+                };
+                
+                let col_total = [1, 2, 4];
+                for(let x = 0; x < col_total.length; x++){
+                    // Total over all pages
+                    total = api
+                        .column( col_total[x] )
+                        .data()
+                        .reduce( function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0 );
+        
+                    // Update footer
+                    $( api.column( col_total[x] ).footer() ).html(
+                        (x < 4 && x < 7) ? '₱' + total.toFixed(2) : '₱' + total.toFixed(2) + ' (' + (total*2).toFixed(2) + ')'
+                    );
+                }
+            }
         });
     }
 
@@ -1529,7 +1602,7 @@ $(document).ready(function(){
 
     //Cancel (Only in Result Monitoring)
     $(document).on('click', '.cancel_student', function(){
-        var id = $(this).attr('id');
+        let id = $(this).attr('id');
 
         swal({
             title: 'Student will Cancel?',
@@ -1558,29 +1631,30 @@ $(document).ready(function(){
     });
 
     $(document).on('click', '.view_profile', function(){
-        var id = $(this).attr('id');
+        let id = $(this).attr('id');
 
         view_profile(id);
     });        
 
     //Student Information -- START
     $(document).on('click', '.info_student', function(){
+        $('.create_soa, .edit_soa, .delete_soa').hide();
         $('#student_info_modal').modal('show');
-        var id = $(this).attr('id');
+        let id = $(this).attr('id');
         $.ajax({
             url: '/get_student_info/'+id,
             method: 'get',
             dataType: 'json',
             success:function(data){
                 $('#student_info_modal .title_name').text(data.lname + ', ' + data.fname);
-                $('.add_emergency, .add_educational, .add_employment_history').attr('id', data.id);
+                $('.add_emergency, .add_educational, .add_employment_history, .create_soa, .edit_soa, .delete_soa').attr('id', data.id);
                 refresh_student_info(data.id);
             }
         });
     });
 
     $(document).on('click', '.add_emergency', function(){
-        var id = $(this).attr('id');
+        let id = $(this).attr('id');
         
         $('#e_stud_id').val(id);
         $('#e_add_edit').val('add');
@@ -1589,7 +1663,7 @@ $(document).ready(function(){
     });
 
     $(document).on('click', '.add_employment_history', function(){
-        var id = $(this).attr('id');
+        let id = $(this).attr('id');
 
         $('#eh_stud_id').val(id);
         $('#eh_add_edit').val('add');
@@ -1598,7 +1672,7 @@ $(document).ready(function(){
     });
 
     $(document).on('click', '.add_educational', function(){
-        var id = $(this).attr('id');
+        let id = $(this).attr('id');
 
         $('#eb_stud_id').val(id);
         $('#eb_add_edit').val('add');
@@ -1607,14 +1681,47 @@ $(document).ready(function(){
     });
 
     $(document).on('click', '.create_soa', function(){
-        //var id = $(this).attr('id');
+        let id = $(this).attr('id');
 
-        //$('#eb_stud_id').val(id);
-        //$('#eb_add_edit').val('add');
-        //$('#student_info_modal').modal('hide');
-        //setTimeout(function(){$('#soa_modal').modal('show')}, 500);
-        $('#soa_modal').modal('show')
+        $('#soa_stud_id').val(id);
+        $('#soa_add_edit').val('add');
+        $('#student_info_modal').modal('hide');
+        setTimeout(function(){$('#soa_modal').modal('show')}, 500);
     });
+
+    $(document).on('click', '.add_others', function(){
+        generate_others();
+    });
+
+    $(document).on('click', '.o_switch', function(){
+        let o_switch = $('.o_switch');
+        let o_index = o_switch.index($(this));
+
+        if($('.o_desc')[o_index].type == 'text'){
+            $('.o_desc')[o_index].type = 'hidden';
+            $('.o_desc').eq(o_index).prop('required', false);
+            $('.o_desc_select').eq(o_index).prop('required', true);
+            $('.o_desc').eq(o_index).val('');
+            $('.o_desc_select').eq(o_index).next(".select2-container").show();
+        }else{
+            $('.o_desc_select').eq(o_index).next(".select2-container").hide();
+            $('.o_desc')[o_index].type = 'text';
+            $('.o_desc').eq(o_index).prop('required', true);
+            $('.o_desc_select').eq(o_index).prop('required', false);
+        }
+        
+        $('.o_desc_select').eq(o_index).val('').trigger('change');
+        $('.o_desc').eq(o_index).val('').trigger('change');
+    });
+
+    $(document).on('click', '.o_delete', function(){
+        let o_delete = $('.o_delete');
+        let o_index = o_delete.index($(this));
+
+        $(this).tooltip('hide');
+        $(this).closest('.row').remove();
+    });
+
 
     $(document).on('click', '.edit_emergency', function(){
         var id = $(this).attr('id');
@@ -1691,191 +1798,64 @@ $(document).ready(function(){
         });
     });
 
-    $(document).on('click', '.delete_emergency', function(){
-        var id = $(this).attr('id');
+    $(document).on('click', '.edit_soa', function(){
+        let id = $(this).attr('id');
 
-        swal.fire({
-            title: 'Confirm User',
-            text: 'For security purposes, input your password again.',
-            input: 'password',
-            inputAttributes: {
-                autocapitalize: 'off'
+        $.ajax({
+            headers: {
+                'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
             },
-            showCancelButton: true,
-            confirmButtonText: 'Confirm',
-            showLoaderOnConfirm: true,
-            preConfirm: (password) => {
-                $.ajax({
-                    headers: {
-                        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    url: '/confirm_user',
-                    data: { password:password },
-                    method: 'POST',
-                    success: function(data){
-                        if(data == 0){
-                            swal('Password Incorrect!', 'Please try again', 'error');
-                            return;
-                        }
-                        else{
-                            swal({
-                                title: 'Are you sure?',
-                                text: 'You are about to delete an emergency contact.',
-                                type: 'warning',
-                                showCancelButton: true,
-                                confirmButtonColor: '#3085d6',
-                                cancelButtonColor: '#d33',
-                                confirmButtonText: 'Yes, delete it!'
-                            }).then((result) => {
-                                if(result.value){
-                                    $.ajax({
-                                        headers: {
-                                            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-                                        },
-                                        url: '/delete_student_emergency',
-                                        method: 'get',
-                                        data: {
-                                            id:id,
-                                            password:password
-                                        },
-                                        type: 'json',
-                                        success:function(data){
-                                            notif('Success!', 'This Data has been Deleted', 'success', 'glyphicon-ok');
-                    
-                                            refresh_student_info(data);
-                                        }
-                                    });
-                                }
-                            });
-                        }
+            url: '/get_student_soa/'+id,
+            method: 'get',
+            dataType: 'json',
+            success:function(data){
+                $('#soa_stud_id').val(id);
+                $('#soa_add_edit').val('edit');
+                for(let x = 0; x < 6; x++){
+                    $('.soa_amount_due').eq(x).val(data.soa[x].amount_due);
+                    $('.soa_amount_paid').eq(x).val(data.soa[x].amount_paid);
+                    $('.soa_payment_date').eq(x).val(data.soa[x].payment_date);
+                    $('.soa_verified').eq(x).val(data.soa[x].emp_id).trigger('change');
+                    $('.soa_remarks').eq(x).val(data.soa[x].remarks);
+                }
+                if(data.soa.length > 6){
+                    for(let x = 0; x < data.soa.length-6; x++){
+                        generate_others(data.soa[x+6], data.soa_fees);
                     }
-                });
-            },
-        });
+                }
+                compute_balance();
+                $('#student_info_modal').modal('hide');
+                setTimeout(function(){$('#soa_modal').modal('show')}, 500);
+            }
+        })
+    })
+
+    $(document).on('click', '.delete_emergency', function(){
+        let id = $(this).attr('id');
+        let text = 'You are about to delete an emergency contact.';
+
+        delete_data(id, text, '/delete_student_emergency', refresh_student_info);
     });
 
     $(document).on('click', '.delete_emp_history', function(){
-        var id = $(this).attr('id');
+        let id = $(this).attr('id');
+        let text = 'You are about to delete an employment history.';
 
-        swal.fire({
-            title: 'Confirm User',
-            text: 'For security purposes, input your password again.',
-            input: 'password',
-            inputAttributes: {
-                autocapitalize: 'off'
-            },
-            showCancelButton: true,
-            confirmButtonText: 'Confirm',
-            showLoaderOnConfirm: true,
-            preConfirm: (password) => {
-                $.ajax({
-                    headers: {
-                        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    url: '/confirm_user',
-                    data: { password:password },
-                    method: 'POST',
-                    success: function(data){
-                        if(data == 0){
-                            swal('Password Incorrect!', 'Please try again', 'error');
-                            return;
-                        }
-                        else{
-                            swal({
-                                title: 'Are you sure?',
-                                type: 'warning',
-                                showCancelButton: true,
-                                confirmButtonColor: '#3085d6',
-                                cancelButtonColor: '#d33',
-                                confirmButtonText: 'Yes, delete it!'
-                            }).then((result) => {
-                                if(result.value){
-                                    $.ajax({
-                                        headers: {
-                                            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-                                        },
-                                        url: '/delete_student_emp_history',
-                                        method: 'get',
-                                        data: {
-                                            id:id,
-                                            password:password
-                                        },
-                                        type: 'json',
-                                        success:function(data){
-                                            notif('Success!', 'This Data has been Deleted', 'success', 'glyphicon-ok');
-                    
-                                            refresh_student_info(data);
-                                        }
-                                    });
-                                }
-                            });
-                        }
-                    }
-                });
-            },
-        });
+        delete_data(id, text, '/delete_student_emp_history', refresh_student_info);
     });
 
     $(document).on('click', '.delete_education', function(){
         var id = $(this).attr('id');
+        let text = 'You are about to delete an education background.';
 
-        swal.fire({
-            title: 'Confirm User',
-            text: 'For security purposes, input your password again.',
-            input: 'password',
-            inputAttributes: {
-                autocapitalize: 'off'
-            },
-            showCancelButton: true,
-            confirmButtonText: 'Confirm',
-            showLoaderOnConfirm: true,
-            preConfirm: (password) => {
-                $.ajax({
-                    headers: {
-                        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    url: '/confirm_user',
-                    data: { password:password },
-                    method: 'POST',
-                    success: function(data){
-                        if(data == 0){
-                            swal('Password Incorrect!', 'Please try again', 'error');
-                            return;
-                        }
-                        else{
-                            swal({
-                                title: 'Are you sure?',
-                                type: 'warning',
-                                showCancelButton: true,
-                                confirmButtonColor: '#3085d6',
-                                cancelButtonColor: '#d33',
-                                confirmButtonText: 'Yes, delete it!'
-                            }).then((result) => {
-                                if(result.value){
-                                    $.ajax({
-                                        headers: {
-                                            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-                                        },
-                                        url: '/delete_student_education',
-                                        method: 'get',
-                                        data: {
-                                            id:id,
-                                            password:password
-                                        },
-                                        type: 'json',
-                                        success:function(data){
-                                            notif('Success!', 'This Data has been Deleted', 'success', 'glyphicon-ok');
-                    
-                                            refresh_student_info(data);
-                                        }
-                                    });
-                                }
-                            });
-                        }
-                    }
-                });
-            },
-        });
+        delete_data(id, text, '/delete_student_education', refresh_student_info);
+    });
+
+    $(document).on('click', '.delete_soa', function(){
+        var id = $(this).attr('id');
+        let text = 'You are about to delete a soa.';
+
+        delete_data(id, text, '/delete_student_soa', refresh_student_info);
     });
 
     $(document).on('submit', '#emergency_form', function(e){
@@ -1989,7 +1969,207 @@ $(document).ready(function(){
         });
     });
 
+    $(document).on('submit', '#soa_form', function(e){
+        e.preventDefault();
+
+        var input = $('.save_soa');
+        var button = document.getElementsByClassName("save_soa")[0];
+
+        button.disabled = true;
+        input.html('SAVING...');
+
+        $.ajax({
+            headers: {
+                'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: '/save_soa',
+            method: 'POST',
+            data: $(this).serialize(),
+            success:function(data){
+                let id = $('#soa_stud_id').val();
+                student_other_modal_clear();
+                $('#soa_stud_id').val(id);
+                $('#soa_modal').modal('hide');
+                button.disabled = false;
+                input.html('SAVE CHANGES');
+                refresh_student_info(data);
+                notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
+            },
+            error: function(data){
+                swal("Error!", "Something went wrong, please contact IT Officer.", "error");
+                button.disabled = false;
+                input.html('SAVE CHANGES');
+            }
+        });
+    });
+
+    $('.soa_amount_due, .soa_amount_paid, .soa_o_amount_due, .soa_o_amount_paid').keyup(function(){
+        compute_balance();
+    })
+
+    function compute_balance(){
+        for(let x = 0; x < 6; x++){
+            $('.soa_balance').eq(x).val(($('.soa_amount_due').eq(x).val() - $('.soa_amount_paid').eq(x).val()).toFixed(2));
+            $('.soa_o_balance').eq(x).val(($('.soa_o_amount_due').eq(x).val() - $('.soa_o_amount_paid').eq(x).val()).toFixed(2));
+        }
+    }
+
+    function generate_others(data, soa_fees){
+        let emp_html = '', desc_html = '';
+        for(let x = 0; x < employees.length; x++){
+            emp_html += '<option value="'+employees[x].id+'">'+employees[x].fname+'</option>'
+        }
+
+        let id='', row='', desc='', due='', paid='', date='', verified='', remarks='';
+
+        if(data){
+            for(let x = 0; x < soa_fees.length; x++){
+                desc_html += '<option value="'+soa_fees[x].id+'">'+soa_fees[x].name+'</option>'
+            }
+
+            row = 'id="'+data.id+'" value="'+data.id+'"';
+            desc = 'id="o_desc_select'+data.id+'"';
+            verified = 'id="soa_o_verified'+data.id+'"';
+            due = 'value="'+((data.amount_due) ? data.amount_due : '')+'"';
+            paid = 'value="'+((data.amount_paid) ? data.amount_paid : '')+'"';
+            date = 'value="'+((data.payment_date) ? data.payment_date : '')+'"';
+            remarks = 'value="'+((data.remarks) ? data.remarks : '')+'"';
+        }
+
+        let html = `<div class="row clearfix">
+            <input type="hidden" name="soa_o_row[]" class="soa_o_row" `+row+`>
+            
+            <div class="col-lg-3 col-md-3">
+                <div class="form-group required" style="width: 95%;">
+                    <select type="text" name="o_desc_select[]" class="form-control select2 o_desc_select required" style="width: 100%;" `+desc+` required>
+                        <option value="">Select Payment</option>
+                        `+desc_html+`
+                    </select>
+                    <input type="hidden" name="o_desc[]" class="form-control o_desc required" placeholder="Enter Payment Description" required>
+                </div>
+            </div>
+            <div class="col-lg-1 col-md-1 soa_width">
+                <div class="form-group">
+                    <input type="number" name="o_amount_due[]" class="form-control soa_o_amount_due" placeholder="Amount Due" `+due+`>
+                </div>
+            </div>
+            <div class="col-lg-1 col-md-1 soa_width">
+                <div class="form-group">
+                    <input type="number" name="o_amount_paid[]" class="form-control soa_o_amount_paid" placeholder="Amount Paid" `+paid+`>
+                </div>
+            </div>
+            <div class="col-lg-1 col-md-1 soa_width">
+                <div class="form-group">
+                    <input type="text" name="o_payment_date[]" class="form-control soa_o_payment_date datepicker" placeholder="Date of Payment" `+date+`>
+                </div>
+            </div>
+            <div class="col-lg-1 col-md-1 soa_width">
+                <div class="form-group">
+                    <input type="number" name="o_balance[]" class="form-control soa_o_balance required" placeholder="Balance Due" required readonly>
+                </div>
+            </div>
+            <div class="col-lg-1 col-md-1 soa_width">
+                <div class="form-group">
+                    <select type="text" name="o_verified[]" class="form-control select2 soa_o_verified" style="width: 100%;" `+verified+`>
+                        <option value="">Verified By</option>
+                        `+emp_html+`
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-1 col-md-1 soa_width">
+                <div class="form-group">
+                    <input type="text" name="o_remarks[]" class="form-control soa_o_remarks" placeholder="Remarks" `+remarks+`>
+                </div>
+            </div>
+            <div class="col-lg-1 col-md-1">
+                <button type="button" data-container="body" data-toggle="tooltip" data-placement="left" title="Switch" class="btn btn-info btn-sm o_switch"><i class="fa fa-sync"></i></button>
+                <button type="button" data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-sm o_delete"><i class="fa fa-times"></i></button>
+            </div>
+        </div>`;
+
+        $('.soa_others').append(html);
+
+        $(".datepicker").datepicker({
+            format: 'yyyy-mm-dd',
+            forceParse: false
+        });
+
+        $('.soa_o_amount_due, .soa_o_amount_paid').keyup(function(){
+            compute_balance();
+        });
+
+        o_desc_select();
+
+        if(data){
+            $('#o_desc_select'+data.id).val(data.soa_fees_id).trigger('change');
+            if(data.emp_id){
+                $('#soa_o_verified'+data.id).val(data.emp_id).trigger('change');
+            }
+        }
+    }
+
     //Student Information -- END
+
+    function delete_data(id, text, url, refresh_function){
+        swal.fire({
+            title: 'Confirm User',
+            text: 'For security purposes, input your password again.',
+            input: 'password',
+            inputAttributes: {
+                autocapitalize: 'off'
+            },
+            showCancelButton: true,
+            confirmButtonText: 'Confirm',
+            showLoaderOnConfirm: true,
+            preConfirm: (password) => {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: '/confirm_user',
+                    data: { password:password },
+                    method: 'POST',
+                    success: function(data){
+                        if(data == 0){
+                            swal('Password Incorrect!', 'Please try again', 'error');
+                            return;
+                        }
+                        else{
+                            swal({
+                                title: 'Are you sure?',
+                                text: text,
+                                type: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Yes, delete it!'
+                            }).then((result) => {
+                                if(result.value){
+                                    $.ajax({
+                                        headers: {
+                                            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                                        },
+                                        url: url,
+                                        method: 'get',
+                                        data: {
+                                            id:id,
+                                            password:password
+                                        },
+                                        type: 'json',
+                                        success:function(data){
+                                            notif('Success!', 'This Data has been Deleted', 'success', 'glyphicon-ok');
+                    
+                                            refresh_function(data);
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    }
+                });
+            },
+        });
+    }
 
     //Course Select 2
     $('#course, #l_course, #s_course, #t_course, #i_course').select2({
@@ -2091,7 +2271,7 @@ $(document).ready(function(){
             data: function (params){
                 return {
                     name: params.term,
-                    page:params.page
+                    page: params.page
                 }
             },
             
@@ -2171,6 +2351,34 @@ $(document).ready(function(){
             }
         },
     });
+
+    //Other Payment Description Select 2
+    function o_desc_select(){
+        for(let x = 0; x < $('.o_desc_select').length; x++){
+            $('.soa_o_verified').eq(x).select2();
+            $('.o_desc_select').eq(x).select2({
+                allowClear: true,
+                placeholder: 'Select Payment',
+                ajax: {
+                    url: "/payment_others",
+                    dataType: 'json',
+    
+                    data: function (params){
+                        return {
+                            name: params.term,
+                            page:params.page
+                        }
+                    },
+                    
+                    processResults: function (data){
+                        return {
+                            results:data.results      
+                        }
+                    }
+                },
+            });
+        }
+    }
 
     function view_profile(id){
         $.ajax({

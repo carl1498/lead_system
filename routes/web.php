@@ -10,7 +10,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-Auth::routes();
+Auth::routes(['register' => false]);
 
 Route::get('/', function () {
     return redirect('/login');
@@ -114,6 +114,16 @@ Route::group(['middleware' => ['auth', 'student_list']], function(){
     Route::post('/save_student_education', 'studentController@save_student_education');
     Route::get('/get_student_education/{id}', 'studentController@get_student_education');
     Route::get('/delete_student_education', 'studentController@delete_student_education');
+
+    //SOA
+    Route::group(['middleware' => ['admin']], function(){
+        Route::get('/payment_others', 'studentController@payment_others');
+        Route::get('/get_employee_first', 'studentController@get_employee_first');
+        Route::get('/view_student_soa/{id}', 'studentController@view_student_soa');
+        Route::get('/delete_student_soa', 'studentController@delete_student_soa');
+        Route::get('/get_student_soa/{id}', 'studentController@get_student_soa');
+        Route::post('/save_soa', 'studentController@save_soa');
+    });
 
     //STUDENT INFO -- END
 });

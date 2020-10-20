@@ -30,9 +30,6 @@
             <button data-container="body" data-toggle="tooltip" data-placement="left" title="Add Student" class="btn btn-secondary bg-red add_student">
                 <i class="fa fa-plus-square"></i>
             </button>
-            <button data-container="body" data-toggle="tooltip" data-placement="left" title="Add Student" class="btn btn-secondary bg-red create_soa">
-                <i class="fa fa-plus-square"></i>
-            </button>
             @endif
         </li>
     </ol>

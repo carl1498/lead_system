@@ -21,6 +21,8 @@ use App\company;
 use App\student_emergency;
 use App\student_emp_history;
 use App\student_educational_background;
+use App\soa;
+use App\soa_fees;
 use Carbon\Carbon;
 use Auth;
 use Yajra\Datatables\Datatables;
@@ -48,9 +50,12 @@ class studentController extends Controller
         $company = company::all();
         $university = university::all();
         $batch = student::whereNotNull('batch')->orderBy('batch')->groupBy('batch')->pluck('batch');
+        $soa_fees_defaults = ['Daily Living Allowance', 'Dormitory Fees', 'Language Fee', 'JFT-Basic Refund',
+        'Skills Examination Refund', 'Penalty | Damages'];
 
         return view('pages.students', compact('program', 'school', 'benefactor', 'batch', 
-        'employee', 'branch', 'course', 'departure_year', 'departure_month', 'company', 'university'));
+        'employee', 'branch', 'course', 'departure_year', 'departure_month', 'company', 'university',
+        'soa_fees_defaults'));
     }
 
     public function branch(Request $request){//Makati, Cebu, Davao
@@ -1616,6 +1621,18 @@ class studentController extends Controller
         ->make(true);
     }
 
+    public function view_student_soa(Request $request){
+        $id = $request->id;
+
+        $soa = soa::with('description', 'verified')->where('stud_id', $id)->get();
+
+        return Datatables::of($soa)
+        ->addColumn('balance', function($data){
+            return number_format($data->amount_due - $data->amount_paid, 2, '.', '');
+        })
+        ->make(true);
+    }
+
     public function save_student_emergency(Request $request){
         if($request->e_add_edit == 'add'){
             $emergency = new student_emergency;
@@ -1801,5 +1818,122 @@ class studentController extends Controller
             ];
         }
         return json_encode(['results' => $array]);
+    }
+
+    public function payment_others(Request $request){
+        $soa_fees = soa_fees::where('name', 'LIKE', '%'.$request->name.'%')
+            ->whereNotBetween('id', [1, 6])->get()->toArray();
+
+        $array = [];
+        foreach ($soa_fees as $key => $value){
+            $array[] = [
+                'id' => $value['id'],
+                'text' => $value['name']
+            ];
+        }
+        return json_encode(['results' => $array]);
+    }
+
+    public function get_employee_first(){
+        return employee::get(['id', 'fname']);
+    }
+
+    public function save_soa(Request $request){
+        $stud_id = $request->soa_stud_id;
+
+        if($request->soa_add_edit == 'add'){
+            for($x = 0; $x < 6; $x++){
+                $soa = new soa;
+                $soa->stud_id = $stud_id;
+                $soa->soa_fees_id = $x+1;
+                $soa->amount_due = $request->amount_due[$x];
+                $soa->amount_paid = $request->amount_paid[$x];
+                $soa->payment_date = $request->payment_date[$x];
+                $soa->emp_id = $request->verified[$x];
+                $soa->remarks = $request->remarks[$x];
+                $soa->save();
+            }
+
+            if($request->soa_o_row){
+                for($x = 0; $x < count($request->soa_o_row); $x++){
+                    if($request->o_desc_select[$x] == null){
+                        $soa_fees_add = new soa_fees;
+                        $soa_fees_add->name = $request->o_desc[$x];
+                        $soa_fees_add->save();
+                    }else{
+                        $soa_fees_add = null;
+                    }
+
+                    $soa = new soa;
+                    $soa->stud_id = $stud_id;
+                    $soa->soa_fees_id = (!is_null($soa_fees_add)) ? $soa_fees_add->id : $request->o_desc_select[$x];
+                    $soa->amount_due = $request->o_amount_due[$x];
+                    $soa->amount_paid = $request->o_amount_paid[$x];
+                    $soa->payment_date = $request->o_payment_date[$x];
+                    $soa->emp_id = $request->o_verified[$x];
+                    $soa->remarks = $request->o_remarks[$x];
+                    $soa->save();
+                }
+            }
+        }
+        else if($request->soa_add_edit == 'edit'){
+            $soa = soa::where('stud_id', $stud_id)->limit(6)->get();
+
+            foreach($soa as $key => $s){
+                $s->amount_due = $request->amount_due[$key];
+                $s->amount_paid = $request->amount_paid[$key];
+                $s->payment_date = $request->payment_date[$key];
+                $s->emp_id = $request->verified[$key];
+                $s->remarks = $request->remarks[$key];
+                $s->save();
+            }
+
+            if($request->soa_o_row){
+                for($x = 0; $x < count($request->soa_o_row); $x++){
+                    if($request->o_desc_select[$x] == null){
+                        $soa_fees_add = new soa_fees;
+                        $soa_fees_add->name = $request->o_desc[$x];
+                        $soa_fees_add->save();
+                    }else{
+                        $soa_fees_add = null;
+                    }
+                    
+                    $s = $request->soa_o_row[$x];
+                    $soa = ($s != null) ? soa::find($s) : new soa;
+                    $soa->stud_id = $stud_id;
+                    $soa->soa_fees_id = (!is_null($soa_fees_add)) ? $soa_fees_add->id : $request->o_desc_select[$x];
+                    $soa->amount_due = $request->o_amount_due[$x];
+                    $soa->amount_paid = $request->o_amount_paid[$x];
+                    $soa->payment_date = $request->o_payment_date[$x];
+                    $soa->emp_id = $request->o_verified[$x];
+                    $soa->remarks = $request->o_remarks[$x];
+                    $soa->save();
+                }
+            }
+        }
+
+        return $stud_id;
+    }
+
+    public function get_student_soa($id){
+        $soa = soa::where('stud_id', $id)->get();
+        $soa_fees = soa_fees::whereNotBetween('id', [1, 6])->get();
+
+        $output = array(
+            'soa' => $soa,
+            'soa_fees' => $soa_fees,
+        );
+        return $output;
+    }
+
+    public function delete_student_soa(Request $request){
+        if(!Hash::check($request->password, Auth::user()->password)){
+            Auth::logout();
+            return \Redirect::to('/');
+        }
+
+        $soa = soa::where('stud_id', $request->id)->delete();
+
+        return $request->id;
     }
 }
