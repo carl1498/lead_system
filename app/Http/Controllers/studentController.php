@@ -1889,6 +1889,11 @@ class studentController extends Controller
             }
 
             if($request->soa_o_row){
+                $soa = soa::whereNotIn('id', array_filter($request->soa_o_row))->where('stud_id', $stud_id)->whereNotBetween('soa_fees_id', [1, 6]);
+                if(!empty($soa)){
+                    $soa->delete();
+                }
+                
                 for($x = 0; $x < count($request->soa_o_row); $x++){
                     if($request->o_desc_select[$x] == null){
                         $soa_fees_add = new soa_fees;
@@ -1909,7 +1914,13 @@ class studentController extends Controller
                     $soa->remarks = $request->o_remarks[$x];
                     $soa->save();
                 }
+            }else{
+                $soa = soa::where('stud_id', $stud_id)->whereNotBetween('soa_fees_id', [1, 6]);
+                if(!empty($soa)){
+                    $soa->delete();
+                }
             }
+            
         }
 
         return $stud_id;

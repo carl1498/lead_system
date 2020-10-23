@@ -352,6 +352,8 @@ Route::group(['middleware' => ['auth', 'admin']], function(){
     Route::get('/delete_tf_payment', 'tuitionController@delete_tf_payment');
     Route::get('/delete_sb_payment', 'tuitionController@delete_sb_payment');
 
+    Route::get('/view_soa', 'tuitionController@view_soa');
+
     Route::post('/excel_tf_breakdown', 'excelController@excel_tf_breakdown');
     Route::post('/excel_tf_sb_summary', 'excelController@excel_tf_sb_summary');
 });

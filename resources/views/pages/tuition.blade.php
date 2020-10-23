@@ -35,6 +35,7 @@
                     <li class="program_pick"><a class="program_pick" href="#program_tab" data-toggle="tab">Programs</a></li>
                     <li class="tf_breakdown_pick"><a class="tf_breakdown_pick" href="#tf_breakdown_tab" data-toggle="tab">TF Breakdown</a></li>
                     <li class="summary_pick"><a class="summary_pick" href="#summary_tab" data-toggle="tab">Summary</a></li>
+                    <li class="soa_pick"><a class="soa_pick" href="#soa_tab" data-toggle="tab">SOA</a></li>
                 </ul>
 
                 <div class="tab-content">

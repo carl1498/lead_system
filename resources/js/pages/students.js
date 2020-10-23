@@ -2020,7 +2020,7 @@ $(document).ready(function(){
             emp_html += '<option value="'+employees[x].id+'">'+employees[x].fname+'</option>'
         }
 
-        let id='', row='', desc='', due='', paid='', date='', verified='', remarks='';
+        let row='', desc='', due='', paid='', date='', verified='', delete_button='', remarks='';
 
         if(data){
             for(let x = 0; x < soa_fees.length; x++){
@@ -2028,6 +2028,7 @@ $(document).ready(function(){
             }
 
             row = 'id="'+data.id+'" value="'+data.id+'"';
+            delete_button = 'id="'+data.id+'"';
             desc = 'id="o_desc_select'+data.id+'"';
             verified = 'id="soa_o_verified'+data.id+'"';
             due = 'value="'+((data.amount_due) ? data.amount_due : '')+'"';
@@ -2356,27 +2357,30 @@ $(document).ready(function(){
     function o_desc_select(){
         for(let x = 0; x < $('.o_desc_select').length; x++){
             $('.soa_o_verified').eq(x).select2();
-            $('.o_desc_select').eq(x).select2({
-                allowClear: true,
-                placeholder: 'Select Payment',
-                ajax: {
-                    url: "/payment_others",
-                    dataType: 'json',
-    
-                    data: function (params){
-                        return {
-                            name: params.term,
-                            page:params.page
+            let o_desc = $('.o_desc_select').eq(x).next('.select2-container');
+            if(o_desc.length == 0){
+                $('.o_desc_select').eq(x).select2({
+                    allowClear: true,
+                    placeholder: 'Select Payment',
+                    ajax: {
+                        url: "/payment_others",
+                        dataType: 'json',
+        
+                        data: function (params){
+                            return {
+                                name: params.term,
+                                page:params.page
+                            }
+                        },
+                        
+                        processResults: function (data){
+                            return {
+                                results:data.results      
+                            }
                         }
                     },
-                    
-                    processResults: function (data){
-                        return {
-                            results:data.results      
-                        }
-                    }
-                },
-            });
+                });
+            }
         }
     }
 

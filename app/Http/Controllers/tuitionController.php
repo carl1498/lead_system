@@ -15,6 +15,8 @@ use App\class_students;
 use App\class_settings;
 use App\departure_year;
 use App\departure_month;
+use App\soa;
+use App\soa_fees;
 use Auth;
 use Yajra\Datatables\Datatables;
 use Illuminate\Support\Facades\Hash;
@@ -85,7 +87,7 @@ class tuitionController extends Controller
             }
         }
 
-        $student = student::with('program', 'branch')
+        $student = student::with('program', 'branch')->limit(1)
         ->when($class != 'All' && $class != 'No Class', function($query) use($current_class){
             $query->whereIn('id', $current_class);
         })
@@ -514,6 +516,32 @@ class tuitionController extends Controller
         }
 
         return $student;
+    }
+
+    public function view_soa(Request $request){
+        $soa_id = soa::groupBy('stud_id')->pluck('stud_id');
+
+        $student = student::whereIn('id', $soa_id)
+        ->get(['id', 'fname', 'lname', 'mname', 'batch']);
+
+        foreach($student as $s){
+            $soa = soa::where('stud_id', $s->id);
+            $soa_clone = clone $soa;
+            $s->due = $soa_clone->sum('amount_due');
+            $s->paid = $soa_clone->sum('amount_paid');
+            $s->balance =  number_format($s->due - $s->paid, 2, '.', '');
+        }
+
+        return Datatables::of($student)
+        ->addColumn('name', function($data){
+            return $data->lname . ', ' . $data->fname . ' ' . $data->mname;
+        })
+        ->addColumn('action', function($data){
+            $html = '';
+
+            return $html;
+        })
+        ->make(true);
     }
 
     public function get_tf_projected(Request $request){

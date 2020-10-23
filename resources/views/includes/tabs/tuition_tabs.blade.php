@@ -167,3 +167,24 @@
 </div>
 
 <!-- SUMMARY -- END -->
+
+<!-- SOA -- START -->
+
+<div class="tab-pane fade in" id="soa_tab">
+    
+    <table id="soa_table" class="table table-hover table-striped table-bordered responsive nowrap" width="100%">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Batch</th>
+                <th>Total</th>
+                <th>Amount Paid</th>
+                <th>Balance</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+    </table>
+    
+</div>
+
+<!-- SOA -- END -->

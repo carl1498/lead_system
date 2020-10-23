@@ -81,11 +81,11 @@ $(document).ready(function(){
 
     function disableTabs(){
         $(`li.student_pick, li.payment_pick, li.sec_bond_pick, li.program_pick, 
-        li.tf_breakdown_pick, li.summary_pick`
+        li.tf_breakdown_pick, li.summary_pick, li.soa_pick`
         ).addClass('disabled').css('cursor', 'not-allowed');
 
         $(`a.student_pick, a.payment_pick, a.sec_bond_pick, a.program_pick, 
-        a.tf_breakdown_pick, a.summary_pick`
+        a.tf_breakdown_pick, a.summary_pick, a.soa_pick`
         ).addClass('disabled').css('pointer-events', 'none');
 
         $('.refresh_table').attr('disabled', true);
@@ -93,11 +93,11 @@ $(document).ready(function(){
 
     function enableTabs(){
         $(`li.student_pick, li.payment_pick, li.sec_bond_pick, li.program_pick, 
-        li.tf_breakdown_pick, li.summary_pick`
+        li.tf_breakdown_pick, li.summary_pick, li.soa_pick`
         ).removeClass('disabled').css('cursor', 'pointer');
         
         $(`a.student_pick, a.payment_pick, a.sec_bond_pick, a.program_pick, 
-        a.tf_breakdown_pick, a.summary_pick`
+        a.tf_breakdown_pick, a.summary_pick, a.soa_pick`
         ).removeClass('disabled').css('pointer-events', 'auto');
 
         $('.refresh_table').attr('disabled', false);
@@ -126,6 +126,9 @@ $(document).ready(function(){
         }
         else if(current_tab == 'Summary'){
             refresh_summary_table();
+        }
+        else if(current_tab == 'SOA'){
+            refresh_soa_table();
         }
         
     }
@@ -656,6 +659,36 @@ $(document).ready(function(){
 
     }
 
+    function refresh_soa_table(){
+        $('#soa_table').DataTable({
+            initComplete: function(settings, json) {
+                enableTabs();
+            },
+            processing: true,
+            destroy: true,
+            scrollX: true,
+            scrollCollapse: true,
+            responsive: true,
+            ajax: {
+                url: '/view_soa',
+                data: {
+                }
+            },
+            columns: [
+                {data: 'name', name: 'name'},
+                {data: 'batch', name: 'batch'},
+                {data: 'due', name: 'due'},
+                {data: 'paid', name: 'paid'},
+                {data: 'balance', name: 'balance'},
+                {data: 'action', orderable: false, searchable: false}
+            ],
+            columnDefs: [
+                {defaultContent: "", targets: "_all"},
+                //{className: "text-right", targets: [4]}
+            ],
+        });
+    }
+
     refresh();
     
     $('.refresh_table').on('click', function(){
@@ -667,7 +700,7 @@ $(document).ready(function(){
     //FUNCTIONS -- START
     
     $(`.student_pick, .payment_pick, .sec_bond_pick, .program_pick, 
-        .tf_breakdown_pick, .summary_pick`).on('click', function(){
+        .tf_breakdown_pick, .summary_pick, .soa_pick`).on('click', function(){
         if(!$(this).hasClass('disabled')){
             current_tab = $(this).text();
             refresh();
