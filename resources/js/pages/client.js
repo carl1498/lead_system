@@ -109,6 +109,8 @@ $(document).ready(function(){
                 {data: 'address', name: 'address'},
                 {data: 'contact', name: 'contact'},
                 {data: 'email', name: 'email'},
+                {data: 'industry.name', name: 'industry'},
+                {data: 'url', name: 'url'},
                 {data: 'action', orderable: false, searchable: false}
             ],
             columnDefs: [{defaultContent: "", targets: "_all"}]
@@ -233,6 +235,8 @@ $(document).ready(function(){
                 $('#client_address').val(data.address);
                 $('#client_contact').val(data.contact);
                 $('#client_email').val(data.email);
+                $('#industry').val(data.ind_id).trigger('change');
+                $('#client_url').val(data.url);
                 $('#client_modal').modal('show');
             }
         });

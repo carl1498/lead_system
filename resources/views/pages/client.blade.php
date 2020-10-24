@@ -43,6 +43,8 @@
                                 <th>Address</th>
                                 <th>Contact #</th>
                                 <th>Email</th>
+                                <th>Industry</th>
+                                <th>URL</th>
                                 <th>Action</th>
                             </thead>
                         </table>

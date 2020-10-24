@@ -7,6 +7,7 @@ use App\client;
 use App\client_bank;
 use App\client_company_type;
 use App\client_pic;
+use App\industries;
 use Auth;
 use Yajra\Datatables\Datatables;
 use Illuminate\Support\Facades\Hash;
@@ -21,14 +22,15 @@ class clientController extends Controller
 
     public function index(){
         $company_type = client_company_type::all();
+        $industries = industries::all();
 
-        return view('pages.client', compact('company_type'));
+        return view('pages.client', compact('company_type', 'industries'));
     }
 
     public function view_client(Request $request){
         $client_type = $request->current_tab;
 
-        $client = client::with('client_company_type')
+        $client = client::with('client_company_type', 'industry')
         ->whereHas('client_company_type', function($query) use($client_type){
             $query->where('name', $client_type);
         })->get();
@@ -80,6 +82,8 @@ class clientController extends Controller
         $client->address = $request->client_address;
         $client->contact = $request->client_contact;
         $client->email = $request->client_email;
+        $client->ind_id = $request->industry;
+        $client->url = $request->client_url;
         $client->save();
     }
 
