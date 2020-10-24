@@ -676,6 +676,7 @@ $(document).ready(function(){
             },
             columns: [
                 {data: 'name', name: 'name'},
+                {data: 'contact', name: 'contact'},
                 {data: 'batch', name: 'batch'},
                 {data: 'due', name: 'due'},
                 {data: 'paid', name: 'paid'},

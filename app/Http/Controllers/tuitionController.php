@@ -522,7 +522,7 @@ class tuitionController extends Controller
         $soa_id = soa::groupBy('stud_id')->pluck('stud_id');
 
         $student = student::whereIn('id', $soa_id)
-        ->get(['id', 'fname', 'lname', 'mname', 'batch']);
+        ->get(['id', 'fname', 'lname', 'mname', 'contact', 'batch']);
 
         foreach($student as $s){
             $soa = soa::where('stud_id', $s->id);

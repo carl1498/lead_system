@@ -176,6 +176,7 @@
         <thead>
             <tr>
                 <th>Name</th>
+                <th>Contact</th>
                 <th>Batch</th>
                 <th>Total</th>
                 <th>Amount Paid</th>

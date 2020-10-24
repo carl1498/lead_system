@@ -1,1 +1,1030 @@
-!function(t){var e={};function a(n){if(e[n])return e[n].exports;var r=e[n]={i:n,l:!1,exports:{}};return t[n].call(r.exports,r,r.exports,a),r.l=!0,r.exports}a.m=t,a.c=e,a.d=function(t,e,n){a.o(t,e)||Object.defineProperty(t,e,{configurable:!1,enumerable:!0,get:n})},a.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return a.d(e,"a",e),e},a.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},a.p="/",a(a.s=14)}({14:function(t,e,a){t.exports=a("1l0Y")},"1l0Y":function(t,e){$(document).ready(function(){var t,e="Student",a=!1,n=!1;function r(){$("#tf_payment_form :input.required").each(function(){this.style.setProperty("border-color","green","important")}),$("#tf_payment_form").find("input,textarea,select").val("").end(),$(".select2").trigger("change.select2")}function s(){$("#sb_payment_form :input.required").each(function(){this.style.setProperty("border-color","green","important")}),$("#sb_payment_form").find("input,textarea,select").val("").end(),$(".select2").trigger("change.select2")}function o(){$("li.student_pick, li.payment_pick, li.sec_bond_pick, li.program_pick, \n        li.tf_breakdown_pick, li.summary_pick, li.soa_pick").removeClass("disabled").css("cursor","pointer"),$("a.student_pick, a.payment_pick, a.sec_bond_pick, a.program_pick, \n        a.tf_breakdown_pick, a.summary_pick, a.soa_pick").removeClass("disabled").css("pointer-events","auto"),$(".refresh_table").attr("disabled",!1)}function l(){$("li.student_pick, li.payment_pick, li.sec_bond_pick, li.program_pick, \n        li.tf_breakdown_pick, li.summary_pick, li.soa_pick").addClass("disabled").css("cursor","not-allowed"),$("a.student_pick, a.payment_pick, a.sec_bond_pick, a.program_pick, \n        a.tf_breakdown_pick, a.summary_pick, a.soa_pick").addClass("disabled").css("pointer-events","none"),$(".refresh_table").attr("disabled",!0),get_year=$("#departure_year_select option:selected").text(),get_month=$("#departure_month_select option:selected").text(),function(){switch(e){case"Payment History":t=" DEPARTURE PAYMENT HISTORY";break;case"Security Bond History":t=" DEPARTURE SECURITY BOND"}get_departure="All"==get_year&&"All"==get_month?"All":get_year+" "+get_month,payment_buttons_format=[{extend:"excelHtml5",title:get_departure+t,exportOptions:{columns:":visible"}},"colvis"]}(),"Student"==e?(class_select=$("#class_select").val(),program_select=$("#program_select").val(),branch_select=$("#branch_select").val(),departure_year_select=$("#departure_year_select").val(),departure_month_select=$("#departure_month_select").val(),$("#student_table").DataTable({initComplete:function(t,e){o()},dom:"Bflrtip",buttons:payment_buttons_format,processing:!0,destroy:!0,scrollX:!0,scrollCollapse:!0,fixedColumns:!0,responsive:!0,ajax:{url:"/view_tf_student",data:{class_select:class_select,program_select:program_select,branch_select:branch_select,departure_year_select:departure_year_select,departure_month_select:departure_month_select}},columns:[{data:"name",name:"name"},{data:"program.name",name:"program"},{data:"branch.name",name:"branch"},{data:"contact",name:"contact"},{data:"balance",name:"balance"},{data:"sec_bond",name:"sec_bond"},{data:"class",name:"class"},{data:"status",name:"status"},{data:"departure",name:"departure"},{data:"action",orderable:!1,searchable:!1}],columnDefs:[{defaultContent:"",targets:"_all"},{className:"text-right",targets:[4,5]}],footerCallback:function(t,e,a,n,r){var s=this.api(),o=function(t){return"string"==typeof t?1*t.replace(/[\$,]/g,""):"number"==typeof t?t:0};total=s.column(4).data().reduce(function(t,e){return o(t)+o(e)},0),total2=s.column(5).data().reduce(function(t,e){return o(t)+o(e)},0),$(s.column(4).footer()).html("₱"+total.toFixed(2)),$(s.column(5).footer()).html("₱"+total2.toFixed(2))}})):"Programs"==e?$("#program_table").DataTable({initComplete:function(t,e){o()},processing:!0,destroy:!0,scrollCollapse:!0,responsive:!0,ajax:{url:"/view_tf_program",data:{}},columns:[{data:"name",name:"name"},{data:"total",name:"total"},{data:"action",orderable:!1,searchable:!1}],columnDefs:[{defaultContent:"",targets:"_all"},{className:"text-right",targets:[1]}]}):"Payment History"==e?(class_select=$("#class_select").val(),program_select=$("#program_select").val(),branch_select=$("#branch_select").val(),departure_year_select=$("#departure_year_select").val(),departure_month_select=$("#departure_month_select").val(),$("#payment_table").DataTable({initComplete:function(t,e){o()},dom:"Bflrtip",buttons:payment_buttons_format,processing:!0,destroy:!0,scrollX:!0,scrollCollapse:!0,responsive:!0,ajax:{url:"/view_tf_payment",data:{class_select:class_select,program_select:program_select,branch_select:branch_select,departure_year_select:departure_year_select,departure_month_select:departure_month_select}},columns:[{data:"name",name:"name"},{data:"tf_name.name",name:"tf_name"},{data:"student.program.name",name:"program"},{data:"student.branch.name",name:"branch"},{data:"amount",name:"amount"},{data:"date",name:"date"},{data:"remarks",name:"remarks"},{data:"action",orderable:!1,searchable:!1}],columnDefs:[{defaultContent:"",targets:"_all"},{className:"text-right",targets:[4]}],order:[5,"desc"],footerCallback:function(t,e,a,n,r){var s=this.api(),o=function(t){return"string"==typeof t?1*t.replace(/[\$,]/g,""):"number"==typeof t?t:0};total=s.column(4).data().reduce(function(t,e){return o(t)+o(e)},0),$(s.column(4).footer()).html("₱"+total.toFixed(2))}})):"Security Bond History"==e?(class_select=$("#class_select").val(),program_select=$("#program_select").val(),branch_select=$("#branch_select").val(),departure_year_select=$("#departure_year_select").val(),departure_month_select=$("#departure_month_select").val(),$("#sec_bond_table").DataTable({initComplete:function(t,e){o()},dom:"Bflrtip",buttons:payment_buttons_format,processing:!0,destroy:!0,scrollX:!0,scrollCollapse:!0,responsive:!0,ajax:{url:"/view_sec_bond",data:{class_select:class_select,program_select:program_select,branch_select:branch_select,departure_year_select:departure_year_select,departure_month_select:departure_month_select}},columns:[{data:"name",name:"name"},{data:"student.program.name",name:"program"},{data:"student.branch.name",name:"branch"},{data:"amount",name:"amount"},{data:"date",name:"date"},{data:"remarks",name:"remarks"},{data:"action",orderable:!1,searchable:!1}],columnDefs:[{defaultContent:"",targets:"_all"},{className:"text-right",targets:[3]}],order:[4,"desc"],footerCallback:function(t,e,a,n,r){var s=this.api(),o=function(t){return"string"==typeof t?1*t.replace(/[\$,]/g,""):"number"==typeof t?t:0};total=s.column(3).data().reduce(function(t,e){return o(t)+o(e)},0),$(s.column(3).footer()).html("₱"+total.toFixed(2))}})):"TF Breakdown"==e?(class_select=$("#class_select").val(),program_select=$("#program_select").val(),branch_select=$("#branch_select").val(),departure_year_select=$("#departure_year_select").val(),departure_month_select=$("#departure_month_select").val(),$.ajax({headers:{"X-CSRF-Token":$('meta[name="csrf-token"]').attr("content")},url:"/view_tf_breakdown",data:{class_select:class_select,program_select:program_select,branch_select:branch_select,departure_year_select:departure_year_select,departure_month_select:departure_month_select},method:"get",dataType:"json",success:function(t){$("#tf_breakdown_table").empty();var e="",a="",n="";e+="<thead>";for(var r=0;r<t.installment;r++)a+='<th colspan="2" class="installments">Installment '+(r+1)+"</th>",n+="<th>Amount Paid</th><th>Payment Date</th>";e+='\n                <tr>\n                    <th rowspan="2" style="width: 300px;">Name</th>\n                    <th rowspan="2" style="width: 150px;">Program</th>\n                    <th colspan="2" style="width: 250px;">Prof Fee</th>\n                    <th rowspan="2" style="width: 150px;">Total Tuition</th>\n                    <th rowspan="2" style="width: 150px;">Total Payment</th>'+a+'<th rowspan="2" style="width: 100px;">Balance</th>\n                </tr>\n                <tr>'+(n+="<th>Amount Paid</th><th>Payment Date</th>"),e+="</thead>",e+="<tbody>";for(var s=0;s<t.student.length;s++){for(var l=t.student[s].mname?t.student[s].mname:"",c=t.student[s].program?t.student[s].program.name:"",d="",i=0;i<t.installment;i++){var m=0,_="";t.student[s].payment[i]&&(m=t.student[s].payment[i].amount,_=t.student[s].payment[i].date),d+='<td style="text-align:right;">'+m+'</td><td style="text-align:center;">'+_+"</td>"}e+="<tr>\n                        <td>"+t.student[s].lname+", "+t.student[s].fname+" "+l+"</td><td>"+c+'</td><td style="text-align:right;">'+t.student[s].prof_fee+'</td><td style="text-align:center;">'+t.student[s].prof_fee_date+'</td><td style="text-align:right;">'+t.student[s].balance+'</td><td style="text-align:right;">'+t.student[s].total_payment+"</td>"+d+'<td style="text-align:right;">'+t.student[s].remaining_bal+"</td></tr>"}e+="</tbody>",e+="<tfoot>";for(var u="",p=0;p<t.installment;p++)u+='<td style="text-align:right;">'+t.footer.installment[p]+"</td><td></td>";e+='<tr>\n                    <td style="text-align:center;" colspan="2">TOTAL</td>\n                    <td style="text-align:right;">'+t.footer.sign_up+'</td>\n                    <td></td>\n                    <td style="text-align:right;">'+t.footer.total_tuition+'</td>\n                    <td style="text-align:right;">'+t.footer.total_payment+"</td>"+u+'<td style="text-align:right;">'+t.footer.balance+"</td>",e+="</tfoot>",$("#tf_breakdown_table").append(e),o()}})):"Summary"==e?(class_select=$("#class_select").val(),program_select=$("#program_select").val(),branch_select=$("#branch_select").val(),departure_year_select=$("#departure_year_select").val(),departure_month_select=$("#departure_month_select").val(),$.ajax({headers:{"X-CSRF-Token":$('meta[name="csrf-token"]').attr("content")},url:"/view_summary",data:{class_select:class_select,program_select:program_select,branch_select:branch_select,departure_year_select:departure_year_select,departure_month_select:departure_month_select},method:"get",dataType:"json",success:function(t){$("#summary_table").empty();var e="";e+="<thead>",e+='\n                <tr>\n                    <th style="width: 300px;">Name</th>\n                    <th style="width: 150px;">Program</th>\n                    <th style="width: 150px;">School</th>\n                    <th style="width: 150px;">Sec Bond Amount</th>\n                    <th style="width: 200px;">Tuition Fee / Sign Up Fee</th>\n                    <th style="width: 100px;">VISA Fee</th>\n                    <th style="width: 100px;">PDOS</th>\n                    <th style="width: 120px;">Selection Fee</th>\n                    <th style="width: 100px;">Airfare</th>\n                    <th style="width: 100px;">DHL</th>\n                    <th style="width: 100px;">BC&ITR</th>\n                </tr>',e+="</thead>",e+="<tbody>";for(var a=0;a<t.length;a++){var n=t[a].mname?t[a].mname:"",r=t[a].program?t[a].program.name:"",s=t[a].school?t[a].school.name:"";e+="<tr>\n                    <td>"+t[a].lname+", "+t[a].fname+" "+n+"</td><td>"+r+"</td><td>"+s+'</td><td style="text-align:right;">'+t[a].sec_bond+'</td><td style="text-align:right;">'+t[a].tf_su+'</td><td style="text-align:right;">'+t[a].visa+'</td><td style="text-align:right;">'+t[a].pdos+'</td><td style="text-align:right;">'+t[a].select+'</td><td style="text-align:right;">'+t[a].air+'</td><td style="text-align:right;">'+t[a].dhl+'</td><td style="text-align:right;">'+t[a].docu+"</td></td>"}e+="</tbody>",$("#summary_table").append(e),o()}})):"SOA"==e&&$("#soa_table").DataTable({initComplete:function(t,e){o()},processing:!0,destroy:!0,scrollX:!0,scrollCollapse:!0,responsive:!0,ajax:{url:"/view_soa",data:{}},columns:[{data:"name",name:"name"},{data:"batch",name:"batch"},{data:"due",name:"due"},{data:"paid",name:"paid"},{data:"balance",name:"balance"},{data:"action",orderable:!1,searchable:!1}],columnDefs:[{defaultContent:"",targets:"_all"}]})}function c(t){$.ajax({url:"/view_tf_student_modal/"+t,method:"get",dataType:"JSON",success:function(t){$("#student_tuition_modal .modal-title").text(t.student.lname+", "+t.student.fname+" "+(t.student.mname?t.student.mname:"")),$(".current_class").text(t.class_students);for(var e=0;e<=Object.keys(t.tf).length;e++)$($(".pay")[e]).text(t.tf[e]);if(0!=t.tf_projected.length){for(var n=0;n<t.tf_projected.length;n++)$($(".bal")[n]).text(t.tf_projected[n].amount);$($(".bal")[8]).text(t.tp_total)}else for(var r=0;r<Object.keys(t.tf).length+1;r++)$($(".bal")[r]).text(0);var s;$(".sb_total").text(t.sb_total),s=t.student.id,$("#tf_modal_table").DataTable({paging:!1,info:!1,searching:!1,processing:!0,destroy:!0,responsive:!0,ajax:{url:"/view_tf_modal/"+s,data:{}},columns:[{data:"amount",name:"amount"},{data:"tf_name.name",name:"tf_name.name"},{data:"date",name:"date"},{data:"remarks",name:"remarks"},{data:"action",orderable:!1,searchable:!1}],columnDefs:[{defaultContent:"",targets:"_all"}],order:[2,"desc"]}),$("#sb_modal_table").DataTable({paging:!1,info:!1,searching:!1,processing:!0,destroy:!0,responsive:!0,ajax:{url:"/view_sb_modal/"+s,data:{}},columns:[{data:"amount",name:"amount"},{data:"date",name:"date"},{data:"remarks",name:"remarks"},{data:"action",orderable:!1,searchable:!1}],columnDefs:[{defaultContent:"",targets:"_all"}],order:[1,"desc"]}),a=!0}})}$(".datepicker").datepicker({format:"yyyy-mm-dd",forceParse:!1}),$(".select2").select2(),$("body").tooltip({selector:'[data-toggle="tooltip"]',trigger:"hover"}),$(".class_select, .program_select, .branch_select, .departure_select").show(),$("#class_select, #program_select, #branch_select, #departure_year_select,\n        #departure_month_select").next(".select2-container").show(),$("body").click(function(){$('[data-toggle="tooltip"]').tooltip("hide")}),$("input, select").attr("autocomplete","off"),$("#projection_modal").on("hidden.bs.modal",function(t){$("#projection_form :input.required").each(function(){this.style.setProperty("border-color","green","important")}),$(this).find("input,textarea,select").val("").end(),$(".select2").trigger("change.select2")}),$("#tf_payment_modal").on("hidden.bs.modal",function(t){r(),$("#tf_payment_continuous").bootstrapToggle("off"),1==n&&(a=!0,n=!1,setTimeout(function(){$("#student_tuition_modal").modal("show")},500))}),$("#sb_payment_modal").on("hidden.bs.modal",function(t){s(),$("#sb_payment_continuous").bootstrapToggle("off"),1==n&&(a=!0,n=!1,setTimeout(function(){$("#student_tuition_modal").modal("show")},500))}),$("#tf_payment_continuous").bootstrapToggle("off"),$("#sb_payment_continuous").bootstrapToggle("off"),$(document).on("shown.bs.tab",'a[data-toggle="tab"]',function(t){$.fn.dataTable.tables({visible:!0,api:!0}).columns.adjust()}),l(),$(".refresh_table").on("click",function(){l()}),$(".student_pick, .payment_pick, .sec_bond_pick, .program_pick, \n        .tf_breakdown_pick, .summary_pick, .soa_pick").on("click",function(){$(this).hasClass("disabled")||(e=$(this).text(),l())}),$(document).on("click",".tf_payment",function(){$("#p_add_edit").val("add"),$("#tf_payment_modal").modal("show")}),$(document).on("click",".sb_payment",function(){$("#s_add_edit").val("add"),$("#sb_payment_modal").modal("show")}),$(document).on("click",".edit_tf_payment",function(){var t=$(this).attr("id");$.ajax({url:"/get_tf_payment/"+t,method:"get",dataType:"JSON",success:function(t){$("#p_id").val(t.id),$("#p_add_edit").val("edit"),$("#p_student").val(t.stud_id).trigger("change"),$("#type").val(t.tf_name_id).trigger("change"),$("#p_amount").val(t.amount),$("#p_date").val(t.date),$("#p_remarks").val(t.remarks),1==a?(n=!0,$("#student_tuition_modal").modal("hide"),setTimeout(function(){$("#tf_payment_modal").modal("show")},500)):$("#tf_payment_modal").modal("show")}})}),$(document).on("click",".edit_sb_payment",function(){var t=$(this).attr("id");$.ajax({url:"/get_sb_payment/"+t,method:"get",dataType:"JSON",success:function(t){$("#s_id").val(t.id),$("#s_add_edit").val("edit"),$("#s_student").val(t.stud_id).trigger("change"),$("#s_amount").val(t.amount),$("#s_date").val(t.date),$("#s_remarks").val(t.remarks),1==a?(n=!0,$("#student_tuition_modal").modal("hide"),setTimeout(function(){$("#sb_payment_modal").modal("show")},500)):$("#sb_payment_modal").modal("show")}})}),$(document).on("click",".view_tf_student_modal",function(){c($(this).attr("id")),$("#student_tuition_modal").modal("show")}),$(document).on("click",".delete_tf_payment",function(){var t=$(this).attr("id");swal.fire({title:"Confirm User",text:"For security purposes, input your password again.",input:"password",inputAttributes:{autocapitalize:"off"},showCancelButton:!0,confirmButtonText:"Confirm",showLoaderOnConfirm:!0,preConfirm:function(e){$.ajax({headers:{"X-CSRF-Token":$('meta[name="csrf-token"]').attr("content")},url:"/confirm_user",data:{password:e},method:"POST",success:function(n){0!=n?swal({title:"Warning",text:"Are you sure?",type:"warning",showCancelButton:!0,confirmButtonColor:"#3085d6",cancelButtonColor:"#d33",confirmButtonText:"Yes, delete it!"}).then(function(n){n.value&&$.ajax({headers:{"X-CSRF-Token":$('meta[name="csrf-token"]').attr("content")},url:"/delete_tf_payment",data:{id:t,password:e},method:"get",type:"json",success:function(t){notif("Success!","This Payment has been Deleted","success","glyphicon-ok"),1==a&&c(t),l()}})}):swal("Password Incorrect!","Please try again","error")}})}})}),$(document).on("click",".delete_sb_payment",function(){var t=$(this).attr("id");swal.fire({title:"Confirm User",text:"For security purposes, input your password again.",input:"password",inputAttributes:{autocapitalize:"off"},showCancelButton:!0,confirmButtonText:"Confirm",showLoaderOnConfirm:!0,preConfirm:function(e){$.ajax({headers:{"X-CSRF-Token":$('meta[name="csrf-token"]').attr("content")},url:"/confirm_user",data:{password:e},method:"POST",success:function(n){0!=n?swal({title:"Warning",text:"Are you sure?",type:"warning",showCancelButton:!0,confirmButtonColor:"#3085d6",cancelButtonColor:"#d33",confirmButtonText:"Yes, delete it!"}).then(function(n){n.value&&$.ajax({headers:{"X-CSRF-Token":$('meta[name="csrf-token"]').attr("content")},url:"/delete_sb_payment",data:{id:t,password:e},method:"get",type:"json",success:function(t){notif("Success!","This Payment has been Deleted","success","glyphicon-ok"),1==a&&c(t),l()}})}):swal("Password Incorrect!","Please try again","error")}})}})}),$(document).on("click",".projection",function(){var t=$(this).attr("id");$("#prog_id").val(t),$.ajax({url:"/get_tf_projected/"+t,method:"get",dataType:"json",success:function(t){for(var e=0;e<t.tf_name_list.length;e++)if($($(".proj_name_id")[e]).val(t.tf_name_list[e]),0!=t.tf_projected.count)for(var a=0;a<t.tf_projected.length;a++)if(t.tf_name_list[e]==t.tf_projected[a].tf_name_id){$($(".proj_amount")[e]).val(t.tf_projected[a].amount),$($(".proj_date")[e]).val(t.tf_projected[a].date_of_payment),$($(".proj_remarks")[e]).val(t.tf_projected[a].remarks);break}}}),$("#projection_modal").modal("toggle"),$("#projection_modal").modal("show")}),$(document).on("submit","#projection_form",function(t){t.preventDefault();var e=$(".save_projection"),a=document.getElementsByClassName("save_projection")[0];a.disabled=!0,e.html("SAVING..."),$.ajax({headers:{"X-CSRF-Token":$('meta[name="csrf-token"]').attr("content")},url:"/save_projection",method:"POST",data:$(this).serialize(),success:function(t){notif("Success!","Record has been saved to the Database!","success","glyphicon-ok"),$("#projection_modal").modal("hide"),l(),a.disabled=!1,e.html("SAVE CHANGES")},error:function(t){swal("Error!","Something went wrong, please contact IT Officer.","error"),a.disabled=!1,e.html("SAVE CHANGES")}})}),$(document).on("submit","#tf_payment_form",function(t){t.preventDefault();var e=$(".save_tf_payment"),a=document.getElementsByClassName("save_tf_payment")[0];a.disabled=!0,e.html("SAVING..."),$.ajax({headers:{"X-CSRF-Token":$('meta[name="csrf-token"]').attr("content")},url:"/save_tf_payment",method:"POST",data:$(this).serialize(),success:function(t){if(notif("Success!","Record has been saved to the Database!","success","glyphicon-ok"),$("#tf_payment_continuous").is(":checked"))r(),$("#p_add_edit").val("add");else{if(1==n)c($("#p_student").val());$("#tf_payment_modal").modal("hide")}a.disabled=!1,e.html("SAVE CHANGES"),l()},error:function(t){swal("Error!","Something went wrong, please contact IT Officer.","error"),a.disabled=!1,e.html("SAVE CHANGES")}})}),$(document).on("submit","#sb_payment_form",function(t){t.preventDefault();var e=$(".save_sb_payment"),a=document.getElementsByClassName("save_sb_payment")[0];a.disabled=!0,e.html("SAVING..."),$.ajax({headers:{"X-CSRF-Token":$('meta[name="csrf-token"]').attr("content")},url:"/save_sb_payment",method:"POST",data:$(this).serialize(),success:function(t){if(notif("Success!","Record has been saved to the Database!","success","glyphicon-ok"),$("#sb_payment_continuous").is(":checked"))s(),$("#s_add_edit").val("add");else{if(1==n)c($("#s_student").val());$("#sb_payment_modal").modal("hide")}a.disabled=!1,e.html("SAVE CHANGES"),l()},error:function(t){swal("Error!","Something went wrong, please contact IT Officer.","error"),a.disabled=!1,e.html("SAVE CHANGES")}})}),$("#class_select, #branch_select, #program_select, #departure_year_select, \n        #departure_month_select").on("change",function(){"class_select"==$(this).attr("id")?$(".class_hidden").val($(this).val()):"program_select"==$(this).attr("id")?$(".program_hidden").val($(this).val()):"branch_select"==$(this).attr("id")?$(".branch_hidden").val($(this).val()):"departure_year_select"==$(this).attr("id")?$(".year_hidden").val($(this).val()):"departure_month_select"==$(this).attr("id")&&$(".month_hidden").val($(this).val()),l()}),$("#p_student, #s_student").select2({allowClear:!0,placeholder:"Select Student",ajax:{url:"/get_tf_student",dataType:"json",data:function(t){return{name:t.term,page:t.page}},processResults:function(t){return{results:t.results}}}})})}});
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "/";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 14);
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ "./resources/js/pages/tuition.js":
+/***/ (function(module, exports) {
+
+$(document).ready(function () {
+
+    //INITIALIZE -- START
+
+    var current_tab = 'Student';
+    var s_modal = false,
+        p_modal = false;
+    var title;
+
+    $(".datepicker").datepicker({
+        format: 'yyyy-mm-dd',
+        forceParse: false
+    });
+
+    $('.select2').select2();
+
+    $('body').tooltip({
+        selector: '[data-toggle="tooltip"]',
+        trigger: 'hover'
+    });
+
+    //tuition select init -- Start
+
+    $('.class_select, .program_select, .branch_select, .departure_select').show();
+    $('#class_select, #program_select, #branch_select, #departure_year_select,\n        #departure_month_select').next(".select2-container").show();
+
+    //tuition select init -- End
+
+    $('body').click(function () {
+        $('[data-toggle="tooltip"]').tooltip("hide");
+    });
+
+    $('input, select').attr('autocomplete', 'off');
+
+    $("#projection_modal").on("hidden.bs.modal", function (e) {
+        $('#projection_form :input.required').each(function () {
+            this.style.setProperty('border-color', 'green', 'important');
+        });
+        $(this).find("input,textarea,select").val('').end();
+        $('.select2').trigger('change.select2');
+    });
+
+    $('#tf_payment_modal').on("hidden.bs.modal", function (e) {
+        tf_payment_clear();
+        $('#tf_payment_continuous').bootstrapToggle('off');
+        if (p_modal == true) {
+            s_modal = true;
+            p_modal = false;
+            setTimeout(function () {
+                $('#student_tuition_modal').modal('show');
+            }, 500);
+        }
+    });
+
+    function tf_payment_clear() {
+        $('#tf_payment_form :input.required').each(function () {
+            this.style.setProperty('border-color', 'green', 'important');
+        });
+        $('#tf_payment_form').find("input,textarea,select").val('').end();
+        $('.select2').trigger('change.select2');
+    }
+
+    $('#sb_payment_modal').on("hidden.bs.modal", function (e) {
+        sb_payment_clear();
+        $('#sb_payment_continuous').bootstrapToggle('off');
+        if (p_modal == true) {
+            s_modal = true;
+            p_modal = false;
+            setTimeout(function () {
+                $('#student_tuition_modal').modal('show');
+            }, 500);
+        }
+    });
+
+    function sb_payment_clear() {
+        $('#sb_payment_form :input.required').each(function () {
+            this.style.setProperty('border-color', 'green', 'important');
+        });
+        $('#sb_payment_form').find("input,textarea,select").val('').end();
+        $('.select2').trigger('change.select2');
+    }
+
+    $('#tf_payment_continuous').bootstrapToggle('off');
+    $('#sb_payment_continuous').bootstrapToggle('off');
+
+    function disableTabs() {
+        $('li.student_pick, li.payment_pick, li.sec_bond_pick, li.program_pick, \n        li.tf_breakdown_pick, li.summary_pick, li.soa_pick').addClass('disabled').css('cursor', 'not-allowed');
+
+        $('a.student_pick, a.payment_pick, a.sec_bond_pick, a.program_pick, \n        a.tf_breakdown_pick, a.summary_pick, a.soa_pick').addClass('disabled').css('pointer-events', 'none');
+
+        $('.refresh_table').attr('disabled', true);
+    }
+
+    function enableTabs() {
+        $('li.student_pick, li.payment_pick, li.sec_bond_pick, li.program_pick, \n        li.tf_breakdown_pick, li.summary_pick, li.soa_pick').removeClass('disabled').css('cursor', 'pointer');
+
+        $('a.student_pick, a.payment_pick, a.sec_bond_pick, a.program_pick, \n        a.tf_breakdown_pick, a.summary_pick, a.soa_pick').removeClass('disabled').css('pointer-events', 'auto');
+
+        $('.refresh_table').attr('disabled', false);
+    }
+
+    function refresh() {
+        disableTabs();
+        get_year = $("#departure_year_select option:selected").text();
+        get_month = $("#departure_month_select option:selected").text();
+        update_buttons();
+
+        if (current_tab == 'Student') {
+            refresh_student_table();
+        } else if (current_tab == 'Programs') {
+            refresh_program_table();
+        } else if (current_tab == 'Payment History') {
+            refresh_payment_table();
+        } else if (current_tab == 'Security Bond History') {
+            refresh_sec_bond_table();
+        } else if (current_tab == 'TF Breakdown') {
+            refresh_tf_breakdown_table();
+        } else if (current_tab == 'Summary') {
+            refresh_summary_table();
+        } else if (current_tab == 'SOA') {
+            refresh_soa_table();
+        }
+    }
+
+    //INITIALIZE -- END
+
+    //DATATABLES -- START
+
+    $(document).on('shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
+        $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
+    });
+
+    function update_buttons() {
+
+        switch (current_tab) {
+            case 'Payment History':
+                title = ' DEPARTURE PAYMENT HISTORY';break;
+            case 'Security Bond History':
+                title = ' DEPARTURE SECURITY BOND';break;
+        }
+
+        get_departure = get_year == 'All' && get_month == 'All' ? 'All' : get_year + ' ' + get_month;
+
+        payment_buttons_format = [{ extend: 'excelHtml5', title: get_departure + title,
+            exportOptions: {
+                columns: ':visible'
+            } }, 'colvis'];
+    }
+
+    function refresh_student_table() {
+
+        class_select = $('#class_select').val();
+        program_select = $('#program_select').val();
+        branch_select = $('#branch_select').val();
+        departure_year_select = $('#departure_year_select').val();
+        departure_month_select = $('#departure_month_select').val();
+
+        $('#student_table').DataTable({
+            initComplete: function initComplete(settings, json) {
+                enableTabs();
+            },
+            dom: 'Bflrtip',
+            buttons: payment_buttons_format,
+            processing: true,
+            destroy: true,
+            scrollX: true,
+            scrollCollapse: true,
+            fixedColumns: true,
+            responsive: true,
+            ajax: {
+                url: '/view_tf_student',
+                data: {
+                    class_select: class_select,
+                    program_select: program_select,
+                    branch_select: branch_select,
+                    departure_year_select: departure_year_select,
+                    departure_month_select: departure_month_select
+                }
+            },
+            columns: [{ data: 'name', name: 'name' }, { data: 'program.name', name: 'program' }, { data: 'branch.name', name: 'branch' }, { data: 'contact', name: 'contact' }, { data: 'balance', name: 'balance' }, { data: 'sec_bond', name: 'sec_bond' }, { data: 'class', name: 'class' }, { data: 'status', name: 'status' }, { data: 'departure', name: 'departure' }, { data: 'action', orderable: false, searchable: false }],
+            columnDefs: [{ defaultContent: "", targets: "_all" }, { className: "text-right", targets: [4, 5] }],
+            footerCallback: function footerCallback(row, data, start, end, display) {
+                var api = this.api(),
+                    data;
+
+                // Remove the formatting to get integer data for summation
+                var intVal = function intVal(i) {
+                    return typeof i === 'string' ? i.replace(/[\$,]/g, '') * 1 : typeof i === 'number' ? i : 0;
+                };
+
+                // Total over all pages
+                total = api.column(4).data().reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0);
+
+                // Total over all pages
+                total2 = api.column(5).data().reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0);
+
+                // Update footer
+                $(api.column(4).footer()).html('₱' + total.toFixed(2));
+
+                // Update footer
+                $(api.column(5).footer()).html('₱' + total2.toFixed(2));
+            }
+        });
+    }
+
+    function refresh_payment_table() {
+
+        class_select = $('#class_select').val();
+        program_select = $('#program_select').val();
+        branch_select = $('#branch_select').val();
+        departure_year_select = $('#departure_year_select').val();
+        departure_month_select = $('#departure_month_select').val();
+
+        $('#payment_table').DataTable({
+            initComplete: function initComplete(settings, json) {
+                enableTabs();
+            },
+            dom: 'Bflrtip',
+            buttons: payment_buttons_format,
+            processing: true,
+            destroy: true,
+            scrollX: true,
+            scrollCollapse: true,
+            responsive: true,
+            ajax: {
+                url: '/view_tf_payment',
+                data: {
+                    class_select: class_select,
+                    program_select: program_select,
+                    branch_select: branch_select,
+                    departure_year_select: departure_year_select,
+                    departure_month_select: departure_month_select
+                }
+            },
+            columns: [{ data: 'name', name: 'name' }, { data: 'tf_name.name', name: 'tf_name' }, { data: 'student.program.name', name: 'program' }, { data: 'student.branch.name', name: 'branch' }, { data: 'amount', name: 'amount' }, { data: 'date', name: 'date' }, { data: 'remarks', name: 'remarks' }, { data: 'action', orderable: false, searchable: false }],
+            columnDefs: [{ defaultContent: "", targets: "_all" }, { className: "text-right", targets: [4] }],
+            order: [5, 'desc'],
+            footerCallback: function footerCallback(row, data, start, end, display) {
+                var api = this.api(),
+                    data;
+
+                // Remove the formatting to get integer data for summation
+                var intVal = function intVal(i) {
+                    return typeof i === 'string' ? i.replace(/[\$,]/g, '') * 1 : typeof i === 'number' ? i : 0;
+                };
+
+                // Total over all pages
+                total = api.column(4).data().reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0);
+
+                // Update footer
+                $(api.column(4).footer()).html('₱' + total.toFixed(2));
+            }
+        });
+    }
+
+    function refresh_sec_bond_table() {
+
+        class_select = $('#class_select').val();
+        program_select = $('#program_select').val();
+        branch_select = $('#branch_select').val();
+        departure_year_select = $('#departure_year_select').val();
+        departure_month_select = $('#departure_month_select').val();
+
+        $('#sec_bond_table').DataTable({
+            initComplete: function initComplete(settings, json) {
+                enableTabs();
+            },
+            dom: 'Bflrtip',
+            buttons: payment_buttons_format,
+            processing: true,
+            destroy: true,
+            scrollX: true,
+            scrollCollapse: true,
+            responsive: true,
+            ajax: {
+                url: '/view_sec_bond',
+                data: {
+                    class_select: class_select,
+                    program_select: program_select,
+                    branch_select: branch_select,
+                    departure_year_select: departure_year_select,
+                    departure_month_select: departure_month_select
+                }
+            },
+            columns: [{ data: 'name', name: 'name' }, { data: 'student.program.name', name: 'program' }, { data: 'student.branch.name', name: 'branch' }, { data: 'amount', name: 'amount' }, { data: 'date', name: 'date' }, { data: 'remarks', name: 'remarks' }, { data: 'action', orderable: false, searchable: false }],
+            columnDefs: [{ defaultContent: "", targets: "_all" }, { className: "text-right", targets: [3] }],
+            order: [4, 'desc'],
+            footerCallback: function footerCallback(row, data, start, end, display) {
+                var api = this.api(),
+                    data;
+
+                // Remove the formatting to get integer data for summation
+                var intVal = function intVal(i) {
+                    return typeof i === 'string' ? i.replace(/[\$,]/g, '') * 1 : typeof i === 'number' ? i : 0;
+                };
+
+                // Total over all pages
+                total = api.column(3).data().reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0);
+
+                // Update footer
+                $(api.column(3).footer()).html('₱' + total.toFixed(2));
+            }
+        });
+    }
+
+    function refresh_program_table() {
+        $('#program_table').DataTable({
+            initComplete: function initComplete(settings, json) {
+                enableTabs();
+            },
+            processing: true,
+            destroy: true,
+            scrollCollapse: true,
+            responsive: true,
+            ajax: {
+                url: '/view_tf_program',
+                data: {}
+            },
+            columns: [{ data: 'name', name: 'name' }, { data: 'total', name: 'total' }, { data: 'action', orderable: false, searchable: false }],
+            columnDefs: [{ defaultContent: "", targets: "_all" }, { className: "text-right", targets: [1] }]
+        });
+    }
+
+    function refresh_tf_modal_tables(id) {
+        $('#tf_modal_table').DataTable({
+            paging: false,
+            info: false,
+            searching: false,
+            processing: true,
+            destroy: true,
+            responsive: true,
+            ajax: {
+                url: '/view_tf_modal/' + id,
+                data: {}
+            },
+            columns: [{ data: 'amount', name: 'amount' }, { data: 'tf_name.name', name: 'tf_name.name' }, { data: 'date', name: 'date' }, { data: 'remarks', name: 'remarks' }, { data: 'action', orderable: false, searchable: false }],
+            columnDefs: [{ defaultContent: "", targets: "_all" }],
+            order: [2, 'desc']
+        });
+
+        $('#sb_modal_table').DataTable({
+            paging: false,
+            info: false,
+            searching: false,
+            processing: true,
+            destroy: true,
+            responsive: true,
+            ajax: {
+                url: '/view_sb_modal/' + id,
+                data: {}
+            },
+            columns: [{ data: 'amount', name: 'amount' }, { data: 'date', name: 'date' }, { data: 'remarks', name: 'remarks' }, { data: 'action', orderable: false, searchable: false }],
+            columnDefs: [{ defaultContent: "", targets: "_all" }],
+            order: [1, 'desc']
+        });
+    }
+
+    function refresh_tf_breakdown_table() {
+
+        class_select = $('#class_select').val();
+        program_select = $('#program_select').val();
+        branch_select = $('#branch_select').val();
+        departure_year_select = $('#departure_year_select').val();
+        departure_month_select = $('#departure_month_select').val();
+
+        $.ajax({
+            headers: {
+                'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: '/view_tf_breakdown',
+            data: {
+                class_select: class_select,
+                program_select: program_select,
+                branch_select: branch_select,
+                departure_year_select: departure_year_select,
+                departure_month_select: departure_month_select
+            },
+            method: 'get',
+            dataType: 'json',
+            success: function success(data) {
+                $('#tf_breakdown_table').empty();
+
+                var html = '';
+                var installment = '';
+                var i_amount_date = '';
+                var i_payment = '';
+
+                html += '<thead>';
+
+                for (var x = 0; x < data.installment; x++) {
+
+                    installment += '<th colspan="2" class="installments">Installment ' + (x + 1) + '</th>';
+                    i_amount_date += '<th>Amount Paid</th><th>Payment Date</th>';
+                }
+                i_amount_date += '<th>Amount Paid</th><th>Payment Date</th>';
+
+                html += '\n                <tr>\n                    <th rowspan="2" style="width: 300px;">Name</th>\n                    <th rowspan="2" style="width: 150px;">Program</th>\n                    <th colspan="2" style="width: 250px;">Prof Fee</th>\n                    <th rowspan="2" style="width: 150px;">Total Tuition</th>\n                    <th rowspan="2" style="width: 150px;">Total Payment</th>' + installment + '<th rowspan="2" style="width: 100px;">Balance</th>\n                </tr>\n                <tr>' + i_amount_date;
+
+                html += '</thead>';
+
+                html += '<tbody>';
+
+                for (var _x = 0; _x < data.student.length; _x++) {
+                    var mname = data.student[_x].mname ? data.student[_x].mname : '';
+                    var program = data.student[_x].program ? data.student[_x].program.name : '';
+                    var _i_payment = '';
+
+                    for (var y = 0; y < data.installment; y++) {
+                        var amount = 0;
+                        var date = '';
+
+                        if (data.student[_x].payment[y]) {
+                            amount = data.student[_x].payment[y].amount;
+                            date = data.student[_x].payment[y].date;
+                        }
+                        _i_payment += '<td style="text-align:right;">' + amount + '</td>' + '<td style="text-align:center;">' + date + '</td>';
+                    }
+
+                    html += '<tr>\n                        <td>' + data.student[_x].lname + ', ' + data.student[_x].fname + ' ' + mname + '</td>' + '<td>' + program + '</td>' + '<td style="text-align:right;">' + data.student[_x].prof_fee + '</td>' + '<td style="text-align:center;">' + data.student[_x].prof_fee_date + '</td>' + '<td style="text-align:right;">' + data.student[_x].balance + '</td>' + '<td style="text-align:right;">' + data.student[_x].total_payment + '</td>' + _i_payment + '<td style="text-align:right;">' + data.student[_x].remaining_bal + '</td>' + '</tr>';
+                }
+
+                html += '</tbody>';
+
+                html += '<tfoot>';
+
+                var footer_installment = '';
+
+                for (var _x2 = 0; _x2 < data.installment; _x2++) {
+                    footer_installment += '<td style="text-align:right;">' + data.footer.installment[_x2] + '</td><td></td>';
+                }
+
+                html += '<tr>\n                    <td style="text-align:center;" colspan="2">TOTAL</td>\n                    <td style="text-align:right;">' + data.footer.sign_up + '</td>\n                    <td></td>\n                    <td style="text-align:right;">' + data.footer.total_tuition + '</td>\n                    <td style="text-align:right;">' + data.footer.total_payment + '</td>' + footer_installment + '<td style="text-align:right;">' + data.footer.balance + '</td>';
+
+                html += '</tfoot>';
+
+                $('#tf_breakdown_table').append(html);
+
+                enableTabs();
+            }
+        });
+    }
+
+    function refresh_summary_table() {
+
+        class_select = $('#class_select').val();
+        program_select = $('#program_select').val();
+        branch_select = $('#branch_select').val();
+        departure_year_select = $('#departure_year_select').val();
+        departure_month_select = $('#departure_month_select').val();
+
+        $.ajax({
+            headers: {
+                'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: '/view_summary',
+            data: {
+                class_select: class_select,
+                program_select: program_select,
+                branch_select: branch_select,
+                departure_year_select: departure_year_select,
+                departure_month_select: departure_month_select
+            },
+            method: 'get',
+            dataType: 'json',
+            success: function success(data) {
+                $('#summary_table').empty();
+
+                var html = '';
+
+                html += '<thead>';
+
+                html += '\n                <tr>\n                    <th style="width: 300px;">Name</th>\n                    <th style="width: 150px;">Program</th>\n                    <th style="width: 150px;">School</th>\n                    <th style="width: 150px;">Sec Bond Amount</th>\n                    <th style="width: 200px;">Tuition Fee / Sign Up Fee</th>\n                    <th style="width: 100px;">VISA Fee</th>\n                    <th style="width: 100px;">PDOS</th>\n                    <th style="width: 120px;">Selection Fee</th>\n                    <th style="width: 100px;">Airfare</th>\n                    <th style="width: 100px;">DHL</th>\n                    <th style="width: 100px;">BC&ITR</th>\n                </tr>';
+
+                html += '</thead>';
+
+                html += '<tbody>';
+
+                for (var x = 0; x < data.length; x++) {
+                    var mname = data[x].mname ? data[x].mname : '';
+                    var program = data[x].program ? data[x].program.name : '';
+                    var student = data[x].school ? data[x].school.name : '';
+
+                    html += '<tr>\n                    <td>' + data[x].lname + ', ' + data[x].fname + ' ' + mname + '</td>' + '<td>' + program + '</td>' + '<td>' + student + '</td>' + '<td style="text-align:right;">' + data[x].sec_bond + '</td>' + '<td style="text-align:right;">' + data[x].tf_su + '</td>' + '<td style="text-align:right;">' + data[x].visa + '</td>' + '<td style="text-align:right;">' + data[x].pdos + '</td>' + '<td style="text-align:right;">' + data[x].select + '</td>' + '<td style="text-align:right;">' + data[x].air + '</td>' + '<td style="text-align:right;">' + data[x].dhl + '</td>' + '<td style="text-align:right;">' + data[x].docu + '</td>' + '</td>';
+                }
+
+                html += '</tbody>';
+
+                $('#summary_table').append(html);
+
+                enableTabs();
+            }
+        });
+    }
+
+    function refresh_soa_table() {
+        $('#soa_table').DataTable({
+            initComplete: function initComplete(settings, json) {
+                enableTabs();
+            },
+            processing: true,
+            destroy: true,
+            scrollX: true,
+            scrollCollapse: true,
+            responsive: true,
+            ajax: {
+                url: '/view_soa',
+                data: {}
+            },
+            columns: [{ data: 'name', name: 'name' }, { data: 'contact', name: 'contact' }, { data: 'batch', name: 'batch' }, { data: 'due', name: 'due' }, { data: 'paid', name: 'paid' }, { data: 'balance', name: 'balance' }, { data: 'action', orderable: false, searchable: false }],
+            columnDefs: [{ defaultContent: "", targets: "_all" }]
+        });
+    }
+
+    refresh();
+
+    $('.refresh_table').on('click', function () {
+        refresh();
+    });
+
+    //DATATABLES -- END
+
+    //FUNCTIONS -- START
+
+    $('.student_pick, .payment_pick, .sec_bond_pick, .program_pick, \n        .tf_breakdown_pick, .summary_pick, .soa_pick').on('click', function () {
+        if (!$(this).hasClass('disabled')) {
+            current_tab = $(this).text();
+            refresh();
+        }
+    });
+
+    $(document).on('click', '.tf_payment', function () {
+        $('#p_add_edit').val('add');
+        $('#tf_payment_modal').modal('show');
+    });
+
+    $(document).on('click', '.sb_payment', function () {
+        $('#s_add_edit').val('add');
+        $('#sb_payment_modal').modal('show');
+    });
+
+    $(document).on('click', '.edit_tf_payment', function () {
+        var id = $(this).attr('id');
+
+        $.ajax({
+            url: '/get_tf_payment/' + id,
+            method: 'get',
+            dataType: 'JSON',
+            success: function success(data) {
+                $('#p_id').val(data.id);
+                $('#p_add_edit').val('edit');
+                $('#p_student').val(data.stud_id).trigger('change');
+                $('#type').val(data.tf_name_id).trigger('change');
+                $('#p_amount').val(data.amount);
+                $('#p_date').val(data.date);
+                $('#p_remarks').val(data.remarks);
+                if (s_modal == true) {
+                    p_modal = true;
+                    $('#student_tuition_modal').modal('hide');
+                    setTimeout(function () {
+                        $('#tf_payment_modal').modal('show');
+                    }, 500);
+                } else {
+                    $('#tf_payment_modal').modal('show');
+                }
+            }
+        });
+    });
+
+    $(document).on('click', '.edit_sb_payment', function () {
+        var id = $(this).attr('id');
+
+        $.ajax({
+            url: '/get_sb_payment/' + id,
+            method: 'get',
+            dataType: 'JSON',
+            success: function success(data) {
+                $('#s_id').val(data.id);
+                $('#s_add_edit').val('edit');
+                $('#s_student').val(data.stud_id).trigger('change');
+                $('#s_amount').val(data.amount);
+                $('#s_date').val(data.date);
+                $('#s_remarks').val(data.remarks);
+                if (s_modal == true) {
+                    p_modal = true;
+                    $('#student_tuition_modal').modal('hide');
+                    setTimeout(function () {
+                        $('#sb_payment_modal').modal('show');
+                    }, 500);
+                } else {
+                    $('#sb_payment_modal').modal('show');
+                }
+            }
+        });
+    });
+
+    $(document).on('click', '.view_tf_student_modal', function () {
+        var id = $(this).attr('id');
+        view_tf_student_modal(id);
+        $('#student_tuition_modal').modal('show');
+    });
+
+    function view_tf_student_modal(id) {
+        $.ajax({
+            url: '/view_tf_student_modal/' + id,
+            method: 'get',
+            dataType: 'JSON',
+            success: function success(data) {
+                $('#student_tuition_modal .modal-title').text(data.student.lname + ', ' + data.student.fname + ' ' + (data.student.mname ? data.student.mname : ''));
+                $('.current_class').text(data.class_students);
+                for (var x = 0; x <= Object.keys(data.tf).length; x++) {
+                    $($('.pay')[x]).text(data.tf[x]);
+                }
+                if (data.tf_projected.length != 0) {
+                    for (var _x3 = 0; _x3 < data.tf_projected.length; _x3++) {
+                        $($('.bal')[_x3]).text(data.tf_projected[_x3].amount);
+                    }
+                    $($('.bal')[8]).text(data.tp_total);
+                } else {
+                    for (var _x4 = 0; _x4 < Object.keys(data.tf).length + 1; _x4++) {
+                        $($('.bal')[_x4]).text(0);
+                    }
+                }
+                $('.sb_total').text(data.sb_total);
+                refresh_tf_modal_tables(data.student.id);
+
+                s_modal = true;
+            }
+        });
+    }
+
+    $(document).on('click', '.delete_tf_payment', function () {
+        var id = $(this).attr('id');
+
+        swal.fire({
+            title: 'Confirm User',
+            text: 'For security purposes, input your password again.',
+            input: 'password',
+            inputAttributes: {
+                autocapitalize: 'off'
+            },
+            showCancelButton: true,
+            confirmButtonText: 'Confirm',
+            showLoaderOnConfirm: true,
+            preConfirm: function preConfirm(password) {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: '/confirm_user',
+                    data: { password: password },
+                    method: 'POST',
+                    success: function success(data) {
+                        if (data == 0) {
+                            swal('Password Incorrect!', 'Please try again', 'error');
+                            return;
+                        } else {
+                            swal({
+                                title: 'Warning',
+                                text: 'Are you sure?',
+                                type: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Yes, delete it!'
+                            }).then(function (result) {
+                                if (result.value) {
+                                    $.ajax({
+                                        headers: {
+                                            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                                        },
+                                        url: '/delete_tf_payment',
+                                        data: {
+                                            id: id,
+                                            password: password
+                                        },
+                                        method: 'get',
+                                        type: 'json',
+                                        success: function success(data) {
+                                            notif('Success!', 'This Payment has been Deleted', 'success', 'glyphicon-ok');
+                                            if (s_modal == true) {
+                                                view_tf_student_modal(data);
+                                            }
+                                            refresh();
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        });
+    });
+
+    $(document).on('click', '.delete_sb_payment', function () {
+        var id = $(this).attr('id');
+
+        swal.fire({
+            title: 'Confirm User',
+            text: 'For security purposes, input your password again.',
+            input: 'password',
+            inputAttributes: {
+                autocapitalize: 'off'
+            },
+            showCancelButton: true,
+            confirmButtonText: 'Confirm',
+            showLoaderOnConfirm: true,
+            preConfirm: function preConfirm(password) {
+                $.ajax({
+                    headers: {
+                        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: '/confirm_user',
+                    data: { password: password },
+                    method: 'POST',
+                    success: function success(data) {
+                        if (data == 0) {
+                            swal('Password Incorrect!', 'Please try again', 'error');
+                            return;
+                        } else {
+                            swal({
+                                title: 'Warning',
+                                text: 'Are you sure?',
+                                type: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Yes, delete it!'
+                            }).then(function (result) {
+                                if (result.value) {
+                                    $.ajax({
+                                        headers: {
+                                            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+                                        },
+                                        url: '/delete_sb_payment',
+                                        data: {
+                                            id: id,
+                                            password: password
+                                        },
+                                        method: 'get',
+                                        type: 'json',
+                                        success: function success(data) {
+                                            notif('Success!', 'This Payment has been Deleted', 'success', 'glyphicon-ok');
+                                            if (s_modal == true) {
+                                                view_tf_student_modal(data);
+                                            }
+                                            refresh();
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        });
+    });
+
+    $(document).on('click', '.projection', function () {
+        var id = $(this).attr('id');
+
+        $('#prog_id').val(id);
+
+        $.ajax({
+            url: '/get_tf_projected/' + id,
+            method: 'get',
+            dataType: 'json',
+            success: function success(data) {
+                for (var x = 0; x < data.tf_name_list.length; x++) {
+                    $($('.proj_name_id')[x]).val(data.tf_name_list[x]);
+                    if (data.tf_projected.count != 0) {
+                        for (var y = 0; y < data.tf_projected.length; y++) {
+                            if (data.tf_name_list[x] == data.tf_projected[y].tf_name_id) {
+                                $($('.proj_amount')[x]).val(data.tf_projected[y].amount);
+                                $($('.proj_date')[x]).val(data.tf_projected[y].date_of_payment);
+                                $($('.proj_remarks')[x]).val(data.tf_projected[y].remarks);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        $('#projection_modal').modal('toggle');
+        $('#projection_modal').modal('show');
+    });
+
+    $(document).on('submit', '#projection_form', function (e) {
+        e.preventDefault();
+
+        var input = $('.save_projection');
+        var button = document.getElementsByClassName("save_projection")[0];
+
+        button.disabled = true;
+        input.html('SAVING...');
+
+        $.ajax({
+            headers: {
+                'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: '/save_projection',
+            method: 'POST',
+            data: $(this).serialize(),
+            success: function success(data) {
+                notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
+                $('#projection_modal').modal('hide');
+                refresh();
+                button.disabled = false;
+                input.html('SAVE CHANGES');
+            },
+            error: function error(data) {
+                swal("Error!", "Something went wrong, please contact IT Officer.", "error");
+                button.disabled = false;
+                input.html('SAVE CHANGES');
+            }
+        });
+    });
+
+    $(document).on('submit', '#tf_payment_form', function (e) {
+        e.preventDefault();
+
+        var input = $('.save_tf_payment');
+        var button = document.getElementsByClassName("save_tf_payment")[0];
+
+        button.disabled = true;
+        input.html('SAVING...');
+
+        $.ajax({
+            headers: {
+                'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: '/save_tf_payment',
+            method: 'POST',
+            data: $(this).serialize(),
+            success: function success(data) {
+                notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
+                if ($('#tf_payment_continuous').is(':checked')) {
+                    tf_payment_clear();
+                    $('#p_add_edit').val('add');
+                } else {
+                    if (p_modal == true) {
+                        var stud = $('#p_student').val();
+                        view_tf_student_modal(stud);
+                    }
+                    $('#tf_payment_modal').modal('hide');
+                }
+                button.disabled = false;
+                input.html('SAVE CHANGES');
+                refresh();
+            },
+            error: function error(data) {
+                swal("Error!", "Something went wrong, please contact IT Officer.", "error");
+                button.disabled = false;
+                input.html('SAVE CHANGES');
+            }
+        });
+    });
+
+    $(document).on('submit', '#sb_payment_form', function (e) {
+        e.preventDefault();
+
+        var input = $('.save_sb_payment');
+        var button = document.getElementsByClassName("save_sb_payment")[0];
+
+        button.disabled = true;
+        input.html('SAVING...');
+
+        $.ajax({
+            headers: {
+                'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: '/save_sb_payment',
+            method: 'POST',
+            data: $(this).serialize(),
+            success: function success(data) {
+                notif('Success!', 'Record has been saved to the Database!', 'success', 'glyphicon-ok');
+                if ($('#sb_payment_continuous').is(':checked')) {
+                    sb_payment_clear();
+                    $('#s_add_edit').val('add');
+                } else {
+                    if (p_modal == true) {
+                        var stud = $('#s_student').val();
+                        view_tf_student_modal(stud);
+                    }
+                    $('#sb_payment_modal').modal('hide');
+                }
+                button.disabled = false;
+                input.html('SAVE CHANGES');
+                refresh();
+            },
+            error: function error(data) {
+                swal("Error!", "Something went wrong, please contact IT Officer.", "error");
+                button.disabled = false;
+                input.html('SAVE CHANGES');
+            }
+        });
+    });
+
+    $('#class_select, #branch_select, #program_select, #departure_year_select, \n        #departure_month_select').on('change', function () {
+        if ($(this).attr('id') == "class_select") {
+            $('.class_hidden').val($(this).val());
+        } else if ($(this).attr('id') == "program_select") {
+            $('.program_hidden').val($(this).val());
+        } else if ($(this).attr('id') == "branch_select") {
+            $('.branch_hidden').val($(this).val());
+        } else if ($(this).attr('id') == "departure_year_select") {
+            $('.year_hidden').val($(this).val());
+        } else if ($(this).attr('id') == "departure_month_select") {
+            $('.month_hidden').val($(this).val());
+        }
+
+        refresh();
+    });
+
+    //Student Select TF SB
+    $('#p_student, #s_student').select2({
+        allowClear: true,
+        placeholder: 'Select Student',
+        ajax: {
+            url: "/get_tf_student",
+            dataType: 'json',
+
+            data: function data(params) {
+                return {
+                    name: params.term,
+                    page: params.page
+                };
+            },
+
+            processResults: function processResults(data) {
+                return {
+                    results: data.results
+                };
+            }
+        }
+    });
+
+    //FUNCTIONS -- END
+});
+
+/***/ }),
+
+/***/ 14:
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__("./resources/js/pages/tuition.js");
+
+
+/***/ })
+
+/******/ });

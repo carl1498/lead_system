@@ -1,6 +1,8 @@
 <!-- EMPLOYEE SETTINGS -- START -->
 
 <div class="tab-pane fade in active" id="emp_salary_tab">
+
+    <button class="btn btn-success" id="filter"><i class="fas fa-sliders-h"></i> Filter</button>
     
     <table id="emp_salary_table" class="table table-hover table-striped table-bordered responsive nowrap" width="100%">
         <thead>
