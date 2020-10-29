@@ -8,7 +8,7 @@
 
     &nbsp;
 
-    <!--<button class="btn btn-success" id="filter"><i class="fas fa-sliders-h"></i> Filter</button>-->
+    <button class="btn btn-success" id="filter"><i class="fas fa-sliders-h"></i> Filter</button>
 
     <form action="/excel_salary" method="POST" style="display: inline-block; margin-left: 10px;">
         @csrf
