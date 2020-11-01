@@ -62,11 +62,11 @@ class tuitionController extends Controller
     }
 
     public function view_tf_student(Request $request){
-        $class = $request->class_select;
-        $program = $request->program_select;
-        $branch = $request->branch_select;
-        $departure_year = $request->departure_year_select;
-        $departure_month = $request->departure_month_select;
+        $class = $request->class_filter;
+        $program = $request->program_filter;
+        $branch = $request->branch_filter;
+        $departure_year = $request->departure_year_filter;
+        $departure_month = $request->departure_month_filter;
         $current_class = [];
 
         if($class != 'All'){
@@ -215,11 +215,11 @@ class tuitionController extends Controller
     }
 
     public function view_tf_payment(Request $request){
-        $class = $request->class_select;
-        $program = $request->program_select;
-        $branch = $request->branch_select;
-        $departure_year = $request->departure_year_select;
-        $departure_month = $request->departure_month_select;
+        $class = $request->class_filter;
+        $program = $request->program_filter;
+        $branch = $request->branch_filter;
+        $departure_year = $request->departure_year_filter;
+        $departure_month = $request->departure_month_filter;
         $current_class = [];
         
         if($class != 'All'){
@@ -279,11 +279,11 @@ class tuitionController extends Controller
     }
 
     public function view_sec_bond(Request $request){
-        $class = $request->class_select;
-        $program = $request->program_select;
-        $branch = $request->branch_select;
-        $departure_year = $request->departure_year_select;
-        $departure_month = $request->departure_month_select;
+        $class = $request->class_filter;
+        $program = $request->program_filter;
+        $branch = $request->branch_filter;
+        $departure_year = $request->departure_year_filter;
+        $departure_month = $request->departure_month_filter;
         $current_class = [];
         
         if($class != 'All'){
@@ -375,16 +375,16 @@ class tuitionController extends Controller
     }
 
     public function view_tf_breakdown(Request $request){
-        $class_select = $request->class_select;
-        $program_select = $request->program_select;
-        $branch_select = $request->branch_select;
-        $departure_year_select = $request->departure_year_select;
-        $departure_month_select = $request->departure_month_select;
+        $class_filter = $request->class_filter;
+        $program_filter = $request->program_filter;
+        $branch_filter = $request->branch_filter;
+        $departure_year_filter = $request->departure_year_filter;
+        $departure_month_filter = $request->departure_month_filter;
         $installment = 0;
 
         $current_class = [];
 
-        if($class_select != 'All'){
+        if($class_filter != 'All'){
             $student_group = student::pluck('id');
             
             for($x = 0; $x < count($student_group); $x++){
@@ -392,7 +392,7 @@ class tuitionController extends Controller
                     ->orderBy('id', 'desc')->first();
 
                 if(!empty($class_students)){
-                    if($class_students->class_settings_id == $class_select){
+                    if($class_students->class_settings_id == $class_filter){
                         array_push($current_class, $class_students->stud_id);
                     }
                 }
@@ -400,20 +400,20 @@ class tuitionController extends Controller
         }
 
         $student = student::with('program', 'payment')
-        ->when($class_select != 'All', function($query) use($current_class){
+        ->when($class_filter != 'All', function($query) use($current_class){
             $query->whereIn('id', $current_class);
         })
-        ->when($program_select != 'All', function($query) use($program_select){
-            $query->where('program_id', $program_select);
+        ->when($program_filter != 'All', function($query) use($program_filter){
+            $query->where('program_id', $program_filter);
         })
-        ->when($branch_select != 'All', function($query) use($branch_select){
-            $query->where('branch_id', $branch_select);
+        ->when($branch_filter != 'All', function($query) use($branch_filter){
+            $query->where('branch_id', $branch_filter);
         })
-        ->when($departure_year_select != 'All', function($query) use($departure_year_select){
-            $query->where('departure_year_id', $departure_year_select);
+        ->when($departure_year_filter != 'All', function($query) use($departure_year_filter){
+            $query->where('departure_year_id', $departure_year_filter);
         })
-        ->when($departure_month_select != 'All', function($query) use($departure_month_select){
-            $query->where('departure_month_id', $departure_month_select);
+        ->when($departure_month_filter != 'All', function($query) use($departure_month_filter){
+            $query->where('departure_month_id', $departure_month_filter);
         })->get();
 
         $total_tuition = 0;
@@ -469,24 +469,24 @@ class tuitionController extends Controller
     }
 
     public function view_summary(Request $request){
-        $program_select = $request->program_select;
-        $branch_select = $request->branch_select;
-        $departure_year_select = $request->departure_year_select;
-        $departure_month_select = $request->departure_month_select;
+        $program_filter = $request->program_filter;
+        $branch_filter = $request->branch_filter;
+        $departure_year_filter = $request->departure_year_filter;
+        $departure_month_filter = $request->departure_month_filter;
         $current_class = [];
 
         $student = student::with('program', 'school', 'payment')
-        ->when($program_select != 'All', function($query) use($program_select){
-                $query->where('program_id', $program_select);
+        ->when($program_filter != 'All', function($query) use($program_filter){
+                $query->where('program_id', $program_filter);
         })
-        ->when($branch_select != 'All', function($query) use($branch_select){
-                $query->where('branch_id', $branch_select);
+        ->when($branch_filter != 'All', function($query) use($branch_filter){
+                $query->where('branch_id', $branch_filter);
         })
-        ->when($departure_year_select != 'All', function($query) use($departure_year_select){
-            $query->where('departure_year_id', $departure_year_select);
+        ->when($departure_year_filter != 'All', function($query) use($departure_year_filter){
+            $query->where('departure_year_id', $departure_year_filter);
         })
-        ->when($departure_month_select != 'All', function($query) use($departure_month_select){
-            $query->where('departure_month_id', $departure_month_select);
+        ->when($departure_month_filter != 'All', function($query) use($departure_month_filter){
+            $query->where('departure_month_id', $departure_month_filter);
         })->get();
 
         foreach($student as $s){

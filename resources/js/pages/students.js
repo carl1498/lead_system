@@ -105,6 +105,7 @@ $(document).ready(function(){
     function student_other_modal_clear(){
         $('#emergency_modal, #emp_history_modal, #educational_background_modal, #soa_modal').find("input,textarea,select").val('').end();
         $('#eb_add_edit, #e_add_edit, #eh_add_edit, #soa_add_edit').val('add');
+        $('.select2').trigger('change.select2');
     }
 
     function student_modal_clear(){

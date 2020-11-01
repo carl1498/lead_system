@@ -20,10 +20,6 @@ $(document).ready(function(){
 
     //tuition select init -- Start
 
-    $('.class_select, .program_select, .branch_select, .departure_select').show();
-    $(`#class_select, #program_select, #branch_select, #departure_year_select,
-        #departure_month_select`).next(".select2-container").show();
-
     //tuition select init -- End
 
     $('body').click(function () {
@@ -67,6 +63,14 @@ $(document).ready(function(){
             setTimeout(function(){$('#student_tuition_modal').modal('show')}, 500);
         }
     });
+    
+    $("#filter_modal").on("hidden.bs.modal", function(e){
+        var input = $('.filter');
+        var button = document.getElementsByClassName("filter")[0];
+
+        button.disabled = false;
+        input.html('SAVE CHANGES');
+    });
 
     function sb_payment_clear(){
         $('#sb_payment_form :input.required').each(function (){
@@ -105,8 +109,8 @@ $(document).ready(function(){
 
     function refresh(){
         disableTabs();
-        get_year = $("#departure_year_select option:selected").text();
-        get_month = $("#departure_month_select option:selected").text();
+        get_year = $("#departure_year_filter option:selected").text();
+        get_month = $("#departure_month_filter option:selected").text();
         update_buttons();
         
         if(current_tab == 'Student'){
@@ -161,11 +165,11 @@ $(document).ready(function(){
 
     function refresh_student_table(){
         
-        class_select = $('#class_select').val();
-        program_select = $('#program_select').val();
-        branch_select = $('#branch_select').val();
-        departure_year_select = $('#departure_year_select').val();
-        departure_month_select = $('#departure_month_select').val();
+        class_filter = $('#class_filter').val();
+        program_filter = $('#program_filter').val();
+        branch_filter = $('#branch_filter').val();
+        departure_year_filter = $('#departure_year_filter').val();
+        departure_month_filter = $('#departure_month_filter').val();
 
         $('#student_table').DataTable({
             initComplete: function(settings, json) {
@@ -182,11 +186,11 @@ $(document).ready(function(){
             ajax: {
                 url: '/view_tf_student',
                 data: {
-                    class_select:class_select,
-                    program_select:program_select,
-                    branch_select:branch_select,
-                    departure_year_select:departure_year_select,
-                    departure_month_select:departure_month_select,
+                    class_filter:class_filter,
+                    program_filter:program_filter,
+                    branch_filter:branch_filter,
+                    departure_year_filter:departure_year_filter,
+                    departure_month_filter:departure_month_filter,
                 }
             },
             columns: [
@@ -248,11 +252,11 @@ $(document).ready(function(){
 
     function refresh_payment_table(){
         
-        class_select = $('#class_select').val();
-        program_select = $('#program_select').val();
-        branch_select = $('#branch_select').val();
-        departure_year_select = $('#departure_year_select').val();
-        departure_month_select = $('#departure_month_select').val();
+        class_filter = $('#class_filter').val();
+        program_filter = $('#program_filter').val();
+        branch_filter = $('#branch_filter').val();
+        departure_year_filter = $('#departure_year_filter').val();
+        departure_month_filter = $('#departure_month_filter').val();
 
         $('#payment_table').DataTable({
             initComplete: function(settings, json) {
@@ -268,11 +272,11 @@ $(document).ready(function(){
             ajax: {
                 url: '/view_tf_payment',
                 data: {
-                    class_select:class_select,
-                    program_select:program_select,
-                    branch_select:branch_select,
-                    departure_year_select:departure_year_select,
-                    departure_month_select:departure_month_select,
+                    class_filter:class_filter,
+                    program_filter:program_filter,
+                    branch_filter:branch_filter,
+                    departure_year_filter:departure_year_filter,
+                    departure_month_filter:departure_month_filter,
                 }
             },
             columns: [
@@ -319,11 +323,11 @@ $(document).ready(function(){
 
     function refresh_sec_bond_table(){
         
-        class_select = $('#class_select').val();
-        program_select = $('#program_select').val();
-        branch_select = $('#branch_select').val();
-        departure_year_select = $('#departure_year_select').val();
-        departure_month_select = $('#departure_month_select').val();
+        class_filter = $('#class_filter').val();
+        program_filter = $('#program_filter').val();
+        branch_filter = $('#branch_filter').val();
+        departure_year_filter = $('#departure_year_filter').val();
+        departure_month_filter = $('#departure_month_filter').val();
 
         $('#sec_bond_table').DataTable({
             initComplete: function(settings, json) {
@@ -339,11 +343,11 @@ $(document).ready(function(){
             ajax: {
                 url: '/view_sec_bond',
                 data: {
-                    class_select:class_select,
-                    program_select:program_select,
-                    branch_select:branch_select,
-                    departure_year_select:departure_year_select,
-                    departure_month_select:departure_month_select,
+                    class_filter:class_filter,
+                    program_filter:program_filter,
+                    branch_filter:branch_filter,
+                    departure_year_filter:departure_year_filter,
+                    departure_month_filter:departure_month_filter,
                 }
             },
             columns: [
@@ -466,11 +470,11 @@ $(document).ready(function(){
 
     function refresh_tf_breakdown_table(){
         
-        class_select = $('#class_select').val();
-        program_select = $('#program_select').val();
-        branch_select = $('#branch_select').val();
-        departure_year_select = $('#departure_year_select').val();
-        departure_month_select = $('#departure_month_select').val();
+        class_filter = $('#class_filter').val();
+        program_filter = $('#program_filter').val();
+        branch_filter = $('#branch_filter').val();
+        departure_year_filter = $('#departure_year_filter').val();
+        departure_month_filter = $('#departure_month_filter').val();
 
         $.ajax({
             headers: {
@@ -478,11 +482,11 @@ $(document).ready(function(){
             },
             url: '/view_tf_breakdown',
             data: {
-                class_select:class_select,
-                program_select:program_select,
-                branch_select:branch_select,
-                departure_year_select:departure_year_select,
-                departure_month_select:departure_month_select,
+                class_filter:class_filter,
+                program_filter:program_filter,
+                branch_filter:branch_filter,
+                departure_year_filter:departure_year_filter,
+                departure_month_filter:departure_month_filter,
             },
             method: 'get',
             dataType: 'json',
@@ -581,11 +585,11 @@ $(document).ready(function(){
     
     function refresh_summary_table(){
         
-        class_select = $('#class_select').val();
-        program_select = $('#program_select').val();
-        branch_select = $('#branch_select').val();
-        departure_year_select = $('#departure_year_select').val();
-        departure_month_select = $('#departure_month_select').val();
+        class_filter = $('#class_filter').val();
+        program_filter = $('#program_filter').val();
+        branch_filter = $('#branch_filter').val();
+        departure_year_filter = $('#departure_year_filter').val();
+        departure_month_filter = $('#departure_month_filter').val();
 
         $.ajax({
             headers: {
@@ -593,11 +597,11 @@ $(document).ready(function(){
             },
             url: '/view_summary',
             data: {
-                class_select:class_select,
-                program_select:program_select,
-                branch_select:branch_select,
-                departure_year_select:departure_year_select,
-                departure_month_select:departure_month_select,
+                class_filter:class_filter,
+                program_filter:program_filter,
+                branch_filter:branch_filter,
+                departure_year_filter:departure_year_filter,
+                departure_month_filter:departure_month_filter,
             },
             method: 'get',
             dataType: 'json',
@@ -699,6 +703,10 @@ $(document).ready(function(){
     //DATATABLES -- END
 
     //FUNCTIONS -- START
+
+    $(document).on('click', '#filter', function(){
+        $('#filter_modal').modal('show');
+    })
     
     $(`.student_pick, .payment_pick, .sec_bond_pick, .program_pick, 
         .tf_breakdown_pick, .summary_pick, .soa_pick`).on('click', function(){
@@ -1074,26 +1082,18 @@ $(document).ready(function(){
         });
     });
 
-    $(`#class_select, #branch_select, #program_select, #departure_year_select, 
-        #departure_month_select`).on('change', function(){
-        if($(this).attr('id') == "class_select"){
-            $('.class_hidden').val($(this).val());
-        }
-        else if($(this).attr('id') == "program_select"){
-            $('.program_hidden').val($(this).val());
-        }
-        else if($(this).attr('id') == "branch_select"){
-            $('.branch_hidden').val($(this).val());
-        }
-        else if($(this).attr('id') == "departure_year_select"){
-            $('.year_hidden').val($(this).val());
-        }
-        else if($(this).attr('id') == "departure_month_select"){
-            $('.month_hidden').val($(this).val());
-        }
+    $(document).on('submit', '#filter_form', function(e){
+        e.preventDefault();
+
+        var input = $('.filter');
+        var button = document.getElementsByClassName("filter")[0];
+
+        button.disabled = true;
+        input.html('FILTERING...');
 
         refresh();
-    });
+        $('#filter_modal').modal('hide');
+    })
 
     //Student Select TF SB
     $('#p_student, #s_student').select2({
