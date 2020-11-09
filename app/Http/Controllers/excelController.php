@@ -2100,7 +2100,7 @@ class excelController extends Controller
         $soa = soa::with('verified', 'description')->where('stud_id', $id)->get();
 
         $student_name = $student->lname.', '.$student->fname.(($student->mname) ? ' '.$student->mname : '');
-        $pbb = 'SSW - '.$student->batch. ' | '.$student->benefactor;//program batch benefactor
+        $pbb = 'SSW - '.$student->batch. ' | '.$student->benefactor->name;//program batch benefactor
 
         //ALL DATA -- END
 
@@ -2176,7 +2176,6 @@ class excelController extends Controller
         $sheet->getColumnDimension('G')->setWidth(15.14);
 
         for($i = 0; $i < 2; $i++){
-            info('mao ni');
             //HEADER -- START
             $sheet->getRowDimension($row)->setRowHeight(20);
 
