@@ -27,6 +27,7 @@ use App\expense_type;
 use App\lead_company_type;
 use App\emp_salary;
 use App\salary_monitoring;
+use App\soa;
 use Carbon\Carbon;
 
 class excelController extends Controller
@@ -1659,7 +1660,7 @@ class excelController extends Controller
             ]
         ];
 
-        $highlightStyleArray = [
+        $outlineStyleArray = [
             'borders' => [
                 'outline' => [
                     'borderStyle' => Border::BORDER_MEDIUM
@@ -2085,6 +2086,297 @@ class excelController extends Controller
         header('Content-Disposition: attachment;filename="'.$filename.'"');
         header('Cache-Control: max-age=0');
 
+        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+        ob_end_clean();
+        $writer->save('php://output');
+    }
+
+    public function excel_soa(Request $request){
+        $id = $request->soa_id_hidden;
+
+        //ALL DATA -- START
+
+        $student = student::with('benefactor', 'branch')->where('id', $id)->first();
+        $soa = soa::with('verified', 'description')->where('stud_id', $id)->get();
+
+        $student_name = $student->lname.', '.$student->fname.(($student->mname) ? ' '.$student->mname : '');
+        $pbb = 'SSW - '.$student->batch. ' | '.$student->benefactor;//program batch benefactor
+
+        //ALL DATA -- END
+
+        //STYLE -- START
+
+        $tableStyleArray = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => Border::BORDER_THIN
+                ]
+            ],
+            'alignment' => [
+                'vertical' => Alignment::VERTICAL_CENTER,
+                'wrapText' => true, 
+            ],
+            'font' => [
+                'size' => 9
+            ],
+        ];
+
+        $outlineStyleArray = [
+            'borders' => [
+                'outline' => [
+                    'borderStyle' => Border::BORDER_MEDIUM
+                ]
+            ]
+        ];
+
+        $headerStyleArray = [
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+                'vertical' => Alignment::VERTICAL_CENTER,
+                'wrapText' => true, 
+            ]
+        ];
+        
+        $middleLeftStyleArray = [
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_LEFT,
+                'vertical' => Alignment::VERTICAL_CENTER,
+                'wrapText' => true, 
+            ],
+            'font' => [
+                'size' => 9
+            ],
+        ];
+        
+        $numberStyleArray = [
+            'numberFormat' => [
+                'formatCode' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1,
+            ],
+        ];
+
+        //STYLE -- END
+
+        //Initialize Sheet
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $row = 1; $copy = "SCHOOL\rCOPY";
+        $address = '3F Dela Rosa Square Bldg., Dela Rosa St.,cor. Chino Roces Avenue, Pio Del Pilar,  Makati City';
+        $contact = 'E-mail: leadtraining2013@gmail.com　Telephone Number: 02-8777-2114';
+        $acknowledgement = 'I, ____________________________ acknowledges the receipt of the above-mentioned amount as payment of my Nihongo Training and Living expense while I study at Manila Kokusai Academy Inc. Hereby acknowledge that the Daily Living expenseand Dormitory fees in the amount of JPY 168,000 shall be paid back to the company from _________________________ to ________________________ for a duration of 12 months in the amount of JPY 14,000 per month or until full paid.';
+
+        $sheet->getPageSetup()->setOrientation(PageSetup::ORIENTATION_PORTRAIT)
+        ->setPaperSize(PageSetup::PAPERSIZE_A4);
+
+        $sheet->getColumnDimension('A')->setWidth(24);
+        $sheet->getColumnDimension('B')->setWidth(11.5);
+        $sheet->getColumnDimension('C')->setWidth(11.5);
+        $sheet->getColumnDimension('D')->setWidth(11.5);
+        $sheet->getColumnDimension('E')->setWidth(11.5);
+        $sheet->getColumnDimension('F')->setWidth(12.14);
+        $sheet->getColumnDimension('G')->setWidth(15.14);
+
+        for($i = 0; $i < 2; $i++){
+            info('mao ni');
+            //HEADER -- START
+            $sheet->getRowDimension($row)->setRowHeight(20);
+
+            $sheet->setCellValue('G'.$row, $copy)->mergeCells('G'.$row.':G'.($row+1));
+            $sheet->getStyle('G'.$row)->getAlignment()->setWrapText(true)
+                ->setHorizontal('center')->setVertical('center');
+            $sheet->getStyle('G'.$row)->getFont()->setSize(14)->setBold(true)
+                ->getColor()->setARGB('FFAFABAB');
+
+            $copy = "STUDENT\rCOPY";
+
+            $row++;
+
+            $sheet->getRowDimension($row)->setRowHeight(26);
+            
+            $sheet->setCellValue('B'.$row, 'MANILA KOKUSAI ACADEMY INC.')
+                ->getStyle('B'.$row)->getFont()->setName('Arial Black')->setSize(14)
+                ->getColor()->setARGB('FF0070C0');
+            $row++;
+            $sheet->setCellValue('B'.$row, $address)->getStyle('B'.$row)->getFont()->setSize(8);
+            $row++;
+            $sheet->setCellValue('B'.$row, $contact)->getStyle('B'.$row)->getFont()->setSize(8);
+            $row += 3;
+                
+            //HEADER -- END
+
+            //BODY -- START
+
+            $info_rows = $row;
+            $sheet->setCellValue('A'.$row, 'Student No.')->setCellValue('F'.$row, 'Branch');
+            $sheet->setCellValue('B'.$row, '')->setCellValue('G'.$row, $student->branch->name);
+            $row++;
+            $sheet->setCellValue('A'.$row, 'Student Name')->setCellValue('F'.$row, 'Class Start');
+            $sheet->setCellValue('B'.$row, $student_name)->setCellValue('G'.$row, '');
+            $sheet->getStyle('B'.$row)->getFont()->setBold(true);
+            $row++;
+            $sheet->setCellValue('A'.$row, 'Program | Batch | Benefactor')->setCellValue('F'.$row, 'Class Finished');
+            $sheet->setCellValue('B'.$row, $pbb)->setCellValue('G'.$row, '');
+            $row += 2;
+            
+            $sheet->setCellValue('A'.$row, 'STATEMENT OF ACCOUNT')->mergeCells('A'.$row.':G'.$row)
+                ->getStyle('A'.$row)->getFont()->setName('Arial Black')->setSize(12);
+            $sheet->getStyle('A'.$row)->getAlignment()->setHorizontal('center');
+            $row++; $table_head = $row;
+            
+            $sheet->setCellValue('A'.$row, 'Payment Description');
+            $sheet->setCellValue('B'.$row, 'AMOUNT DUE');
+            $sheet->setCellValue('C'.$row, 'AMOUNT PAID');
+            $sheet->setCellValue('D'.$row, 'DATE OF PAYMENT');
+            $sheet->setCellValue('E'.$row, 'BALANCE DUE');
+            $sheet->setCellValue('F'.$row, 'VERIFIED BY');
+            $sheet->setCellValue('G'.$row, 'REMARKS');
+            $row++; $table_start = $row;
+
+            foreach($soa as $s){
+                $sheet->setCellValue('A'.$row, $s->description->name);
+                $sheet->setCellValue('B'.$row, $s->amount_due);
+                $sheet->setCellValue('C'.$row, $s->amount_paid);
+                $sheet->setCellValue('D'.$row, $s->payment_date);
+                $sheet->setCellValue('E'.$row, '=B'.$row.'-C'.$row);
+                $sheet->setCellValue('F'.$row, ($s->verified) ? $s->verified->fname : ''); 
+                $sheet->setCellValue('G'.$row, $s->remarks);
+                $row++;
+            }
+
+            $total_row = $row;
+            $sheet->setCellValue('A'.$row, 'Total Due');
+            $sheet->setCellValue('B'.$row, '=sum(B'.$table_start.':B'.($row-1).')');
+            $sheet->setCellValue('C'.$row, '=sum(C'.$table_start.':C'.($row-1).')');
+            $sheet->setCellValue('E'.$row, '=sum(E'.$table_start.':E'.($row-1).')');
+            $row += 2;
+
+            $sheet->setCellValue('A'.$row, $acknowledgement)->mergeCells('A'.$row.':G'.($row+3));
+            $sheet->getStyle('A'.$row)->applyFromArray($middleLeftStyleArray);
+            $row += 5;
+            
+            $sheet->getStyle('F'.$row.':G'.$row)->getBorders()->getBottom()->setBorderStyle(Border::BORDER_THIN);
+            $row++;
+            $sheet->setCellValue('F'.$row, 'Signature over printed name')->mergeCells('F'.$row.':G'.$row);
+            $sheet->getStyle('F'.$row)->getAlignment()->setHorizontal('center');
+            $sheet->getStyle('F'.$row)->getFont()->setSize(10);
+            $row += 2;
+
+            $sheet->setCellValue('A'.$row, 'Prepared By');
+            $sheet->setCellValue('C'.$row, 'Verified By')->mergeCells('C'.$row.':D'.$row);
+            $sheet->setCellValue('G'.$row, 'Approved By');
+            $sheet->getStyle('A'.$row.':G'.$row)->getFont()->setSize(9);
+            $row++;
+
+            $sheet->getStyle('A'.$row)->getBorders()->getBottom()->setBorderStyle(Border::BORDER_THIN);
+            $sheet->getStyle('C'.$row.':D'.$row)->getBorders()->getBottom()->setBorderStyle(Border::BORDER_THIN);
+            $sheet->getStyle('G'.$row)->getBorders()->getBottom()->setBorderStyle(Border::BORDER_THIN);
+            $row++;
+
+            $sheet->setCellValue('A'.$row, 'EIRENE A. PRADO');
+            $sheet->setCellValue('C'.$row, 'BEVERLY BENEDICTO')->mergeCells('C'.$row.':D'.$row);
+            $sheet->setCellValue('G'.$row, 'KRESTA N. ANCAJAS');
+            $sheet->getStyle('A'.$row.':G'.$row)->getAlignment()->setHorizontal('center');
+            $sheet->getStyle('A'.$row.':G'.$row)->getFont()->setSize(9)->setBold(true);
+            $row++;
+
+            $sheet->setCellValue('A'.$row, 'Finance Officer');
+            $sheet->setCellValue('C'.$row, 'HR/Finance Dept. Head')->mergeCells('C'.$row.':D'.$row);
+            $sheet->setCellValue('G'.$row, 'Finance Manager');
+            $sheet->getStyle('A'.$row.':G'.$row)->getAlignment()->setHorizontal('center');
+            $sheet->getStyle('A'.$row.':G'.$row)->getFont()->setSize(9);
+            $row += 1;
+
+            if($i == 0){
+                $sheet->getStyle('A'.$row.':G'.$row)->getBorders()->getBottom()->setBorderStyle(Border::BORDER_MEDIUMDASHED);
+                $row++;
+                $logo2 = $row+1;
+            }
+            $row++;
+
+            //BODY -- END
+
+            //Using Styles -- START
+
+            $sheet->getStyle('A'.$info_rows.':G'.($info_rows+2))->getFont()->setSize(10);
+            
+            $sheet->getStyle('B'.$info_rows.':B'.($info_rows+2))->getAlignment()->setHorizontal('center');
+            $sheet->getStyle('G'.$info_rows.':G'.($info_rows+2))->getAlignment()->setHorizontal('center');
+
+            $info_cells = 'B'.$info_rows.':B'.($info_rows+2);
+            $info_cells_2 = 'G'.$info_rows.':G'.($info_rows+2);
+
+            $sheet->getStyle($info_cells)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FFE7E6E6');
+            $sheet->getStyle($info_cells_2)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FFE7E6E6');
+            $sheet->getStyle('A'.$table_head.':G'.$table_head)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FF9BC2E6');
+            
+            for($x = $info_rows; $x < $info_rows+3; $x++){
+                $sheet->mergeCells('B'.$x.':D'.$x);
+                $sheet->getRowDimension($x)->setRowHeight(18);
+                $sheet->getStyle('B'.$x.':D'.$x)->getBorders()->getBottom()->setBorderStyle(Border::BORDER_THIN);
+                $sheet->getStyle('G'.$x)->getBorders()->getBottom()->setBorderStyle(Border::BORDER_THIN);
+            }
+
+            $sheet->getRowDimension($table_head)->setRowHeight(25);
+            
+            $sheet->getStyle('A'.$table_head.':G'.$total_row)->applyFromArray($tableStyleArray);
+            $sheet->getStyle('A'.$total_row.':G'.$total_row)->getBorders()->getTop()->setBorderStyle(Border::BORDER_DOUBLE);
+            $sheet->getStyle('A'.$total_row.':G'.$total_row)->getFont()->setBold(true);
+            $sheet->getStyle('A'.$table_head.':G'.$total_row)->applyFromArray($outlineStyleArray);
+            $sheet->getStyle('A'.$table_head.':G'.$table_head)->applyFromArray($outlineStyleArray)->applyFromArray($headerStyleArray);
+
+            
+            $sheet->getStyle('B'.$table_head.':B'.$total_row)->applyFromArray($numberStyleArray);
+            $sheet->getStyle('C'.$table_head.':C'.$total_row)->applyFromArray($numberStyleArray);
+            $sheet->getStyle('E'.$table_head.':E'.$total_row)->applyFromArray($numberStyleArray);
+            $sheet->getStyle('D'.$table_head.':D'.$total_row)->getAlignment()->setHorizontal('center')->setIndent(1);
+
+            $row_colored = false;
+            for($x = $table_start; $x <= $total_row; $x++){
+                $sheet->getRowDimension($x)->setRowHeight(19);
+
+                if($row_colored == false){
+                    $row_colored = true;
+                }
+                else{
+                    $sheet->getStyle('A'.$x.':G'.$x)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FFDDEBF7');
+                    $row_colored = false;
+                }
+            }
+
+            $sheet->getRowDimension($total_row)->setRowHeight(22);
+
+            //Using Styles -- END
+        }
+        
+
+        $drawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+        $drawing->setName('Logo');
+        $drawing->setDescription('Logo');
+        $drawing->setPath(public_path('img/mila.png'));
+        $drawing->setHeight(125);
+        $drawing->setOffsetX(20);
+        $drawing->setOffsetY(10);
+        $drawing->setCoordinates('A1');
+        $drawing->setWorksheet($spreadsheet->getActiveSheet());
+
+        $drawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+        $drawing->setName('Logo');
+        $drawing->setDescription('Logo');
+        $drawing->setPath(public_path('img/mila.png'));
+        $drawing->setHeight(125);
+        $drawing->setOffsetX(20);
+        $drawing->setOffsetY(10);
+        $drawing->setCoordinates('A'.$logo2);
+        $drawing->setWorksheet($spreadsheet->getActiveSheet());
+        
+        $filename = 'SOA.xlsx';
+        
+        //redirect output to client
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="'.$filename.'"');
+        header('Cache-Control: max-age=0');
+
+        $sheet->getPageSetup()->setPrintArea('A1:'.$sheet->getHighestColumn().$sheet->getHighestRow())
+            ->setFitToWidth(1)->setFitToHeight(1);
         $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
         ob_end_clean();
         $writer->save('php://output');

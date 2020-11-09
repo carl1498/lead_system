@@ -539,6 +539,14 @@ class tuitionController extends Controller
         ->addColumn('action', function($data){
             $html = '';
 
+            $html .= '
+                <form action="/excel_soa" method="POST" style="display: inline-block; margin-left: 10px;">
+                    '.csrf_field().'
+                    <input type="hidden" class="soa_id_hidden" name="soa_id_hidden" value="'.$data->id.'">
+                    <button type="submit" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="left" title="Excel"><i class="fa fa-file-excel"></i></button>
+                </form>
+            ';
+
             return $html;
         })
         ->make(true);

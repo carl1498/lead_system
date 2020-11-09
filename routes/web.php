@@ -356,6 +356,7 @@ Route::group(['middleware' => ['auth', 'admin']], function(){
 
     Route::post('/excel_tf_breakdown', 'excelController@excel_tf_breakdown');
     Route::post('/excel_tf_sb_summary', 'excelController@excel_tf_sb_summary');
+    Route::post('/excel_soa', 'excelController@excel_soa');
 });
 
 //Salary Monitoring
