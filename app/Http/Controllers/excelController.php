@@ -1660,7 +1660,7 @@ class excelController extends Controller
             ]
         ];
 
-        $outlineStyleArray = [
+        $highlightStyleArray = [
             'borders' => [
                 'outline' => [
                     'borderStyle' => Border::BORDER_MEDIUM
