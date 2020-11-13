@@ -53,7 +53,6 @@ class studentSettingsController extends Controller
     }
 
     public function store(Request $request){
-        info($request);
         $id = $request->id;
         $current_settings = $request->current_settings;
         $settings_type = ['Program', 'School', 'Benefactor', 'Year', 'Month', 'Course', 'Company', 'University'];
@@ -73,7 +72,6 @@ class studentSettingsController extends Controller
         }
         else{
             for($x = 0; $x < count($settings_type); $x++){
-                info($settings_type[$x]);
                 if($current_settings == $settings_type[$x]){
                     $settings = $edit_settings[$x];
                     break;

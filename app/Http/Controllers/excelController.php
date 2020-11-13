@@ -2100,7 +2100,8 @@ class excelController extends Controller
         $soa = soa::with('verified', 'description')->where('stud_id', $id)->get();
 
         $student_name = $student->lname.', '.$student->fname.(($student->mname) ? ' '.$student->mname : '');
-        $pbb = 'SSW - '.$student->batch. ' | '.$student->benefactor->name;//program batch benefactor
+        $pbb = 'SSW - '.$student->batch. ' | '.(($student->benefactor) ? $student->benefactor->name : '');//program batch benefactor
+        
 
         //ALL DATA -- END
 
@@ -2367,7 +2368,7 @@ class excelController extends Controller
         $drawing->setCoordinates('A'.$logo2);
         $drawing->setWorksheet($spreadsheet->getActiveSheet());
         
-        $filename = 'SOA.xlsx';
+        $filename = 'SOA - '.$student->lname.'.xlsx';
         
         //redirect output to client
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
