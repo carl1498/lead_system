@@ -2102,6 +2102,8 @@ class excelController extends Controller
         $student_name = $student->lname.', '.$student->fname.(($student->mname) ? ' '.$student->mname : '');
         $pbb = 'SSW - '.$student->batch. ' | '.(($student->benefactor) ? $student->benefactor->name : '');//program batch benefactor
         
+        $class_start = class_students::where('stud_id', $id)->orderBy('start_date', 'asc')->first()->start_date;
+        $class_end = class_students::where('stud_id', $id)->orderBy('end_date', 'desc')->first()->end_date;
 
         //ALL DATA -- END
 
@@ -2210,11 +2212,11 @@ class excelController extends Controller
             $sheet->setCellValue('B'.$row, '')->setCellValue('G'.$row, $student->branch->name);
             $row++;
             $sheet->setCellValue('A'.$row, 'Student Name')->setCellValue('F'.$row, 'Class Start');
-            $sheet->setCellValue('B'.$row, $student_name)->setCellValue('G'.$row, '');
+            $sheet->setCellValue('B'.$row, $student_name)->setCellValue('G'.$row, $class_start);
             $sheet->getStyle('B'.$row)->getFont()->setBold(true);
             $row++;
             $sheet->setCellValue('A'.$row, 'Program | Batch | Benefactor')->setCellValue('F'.$row, 'Class Finished');
-            $sheet->setCellValue('B'.$row, $pbb)->setCellValue('G'.$row, '');
+            $sheet->setCellValue('B'.$row, $pbb)->setCellValue('G'.$row, $class_end);
             $row += 2;
             
             $sheet->setCellValue('A'.$row, 'STATEMENT OF ACCOUNT')->mergeCells('A'.$row.':G'.$row)

@@ -11,6 +11,8 @@ use App\benefactor;
 use App\employee;
 use App\branch;
 use App\course;
+use App\class_settings;
+use App\class_students;
 use App\departure_year;
 use App\departure_month;
 use App\student_add_history;
