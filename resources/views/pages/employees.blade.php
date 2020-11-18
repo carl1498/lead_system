@@ -31,6 +31,12 @@
             <div class="box box-primary" id="box-primary-fixed">
                 <div class="box-body box-profile">
                     <div style="width: auto; height: 220px;">
+
+                        <button disabled class="btn btn-primary btn-sm print_employee_profile"
+                            style="position: absolute; right: 20px; z-index: 1000;">
+                            <i class="fa fa-print"></i>
+                        </button>
+
                         <img id="p_picture" class="profile-user-img img-responsive img-rounded" src="./img/avatar5.png" alt="User Profile Picture" style="max-width: 97px; max-height: 97px;">
                         
                         <h4 id="p_emp_name" class="profile-username text-center">Employee Name</h4>

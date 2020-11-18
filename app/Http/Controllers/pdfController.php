@@ -9,6 +9,7 @@ use App\student;
 use App\class_students;
 use App\book_type;
 use App\books;
+use App\employee;
 use Carbon\Carbon;
 
 class pdfController extends Controller
@@ -106,5 +107,31 @@ class pdfController extends Controller
 
         ob_end_clean();
         PDF::Output('StudentProfile_'.$student->lname.'.pdf', 'I');
+    }
+
+    public function employeePDF(Request $request){
+        $id = $request->id;
+        $emp = employee::with('branch', 'role', 'company_type', 'benefits',
+            'employment_history', 'current_employment_status',
+            'employee_emergency')->where('id', $id)->first();
+            
+        //BIRTHDATE -- START
+        $birth = new Carbon($emp->birthdate);
+        $emp->age = $birth->diffInYears(Carbon::now());
+        //BIRTHDATE -- END
+
+
+        $view = \View::make('pages.employeepdf', compact('emp'));
+        $html = $view->render();
+
+        PDF::changeFormat('A4');
+        PDF::reset();
+        PDF::SetTitle('Employee Profile - '.$emp->fname . ' ' . $emp->lname);
+        PDF::AddPage();
+        PDF::setPageMark();
+        PDF::writeHTML($html, true, false, true, false, '');
+
+        ob_end_clean();
+        PDF::Output('EmployeeProfile_'.$emp->lname.'.pdf', 'I');
     }
 }

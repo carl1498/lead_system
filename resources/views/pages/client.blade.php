@@ -31,6 +31,7 @@
                     <li class="disabled client_pick"><a class="client_pick" href="#client_tab" data-toggle="tab">SSW Benefactor</a></li>
                     <li class="disabled client_pick"><a class="client_pick" href="#client_tab" data-toggle="tab">TITP</a></li>
                     <li class="disabled client_pick"><a class="client_pick" href="#client_tab" data-toggle="tab">RSO</a></li>
+                    <li class="disabled client_pick"><a class="client_pick" href="#client_tab" data-toggle="tab">SIAP</a></li>
                     <li class="disabled client_pick"><a class="client_pick" href="#client_tab" data-toggle="tab">Others</a></li>
                 </ul>
 

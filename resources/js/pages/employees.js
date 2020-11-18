@@ -1356,9 +1356,19 @@ $(document).ready(function(){
                     if(x != data.employee_emergency.length-1){html += '<br><br>'}
                 }
                 $('#p_emergency').html(html);
+                $('.print_employee_profile').attr('id', data.id);
+                $('.print_employee_profile').removeAttr('disabled');
             }
         });
     }
+
+    $(document).on('click', '.print_employee_profile', function(){
+        if(!$(this).hasClass('disabled')){
+            let id = $(this).attr('id');
+
+            window.open('/employeePDF/'+id, '_blank');
+        }
+    });
 
     //Course Select 2
     $('#eb_course').select2({
