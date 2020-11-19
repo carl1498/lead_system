@@ -123,17 +123,58 @@
             <td><h2>Employment History</h2></td>
         </tr>
 
-        @if(count($emp->employment_history) >= 1)
+        <tr>
+            <td></td>
+        </tr>
+        
+        @if(count($emp->prev_employment_history) >= 1)
         <tr>
             <th width="200px" style="font-weight: bold;">Company</th>
-            <th width="150px" style="font-weight: bold;">Position</th>
-            <th width="180px" style="font-weight: bold;">Employment Duration</th>
+            <th width="200px" style="font-weight: bold;">Position</th>
+            <th width="150px" style="font-weight: bold;">Employment Duration</th>
         </tr>
-            @foreach($emp->employment_history as $e)
+            @foreach($emp->prev_employment_history as $e)
             <tr>
-                <th width="200px">{{ $e->name }}</th>
-                <th width="150px">{{ $e->designation }}</th>
-                <th width="180px">{{ $e->start }} - {{ $e->finished }}</th>
+                <th width="200px">{{ $e->company }}</th>
+                <th width="200px">{{ $e->designation }}</th>
+                <th width="180px">{{ $e->hired_date }} - {{ $e->until }}</th>
+            </tr>
+            @endforeach
+        @else
+            <tr>
+                <td><h3>N/A</h3></td>
+            </tr>
+        @endif
+
+        <tr>
+            <td></td>
+        </tr>
+        <hr>
+        <tr>
+            <td></td>
+        </tr>
+
+        <tr>
+            <td><h2>Educational Background</h2></td>
+        </tr>
+
+        <tr>
+            <td></td>
+        </tr>
+        
+        @if(count($emp->educational) >= 1)
+        <tr>
+            <th width="200px" style="font-weight: bold;">School</th>
+            <th width="10px"></th>
+            <th width="200px" style="font-weight: bold;">Level</th>
+            <th width="150px" style="font-weight: bold;">Duration</th>
+        </tr>
+            @foreach($emp->educational as $e)
+            <tr>
+                <th width="200px">{{ $e->school }}</th>
+                <th width="10px"></th>
+                <th width="200px">{{ $e->level }}</th>
+                <th width="180px">{{ $e->start }} - {{ $e->end }}</th>
             </tr>
             @endforeach
         @else

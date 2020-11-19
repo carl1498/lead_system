@@ -113,7 +113,9 @@ class pdfController extends Controller
         $id = $request->id;
         $emp = employee::with('branch', 'role', 'company_type', 'benefits',
             'employment_history', 'current_employment_status',
-            'employee_emergency')->where('id', $id)->first();
+            'employee_emergency', 'prev_employment_history')
+            ->where('id', $id)->first();
+
             
         //BIRTHDATE -- START
         $birth = new Carbon($emp->birthdate);

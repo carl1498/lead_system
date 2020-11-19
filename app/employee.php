@@ -52,6 +52,14 @@ class employee extends Model
         return $this->hasOne('App\employment_history', 'emp_id', 'id')->latest();
     }
 
+    public function prev_employment_history(){
+        return $this->hasMany('App\prev_employment_history', 'emp_id', 'id')->orderBy('hired_date', 'desc');
+    }
+
+    public function educational(){
+        return $this->hasMany('App\educational_background', 'emp_id', 'id')->orderBy('end', 'desc');
+    }
+
     public function employee_emergency(){
         return $this->hasMany('App\employee_emergency', 'emp_id', 'id');
     }
