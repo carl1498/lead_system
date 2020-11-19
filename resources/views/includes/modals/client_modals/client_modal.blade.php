@@ -89,6 +89,7 @@
                                         @foreach($industries as $i)
                                             <option value="{{ $i->id }}">{{ $i->name }}</option>
                                         @endforeach
+                                        <option value="8">Others</option>
                                     </select>
                                 </div>
                             </div>

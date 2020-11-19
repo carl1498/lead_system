@@ -120,6 +120,15 @@ class pdfController extends Controller
         $emp->age = $birth->diffInYears(Carbon::now());
         //BIRTHDATE -- END
 
+        //HIREDDATE -- START
+        $emp_history = $emp->current_employment_status;
+
+        $from = new Carbon($emp_history->hired_date);
+        $to = ($emp_history) ? new Carbon($emp_history->until) : Carbon::now();
+        $months = $from->diffInMonths($to);
+
+        $emp->emp_history = $emp_history->hired_date . ' (' . $months . ')';
+        //HIREDDATE -- END
 
         $view = \View::make('pages.employeepdf', compact('emp'));
         $html = $view->render();

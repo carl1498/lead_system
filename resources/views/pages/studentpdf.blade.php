@@ -128,7 +128,7 @@
 
         @if(count($student->emergency) >= 1)
         <tr>
-            <th width="180px" style=" font-weight: bold;">Name</th>
+            <th width="180px" style="font-weight: bold;">Name</th>
             <th width="100px" style="font-weight: bold;">Relationship</th>
             <th width="100px" style="font-weight: bold;">Contact</th>
             <th width="100px" style="font-weight: bold;">Address</th>

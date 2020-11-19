@@ -22,7 +22,7 @@ class clientController extends Controller
 
     public function index(){
         $company_type = client_company_type::all();
-        $industries = industries::all();
+        $industries = industries::whereNotIn('id', [8])->get();
 
         return view('pages.client', compact('company_type', 'industries'));
     }
