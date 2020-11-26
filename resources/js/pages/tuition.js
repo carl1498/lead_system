@@ -5,6 +5,9 @@ $(document).ready(function(){
     var current_tab = 'Student';
     var s_modal = false, p_modal = false;
     var title;
+    var class_filter, program_filter, branch_filter,
+        departure_year_filter, departure_month_filter,
+        batch_filter;
 
     $(".datepicker").datepicker({
         format: 'yyyy-mm-dd',
@@ -136,6 +139,15 @@ $(document).ready(function(){
         }
         
     }
+
+    function filter(){
+        class_filter = $('#class_filter').val();
+        program_filter = $('#program_filter').val();
+        branch_filter = $('#branch_filter').val();
+        departure_year_filter = $('#departure_year_filter').val();
+        departure_month_filter = $('#departure_month_filter').val();
+        batch_filter = $('#batch_filter').val();
+    }
     
     //INITIALIZE -- END
 
@@ -164,12 +176,8 @@ $(document).ready(function(){
     }
 
     function refresh_student_table(){
-        
-        class_filter = $('#class_filter').val();
-        program_filter = $('#program_filter').val();
-        branch_filter = $('#branch_filter').val();
-        departure_year_filter = $('#departure_year_filter').val();
-        departure_month_filter = $('#departure_month_filter').val();
+
+        filter();
 
         $('#student_table').DataTable({
             initComplete: function(settings, json) {
@@ -252,11 +260,7 @@ $(document).ready(function(){
 
     function refresh_payment_table(){
         
-        class_filter = $('#class_filter').val();
-        program_filter = $('#program_filter').val();
-        branch_filter = $('#branch_filter').val();
-        departure_year_filter = $('#departure_year_filter').val();
-        departure_month_filter = $('#departure_month_filter').val();
+        filter();
 
         $('#payment_table').DataTable({
             initComplete: function(settings, json) {
@@ -323,11 +327,7 @@ $(document).ready(function(){
 
     function refresh_sec_bond_table(){
         
-        class_filter = $('#class_filter').val();
-        program_filter = $('#program_filter').val();
-        branch_filter = $('#branch_filter').val();
-        departure_year_filter = $('#departure_year_filter').val();
-        departure_month_filter = $('#departure_month_filter').val();
+        filter();
 
         $('#sec_bond_table').DataTable({
             initComplete: function(settings, json) {
@@ -664,10 +664,21 @@ $(document).ready(function(){
     }
 
     function refresh_soa_table(){
+
+        filter();
+
         $('#soa_table').DataTable({
             initComplete: function(settings, json) {
                 enableTabs();
             },
+            dom: 'Bflrtip',
+            buttons: [
+                {extend: 'excelHtml5', title: get_departure + title,
+                exportOptions: {
+                    columns: ':visible'
+                }},
+                'colvis'
+            ],
             processing: true,
             destroy: true,
             scrollX: true,
@@ -676,10 +687,14 @@ $(document).ready(function(){
             ajax: {
                 url: '/view_soa',
                 data: {
+                    class_filter:class_filter,
+                    program_filter:program_filter,
+                    batch_filter:batch_filter,
                 }
             },
             columns: [
                 {data: 'name', name: 'name'},
+                {data: 'program.name', name: 'program'},
                 {data: 'contact', name: 'contact'},
                 {data: 'batch', name: 'batch'},
                 {data: 'due', name: 'due'},
@@ -689,7 +704,7 @@ $(document).ready(function(){
             ],
             columnDefs: [
                 {defaultContent: "", targets: "_all"},
-                {className: "text-right", targets: [3, 4, 5]}
+                {className: "text-right", targets: [4, 5, 6]}
             ],
             footerCallback: function ( row, data, start, end, display ) {
                 var api = this.api(), data;
@@ -702,7 +717,7 @@ $(document).ready(function(){
                             i : 0;
                 };
 
-                let col_total = [3, 4, 5];
+                let col_total = [4, 5, 5];
 
                 for(let x = 0; x < col_total.length; x++){
                     // Total over all pages

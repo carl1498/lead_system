@@ -37,9 +37,10 @@ class tuitionController extends Controller
         $branch = branch::all();
         $departure_year = departure_year::all();
         $departure_month = departure_month::all();
+        $batch = student::whereNotNull('batch')->groupBy('batch')->pluck('batch');
 
         return view('pages.tuition', compact('student', 'tf_name', 'class_settings', 'program',
-            'branch', 'departure_year', 'departure_month'));
+            'branch', 'departure_year', 'departure_month', 'batch'));
     }
 
     public function view_tf_program(){
@@ -477,10 +478,10 @@ class tuitionController extends Controller
 
         $student = student::with('program', 'school', 'payment')
         ->when($program_filter != 'All', function($query) use($program_filter){
-                $query->where('program_id', $program_filter);
+            $query->where('program_id', $program_filter);
         })
         ->when($branch_filter != 'All', function($query) use($branch_filter){
-                $query->where('branch_id', $branch_filter);
+            $query->where('branch_id', $branch_filter);
         })
         ->when($departure_year_filter != 'All', function($query) use($departure_year_filter){
             $query->where('departure_year_id', $departure_year_filter);
@@ -519,10 +520,40 @@ class tuitionController extends Controller
     }
 
     public function view_soa(Request $request){
+        $class_filter = $request->class_filter;
+        $program_filter = $request->program_filter;
+        $batch_filter = $request->batch_filter;
+
+        $current_class = [];
+
+        if($class_filter != 'All'){
+            $student_group = student::pluck('id');
+            
+            for($x = 0; $x < count($student_group); $x++){
+                $class_students = class_students::where('stud_id', $student_group[$x])
+                    ->orderBy('id', 'desc')->first();
+
+                if(!empty($class_students)){
+                    if($class_students->class_settings_id == $class_filter){
+                        array_push($current_class, $class_students->stud_id);
+                    }
+                }
+            }
+        }
+
         $soa_id = soa::groupBy('stud_id')->pluck('stud_id');
 
-        $student = student::whereIn('id', $soa_id)
-        ->get(['id', 'fname', 'lname', 'mname', 'contact', 'batch']);
+        $student = student::with('program')->whereIn('id', $soa_id)
+        ->when($class_filter != 'All', function($query) use($current_class){
+            $query->whereIn('id', $current_class);
+        })
+        ->when($program_filter != 'All', function($query) use($program_filter){
+            $query->where('program_id', $program_filter);
+        })
+        ->when($batch_filter != 'All', function($query) use($batch_filter){
+            $query->where('batch', $batch_filter);
+        })
+        ->get(['id', 'program_id', 'fname', 'lname', 'mname', 'contact', 'batch']);
 
         foreach($student as $s){
             $soa = soa::where('stud_id', $s->id);

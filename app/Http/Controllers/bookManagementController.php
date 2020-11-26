@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Traits\LogsTraits;
 use App\book_type;
 use App\branch;
 use App\books;
@@ -14,9 +15,12 @@ use App\reference_no;
 use App\invoice;
 use Auth;
 use Yajra\Datatables\Datatables;
+use Carbon\Carbon;
 
 class bookManagementController extends Controller
 {
+    use LogsTraits;
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -28,6 +32,9 @@ class bookManagementController extends Controller
      */
     public function index()
     {
+        info(Auth::user()->emp_id);
+        $this->page_access_log(Auth::user()->emp_id, 'Book Management', 'Visit');
+
         $book_type = book_type::all();
         $branch = branch::all();
         $program = program::all();
@@ -40,6 +47,7 @@ class bookManagementController extends Controller
         $book_type_select = $request->book_type_select;
         $branch_select = $request->branch_select;
         $invoice_select = $request->invoice_select;
+        info(Auth::user()->emp_id);
         $get_branch = employee::with('branch')->where('id', Auth::user()->emp_id)->first();
         $branch = $get_branch->branch->name;
 

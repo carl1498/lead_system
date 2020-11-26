@@ -341,7 +341,8 @@ $fa-font-path: "../webfonts";
 #books_student_table_wrapper .dataTables_length, #books_ssw_student_table_wrapper .dataTables_length,
 #books_branch_table_wrapper .dataTables_length, #books_lost_table_wrapper .dataTables_length, 
 #books_return_table_wrapper .dataTables_length, #intern_students_wrapper .dataTables_length,
-#emp_salary_table_wrapper .dataTables_length, #salary_table_wrapper .dataTables_length {
+#emp_salary_table_wrapper .dataTables_length, #salary_table_wrapper .dataTables_length,
+#soa_table_wrapper .dataTables_length  {
   float: right !important;
   margin-right: 25px;
 }
@@ -358,7 +359,8 @@ $fa-font-path: "../webfonts";
 #books_student_table_wrapper .dataTables_filter, #books_ssw_student_table_wrapper .dataTables_filter,
 #books_branch_table_wrapper .dataTables_filter, #books_lost_table_wrapper .dataTables_filter, 
 #books_return_table_wrapper .dataTables_filter, #intern_students_wrapper .dataTables_filter,
-#emp_salary_table_wrapper .dataTables_filter, #salary_table_wrapper .dataTables_filter { 
+#emp_salary_table_wrapper .dataTables_filter, #salary_table_wrapper .dataTables_filter,
+#soa_table_wrapper .dataTables_filter  {
   float: right !important;
 }
 

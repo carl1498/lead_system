@@ -122,14 +122,14 @@
 <script src="{{ mix('/js/app.js') }}"></script>
 @yield('script')
 <script>
-	function notif(title, message, type, glyphicon){
+	function notif(title, message, type, glyphicon, delay){
 		$.notify({
 			icon: 'glyphicon '+glyphicon,
 			title: title,
 			message: message,
 		},{
 			type:type,
-			delay: 2000,
+			delay: delay ? delay : 2000,
 			animate: {
 				enter: 'animated fadeInDown',
 				exit: 'animated fadeOutUp'

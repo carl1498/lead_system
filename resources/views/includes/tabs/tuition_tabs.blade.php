@@ -176,6 +176,7 @@
         <thead>
             <tr>
                 <th>Name</th>
+                <th>Program</th>
                 <th>Contact</th>
                 <th>Batch</th>
                 <th>Total</th>
@@ -186,6 +187,7 @@
         </thead>
         <tfoot>
             <tr>
+                <th></th>
                 <th></th>
                 <th></th>
                 <th></th>

@@ -15,6 +15,8 @@ $(document).ready(function(){
         $('[data-toggle="tooltip"]').tooltip("hide");
     });
 
+    notif('Reminder!', 'All pages accessed by users are recorded', 'warning', 'glyphicon-ok', 5000);
+
     $.ajax({
         headers: {
             'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')

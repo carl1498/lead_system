@@ -92,6 +92,22 @@
                                 </div>
                             </div>
                         </div>
+                        
+                        <div class="row clearfix">
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
+                                <label for="batch_filter" class="pull-right">Batch</label>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                                <div class="form-group required">
+                                    <select type="text" id="batch_filter" class="form-control select2" style="width: 100%;" required>
+                                        <option value="All">All</option>
+                                        @foreach($batch as $b)
+                                        <option value="{{ $b }}">{{ $b }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
 
