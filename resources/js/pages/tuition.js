@@ -147,6 +147,10 @@ $(document).ready(function(){
         departure_year_filter = $('#departure_year_filter').val();
         departure_month_filter = $('#departure_month_filter').val();
         batch_filter = $('#batch_filter').val();
+        
+        class_hidden = class_filter;
+        program_hidden = program_filter;
+        batch_hidden = batch_filter;
     }
     
     //INITIALIZE -- END
