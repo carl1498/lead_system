@@ -52,6 +52,27 @@
 
                         <div class="row clearfix">
                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
+                                    <label for="industry" class="pull-right">Industry</label>
+                            </div>
+                            <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+                                <div class="form-group required">
+                                    <select type="text" id="industry" name="industry" class="form-control select2 required" style="width: 100%;" required>
+                                        <option value="">Select Industry</option>
+                                        <option value="Nursing Care">Nursing Care</option>
+                                        <option value="Hotel">Hotel</option>
+                                        <option value="Food Service">Food Service</option>
+                                        <option value="Building Cleaning">Building Cleaning</option>
+                                        <option value="Agriculture">Agriculture</option>
+                                        <option value="Food and Drinks Manufacturing">Food and Drinks Manufacturing</option>
+                                        <option value="Airport Ground Service">Airport Ground Service</option>
+                                        <option value="Others">Others</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row clearfix">
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 form-control-label">
                                     <label for="order" class="pull-right">Order</label>
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">

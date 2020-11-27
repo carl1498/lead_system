@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Traits\LogsTraits;
 use App\order;
 use App\order_type;
 use App\client;
@@ -14,12 +14,16 @@ use App\Http\Controllers\Redirect;
 
 class orderController extends Controller
 {
+    use LogsTraits;
+
     public function __construct()
     {
         $this->middleware('auth');
     }
 
     public function index(){
+        $this->page_access_log(Auth::user()->emp_id, 'Order', 'Visit');
+
         $order = order::all();
         $order_type = order_type::all();
         $client = client::all();
@@ -77,6 +81,7 @@ class orderController extends Controller
 
         $order->order_type_id = $request->order_type;
         $order->client_id = $request->client;
+        $order->industry = $request->industry;
         $order->no_of_orders = $request->order;
         $order->no_of_hires = $request->hires;
         $order->interview_date = $request->interview_date;

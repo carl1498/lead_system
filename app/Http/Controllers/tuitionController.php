@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use App\Traits\LogsTraits;
 use App\sec_bond;
 use App\tf_name;
 use App\tf_payment;
@@ -24,12 +25,16 @@ use App\Http\Controllers\Redirect;
 
 class tuitionController extends Controller
 {
+    use LogsTraits;
+
     public function __construct()
     {
         $this->middleware('auth');
     }
 
     public function index(){
+        $this->page_access_log(Auth::user()->emp_id, 'Tuition', 'Visit');
+
         $student = student::with('program')->get();
         $tf_name = tf_name::all();
         $class_settings = class_settings::with('sensei')->orderBy('start_date', 'desc')->get();

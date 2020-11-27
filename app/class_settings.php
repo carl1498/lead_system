@@ -22,6 +22,18 @@ class class_settings extends Model
     public function class_day(){
         return $this->hasMany('App\class_day', 'class_settings_id', 'id');
     }
+    
+    public function class_students(){
+        return $this->hasMany('App\class_students', 'class_settings_id', 'id');
+    }
+
+    protected static function boot() {
+        parent::boot();
+    
+        static::deleting(function($offer) {
+            $offer->class_students()->delete();
+        });
+    }
 
     public $timestamps = true;
 }

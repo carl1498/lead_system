@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Traits\LogsTraits;
 use App\expense;
 use App\expense_type;
 use App\expense_particular;
@@ -15,12 +16,16 @@ use App\Http\Controllers\Redirect;
 
 class expenseController extends Controller
 {
+    use LogsTraits;
+
     public function __construct()
     {
         $this->middleware('auth');
     }
 
     public function index(){
+        $this->page_access_log(Auth::user()->emp_id, 'Expense', 'Visit');
+
         $expense_type = expense_type::all();
         $expense_particular = expense_particular::all();
         $lead_company_type = lead_company_type::all();

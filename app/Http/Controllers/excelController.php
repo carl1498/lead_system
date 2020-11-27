@@ -2092,18 +2092,50 @@ class excelController extends Controller
     }
 
     public function excel_soa(Request $request){
+        $class = $request->class_hidden;
+        $program = $request->program_hidden;
+        $batch = $request->batch_hidden;
         $id = $request->soa_id_hidden;
+        $counter = $request->counter; //if group excel or individual
+        $current_class = [];
 
         //ALL DATA -- START
 
-        $student = student::with('benefactor', 'branch')->where('id', $id)->first();
-        $soa = soa::with('verified', 'description')->where('stud_id', $id)->get();
+        if($class != 'All'){
+            $student_group = student::pluck('id');
+            
+            for($x = 0; $x < count($student_group); $x++){
+                $class_students = class_students::where('id', $student_group[$x])
+                    ->orderBy('id', 'desc')->first();
 
-        $student_name = $student->lname.', '.$student->fname.(($student->mname) ? ' '.$student->mname : '');
-        $pbb = 'SSW - '.$student->batch. ' | '.(($student->benefactor) ? $student->benefactor->name : '');//program batch benefactor
+                if(!empty($class_students)){
+                    if($class_students->class_settings_id == $class){
+                        array_push($current_class, $class_students->stud_id);
+                    }
+                }
+            }
+        }
+
+        if($counter == true){
+            $soa_ids = soa::groupBy('stud_id')->pluck('stud_id');
+            $student = student::with('benefactor', 'branch')
+            ->whereIn('id', $soa_ids)
+            ->when($class != 'All', function($query) use($current_class){
+                $query->whereIn('id', $current_class);
+            })
+            ->when($program != 'All', function($query) use($program){
+                $query->where('program_id', $program);
+            })
+            ->when($batch != 'All', function($query) use($batch){
+                $query->where('batch', $batch);
+            })
+            ->get();
+        }
+        else{
+            $student = student::with('benefactor', 'branch')->where('id', $id)->first();
+            $soa = soa::with('verified', 'description')->where('stud_id', $id)->get();
+        }
         
-        $class_start = class_students::where('stud_id', $id)->orderBy('start_date', 'asc')->first()->start_date;
-        $class_end = class_students::where('stud_id', $id)->orderBy('end_date', 'desc')->first()->end_date;
 
         //ALL DATA -- END
 
@@ -2161,7 +2193,46 @@ class excelController extends Controller
 
         //Initialize Sheet
         $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
+
+        if($counter == true){
+            foreach($student as $key => $s){
+                $soa = soa::with('verified', 'description')->where('stud_id', $s->id)->get();
+                $this->soa_sheet($s, $soa, $spreadsheet, $tableStyleArray, $outlineStyleArray, $headerStyleArray, $middleLeftStyleArray, $numberStyleArray);
+                if(isset($student[$key+1])){
+                    $spreadsheet->createSheet();
+                    $spreadsheet->setActiveSheetIndex($key+1);
+                }
+            }
+        }else{
+            $this->soa_sheet($student, $soa, $spreadsheet, $tableStyleArray, $outlineStyleArray, $headerStyleArray, $middleLeftStyleArray, $numberStyleArray);
+        }
+        
+        if($counter == false){
+            $filename = 'SOA - '.$student->lname.'.xlsx';
+        }else{
+            $filename = 'SOA.xlsx';
+        }
+        
+        //redirect output to client
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="'.$filename.'"');
+        header('Cache-Control: max-age=0');
+
+        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+        ob_end_clean();
+        $writer->save('php://output');
+    }
+
+    public function soa_sheet($student, $soa, $spreadsheet, $tableStyleArray, $outlineStyleArray, $headerStyleArray, $middleLeftStyleArray, $numberStyleArray){
+        $student_name = $student->lname.', '.$student->fname.(($student->mname) ? ' '.$student->mname : '');
+        $pbb = 'SSW - '.$student->batch. ' | '.(($student->benefactor) ? $student->benefactor->name : '');//program batch benefactor
+        
+        $class_start = class_students::where('stud_id', $student->id)->orderBy('start_date', 'asc')->first();
+        $class_start = (isset($class_start)) ? $class_start->start_date : '';
+        $class_end = class_students::where('stud_id', $student->id)->orderBy('end_date', 'desc')->first();
+        $class_end = (isset($class_end)) ? $class_end->end_date : '';
+
+        $sheet = $spreadsheet->getActiveSheet()->setTitle($student->lname);
         $row = 1; $copy = "SCHOOL\rCOPY";
         $address = '3F Dela Rosa Square Bldg., Dela Rosa St.,cor. Chino Roces Avenue, Pio Del Pilar,  Makati City';
         $contact = 'E-mail: leadtraining2013@gmail.com　Telephone Number: 02-8777-2114';
@@ -2369,18 +2440,8 @@ class excelController extends Controller
         $drawing->setOffsetY(10);
         $drawing->setCoordinates('A'.$logo2);
         $drawing->setWorksheet($spreadsheet->getActiveSheet());
-        
-        $filename = 'SOA - '.$student->lname.'.xlsx';
-        
-        //redirect output to client
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="'.$filename.'"');
-        header('Cache-Control: max-age=0');
 
         $sheet->getPageSetup()->setPrintArea('A1:'.$sheet->getHighestColumn().$sheet->getHighestRow())
             ->setFitToWidth(1)->setFitToHeight(1);
-        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
-        ob_end_clean();
-        $writer->save('php://output');
     }
 }

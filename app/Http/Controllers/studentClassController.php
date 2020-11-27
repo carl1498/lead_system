@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Traits\LogsTraits;
 use App\student;
 use App\employee;
 use App\class_settings;
@@ -17,6 +18,8 @@ use Illuminate\Support\Facades\Hash;
 
 class studentClassController extends Controller
 {
+    use LogsTraits;
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -24,6 +27,8 @@ class studentClassController extends Controller
 
     public function index()
     {
+        $this->page_access_log(Auth::user()->emp_id, 'Student Class', 'Visit');
+
         $sensei = employee::with('role')
             ->whereHas('role', function($query){
                 $query->where('name', 'Language Head')->orWhere('name', 'Language Teacher');

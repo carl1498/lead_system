@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Traits\LogsTraits;
 use Illuminate\Support\Facades\Storage;
 use App\employee;
 use App\emp_salary;
@@ -27,6 +28,8 @@ use Image;
 
 class employeeController extends Controller
 {
+    use LogsTraits;
+
     /**
      * Create a new controller instance.
      *
@@ -44,6 +47,8 @@ class employeeController extends Controller
      */
     public function index()
     {
+        $this->page_access_log(Auth::user()->emp_id, 'Employees', 'Visit');
+
         $branch = branch::all();
         $role = role::all();
         $employee = employee::all();

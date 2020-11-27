@@ -65,7 +65,7 @@
 				@endif
 
 				@if(canAccessAll() || canAccessExpense())
-                <li class="{{ (Request::path() == 'expense' || Request::path() == 'tuition') ? 'active' : '' }} treeview">
+                <li class="{{ (Request::path() == 'expense' || Request::path() == 'tuition' || Request::path() == 'salary') ? 'active' : '' }} treeview">
 					<a href="">
 						<i class="fa fa-calculator"></i> <span>Finance</span>
 						<span class="pull-right-container">

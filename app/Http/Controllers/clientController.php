@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Traits\LogsTraits;
 use App\client;
 use App\client_bank;
 use App\client_company_type;
@@ -15,12 +16,16 @@ use App\Http\Controllers\Redirect;
 
 class clientController extends Controller
 {
+    use LogsTraits;
+    
     public function __construct()
     {
         $this->middleware('auth');
     }
 
     public function index(){
+        $this->page_access_log(Auth::user()->emp_id, 'Client', 'Visit');
+
         $company_type = client_company_type::all();
         $industries = industries::whereNotIn('id', [8])->get();
 

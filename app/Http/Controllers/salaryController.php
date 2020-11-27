@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Traits\SalaryTraits;
 
 use Illuminate\Http\Request;
+use App\Traits\LogsTraits;
 use App\employee;
 use App\emp_salary;
 use App\salary_monitoring;
@@ -18,6 +19,7 @@ use Yajra\Datatables\Datatables;
 
 class salaryController extends Controller
 {
+    use LogsTraits;
     use SalaryTraits;
 
     public function __construct()
@@ -32,6 +34,8 @@ class salaryController extends Controller
      */
     public function index()
     {
+        $this->page_access_log(Auth::user()->emp_id, 'Salary', 'Visit');
+
         $emp_salary = emp_salary::with('employee')->get();
         $lead_company_type = lead_company_type::all();
         $branch = branch::all();

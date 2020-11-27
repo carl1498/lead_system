@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Traits\LogsTraits;
 use App\invoice;
 use App\reference_no;
 use App\book_type;
@@ -16,6 +17,8 @@ use Illuminate\Support\Facades\Hash;
 
 class invoiceController extends Controller
 {
+    use LogsTraits;
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -27,6 +30,8 @@ class invoiceController extends Controller
      */
     public function index()
     {
+        $this->page_access_log(Auth::user()->emp_id, 'Invoice', 'Visit');
+
         $book_type = book_type::all();
         $invoice = reference_no::all();
 
@@ -34,6 +39,8 @@ class invoiceController extends Controller
     }
 
     public function view(Request $request){
+        $this->page_access_log(Auth::user()->emp_id, 'Invoice', 'Visit');
+
         $invoice = invoice::with('reference_no')->groupBy('ref_no_id')->get();
         $type_select = $request->type_select;
 

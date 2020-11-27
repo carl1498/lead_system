@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
+use App\Traits\LogsTraits;
 use App\student;
 use App\program;
 use App\school;
@@ -34,6 +35,8 @@ use Intervention\Image\ImageManagerStatic as Image;
 
 class studentController extends Controller
 {
+    use LogsTraits;
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -41,6 +44,8 @@ class studentController extends Controller
 
     public function index()
     {
+        $this->page_access_log(Auth::user()->emp_id, 'Student List', 'Visit');
+
         $program = program::all();
         $school = school::all();
         $benefactor = benefactor::all();

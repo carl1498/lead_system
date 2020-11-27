@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Traits\LogsTraits;
 use Illuminate\Support\Collection;
 use App\employee;
 use App\student;
@@ -13,6 +14,8 @@ use Carbon\Carbon;
 
 class dashboardController extends Controller
 {
+    use LogsTraits;
+
     /**
      * Create a new controller instance.
      *
@@ -31,6 +34,8 @@ class dashboardController extends Controller
      */
     public function index()
     {
+        $this->page_access_log(Auth::user()->emp_id, 'Dashboard', 'Visit');
+
         $id = Auth::user()->emp_id;
         
         //Logout if resigned

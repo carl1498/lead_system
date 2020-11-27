@@ -32,7 +32,6 @@ class bookManagementController extends Controller
      */
     public function index()
     {
-        info(Auth::user()->emp_id);
         $this->page_access_log(Auth::user()->emp_id, 'Book Management', 'Visit');
 
         $book_type = book_type::all();

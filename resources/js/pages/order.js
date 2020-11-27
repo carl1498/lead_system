@@ -183,6 +183,7 @@ $(document).ready(function(){
                 $('#add_edit').val('edit');
                 $('#client').val(data.client_id).trigger('change');
                 $('#order_type').val(data.order_type_id).trigger('change');
+                $('#industry').val(data.industry).trigger('change');
                 $('#order').val(data.no_of_orders);
                 $('#hires').val(data.no_of_hires);
                 $('#interview_date').val(data.interview_date);

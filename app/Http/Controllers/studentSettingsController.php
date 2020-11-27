@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Traits\LogsTraits;
 use App\program;
 use App\school;
 use App\benefactor;
@@ -12,15 +13,21 @@ use App\course;
 use App\company;
 use App\university;
 use Yajra\Datatables\Datatables;
+use Carbon\Carbon;
+use Auth;
 
 class studentSettingsController extends Controller
 {
+    use LogsTraits;
+
     public function __construct()
     {
         $this->middleware('auth');
     }
 
     public function index(){
+        $this->page_access_log(Auth::user()->emp_id, 'Student Settings', 'Visit');
+
         return view('pages.student_settings');
     }
 
