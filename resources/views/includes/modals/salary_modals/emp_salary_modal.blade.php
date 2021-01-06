@@ -51,7 +51,6 @@
                                             <option value="">Select Type</option>
                                             <option value="Monthly">Monthly</option>
                                             <option value="Daily">Daily</option>
-                                            <option value="Daily">Yen</option>
                                         </select>
                                     </div>
                                 </div>
