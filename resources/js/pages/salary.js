@@ -533,12 +533,16 @@ $(document).ready(function(){
     })
 
     function calculate_all(){
+        let emp_id = $('#emp').val();
         let rate = $('#s_rate').val();
         let type = $('#s_type').val();
         let daily = $('#s_daily').val();
 
         //INCOME -- START
-        if(type == 'Monthly'){
+        if(emp_id == 1){
+            $('#basic_amount').val(rate).trigger('change');
+        }
+        else if(type == 'Monthly'){
             $('#basic_amount').val(rate / 2).trigger('change');
         }
         else if(type == 'Daily'){

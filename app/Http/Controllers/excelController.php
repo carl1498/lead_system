@@ -1812,6 +1812,9 @@ class excelController extends Controller
                         $sheet->setCellValue('G'.$row, $m->rate);
                         $sheet->setCellValue('H'.$row, $m->income->basic);
                         if($m->sal_type == 'Monthly'){
+                            $sheet->setCellValue('I'.$row, '=round(G'.$row.', 2)');
+                        }
+                        else if($m->sal_type == 'Monthly'){
                             $sheet->setCellValue('I'.$row, '=round(G'.$row.'/2, 2)');
                         }else if($m->sal_type == 'Daily'){
                             $sheet->setCellValue('I'.$row, '=round(F'.$row.'*H'.$row.', 2)');

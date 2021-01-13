@@ -17,7 +17,10 @@ trait SalaryTraits {
             $inc = $d->income;
             $gross = 0;
 
-            if($d->sal_type == 'Monthly'){
+            if($d->emp_id == 1){
+                $gross += $rate;
+            }
+            else if($d->sal_type == 'Monthly'){
                 $gross += $rate / 2;
             }
             else if($d->sal_type == 'Daily'){
