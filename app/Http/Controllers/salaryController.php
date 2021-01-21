@@ -242,8 +242,8 @@ class salaryController extends Controller
         $sal_inc->reg_ot = $request->reg_ot_hours;
         $sal_inc->rd_ot = $request->rd_ot_hours;
         $sal_inc->thirteenth = $request->thirteenth;
-        $sal_inc->leg_hol = $request->leg_hol_hours;
-        $sal_inc->spcl_hol = $request->spcl_hol_hours;
+        $sal_inc->leg_hol = $request->leg_hol_days;
+        $sal_inc->spcl_hol = $request->spcl_hol_days;
         $sal_inc->leg_hol_ot = $request->leg_hol_ot_hours;
         $sal_inc->spcl_hol_ot = $request->spcl_hol_ot_hours;
         $sal_inc->save();

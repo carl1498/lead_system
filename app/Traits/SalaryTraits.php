@@ -46,11 +46,17 @@ trait SalaryTraits {
             $gross += $inc->market_comm;
             $gross += $inc->jap_comm;
             $gross += $inc->thirteenth;
+            $gross += ($inc->daily * $inc->leg_hol) * 2;
+            info($daily);
+            info($inc->leg_hol);
+            info(($daily * $inc->leg_hol) * 2);
+            if($type == 'leg') return ($daily * $inc->leg_hol) * 2;
+            $gross += ($inc->daily  * $inc->spcl_hol) + (($daily  * $inc->spcl_hol) * 0.3);
+            if($type == 'spcl') return ($daily  * $inc->spcl_hol) + (($daily  * $inc->spcl_hol) * 0.3);
             
-            $ot_hours = [$inc->reg_ot, $inc->rd_ot, $inc->leg_hol, 
-            $inc->spcl_hol, $inc->leg_hol_ot, $inc->spcl_hol_ot];
+            $ot_hours = [$inc->reg_ot, $inc->rd_ot, $inc->leg_hol_ot, $inc->spcl_hol_ot];
 
-            $ot = ['reg', 'rd', 'leg', 'spcl', 'leg_ot', 'spcl_ot'];
+            $ot = ['reg', 'rd', 'leg_ot', 'spcl_ot'];
 
             for($x = 0; $x < count($ot); $x++){
                 $amount = ($daily / 8) * $ot_hours[$x];
@@ -63,14 +69,12 @@ trait SalaryTraits {
                     $amount = number_format($amount * 1.3, 2, '.', '');
                     if($type == 'rd_ot') return $amount;
                 }
-                else if($ot[$x] == 'spcl' || $ot[$x] == 'spcl_ot'){
+                else if($ot[$x] == 'spcl_ot'){
                     $amount = number_format($amount + ($amount *0.3), 2, '.', '');
-                    if($type == 'spcl') return $amount;
                     if($type == 'spcl_ot') return $amount;
                 }
-                else if($ot[$x] == 'leg' || $ot[$x] == 'leg_ot'){
+                else if($ot[$x] == 'leg_ot'){
                     $amount = number_format($amount * 2, 2, '.', '');
-                    if($type == 'leg') return $amount;
                     if($type == 'leg_ot') return $amount;
                 }
 

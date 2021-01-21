@@ -12,8 +12,8 @@ $(document).ready(function(){
     var date_counter = true;
     var from_date, to_date, release_date;
 
-    var ot_hours = ['#reg_ot_hours', '#rd_ot_hours', '#spcl_hol_hours', '#spcl_hol_ot_hours', '#leg_hol_hours', '#leg_hol_ot_hours'];
-    var ot_type = ['#reg_ot_amount', '#rd_ot_amount', '#spcl_hol_amount', '#spcl_hol_ot_amount', '#leg_hol_amount', '#leg_hol_ot_amount'];
+    var ot_hours = ['#reg_ot_hours', '#rd_ot_hours', '#spcl_hol_ot_hours', '#leg_hol_ot_hours'];
+    var ot_type = ['#reg_ot_amount', '#rd_ot_amount', '#spcl_hol_ot_amount', '#leg_hol_ot_amount'];
     
     var income_all = ['#basic_amount', '#s_accom', '#s_cola', 
                     '#s_transpo_amount', '#mktg_comm', '#jap_comm', '#reg_ot_amount', '#rd_ot_amount',
@@ -22,7 +22,7 @@ $(document).ready(function(){
     var deduction_all = ['#cash_advance', '#absence_amount', '#late_amount', '#s_sss', '#s_phic',
                         '#s_hdmf', '#others', '#under_amount', '#tax', '#man_allocation']
     var keyup = `#s_rate, #s_daily, #basic_days, #s_accom, #s_cola, #transpo_days, #s_transpo, #mktg_comm, #jap_comm, 
-                #reg_ot_hours, #rd_ot_hours, #leg_hol_hours, #spcl_hol_hours, #leg_hol_ot_hours, #spcl_hol_ot_hours,
+                #reg_ot_hours, #rd_ot_hours, #leg_hol_days, #spcl_hol_days, #leg_hol_ot_hours, #spcl_hol_ot_hours,
                 #thirteenth, #adjustments, #cash_advance, #absence_days, #late_hours, #s_sss, #s_phic,
                 #s_hdmf, #others, #under_hours, #tax, #man_allocation, #wfh`;
     
@@ -553,6 +553,12 @@ $(document).ready(function(){
         let transpo_days = $('#transpo_days').val();
         let transpo_allowance = $('#s_transpo').val();
         $('#s_transpo_amount').val((transpo_days * transpo_allowance).toFixed(2));
+        
+        let leg_hol_days = $('#leg_hol_days').val() ? $('#leg_hol_days').val() : 0;
+        let spcl_hol_days = $('#spcl_hol_days').val() ? $('#spcl_hol_days').val() : 0;
+
+        $('#leg_hol_amount').val(((daily * leg_hol_days) * 2).toFixed(2)).trigger('change');
+        $('#spcl_hol_amount').val(((daily * spcl_hol_days) + ((daily * spcl_hol_days) * 0.3)).toFixed(2)).trigger('change');
 
         for(let x = 0; x < ot_hours.length; x++){
             let amount = (daily / 8) * $(ot_hours[x]).val();
@@ -563,10 +569,10 @@ $(document).ready(function(){
             if(ot_type[x] == '#rd_ot_amount'){
                 amount = amount * 1.3;
             }
-            else if(ot_type[x] == '#spcl_hol_amount' || ot_type[x] == '#spcl_hol_ot_amount'){
+            else if( ot_type[x] == '#spcl_hol_ot_amount'){
                 amount = amount + (amount * 0.3);
             }
-            else if(ot_type[x] == '#leg_hol_amount' || ot_type[x] == '#leg_hol_ot_amount'){
+            else if(ot_type[x] == '#leg_hol_ot_amount'){
                 amount = amount * 2;
             }
 
@@ -682,8 +688,8 @@ $(document).ready(function(){
                 $('#reg_ot_hours').val(data.income.reg_ot);
                 $('#rd_ot_hours').val(data.income.rd_ot);
                 $('#thirteenth').val(data.income.thirteenth);
-                $('#leg_hol_hours').val(data.income.leg_hol);
-                $('#spcl_hol_hours').val(data.income.spcl_hol);
+                $('#leg_hol_days').val(data.income.leg_hol);
+                $('#spcl_hol_days').val(data.income.spcl_hol);
                 $('#leg_hol_ot_hours').val(data.income.leg_hol_ot);
                 $('#spcl_hol_ot_hours').val(data.income.spcl_hol_ot);
                 $('#adjustments').val(data.income.adjustments);

@@ -1332,18 +1332,18 @@ class excelController extends Controller
             $row++; $inc_row++;
 
             // LEG HOLIDAY
-            $leg_hours = $s->income->leg_hol;
-            $leg_amount = ($leg_hours) ? $this->calculate_all('leg', $s) : '';
+            $leg_days = $s->income->leg_hol;
+            $leg_amount = ($leg_days) ? $this->calculate_all('leg', $s) : '';
             $sheet->setCellValue('A'.$inc_row, 'Leg Holiday')->setCellValue('H'.$inc_row, '=A'.$inc_row);
-            $sheet->setCellValue('B'.$inc_row, $leg_hours)->setCellValue('I'.$inc_row, '=B'.$inc_row);
+            $sheet->setCellValue('B'.$inc_row, $leg_days)->setCellValue('I'.$inc_row, '=B'.$inc_row);
             $sheet->setCellValue('C'.$inc_row, $leg_amount)->setCellValue('J'.$inc_row, '=C'.$inc_row);
             $row++; $inc_row++;
 
             // SPCL HOLIDAY
-            $spcl_hours = $s->income->spcl_hol;
-            $spcl_amount = ($spcl_hours) ? $this->calculate_all('spcl', $s) : '';
+            $spcl_days = $s->income->spcl_hol;
+            $spcl_amount = ($spcl_days) ? $this->calculate_all('spcl', $s) : '';
             $sheet->setCellValue('A'.$inc_row, 'Spcl Holiday')->setCellValue('H'.$inc_row, '=A'.$inc_row);
-            $sheet->setCellValue('B'.$inc_row, $spcl_hours)->setCellValue('I'.$inc_row, '=B'.$inc_row);
+            $sheet->setCellValue('B'.$inc_row, $spcl_days)->setCellValue('I'.$inc_row, '=B'.$inc_row);
             $sheet->setCellValue('C'.$inc_row, $spcl_amount)->setCellValue('J'.$inc_row, '=C'.$inc_row);
             $row++; $inc_row++; 
 
@@ -1824,11 +1824,11 @@ class excelController extends Controller
                         $sheet->setCellValue('L'.$row, $m->income->rd_ot);
                         $sheet->setCellValue('M'.$row, '=round(F'.$row.'/8*1.3*L'.$row.', 2)');
                         $sheet->setCellValue('N'.$row, $m->income->spcl_hol);
-                        $sheet->setCellValue('O'.$row, '=round((F'.$row.'/8*N'.$row.')+(F'.$row.'/8*0.3*N'.$row.'), 2)');
+                        $sheet->setCellValue('O'.$row, '=round((F'.$row.'*N'.$row.')+(F'.$row.'*0.3*N'.$row.'), 2)');
                         $sheet->setCellValue('P'.$row, $m->income->spcl_hol_ot);
                         $sheet->setCellValue('Q'.$row, '=round((F'.$row.'/8*P'.$row.')+(F'.$row.'/8*0.3*P'.$row.'), 2)');
                         $sheet->setCellValue('R'.$row, $m->income->leg_hol);
-                        $sheet->setCellValue('S'.$row, '=round(F'.$row.'/8*2*R'.$row.', 2)');
+                        $sheet->setCellValue('S'.$row, '=round(F'.$row.'*2*R'.$row.', 2)');
                         $sheet->setCellValue('T'.$row, $m->income->leg_hol_ot);
                         $sheet->setCellValue('U'.$row, '=round(F'.$row.'/8*2*T'.$row.', 2)');
                         $sheet->setCellValue('V'.$row, $m->income->acc_allowance);
@@ -1888,9 +1888,9 @@ class excelController extends Controller
                 $sheet->setCellValue('I'.$row, 0);
                 $sheet->setCellValue('K'.$row, '=round(F'.$row.'/8*1.25*J'.$row.', 2)');
                 $sheet->setCellValue('M'.$row, '=round(F'.$row.'/8*1.3*L'.$row.', 2)');
-                $sheet->setCellValue('O'.$row, '=round((F'.$row.'/8*N'.$row.')+(F'.$row.'/8*0.3*N'.$row.'), 2)');
+                $sheet->setCellValue('O'.$row, '=round((F'.$row.'*N'.$row.')+(F'.$row.'*0.3*N'.$row.'), 2)');
                 $sheet->setCellValue('Q'.$row, '=round((F'.$row.'/8*P'.$row.')+(F'.$row.'/8*0.3*P'.$row.'), 2)');
-                $sheet->setCellValue('S'.$row, '=round(F'.$row.'/8*2*R'.$row.', 2)');
+                $sheet->setCellValue('S'.$row, '=round(F'.$row.'*2*R'.$row.', 2)');
                 $sheet->setCellValue('U'.$row, '=round(F'.$row.'/8*2*T'.$row.', 2)');
                 $gross = '=round(sum(I'.$row.',K'.$row.',M'.$row.',O'.$row.',Q'.$row.',S'.$row
                 .',U'.$row.',V'.$row.':AB'.$row.'), 2)';

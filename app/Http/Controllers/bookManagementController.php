@@ -46,7 +46,6 @@ class bookManagementController extends Controller
         $book_type_select = $request->book_type_select;
         $branch_select = $request->branch_select;
         $invoice_select = $request->invoice_select;
-        info(Auth::user()->emp_id);
         $get_branch = employee::with('branch')->where('id', Auth::user()->emp_id)->first();
         $branch = $get_branch->branch->name;
 

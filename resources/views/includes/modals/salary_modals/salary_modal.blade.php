@@ -291,11 +291,11 @@
 
                         <div class="row clearfix">
                             <div class="col-lg-5 col-md-5 col-sm-3 col-xs-3 form-control-label">
-                                    <label for="leg_hol_hours" class="pull-right">Leg Holiday</label>
+                                    <label for="leg_hol_days" class="pull-right">Leg Holiday</label>
                             </div>
                             <div class="col-lg-2 col-md-2 col-sm-7 col-xs-7">
                                 <div class="form-group">
-                                    <input type="number" step="any" id="leg_hol_hours" name="leg_hol_hours" class="form-control" placeholder="Hours">
+                                    <input type="number" step="any" id="leg_hol_days" name="leg_hol_days" class="form-control" placeholder="Days">
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-7 col-xs-7">
@@ -307,11 +307,11 @@
 
                         <div class="row clearfix">
                             <div class="col-lg-5 col-md-5 col-sm-3 col-xs-3 form-control-label">
-                                    <label for="spcl_hol_hours" class="pull-right">Spcl Holiday</label>
+                                    <label for="spcl_hol_days" class="pull-right">Spcl Holiday</label>
                             </div>
                             <div class="col-lg-2 col-md-2 col-sm-7 col-xs-7">
                                 <div class="form-group">
-                                    <input type="number" step="any" id="spcl_hol_hours" name="spcl_hol_hours" class="form-control" placeholder="Hours">
+                                    <input type="number" step="any" id="spcl_hol_days" name="spcl_hol_days" class="form-control" placeholder="Days">
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-7 col-xs-7">
