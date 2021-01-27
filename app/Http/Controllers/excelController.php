@@ -1811,7 +1811,7 @@ class excelController extends Controller
                         $sheet->setCellValue('F'.$row, $m->daily);
                         $sheet->setCellValue('G'.$row, $m->rate);
                         $sheet->setCellValue('H'.$row, $m->income->basic);
-                        if($m->sal_type == 'Monthly'){
+                        if($m->emp_id == 1){
                             $sheet->setCellValue('I'.$row, '=round(G'.$row.', 2)');
                         }
                         else if($m->sal_type == 'Monthly'){
