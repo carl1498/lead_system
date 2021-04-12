@@ -197,6 +197,10 @@ $(document).ready(function(){
             showYearSelect();
             showMonthSelect();
             $('.select_description').text('Departure:');
+        }else if(current_tab == 'Intern'){
+            showYearSelect();
+            showMonthSelect();
+            $('.select_description').text('Departure:');
         }
         
         if(current_tab != 'SSW'){
@@ -1344,8 +1348,12 @@ $(document).ready(function(){
                 $('#i_mname').val(data.mname);
                 $('#i_lname').val(data.lname); 
                 $('#i_branch').val(data.branch.id).trigger('change');
-                $('#i_university').val(data.university.id).trigger('change');
-                $('#i_benefactor').val(data.benefactor.id).trigger('change');
+                if(data.university){
+                    $('#i_university').val(data.university.id).trigger('change');
+                }
+                if(data.benefactor){
+                    $('#i_benefactor').val(data.benefactor.id).trigger('change');
+                }
                 $('#i_contact').val(data.contact);
                 $('#i_gender').val(data.gender).trigger('change');
                 $('#i_birthdate').val(data.birthdate);
@@ -2417,6 +2425,7 @@ $(document).ready(function(){
                 $('#p_program').text(data.program ? data.program.name : '-');
                 $('#p_school').text(data.school ? data.school.name : '-');
                 $('#p_benefactor').text(data.benefactor ? data.benefactor.name : '-');
+                $('#p_university').text(data.university ? data.university.name : '-');
                 $('#p_company').text(data.company ? data.company.name : '-');
                 $('#p_birthdate').text(data.birthdate + ' (' + data.age + ')');
                 $('#p_civil').text(data.civil_status);

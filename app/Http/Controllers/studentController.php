@@ -1221,7 +1221,7 @@ class studentController extends Controller
             $added_by = Auth::user()->emp_id;
         }
         else{
-            $id = $request->t_id;
+            $id = $request->i_id;
             $student = student::find($id);
             $edited_by = Auth::user()->emp_id;
         }
@@ -1329,25 +1329,25 @@ class studentController extends Controller
                             $new = 'N/A';
                         }else{
                             if($edit_fields[$x] == 'Branch'){
-                                $new = branch::where('id', $student_fields[$x])->pluck('name');
+                                $new = branch::where('id', $request_fields[$x])->pluck('name');
                             }
                             else if($edit_fields[$x] == 'University'){
-                                $new = university::where('id', $student_fields[$x])->pluck('name');
+                                $new = university::where('id', $request_fields[$x])->pluck('name');
                             }
                             else if($edit_fields[$x] == 'Benefactor'){
-                                $new = benefactor::where('id', $student_fields[$x])->pluck('name');
+                                $new = benefactor::where('id', $request_fields[$x])->pluck('name');
                             }
                             else if($edit_fields[$x] == 'Course'){
-                                $new = course::where('id', $student_fields[$x])->pluck('name');
+                                $new = course::where('id', $request_fields[$x])->pluck('name');
                             }
                             else if($edit_fields[$x] == 'Referred By'){
-                                $new = employee::where('id', $student_fields[$x])->withTrashed()->pluck('fname');
+                                $new = employee::where('id', $request_fields[$x])->withTrashed()->pluck('fname');
                             }
                             else if($edit_fields[$x] == 'Year'){
-                                $new = departure_year::where('id', $student_fields[$x])->pluck('name');
+                                $new = departure_year::where('id', $request_fields[$x])->pluck('name');
                             }
                             else if($edit_fields[$x] == 'Month'){
-                                $new = departure_month::where('id', $student_fields[$x])->pluck('name');
+                                $new = departure_month::where('id', $request_fields[$x])->pluck('name');
                             }
                             $new = $new[0];
                         }
@@ -1540,7 +1540,7 @@ class studentController extends Controller
             $student = student::with('program', 'referral', 'branch', 'course', 'departure_year', 'departure_month')->find($id);
             //$student->contact = '-';
         }else{
-            $student = student::with('program', 'school', 'benefactor', 'company', 'referral', 'branch', 'course', 'departure_year', 'departure_month', 'emergency')->find($id);
+            $student = student::with('program', 'school', 'benefactor', 'university', 'company', 'referral', 'branch', 'course', 'departure_year', 'departure_month', 'emergency')->find($id);
         }
 
         $birth = new Carbon($student->birthdate);

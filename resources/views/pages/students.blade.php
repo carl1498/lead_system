@@ -92,6 +92,12 @@
                             </p>
                         </li>
                         <li class="list-group-item">
+                            <strong>University</strong>
+                            <p id="p_university" class="text-muted">
+                            -
+                            </p>
+                        </li>
+                        <li class="list-group-item">
                             <strong>Company (For TITP Only)</strong>
                             <p id="p_company" class="text-muted">
                             -
