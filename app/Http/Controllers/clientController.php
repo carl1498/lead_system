@@ -26,7 +26,8 @@ class clientController extends Controller
     public function index(){
         $this->page_access_log(Auth::user()->emp_id, 'Client', 'Visit');
 
-        $company_type = client_company_type::all();
+        $company_type = client_company_type::where('id', '!=' , 8)->get();
+        $company_type->push(client_company_type::find(8));
         $industries = industries::whereNotIn('id', [8])->get();
 
         return view('pages.client', compact('company_type', 'industries'));

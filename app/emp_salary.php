@@ -14,7 +14,7 @@ class emp_salary extends Model
     ];
 
     public function employee(){
-        return $this->hasOne('App\employee', 'id', 'emp_id');
+        return $this->hasOne('App\employee', 'id', 'emp_id')->withTrashed();
     }
 
     public function monitoring(){

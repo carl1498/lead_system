@@ -89,6 +89,9 @@
                                     <select type="text" id="emp" name="emp" class="form-control select2 required" style="width: 100%;" required>
                                         <option value="" >Select Employee</option>
                                         @foreach($emp_salary as $e)
+                                            @php
+                                                info($e);
+                                            @endphp
                                             <option value="{{ $e->employee->id }}">{{ $e->employee->lname }}, {{ $e->employee->fname }} {{ $e->employee->mname }}</option>
                                         @endforeach
                                     </select>
