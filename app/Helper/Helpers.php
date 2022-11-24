@@ -147,7 +147,7 @@ function canAccessClient(){
     $id = Auth::user()->id;
     $user = \App\User::with('employee.role', 'employee.branch')->find($id);
     $authorized = ['President', 'Finance Director', 'HR/Finance Head', 'IT Officer', 
-        'Assistant Finance Officer'];
+        'Assistant Finance Officer', 'Marketing Head'];
 
     foreach($authorized as $auth){
         if($user->employee->role->name == $auth 
@@ -269,6 +269,19 @@ function canAccessOrder(){
     $user = \App\User::with('employee.role')->find($id);
     $authorized = ['President', 'Finance Director', 'HR/Finance Head', 'IT Officer', 'HR/Finance Officer', 
                 'Assistant Finance Officer', 'Marketing Officer', 'Marketing Head', 'Branch Manager', 'OIC'];
+
+    foreach($authorized as $auth){
+        if($user->employee->role->name == $auth){
+            return true;
+        }
+    }
+    return false;
+}
+
+function OrderHigherPermission(){
+    $id = Auth::user()->id;
+    $user = \App\User::with('employee.role', 'employee.branch')->find($id);
+    $authorized = ['Marketing Head'];
 
     foreach($authorized as $auth){
         if($user->employee->role->name == $auth){
