@@ -11,7 +11,7 @@
             <button data-container="body" data-toggle="tooltip" data-placement="left" title="Refresh Table" class="btn btn-secondary bg-red refresh_table">
                 <i class="fa fa-sync"></i>
             </button>
-            @if(canAccessAll() || orderHigherPermission())
+            @if(canAccessAll() || OrderHigherPermission())
             <button data-container="body" data-toggle="tooltip" data-placement="left" title="Add Order" class="btn btn-secondary bg-red add_order">
                 <i class="fas fa-plus-square"></i>
             </button>

@@ -158,6 +158,19 @@ function canAccessClient(){
     return false;
 }
 
+function ClientHigherPermission(){
+    $id = Auth::user()->id;
+    $user = \App\User::with('employee.role', 'employee.branch')->find($id);
+    $authorized = ['Marketing Head'];
+
+    foreach($authorized as $auth){
+        if($user->employee->role->name == $auth){
+            return true;
+        }
+    }
+    return false;
+}
+
 function canAccessEmployees(){
     $id = Auth::user()->id;
     $user = \App\User::with('employee.role')->find($id);

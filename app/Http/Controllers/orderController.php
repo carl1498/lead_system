@@ -46,7 +46,7 @@ class orderController extends Controller
         ->addColumn('action', function($data){
             $html = '';
 
-            if(canAccessAll() || orderHigherPermission()){
+            if(canAccessAll() || OrderHigherPermission()){
                 $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-primary btn-xs edit_order" id="'.$data->id.'"><i class="fa fa-pen"></i></button>';
                 $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Delete" class="btn btn-danger btn-xs delete_order" id="'.$data->id.'"><i class="fa fa-trash"></i></button>';
             }
