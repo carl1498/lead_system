@@ -20,7 +20,7 @@ class Client
         $id = Auth::user()->id;
         $user = User::with('employee.role', 'employee.branch')->find($id);
         $authorized = ['President', 'Finance Director', 'HR/Finance Head', 'IT Officer', 
-                        'Assistant Finance Officer'];
+                        'Assistant Finance Officer', 'Marketing Head'];
 
         foreach($authorized as $auth){
             if($user->employee->role->name == $auth && $user->employee->employment_status != 'Resigned'
