@@ -405,10 +405,8 @@ Route::group(['middleware' => ['auth', 'order']], function(){
     Route::get('/get_order/{id}', 'orderController@get_order');
     Route::get('/clientAll', 'orderController@clientAll');
     
-    Route::group(['middleware' => ['admin']], function(){
-        Route::get('/delete_order', 'orderController@delete_order');
-        Route::post('/save_order', 'orderController@save_order');
-    });
+    Route::get('/delete_order', 'orderController@delete_order');
+    Route::post('/save_order', 'orderController@save_order');
 });
 
 //CLIENT ROUTES -- END
