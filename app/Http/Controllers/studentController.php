@@ -1204,8 +1204,8 @@ class studentController extends Controller
     }
 
     public function save_intern_student(Request $request){
-        if($request->hasFile('t_picture')){
-            $fileextension = $request->t_picture->getClientOriginalExtension();
+        if($request->hasFile('i_picture')){
+            $fileextension = $request->i_picture->getClientOriginalExtension();
 
             if($fileextension != 'jpg' && $fileextension != 'png' && $fileextension != 'jpeg' && $fileextension != 'JPG'){
                 return false;
