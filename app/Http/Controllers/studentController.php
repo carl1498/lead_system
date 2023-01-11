@@ -1370,7 +1370,7 @@ class studentController extends Controller
             if($student->picture != 'avatar5.png'){
                 Storage::delete('public/img/student/'.$student->picture);
             }
-            $encryption = sha1(date('jSFY').time().$request->picture->getClientOriginalName());
+            $encryption = sha1(date('jSFY').time().$request->i_picture->getClientOriginalName());
             $filename = $encryption.'.jpg';
 
             $target = storage_path('app/public/img/student/'.$filename);
