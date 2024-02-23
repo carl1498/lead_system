@@ -153,9 +153,7 @@ class tuitionController extends Controller
         })
         ->addColumn('departure', function($data){
             if($data->program){
-                if($data->program->name == 'Language Only' || 
-                    $data->program->name == 'SSW (Careworker)' ||
-                    $data->program->name == 'SSW (Hospitality)'){
+                if(in_array($data->program->name, ['SSW (Careworker)', 'SSW (Hospitality)', 'SSW (Food Processing)', 'SSW (Construction)', 'Language Only'])){
                     return 'N/A';
                 }
             }

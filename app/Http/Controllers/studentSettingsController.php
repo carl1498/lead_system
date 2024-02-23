@@ -48,8 +48,7 @@ class studentSettingsController extends Controller
         ->addColumn('action', function($data) use($current_settings){
             $html = '';
             if($current_settings == 'Program'){
-                if($data->name == 'Language Only' || $data->name == 'SSW (Careworker)' ||
-                $data->name == 'SSW (Hospitality)' || $data->name == 'TITP' || $data->name == 'TITP (Careworker)'){
+                if(in_array($data->name, ['SSW (Careworker)', 'SSW (Hospitality)', 'SSW (Food Processing)', 'SSW (Construction)', 'Language Only', 'TITP', 'TITP (Careworker)'])){
                     return;
                 }
             }

@@ -124,7 +124,7 @@ class studentController extends Controller
         $current_status = $request->current_status;
         $dep_year = $request->departure_year;
         $dep_month = $request->departure_month;
-        $except = ['Language Only', 'TITP', 'TITP (Careworker)', 'SSW (Careworker)', 'SSW (Hospitality)'];
+        $except = ['Language Only', 'TITP', 'TITP (Careworker)', 'SSW (Careworker)', 'SSW (Hospitality)', 'SSW (Food Processing)', 'SSW (Construction)'];
         $except = program::whereIn('name', $except)->pluck('id');
 
         $status = student::student($dep_year, $dep_month)
@@ -283,7 +283,7 @@ class studentController extends Controller
             $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="View Profile" class="btn btn-primary btn-xs view_profile" id="'.$data->id.'"><i class="fa fa-eye"></i></button>';
             
             if(isset($data->program)){
-                if($data->program->name == 'SSW (Careworker)' || $data->program->name == 'SSW (Hospitality)'){
+                if(in_array($data->program->name, ['SSW (Careworker)', 'SSW (Hospitality)', 'SSW (Food Processing)', 'SSW (Construction)'])){
                     $html .= '<button data-container="body" data-toggle="tooltip" data-placement="left" title="Edit" class="btn btn-info btn-xs edit_ssw_student" id="'.$data->id.'"><i class="fa fa-pen"></i></button>';
                 }
                 else if($data->program->name == 'Language Only'){
@@ -317,7 +317,7 @@ class studentController extends Controller
 
         $ssw = student::with('program', 'benefactor', 'referral', 'course', 'departure_year')
             ->whereHas('program', function($query) use ($request) {
-                $query->where('name', 'SSW (Careworker)')->orWhere('name', 'SSW (Hospitality)');
+                $query->whereIn('name', ['SSW (Careworker)', 'SSW (Hospitality)', 'SSW (Food Processing)', 'SSW (Construction)']);
             })
             ->when($departure_year != 'All', function($query) use($departure_year){
                 $query->where('departure_year_id', $departure_year);
@@ -1735,6 +1735,7 @@ class studentController extends Controller
         $program = program::where('name', 'LIKE', '%'.$request->name.'%')
             ->where('name', '<>', 'Language Only')->where('name', '<>', 'SSW (Careworker)')
             ->where('name', '<>', 'SSW (Hospitality)')->where('name', '<>', 'TITP')->where('name', '<>', 'TITP (Careworker)')
+            ->where('name', '<>', 'SSW (Food Processing)')->where('name', '<>', 'SSW (Construction)')
             ->get()->toArray();
 
         $array = [];
@@ -1749,7 +1750,7 @@ class studentController extends Controller
 
     public function program_ssw(Request $request){
         $program = program::where('name', 'LIKE', '%'.$request->name.'%')
-            ->where('name', '=', 'SSW (Careworker)')->orWhere('name', '=', 'SSW (Hospitality)')->get()->toArray();
+            ->whereIn('name', ['SSW (Careworker)', 'SSW (Hospitality)', 'SSW (Food Processing)', 'SSW (Construction)'])->get()->toArray();
 
         $array = [];
         foreach ($program as $key => $value){
