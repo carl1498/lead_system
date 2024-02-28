@@ -36,7 +36,7 @@ class student extends Model
     ];
 
     public function scopeStudent($query, $dep_year, $dep_month){
-        $except = ['Language Only', 'TITP', 'TITP (Careworker)', 'SSW (Careworker)', 'SSW (Hospitality)'];
+        $except = ['Language Only', 'TITP', 'TITP (Careworker)', 'SSW (Careworker)', 'SSW (Hospitality)', 'SSW (Food Processing)', 'SSW (Construction)'];
         $except = program::whereIn('name', $except)->pluck('id');
 
         $query->with('program', 'school', 'benefactor', 'referral', 
